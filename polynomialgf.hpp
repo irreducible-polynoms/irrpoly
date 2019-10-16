@@ -1,12 +1,12 @@
 #ifndef POLYNOMIALGF_HPP
 #define POLYNOMIALGF_HPP
 
+#include <algorithm>
 #include <stdexcept>
 #include <vector>
 
 #include "boost/numeric/ublas/matrix.hpp"
 #include "boost/math/tools/polynomial.hpp"
-#include "boost/core/swap.hpp"
 
 #include "gf.hpp"
 
@@ -30,7 +30,7 @@ PolynomialGF<P> gcd(PolynomialGF<P> m, PolynomialGF<P> n) {
         throw std::domain_error("arguments must be strictly positive");
     }
     if (m.degree() < n.degree()) {
-        boost::swap(m, n);
+        std::swap(m, n);
     }
     PolynomialGF<P> u0 = m, u1 = PolynomialGF<P>({1}), u2 = PolynomialGF<P>({0}),
             v0 = n, v1 = PolynomialGF<P>({0}), v2 = PolynomialGF<P>({1}),
@@ -63,6 +63,7 @@ bool isIrreducible(const PolynomialGF<P> &val) {
                           (j <= k ? tmp[j] : zer); // m -= E
             }
         }
+
         // reduction of a matrix to a step form with calculation of its rank
         for (i = k = 0; i < n && k < n; ++k) {
             f = !m(i, k).IsZero();
@@ -76,7 +77,7 @@ bool isIrreducible(const PolynomialGF<P> &val) {
                         }
                     } else {
                         for (l = k; l < n; ++l) {
-                            boost::swap(m(i, l), m(j, l));
+                            std::swap(m(i, l), m(j, l));
                         }
                         f = true;
                     }
@@ -87,7 +88,7 @@ bool isIrreducible(const PolynomialGF<P> &val) {
         return i;
     };
     auto d = derivative(val);
-    return !d.is_zero() && gcd(val, d) == PolynomialGF<P>({1}) &&
+    return !d.is_zero() && gcd(val, d).degree() == 0 &&
            berlekampMatrixRank(val) == val.degree() - 1;
 }
 
