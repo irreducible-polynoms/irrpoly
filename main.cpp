@@ -9,6 +9,5 @@ int main() {
 
     cout << isIrreducible(test) << endl; // Berlekamp test
 
-    cin.get();
     return 0;
 }
