@@ -59,8 +59,8 @@ bool isIrreducible(const PolynomialGF<P> &val) {
             k = tmp.degree();
             for (j = 0; j < n; ++j) {
                 m(i, j) = i == j ?
-                          (j < k ? tmp[j] : zer) - GF<P>(1) :
-                          (j < k ? tmp[j] : zer); // m -= E
+                          (j <= k ? tmp[j] : zer) - GF<P>(1) :
+                          (j <= k ? tmp[j] : zer); // m -= E
             }
         }
         // reduction of a matrix to a step form with calculation of its rank
@@ -88,7 +88,7 @@ bool isIrreducible(const PolynomialGF<P> &val) {
     };
     auto d = derivative(val);
     return !d.is_zero() && gcd(val, d) == PolynomialGF<P>({1}) &&
-           berlekampMatrixRank(val) == val.degree();
+           berlekampMatrixRank(val) == val.degree() - 1;
 }
 
 #endif //POLYNOMIALGF_HPP
