@@ -5,6 +5,7 @@
 #include <array>
 #include <cstdint>
 #include <iostream>
+#include <random>
 #include <stdexcept>
 
 template<uint32_t P = 2>
@@ -14,6 +15,9 @@ class gf {
     void fix() noexcept;
 
 public:
+    static
+    gf<P> random() noexcept;
+
     constexpr
     gf() noexcept;
 
@@ -78,6 +82,14 @@ template<uint32_t P>
 void gf<P>::fix() noexcept {
     v = v % P;
     v = v >= 0 ? v : P + v;
+}
+
+template<uint32_t P>
+gf<P> gf<P>::random() noexcept {
+    static std::random_device rd;
+    static std::mt19937_64 gen(rd());
+    static std::uniform_int_distribution<uint_fast64_t> dis(0, P - 1);
+    return gf<P>(dis(gen));
 }
 
 template<uint32_t P>

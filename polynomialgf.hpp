@@ -89,4 +89,11 @@ bool is_irreducible(const polynomialgf<P> &val) {
            berlekampMatrixRank(val) == val.degree() - 1;
 }
 
+template<uint32_t P>
+polynomialgf<P> random(typename polynomialgf<P>::size_type degree) {
+    std::vector<gf<P>> data(degree + 1, gf<P>::random());
+    while (data[degree].is_zero()) { data[degree] = gf<P>::random(); }
+    return data;
+}
+
 #endif //POLYNOMIALGF_HPP
