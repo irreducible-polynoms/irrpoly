@@ -5,9 +5,9 @@
 using namespace std;
 
 int main() {
-    PolynomialGF<2> test({ 1, 1, 1 }); // 1 + x + x^2 (mod 2)
+    polynomialgf<2> test({ 1, 1, 1 }); // 1 + x + x^2 (mod 2)
 
-    cout << isIrreducible(test) << endl; // Berlekamp test
+    cout << is_irreducible(test) << endl; // Berlekamp test
 
     return 0;
 }

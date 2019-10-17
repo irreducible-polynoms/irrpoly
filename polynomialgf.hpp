@@ -9,29 +9,29 @@
 #include "polynomial.hpp"
 
 template<uint32_t P = 2>
-using PolynomialGF = Polynomial<GF<P>>;
+using polynomialgf = polynomial<gf<P>>;
 
 template<uint32_t P>
-PolynomialGF<P> derivative(const PolynomialGF<P> &val) {
-    PolynomialGF<P> res = val;
+polynomialgf<P> derivative(const polynomialgf<P> &val) {
+    polynomialgf<P> res = val;
     auto i = val.degree();
     for (res[i] = 0; i > 0; --i) {
-        res[i - 1] = GF<P>(i) * val[i];
+        res[i - 1] = gf<P>(i) * val[i];
     }
     res.normalize();
     return res;
 }
 
 template<uint32_t P>
-PolynomialGF<P> gcd(PolynomialGF<P> m, PolynomialGF<P> n) {
+polynomialgf<P> gcd(polynomialgf<P> m, polynomialgf<P> n) {
     if (m.is_zero() || n.is_zero()) {
         throw std::domain_error("arguments must be strictly positive");
     }
     if (m.degree() < n.degree()) {
         std::swap(m, n);
     }
-    PolynomialGF<P> u0 = m, u1 = PolynomialGF<P>({1}), u2 = PolynomialGF<P>({0}),
-            v0 = n, v1 = PolynomialGF<P>({0}), v2 = PolynomialGF<P>({1}),
+    polynomialgf<P> u0 = m, u1 = polynomialgf<P>({1}), u2 = polynomialgf<P>({0}),
+            v0 = n, v1 = polynomialgf<P>({0}), v2 = polynomialgf<P>({1}),
             w0, w1, w2, q;
     while (!v0.is_zero()) {
         q = u0 / v0;
@@ -42,17 +42,17 @@ PolynomialGF<P> gcd(PolynomialGF<P> m, PolynomialGF<P> n) {
 }
 
 template<uint32_t P>
-bool isIrreducible(const PolynomialGF<P> &val) {
+bool is_irreducible(const polynomialgf<P> &val) {
     if (val.degree() == 0) { return true; }
-    if (val[0].IsZero()) { return false; }
-    auto berlekampMatrixRank = [](const PolynomialGF<P> &val) {
-        PolynomialGF<P> tmp;
-        typename PolynomialGF<P>::size_type i, j, k, l;
-        const GF<P> zer = 0;
+    if (val[0].is_zero()) { return false; }
+    auto berlekampMatrixRank = [](const polynomialgf<P> &val) {
+        polynomialgf<P> tmp;
+        typename polynomialgf<P>::size_type i, j, k, l;
+        const gf<P> zer = 0;
         const auto n = val.degree();
-        std::vector<std::vector<GF<P>>> m(n, std::vector<GF<P>>(n, zer)); // berlekamp matrix
+        std::vector<std::vector<gf<P>>> m(n, std::vector<gf<P>>(n, zer)); // berlekamp matrix
         for (i = 0; i < n; ++i) {
-            tmp = (PolynomialGF<P>({1}) << i * P) % val; // temp = x ^ ip (mod val)
+            tmp = (polynomialgf<P>({1}) << i * P) % val; // temp = x ^ ip (mod val)
             for (j = 0, k = tmp.degree(); j <= k; ++j) {
                 m[i][j] += tmp[j];
             }
@@ -61,13 +61,13 @@ bool isIrreducible(const PolynomialGF<P> &val) {
 
         // reduction of a matrix to a step form with calculation of its rank
         bool f;
-        GF<P> mul;
+        gf<P> mul;
         for (i = k = 0; i < n && k < n; ++k) {
-            f = !m[i][k].IsZero();
+            f = !m[i][k].is_zero();
             for (j = i + 1; j < n; ++j) {
-                if (!m[j][k].IsZero()) {
+                if (!m[j][k].is_zero()) {
                     if (f) {
-                        mul = m[i][k].MulInv() * m[j][k];
+                        mul = m[i][k].mul_inv() * m[j][k];
                         m[j][k] = zer;
                         for (l = k + 1; l < n; ++l) {
                             m[j][l] -= m[i][l] * mul;
