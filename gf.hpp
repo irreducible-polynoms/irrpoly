@@ -9,7 +9,7 @@
 
 template<uint32_t P = 2>
 class gf {
-    int64_t v;
+    int_fast64_t v;
 
     void fix() noexcept;
 
@@ -17,7 +17,7 @@ public:
     constexpr
     gf() noexcept;
 
-    gf(int64_t) noexcept;
+    gf(int_fast64_t) noexcept;
 
     gf<P> operator+() const noexcept;
 
@@ -82,10 +82,10 @@ void gf<P>::fix() noexcept {
 
 template<uint32_t P>
 constexpr
-gf<P>::gf() noexcept : v(0) { }
+gf<P>::gf() noexcept : v(0) {}
 
 template<uint32_t P>
-gf<P>::gf(const int64_t val) noexcept : v(val) {
+gf<P>::gf(const int_fast64_t val) noexcept : v(val) {
     if (P < 2) {
         throw std::domain_error("P must be > 1");
     }
@@ -166,7 +166,7 @@ template<uint32_t P>
 [[nodiscard]]
 gf<P> gf<P>::mul_inv() const noexcept(false) {
     static std::array<gf<P>, P - 2> arr{};
-    int64_t u0 = P, u1 = 1, u2 = 0, v0 = v, v1 = 0, v2 = 1, w0, w1, w2, q;
+    int_fast64_t u0 = P, u1 = 1, u2 = 0, v0 = v, v1 = 0, v2 = 1, w0, w1, w2, q;
     switch (v) {
         case 1:
             return gf<P>(*this);

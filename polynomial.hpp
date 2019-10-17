@@ -137,7 +137,7 @@ public:
     }
 
     template<class U>
-    explicit polynomial(const U &point, U* = 0) {
+    explicit polynomial(const U &point, U * = 0) {
         if (point != U(0))
             m_data.push_back(point);
     }
@@ -201,28 +201,28 @@ public:
     }
 
     template<class U>
-    polynomial & operator+=(const U &value) {
+    polynomial &operator+=(const U &value) {
         addition(value);
         normalize();
         return *this;
     }
 
     template<class U>
-    polynomial & operator-=(const U &value) {
+    polynomial &operator-=(const U &value) {
         subtraction(value);
         normalize();
         return *this;
     }
 
     template<class U>
-    polynomial & operator*=(const U &value) {
+    polynomial &operator*=(const U &value) {
         multiplication(value);
         normalize();
         return *this;
     }
 
     template<class U>
-    polynomial & operator/=(const U &value) {
+    polynomial &operator/=(const U &value) {
         division(value);
         normalize();
         return *this;
@@ -294,7 +294,7 @@ public:
         normalize();
         return *this;
     }
-    
+
     [[nodiscard]]
     bool is_zero() const {
         return m_data.empty();
@@ -303,11 +303,11 @@ public:
     explicit operator bool() const {
         return !m_data.empty();
     }
-    
+
     void set_zero() {
         m_data.clear();
     }
-    
+
     void normalize() {
         m_data.erase(std::find_if(m_data.rbegin(), m_data.rend(), [](const T &x) -> bool { return x != T(0); }).base(),
                      m_data.end());
