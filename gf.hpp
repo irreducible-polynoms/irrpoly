@@ -1,11 +1,10 @@
 #ifndef GF_HPP
 #define GF_HPP
 
+#include <algorithm>
 #include <cstdint>
 #include <iostream>
 #include <stdexcept>
-
-#include "boost/integer/mod_inverse.hpp"
 
 template<uint32_t P = 2>
 class GF {
@@ -40,12 +39,14 @@ public:
 
     GF<P> &operator*=(const GF<P> &) noexcept;
 
+    [[nodiscard]]
     GF<P> MulInv() const noexcept(false);
-    
+
     GF<P> operator/(const GF<P> &) const noexcept(false);
 
     GF<P> &operator/=(const GF<P> &) noexcept(false);
 
+    [[nodiscard]]
     bool IsZero() const noexcept;
 
     bool operator==(const GF<P> &) const noexcept;
@@ -77,6 +78,9 @@ void GF<P>::fix() noexcept {
 
 template<uint32_t P>
 GF<P>::GF(const int64_t val) noexcept : v(val) {
+    if (P < 2) {
+        throw std::domain_error("P must be > 1");
+    }
     fix();
 }
 
@@ -151,10 +155,19 @@ GF<P> GF<P>::operator*(const GF<P> &val) const noexcept {
 }
 
 template<uint32_t P>
+[[nodiscard]]
 GF<P> GF<P>::MulInv() const noexcept(false) {
-    int64_t tmp = boost::integer::mod_inverse<int64_t>(v, P);
-    if (tmp == 0) { throw std::logic_error("multiplicative inverse not exists"); }
-    return tmp;
+    if (v == 0) { return GF<P>(*this); }
+    int64_t u0 = P, u1 = 1, u2 = 0, v0 = v, v1 = 0, v2 = 1, w0, w1, w2, q;
+    while (v0 > 0) {
+        q = u0 / v0;
+        w0 = u0 - q * v0, w1 = u1 - q * v1, w2 = u2 - q * v2;
+        u0 = v0, u1 = v1, u2 = v2, v0 = w0, v1 = w1, v2 = w2;
+    }
+    if (u0 > 1) {
+        throw std::logic_error("multiplicative inverse not exists");
+    }
+    return GF<P>(u2);
 }
 
 template<uint32_t P>
@@ -169,6 +182,7 @@ GF<P> GF<P>::operator/(const GF<P> &val) const noexcept(false) {
 }
 
 template<uint32_t P>
+[[nodiscard]]
 bool GF<P>::IsZero() const noexcept {
     return v == 0;
 }

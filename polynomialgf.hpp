@@ -5,13 +5,11 @@
 #include <stdexcept>
 #include <vector>
 
-#include "boost/numeric/ublas/matrix.hpp"
-#include "boost/math/tools/polynomial.hpp"
-
 #include "gf.hpp"
+#include "polynomial.hpp"
 
 template<uint32_t P = 2>
-using PolynomialGF = boost::math::tools::polynomial<GF<P>>;
+using PolynomialGF = Polynomial<GF<P>>;
 
 template<uint32_t P>
 PolynomialGF<P> derivative(const PolynomialGF<P> &val) {
@@ -46,39 +44,37 @@ PolynomialGF<P> gcd(PolynomialGF<P> m, PolynomialGF<P> n) {
 template<uint32_t P>
 bool isIrreducible(const PolynomialGF<P> &val) {
     if (val.degree() == 0) { return true; }
+    if (val[0].IsZero()) { return false; }
     auto berlekampMatrixRank = [](const PolynomialGF<P> &val) {
         PolynomialGF<P> tmp;
         typename PolynomialGF<P>::size_type i, j, k, l;
-        bool f;
-        GF<P> mul;
         const GF<P> zer = 0;
         const auto n = val.degree();
-        boost::numeric::ublas::matrix<GF<P>> m(n, n); // berlekamp matrix
+        std::vector<std::vector<GF<P>>> m(n, std::vector<GF<P>>(n, zer)); // berlekamp matrix
         for (i = 0; i < n; ++i) {
-            tmp = PolynomialGF<P>({1}) << i * P; // temp = x ^ ip
-            tmp %= val; // temp = x ^ ip (mod val)
-            k = tmp.degree();
-            for (j = 0; j < n; ++j) {
-                m(i, j) = i == j ?
-                          (j <= k ? tmp[j] : zer) - GF<P>(1) :
-                          (j <= k ? tmp[j] : zer); // m -= E
+            tmp = (PolynomialGF<P>({1}) << i * P) % val; // temp = x ^ ip (mod val)
+            for (j = 0, k = tmp.degree(); j <= k; ++j) {
+                m[i][j] += tmp[j];
             }
+            m[i][i] -= 1; // m -= E
         }
 
         // reduction of a matrix to a step form with calculation of its rank
+        bool f;
+        GF<P> mul;
         for (i = k = 0; i < n && k < n; ++k) {
-            f = !m(i, k).IsZero();
+            f = !m[i][k].IsZero();
             for (j = i + 1; j < n; ++j) {
-                if (!m(j, k).IsZero()) {
+                if (!m[j][k].IsZero()) {
                     if (f) {
-                        mul = m(i, k).MulInv() * m(j, k);
-                        m(j, k) = zer;
+                        mul = m[i][k].MulInv() * m[j][k];
+                        m[j][k] = zer;
                         for (l = k + 1; l < n; ++l) {
-                            m(j, l) -= m(i, l) * mul;
+                            m[j][l] -= m[i][l] * mul;
                         }
                     } else {
                         for (l = k; l < n; ++l) {
-                            std::swap(m(i, l), m(j, l));
+                            std::swap(m[i][l], m[j][l]);
                         }
                         f = true;
                     }
