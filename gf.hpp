@@ -2,6 +2,7 @@
 #define GF_HPP
 
 #include <algorithm>
+#include <array>
 #include <cstdint>
 #include <iostream>
 #include <stdexcept>
@@ -13,7 +14,10 @@ class gf {
     void fix() noexcept;
 
 public:
-    gf(int64_t = 0) noexcept;
+    constexpr
+    gf() noexcept;
+
+    gf(int64_t) noexcept;
 
     gf<P> operator+() const noexcept;
 
@@ -75,6 +79,10 @@ void gf<P>::fix() noexcept {
     v = v % P;
     v = v >= 0 ? v : P + v;
 }
+
+template<uint32_t P>
+constexpr
+gf<P>::gf() noexcept : v(0) { }
 
 template<uint32_t P>
 gf<P>::gf(const int64_t val) noexcept : v(val) {
@@ -157,17 +165,33 @@ gf<P> gf<P>::operator*(const gf<P> &val) const noexcept {
 template<uint32_t P>
 [[nodiscard]]
 gf<P> gf<P>::mul_inv() const noexcept(false) {
-    if (v == 0) { return gf<P>(*this); }
+    static std::array<gf<P>, P - 2> arr{};
     int64_t u0 = P, u1 = 1, u2 = 0, v0 = v, v1 = 0, v2 = 1, w0, w1, w2, q;
-    while (v0 > 0) {
-        q = u0 / v0;
-        w0 = u0 - q * v0, w1 = u1 - q * v1, w2 = u2 - q * v2;
-        u0 = v0, u1 = v1, u2 = v2, v0 = w0, v1 = w1, v2 = w2;
+    switch (v) {
+        case 1:
+            return gf<P>(*this);
+        case 0:
+            throw std::logic_error("multiplicative inverse not exists");
+        default:
+            switch (arr[v].v) {
+                case 1: // marked as irreversible
+                    throw std::logic_error("multiplicative inverse not exists");
+                case 0: // not calculated
+                    while (v0 > 0) {
+                        q = u0 / v0;
+                        w0 = u0 - q * v0, w1 = u1 - q * v1, w2 = u2 - q * v2;
+                        u0 = v0, u1 = v1, u2 = v2, v0 = w0, v1 = w1, v2 = w2;
+                    }
+                    if (u0 > 1) {
+                        arr[v] = 1; // mark as irreversible
+                        throw std::logic_error("multiplicative inverse not exists");
+                    }
+                    arr[v] = u2; // calculated is inverse for this
+                    arr[arr[v].v] = v; // this is inverse for calculated
+                default:
+                    return arr[v];
+            }
     }
-    if (u0 > 1) {
-        throw std::logic_error("multiplicative inverse not exists");
-    }
-    return gf<P>(u2);
 }
 
 template<uint32_t P>
