@@ -3,5 +3,5 @@ project(irrpoly CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 
-file(GLOB SOURCES *.cpp)
+file(GLOB SOURCES *.cpp *.hpp)
 add_executable("${PROJECT_NAME}" "${SOURCES}" polynomial.hpp)
