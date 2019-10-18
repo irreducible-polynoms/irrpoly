@@ -177,7 +177,7 @@ gf<P> gf<P>::operator*(const gf<P> &val) const noexcept {
 template<uint32_t P>
 [[nodiscard]]
 gf<P> gf<P>::mul_inv() const noexcept(false) {
-    static std::array<gf<P>, P - 2> arr{};
+    static std::array<gf<P>, P> arr{};
     int_fast64_t u0 = P, u1 = 1, u2 = 0, v0 = v, v1 = 0, v2 = 1, w0, w1, w2, q;
     switch (v) {
         case 1:
