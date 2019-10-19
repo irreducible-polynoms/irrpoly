@@ -91,7 +91,8 @@ bool is_irreducible(const polynomialgf<P> &val) {
 
 template<uint32_t P>
 polynomialgf<P> random(typename polynomialgf<P>::size_type degree) {
-    std::vector<gf<P>> data(degree + 1, gf<P>::random());
+    std::vector<gf<P>> data(degree + 1);
+    for (auto &d : data) { d = gf<P>::random(); }
     while (data[degree].is_zero()) { data[degree] = gf<P>::random(); }
     return data;
 }

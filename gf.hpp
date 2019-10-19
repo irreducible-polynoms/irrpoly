@@ -23,6 +23,8 @@ public:
 
     gf(int_fast64_t) noexcept;
 
+    int_fast64_t data() const noexcept;
+
     gf<P> operator+() const noexcept;
 
     gf<P> operator+(const gf<P> &) const noexcept;
@@ -102,6 +104,11 @@ gf<P>::gf(const int_fast64_t val) noexcept : v(val) {
         throw std::domain_error("P must be > 1");
     }
     fix();
+}
+
+template<uint32_t P>
+int_fast64_t gf<P>::data() const noexcept {
+    return v;
 }
 
 template<uint32_t P>
