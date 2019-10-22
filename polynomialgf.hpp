@@ -97,4 +97,56 @@ polynomialgf<P> random(typename polynomialgf<P>::size_type degree) {
     return data;
 }
 
+template<uint32_t P>
+bool is_primitive(const polynomialgf<P> &val) {
+    if (val.is_zero() || val[0].is_zero()) { return false; }
+
+    // get list of all divisors of n
+    auto factor = [](uint_fast64_t n) {
+        std::vector<uint_fast64_t> list { 1 };
+        for (uint_fast64_t i = 2; i * i <= n && n != 1; ++i) {
+            if (n % i) { continue; }
+            list.emplace_back(i);
+            while (n % i == 0) { n /= i; }
+        }
+        if (n != 1) { list.emplace_back(n); }
+        return list;
+    };
+
+    const auto n = val.degree();
+    auto mp = (n % 2) ? -val[0] : val[0];
+
+    // step 1
+    if (P != 2) {
+        auto list = factor(P - 1);
+        auto m = list.size() - 1;
+        gf<P> tmp = 1;
+        for (uint32_t i = 1; i <= P; ++i) {
+            tmp *= mp;
+            if (i == P / list[m]) {
+                if (tmp == 1) { return false; }
+                if (m == 0) { break; }
+                --m;
+            }
+        }
+    }
+
+    // step 2
+    uint_fast64_t r = 1;
+    for (auto i = n; i > 0; --i) { r *= P; }
+    r = (r - 1) / (P - 1);
+    auto tmp = (polynomialgf<P>({ 1 }) << r) - polynomialgf<P>({mp });
+    if (!(tmp % val).is_zero()) { return false; }
+
+    // step 3
+    auto list = factor(r);
+    const auto m = list.size();
+    for (size_t i = 0; i < m; ++i) {
+        tmp = polynomialgf<P>({ 1 }) << (r / list[i]);
+        if ((tmp % val).is_zero()) { return false; }
+    }
+
+    return true;
+}
+
 #endif //POLYNOMIALGF_HPP
