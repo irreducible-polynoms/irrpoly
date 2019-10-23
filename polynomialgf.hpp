@@ -43,8 +43,9 @@ polynomialgf<P> gcd(polynomialgf<P> m, polynomialgf<P> n) {
 
 template<uint32_t P>
 bool is_irreducible(const polynomialgf<P> &val) {
-    if (val.degree() == 0) { return true; }
-    if (val[0].is_zero()) { return false; }
+    const auto n = val.degree();
+    if (val.is_zero() || n == 0 || (val[0].is_zero() && n > 1)) { return false; }
+    if (n == 1) { return true; }
     auto berlekampMatrixRank = [](const polynomialgf<P> &val) {
         polynomialgf<P> tmp;
         typename polynomialgf<P>::size_type i, j, k, l;
