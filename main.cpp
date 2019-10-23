@@ -20,6 +20,16 @@ int main() {
     //non-primitive
     polynomialgf<3> p4({ 1, 1, 2 });
     cout << "expected: 0, got: " << is_primitive(p4) << endl;
+    polynomialgf<2> p5({ 1, 1 });
+    cout << "expected: 0, got: " << is_primitive(p5) << endl;
+    polynomialgf<2> p6({ 1, 1, 1, 1, 1 });
+    cout << "expected: 0, got: " << is_primitive(p6) << endl;
+    polynomialgf<2> p7({ 1, 0, 0, 1, 0, 0, 1 });
+    cout << "expected: 0, got: " << is_primitive(p7) << endl;
+    polynomialgf<2> p8({ 1, 1, 0, 0, 1, 0, 1 });
+    cout << "expected: 0, got: " << is_primitive(p8) << endl;
+    polynomialgf<2> p9({ 1, 1, 1, 0, 1, 0, 1 });
+    cout << "expected: 0, got: " << is_primitive(p9) << endl;
 
     return 0;
 }

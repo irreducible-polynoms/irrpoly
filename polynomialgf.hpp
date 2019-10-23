@@ -99,7 +99,8 @@ polynomialgf<P> random(typename polynomialgf<P>::size_type degree) {
 
 template<uint32_t P>
 bool is_primitive(const polynomialgf<P> &val) {
-    if (val.is_zero() || val[0].is_zero()) { return false; }
+    const auto n = val.degree();
+    if (val.is_zero() || n == 0 || (val[0].is_zero() && n > 1)) { return false; }
 
     // get list of all divisors of n
     auto factor = [](uint_fast64_t n) {
@@ -113,11 +114,9 @@ bool is_primitive(const polynomialgf<P> &val) {
         return list;
     };
 
-    const auto n = val.degree();
     auto mp = (n % 2) ? -val[0] : val[0];
-
     // step 1
-    if (P != 2) {
+    if (P > 2) {
         auto list = factor(P - 1);
         auto m = list.size() - 1;
         gf<P> tmp = 1;
@@ -135,7 +134,7 @@ bool is_primitive(const polynomialgf<P> &val) {
     uint_fast64_t r = 1;
     for (auto i = n; i > 0; --i) { r *= P; }
     r = (r - 1) / (P - 1);
-    auto tmp = (polynomialgf<P>({ 1 }) << r) - polynomialgf<P>({mp });
+    auto tmp = (polynomialgf<P>({ 1 }) << r) - polynomialgf<P>({ mp });
     if (!(tmp % val).is_zero()) { return false; }
 
     // step 3
