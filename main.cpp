@@ -18,8 +18,6 @@ int main() {
     cout << "expected: 1, got: " << is_primitive(p3) << endl;
 
     //non-primitive
-    polynomialgf<3> p4({ 1, 1, 2 });
-    cout << "expected: 0, got: " << is_primitive(p4) << endl;
     polynomialgf<2> p5({ 1, 1 });
     cout << "expected: 0, got: " << is_primitive(p5) << endl;
     polynomialgf<2> p6({ 1, 1, 1, 1, 1 });
