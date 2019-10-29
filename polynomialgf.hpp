@@ -2,6 +2,7 @@
 #define POLYNOMIALGF_HPP
 
 #include <algorithm>
+#include <cmath>
 #include <stdexcept>
 #include <vector>
 
@@ -42,7 +43,7 @@ polynomialgf<P> gcd(polynomialgf<P> m, polynomialgf<P> n) {
 }
 
 template<uint32_t P>
-bool is_irreducible(const polynomialgf<P> &val) {
+bool is_irreducible_berlekamp(const polynomialgf<P> &val) {
     const auto n = val.degree();
     if (val.is_zero() || n == 0 || (val[0].is_zero() && n > 1)) { return false; }
     if (n == 1) { return true; }
@@ -107,9 +108,9 @@ bool is_primitive(const polynomialgf<P> &val) {
     auto mp = (n % 2) ? -poly[0] : poly[0];
 
     auto factorize = [](uint64_t n) {
-        std::vector<int64_t> list;
+        std::vector<uint64_t> list;
         const auto begin = n;
-        for (int64_t d = 2; d * d <= n; ++d) {
+        for (uint64_t d = 2; d * d <= n; ++d) {
             if (n % d) { continue; }
             list.emplace_back(d);
             while (n % d == 0) { n /= d; }
@@ -121,7 +122,7 @@ bool is_primitive(const polynomialgf<P> &val) {
     // step 1
     if (P > 2) {
         const auto p = P - 1;
-        auto list = (p == 2) ? std::vector<int64_t>{2} : factorize(p);
+        auto list = (p == 2) ? std::vector<uint64_t>{2} : factorize(p);
         auto m = list.size() - 1;
         auto tmp = mp;
         for (uint32_t i = 1; i <= p; ++i, tmp *= mp) {
@@ -147,6 +148,35 @@ bool is_primitive(const polynomialgf<P> &val) {
     }
 
     return true;
+}
+
+template<uint32_t P>
+bool is_irreducible_rabin(const polynomialgf<P> &val) {
+    auto get_list = [](uint64_t n) {
+        std::vector<uint64_t> list;
+        const auto begin = n;
+        for (int64_t d = 2; d * d <= n; ++d) {
+            if (n % d) { continue; }
+            list.emplace_back(begin / d);
+            while (n % d == 0) { n /= d; }
+        }
+        if (n != 1) { list.emplace_back(begin / n); }
+        return list;
+    };
+
+    const auto n = val.degree();
+    auto list = get_list(n);
+    polynomialgf<P> tmp;
+    for (auto i: list) {
+        tmp = polynomialgf<P>({1}) << pow(P, i);
+        tmp -= polynomialgf<P>({1}) << 1;
+        tmp %= val;
+        if (tmp.is_zero() || gcd(val, tmp).degree() > 0) { return false; }
+    }
+    tmp = polynomialgf<P>({1}) << pow(P, n);
+    tmp -= polynomialgf<P>({1}) << 1;
+    tmp %= val;
+    return tmp.is_zero();
 }
 
 #endif //POLYNOMIALGF_HPP
