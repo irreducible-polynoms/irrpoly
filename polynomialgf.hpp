@@ -95,7 +95,7 @@ template<uint32_t P>
 polynomialgf<P> random(typename polynomialgf<P>::size_type degree) {
     std::vector<gf<P>> data(degree + 1);
     for (auto &d : data) { d = gf<P>::random(); }
-    while (data[degree].is_zero()) { data[degree] = gf<P>::random(); }
+    data[degree] = 1; // generate only monic polynomials
     return data;
 }
 
@@ -152,6 +152,10 @@ bool is_primitive(const polynomialgf<P> &val) {
 
 template<uint32_t P>
 bool is_irreducible_rabin(const polynomialgf<P> &val) {
+    const auto n = val.degree();
+    if (val.is_zero() || n == 0 || (val[0].is_zero() && n > 1)) { return false; }
+    if (n == 1) { return true; }
+
     auto get_list = [](uint64_t n) {
         std::vector<uint64_t> list;
         const auto begin = n;
@@ -164,7 +168,6 @@ bool is_irreducible_rabin(const polynomialgf<P> &val) {
         return list;
     };
 
-    const auto n = val.degree();
     auto list = get_list(n);
     polynomialgf<P> tmp;
     for (auto i: list) {
