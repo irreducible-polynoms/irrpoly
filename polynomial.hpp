@@ -1,3 +1,6 @@
+//  (C) Copyright John Maddock 2006.
+//  (C) Copyright Jeremy William Murphy 2015.
+
 #ifndef POLYNOMIAL_HPP
 #define POLYNOMIAL_HPP
 
