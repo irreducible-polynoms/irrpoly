@@ -20,46 +20,37 @@ std::vector<polynomialgf<P>> generate_primitive(
     std::vector<polynomialgf<P>> res(num--); // возвращаемое значение
 
     // создаём всё необходимое для многопоточности
-    typename checker<P>::control_type ctrl{};
-    checker<P>::init(ctrl, meth, threads_num);
-    // закрываем мьютекс, таким образом изменения состояния busy() отдельных потоков
-    // на значение false смогут происходить только внутри pthread_cond_wait
-    pthread_mutex_lock(&ctrl.mutex);
+    typename checker<P>::control_type ctrl(meth, threads_num);
 
     while (true) {
-        if (countBusy(ctrl.checkers) == threads_num) {
+        if (countBusy(ctrl.checkers()) == threads_num) {
             // ждём изменения числа занятых потоков
-            pthread_cond_wait(&ctrl.cond, &ctrl.mutex);
+            ctrl.wait();
         }
 
         for (unsigned i = 0; i < threads_num; ++i) {
             // находим первый свободный поток
-            if (ctrl.checkers[i].busy()) { continue; }
+            if (ctrl.checkers()[i].busy()) { continue; }
             // если многочлен примитивный (именно их и ищем) - созраняем результат
             // для поиска неприводимых используйте .irreducible
-            if (ctrl.checkers[i].result().primitive) {
-                res[num] = ctrl.checkers[i].get();
+            if (ctrl.checkers()[i].result().primitive) {
+                res[num] = ctrl.checkers()[i].get();
                 if (num > 0) { num -= 1; }
                 else { goto END; }
             }
             // генерируем случайный многочлен для проверки
-            ctrl.checkers[i].set(random<P>(degree));
+            ctrl.checkers()[i].set(random<P>(degree));
         }
     }
     END:
     // сообщаем всем потокам, что они должны прекратить работу
-    for (auto &c : ctrl.checkers) {
+    for (auto &c : ctrl.checkers()) {
         c.terminate();
     }
     // ждём завершения всех потоков
-    while (countBusy(ctrl.checkers)) {
-        pthread_cond_wait(&ctrl.cond, &ctrl.mutex);
+    while (countBusy(ctrl.checkers())) {
+        ctrl.wait();
     }
-
-    // освобождаем мьютекс, т.к. работа с потоками окончена
-    pthread_mutex_unlock(&ctrl.mutex);
-    // освобождаем ресурсы
-    checker<P>::destroy(ctrl);
 
     return res;
 }
