@@ -6,10 +6,11 @@
 #include "checker.hpp"
 #include "polynomialgf.hpp"
 
-template <uint32_t P>
+template<uint32_t P>
 [[nodiscard]]
 polynomialgf<P> generate_primitive(typename polynomialgf<P>::size_type degree, const typename checker<P>::method meth) {
-    static const unsigned threadsNum = (std::thread::hardware_concurrency() > 0 ? std::thread::hardware_concurrency() : 1);
+    static const unsigned threadsNum =
+            (std::thread::hardware_concurrency() > 0 ? std::thread::hardware_concurrency() : 1);
 
     auto countBusy = [](const std::vector<checker<P>> &c) noexcept {
         unsigned n = 0;
@@ -33,8 +34,11 @@ polynomialgf<P> generate_primitive(typename polynomialgf<P>::size_type degree, c
     // по одному проверщику в каждом потоке
     auto c = std::vector<checker<P>>(threadsNum, checker<P>(&mutex, &cond, meth));
 
+    // закрываем мьютекс, таким образом изменение состояния busy() отдельных потоков
+    // смогут происходить только внутри pthread_cond_wait
+    pthread_mutex_lock(&mutex);
     while (true) {
-        while (countBusy(c) >= threadsNum) {
+        if (countBusy(c) == threadsNum) {
             // ждём изменения числа занятых потоков
             pthread_cond_wait(&cond, &mutex);
         }
@@ -59,6 +63,7 @@ polynomialgf<P> generate_primitive(typename polynomialgf<P>::size_type degree, c
     while (countBusy(c)) {
         pthread_cond_wait(&cond, &mutex);
     }
+    pthread_mutex_unlock(&mutex);
     if (pthread_cond_destroy(&cond) || pthread_mutex_destroy(&mutex)
         || pthread_mutexattr_destroy(&attr)) { throw std::runtime_error("pthread destruction failed"); }
     return res;

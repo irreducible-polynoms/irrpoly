@@ -90,10 +90,7 @@ void *checker<P>::check(void *arg) noexcept {
 
 template<uint32_t P>
 bool checker<P>::busy() const noexcept {
-    pthread_mutex_lock(mutex);
-    auto b = _busy;
-    pthread_mutex_unlock(mutex);
-    return b;
+    return _busy;
 }
 
 template<uint32_t P>
