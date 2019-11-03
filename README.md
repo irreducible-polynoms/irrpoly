@@ -24,7 +24,7 @@
 
 ## Документация
 Описание кода программы может быть найдено в папке [docs](docs) или на соответствующей странице
-[GitHub Pages](https://github.com/irreducible-polynoms/irrpoly/html).
+[GitHub Pages](https://irreducible-polynoms.github.io/irrpoly/html/).
 
 Сборка проекта и обновление документации может выполняться с использованием [Makefile](Makefile).
 Доступные команды:
