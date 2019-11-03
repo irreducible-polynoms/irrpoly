@@ -20,7 +20,7 @@ std::vector<polynomialgf<P>> generate_primitive(
     std::vector<polynomialgf<P>> res(num--); // возвращаемое значение
 
     // создаём всё необходимое для многопоточности
-    typename checker<P>::control_type ctrl;
+    typename checker<P>::control_type ctrl{};
     checker<P>::init(ctrl, meth, threads_num);
     // закрываем мьютекс, таким образом изменения состояния busy() отдельных потоков
     // на значение false смогут происходить только внутри pthread_cond_wait

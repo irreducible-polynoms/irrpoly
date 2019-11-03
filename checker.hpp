@@ -8,8 +8,8 @@ template<uint32_t P>
 class checker {
 public:
     struct control_type {
-        pthread_mutex_t mutex;
-        pthread_cond_t cond;
+        pthread_mutex_t mutex{};
+        pthread_cond_t cond{};
         std::vector<checker<P>> checkers;
         std::vector<pthread_t> threads;
     };
