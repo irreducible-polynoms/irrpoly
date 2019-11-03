@@ -171,7 +171,7 @@ bool is_primitive(const polynomialgf<P> &val) {
     const auto poly = val / val[n];
 
     // ещё один вырожденный случай, на работу с которым алгоритм не рассчитан
-    if (P == 2 && poly == polynomialgf<P>({ 1,1 })) { return false; }
+    if (P == 2 && poly == polynomialgf<P>({1, 1})) { return false; }
 
     auto mp = (n % 2) ? -poly[0] : poly[0];
 
@@ -206,14 +206,14 @@ bool is_primitive(const polynomialgf<P> &val) {
     uint_fast64_t r = 1;
     for (auto i = n; i > 0; --i) { r *= P; }
     r = (r - 1) / (P - 1);
-    auto tmp = (polynomialgf<P>({ 1 }) << r) - polynomialgf<P>({ mp });
+    auto tmp = (polynomialgf<P>({1}) << r) - polynomialgf<P>({mp});
     if (!(tmp % val).is_zero()) { return false; }
 
     // проверяется выполнение третьего условия
     auto list3 = factorize(r);
     const auto m = list3.size();
     for (size_t i = 0; i < m; ++i) {
-        tmp = (polynomialgf<P>({ 1 }) << (r / list3[i])) % poly;
+        tmp = (polynomialgf<P>({1}) << (r / list3[i])) % poly;
         if (tmp.is_zero() || tmp.degree() == 0) { return false; }
     }
 

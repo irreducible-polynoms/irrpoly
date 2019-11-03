@@ -10,12 +10,15 @@
 #define IRRPOLY_CHECKER_HPP
 
 #ifdef PTHREAD
+
 #include <pthread.h>
+
 #else
 #include <thread>
 #include <mutex>
 #include <condition_variable>
 #endif
+
 #include "polynomialgf.hpp"
 
 /// Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P].
@@ -101,6 +104,7 @@ public:
         }
 
 #ifdef PTHREAD
+
         /// Освобождение ресурсов, здесь происходит разблокировка мьютекса.
         ~control_type() noexcept(false) {
             pthread_mutex_unlock(&mutex);
@@ -109,6 +113,7 @@ public:
                 throw std::runtime_error("pthread destroy failed");
             }
         }
+
 #endif
 
         /// Блокировка мьютекса.
@@ -185,8 +190,10 @@ public:
     const result_type &result() const noexcept;
 
 #ifdef PTHREAD
+
     static
     void *check(void *arg) noexcept;
+
 #else
     void check() noexcept;
 #endif
@@ -229,8 +236,8 @@ template<uint32_t P>
 void *checker<P>::check(void *arg) noexcept {
     auto *c = static_cast<checker *>(arg);
 #else
-void checker<P>::check() noexcept {
-    auto *c = this;
+    void checker<P>::check() noexcept {
+        auto *c = this;
 #endif
     while (true) {
         if (c->_terminate) { break; }
