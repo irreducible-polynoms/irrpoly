@@ -1,0 +1,236 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.16"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>irrpoly: Файл /Users/vadimpiven/Development/irrpoly/polynomialgf.hpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">irrpoly
+   &#160;<span id="projectnumber">1.0.0</span>
+   </div>
+   <div id="projectbrief">Проверка многочленов на неприводимость и примитивность над заданным полем Галуа</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.8.16 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Поиск');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#typedef-members">Определения типов</a> &#124;
+<a href="#func-members">Функции</a>  </div>
+  <div class="headertitle">
+<div class="title">Файл /Users/vadimpiven/Development/irrpoly/polynomialgf.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &lt;algorithm&gt;</code><br />
+<code>#include &lt;cmath&gt;</code><br />
+<code>#include &lt;stdexcept&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
+<code>#include &quot;<a class="el" href="gf_8hpp_source.html">gf.hpp</a>&quot;</code><br />
+<code>#include &quot;polynomial.hpp&quot;</code><br />
+</div>
+<p><a href="polynomialgf_8hpp_source.html">См. исходные тексты.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Определения типов</h2></td></tr>
+<tr class="memitem:ac9ea228b519ed0b6b1c26d6b0eb20bd7"><td class="memTemplParams" colspan="2"><a id="ac9ea228b519ed0b6b1c26d6b0eb20bd7"></a>
+template&lt;uint32_t P = 2&gt; </td></tr>
+<tr class="memitem:ac9ea228b519ed0b6b1c26d6b0eb20bd7"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="polynomialgf_8hpp.html#ac9ea228b519ed0b6b1c26d6b0eb20bd7">polynomialgf</a> = <a class="el" href="classpolynomial.html">polynomial</a>&lt; <a class="el" href="classgf.html">gf</a>&lt; P &gt; &gt;</td></tr>
+<tr class="memdesc:ac9ea228b519ed0b6b1c26d6b0eb20bd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Класс многочленов над полем Галуа. <br /></td></tr>
+<tr class="separator:ac9ea228b519ed0b6b1c26d6b0eb20bd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Функции</h2></td></tr>
+<tr class="memitem:afe88401ab1b6ac0300976d543f634a33"><td class="memTemplParams" colspan="2"><a id="afe88401ab1b6ac0300976d543f634a33"></a>
+template&lt;uint32_t P&gt; </td></tr>
+<tr class="memitem:afe88401ab1b6ac0300976d543f634a33"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="polynomialgf_8hpp.html#ac9ea228b519ed0b6b1c26d6b0eb20bd7">polynomialgf</a>&lt; P &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="polynomialgf_8hpp.html#afe88401ab1b6ac0300976d543f634a33">derivative</a> (const <a class="el" href="polynomialgf_8hpp.html#ac9ea228b519ed0b6b1c26d6b0eb20bd7">polynomialgf</a>&lt; P &gt; &amp;val)</td></tr>
+<tr class="memdesc:afe88401ab1b6ac0300976d543f634a33"><td class="mdescLeft">&#160;</td><td class="mdescRight">Вычисляет производную данного многочлена. <br /></td></tr>
+<tr class="separator:afe88401ab1b6ac0300976d543f634a33"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2dcac9e33d11fec27737ac7aad53ef29"><td class="memTemplParams" colspan="2">template&lt;uint32_t P&gt; </td></tr>
+<tr class="memitem:a2dcac9e33d11fec27737ac7aad53ef29"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="polynomialgf_8hpp.html#ac9ea228b519ed0b6b1c26d6b0eb20bd7">polynomialgf</a>&lt; P &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="polynomialgf_8hpp.html#a2dcac9e33d11fec27737ac7aad53ef29">gcd</a> (<a class="el" href="polynomialgf_8hpp.html#ac9ea228b519ed0b6b1c26d6b0eb20bd7">polynomialgf</a>&lt; P &gt; m, <a class="el" href="polynomialgf_8hpp.html#ac9ea228b519ed0b6b1c26d6b0eb20bd7">polynomialgf</a>&lt; P &gt; n)</td></tr>
+<tr class="separator:a2dcac9e33d11fec27737ac7aad53ef29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7acdd0302d75f85688c1abd92e1c5093"><td class="memTemplParams" colspan="2">template&lt;uint32_t P&gt; </td></tr>
+<tr class="memitem:a7acdd0302d75f85688c1abd92e1c5093"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="polynomialgf_8hpp.html#a7acdd0302d75f85688c1abd92e1c5093">is_irreducible_berlekamp</a> (const <a class="el" href="polynomialgf_8hpp.html#ac9ea228b519ed0b6b1c26d6b0eb20bd7">polynomialgf</a>&lt; P &gt; &amp;val)</td></tr>
+<tr class="separator:a7acdd0302d75f85688c1abd92e1c5093"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09d4c7241bafa99c5be5eb7484d73177"><td class="memTemplParams" colspan="2"><a id="a09d4c7241bafa99c5be5eb7484d73177"></a>
+template&lt;uint32_t P&gt; </td></tr>
+<tr class="memitem:a09d4c7241bafa99c5be5eb7484d73177"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="polynomialgf_8hpp.html#ac9ea228b519ed0b6b1c26d6b0eb20bd7">polynomialgf</a>&lt; P &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="polynomialgf_8hpp.html#a09d4c7241bafa99c5be5eb7484d73177">random</a> (typename <a class="el" href="polynomialgf_8hpp.html#ac9ea228b519ed0b6b1c26d6b0eb20bd7">polynomialgf</a>&lt; P &gt;::size_type degree)</td></tr>
+<tr class="memdesc:a09d4c7241bafa99c5be5eb7484d73177"><td class="mdescLeft">&#160;</td><td class="mdescRight">Генерирует случайный многочлен над полем GF[P] заданной степени. <br /></td></tr>
+<tr class="separator:a09d4c7241bafa99c5be5eb7484d73177"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8086d21a544b25ce966de9ff506e5d1"><td class="memTemplParams" colspan="2">template&lt;uint32_t P&gt; </td></tr>
+<tr class="memitem:ab8086d21a544b25ce966de9ff506e5d1"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="polynomialgf_8hpp.html#ab8086d21a544b25ce966de9ff506e5d1">is_primitive</a> (const <a class="el" href="polynomialgf_8hpp.html#ac9ea228b519ed0b6b1c26d6b0eb20bd7">polynomialgf</a>&lt; P &gt; &amp;val)</td></tr>
+<tr class="separator:ab8086d21a544b25ce966de9ff506e5d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a261950bb4d2e5b869f8f9b357bdb2e"><td class="memTemplParams" colspan="2">template&lt;uint32_t P&gt; </td></tr>
+<tr class="memitem:a6a261950bb4d2e5b869f8f9b357bdb2e"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="polynomialgf_8hpp.html#a6a261950bb4d2e5b869f8f9b357bdb2e">is_irreducible_rabin</a> (const <a class="el" href="polynomialgf_8hpp.html#ac9ea228b519ed0b6b1c26d6b0eb20bd7">polynomialgf</a>&lt; P &gt; &amp;val)</td></tr>
+<tr class="separator:a6a261950bb4d2e5b869f8f9b357bdb2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
+<div class="textblock"><dl class="section author"><dt>Автор</dt><dd>Vadim Piven <a href="#" onclick="location.href='mai'+'lto:'+'vad'+'im'+'@pi'+'ve'+'n.t'+'ec'+'h'; return false;">vadim<span style="display: none;">.nosp@m.</span>@piv<span style="display: none;">.nosp@m.</span>en.te<span style="display: none;">.nosp@m.</span>ch</a>, Anastasia Chekhoeva <a href="#" onclick="location.href='mai'+'lto:'+'A89'+'16'+'822'+'68'+'76@'+'ya'+'nde'+'x.'+'ru'; return false;">A8916<span style="display: none;">.nosp@m.</span>8226<span style="display: none;">.nosp@m.</span>876@y<span style="display: none;">.nosp@m.</span>ande<span style="display: none;">.nosp@m.</span>x.ru</a>, Veronika Biryukova <a href="#" onclick="location.href='mai'+'lto:'+'bir'+'yu'+'kov'+'av'+'ero'+'ni'+'ka@'+'ma'+'il.'+'ru'; return false;">biryu<span style="display: none;">.nosp@m.</span>kova<span style="display: none;">.nosp@m.</span>veron<span style="display: none;">.nosp@m.</span>ika@<span style="display: none;">.nosp@m.</span>mail.<span style="display: none;">.nosp@m.</span>ru</a>, Igor Bogdanov <a href="#" onclick="location.href='mai'+'lto:'+'bog'+'da'+'nov'+'.i'+'gor'+'.9'+'8@m'+'ai'+'l.r'+'u'; return false;">bogda<span style="display: none;">.nosp@m.</span>nov.<span style="display: none;">.nosp@m.</span>igor.<span style="display: none;">.nosp@m.</span>98@m<span style="display: none;">.nosp@m.</span>ail.r<span style="display: none;">.nosp@m.</span>u</a>, Vadim Volkov <a href="#" onclick="location.href='mai'+'lto:'+'vol'+'k.'+'vad'+'.p'+'@gm'+'ai'+'l.c'+'om'; return false;">volk.<span style="display: none;">.nosp@m.</span>vad.<span style="display: none;">.nosp@m.</span>p@gma<span style="display: none;">.nosp@m.</span>il.c<span style="display: none;">.nosp@m.</span>om</a>, Zimin Fedor <a href="#" onclick="location.href='mai'+'lto:'+'zim'+'fv'+'@ya'+'nd'+'ex.'+'ru'; return false;">zimfv<span style="display: none;">.nosp@m.</span>@yan<span style="display: none;">.nosp@m.</span>dex.r<span style="display: none;">.nosp@m.</span>u</a> @license Free use of this library is permitted under the guidelines and in accordance with the MIT License (MIT). @url <a href="https://github.com/irreducible-polynoms/irrpoly">https://github.com/irreducible-polynoms/irrpoly</a> </dd></dl>
+</div><h2 class="groupheader">Функции</h2>
+<a id="a2dcac9e33d11fec27737ac7aad53ef29"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2dcac9e33d11fec27737ac7aad53ef29">&#9670;&nbsp;</a></span>gcd()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;uint32_t P&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="polynomialgf_8hpp.html#ac9ea228b519ed0b6b1c26d6b0eb20bd7">polynomialgf</a>&lt;P&gt; gcd </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="polynomialgf_8hpp.html#ac9ea228b519ed0b6b1c26d6b0eb20bd7">polynomialgf</a>&lt; P &gt;&#160;</td>
+          <td class="paramname"><em>m</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="polynomialgf_8hpp.html#ac9ea228b519ed0b6b1c26d6b0eb20bd7">polynomialgf</a>&lt; P &gt;&#160;</td>
+          <td class="paramname"><em>n</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Расширенный алгоритм Евклида для поиска наибольшего общего делителя (greatest common divisor) двух многочленов. Реализация сделана на основе кода из библиотеки Boost 1.71.0. </p>
+
+</div>
+</div>
+<a id="a7acdd0302d75f85688c1abd92e1c5093"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7acdd0302d75f85688c1abd92e1c5093">&#9670;&nbsp;</a></span>is_irreducible_berlekamp()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;uint32_t P&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool is_irreducible_berlekamp </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="polynomialgf_8hpp.html#ac9ea228b519ed0b6b1c26d6b0eb20bd7">polynomialgf</a>&lt; P &gt; &amp;&#160;</td>
+          <td class="paramname"><em>val</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Алгоритм Берлекампа проверки многочлена на неприводимость в поле GF[P]. Первый шаг - вычисление производной данного многочлена. Если производная равна нулю, то многочлен является степенью какого-то другого многочлена, то есть он приводим. Второй шаг - поиск общих множителей многочлена и его производной. Если общие множители (многочлены, а не числа) есть, т.е. многочлены не взаимно просты, то val делится на них, т.е. он не неприводим. Третий шаг - простоение матрицы Берлекампа и вычисление её ранга. Строится матрица M[nxn], где строки - коэффициенты многочлена x^(ip) (mod val), где p - двойка, 0 &lt; i &lt; n, P(x) - текущий многочлен над полем GF[2] степени n. Подробное описание и пример расчёта можно найти в статье "A Formalization of Berlekamp’s Factorization Algorithm" по ссылке <a href="http://www21.in.tum.de/~nipkow/Isabelle2016/Isabelle2016_6.pdf">http://www21.in.tum.de/~nipkow/Isabelle2016/Isabelle2016_6.pdf</a> (стр. 3-4). Из матрицы M вычитается единичная матрица и получается матрица Берлекампа. Если ранг матрицы Берлекампа равен степени многочлена минус 1, то многочлен неприводим. Для вычисления ранга используется приведение матрицы к ступенчатому виду и подсчёт числа ступеней в ней. Кроме того, все многочлены первой степени неприводимы в любом поле. </p><dl class="section author"><dt>Автор</dt><dd>Vadim Piven <a href="#" onclick="location.href='mai'+'lto:'+'vad'+'im'+'@pi'+'ve'+'n.t'+'ec'+'h'; return false;">vadim<span style="display: none;">.nosp@m.</span>@piv<span style="display: none;">.nosp@m.</span>en.te<span style="display: none;">.nosp@m.</span>ch</a> </dd></dl>
+
+</div>
+</div>
+<a id="a6a261950bb4d2e5b869f8f9b357bdb2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a261950bb4d2e5b869f8f9b357bdb2e">&#9670;&nbsp;</a></span>is_irreducible_rabin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;uint32_t P&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool is_irreducible_rabin </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="polynomialgf_8hpp.html#ac9ea228b519ed0b6b1c26d6b0eb20bd7">polynomialgf</a>&lt; P &gt; &amp;&#160;</td>
+          <td class="paramname"><em>val</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Алгоритм Рабина проверки многочлена на неприводимость в поле GF[P]. Для использования алгоритма предварительно строится список простых множителей для числа n - степени многочлена. Вместо множителей в список добавляется отношение n_i = n / d_i, где d_i - простой делитель (divisor) n. Если n - простое, то список состоит из одной единицы. Далее выполняется несколько шагов:</p><ol type="1">
+<li>строится многочлен temp = x^(P ^ n_i) - x (mod val)</li>
+<li>находится наиболиший общий дилитель temp и val, если НОД не константе, отличной от нуля, то это многочлен, и val, очевидно, делится на него, а значит приводим.</li>
+<li>если условия 1-2 выполнены для всех n_i, проверяем их для n. Если для n получаем результат 0, то val неприводим. Кроме того, все многочлены первой степени неприводимы в любом поле. <dl class="section author"><dt>Автор</dt><dd>Anastasia Chekhoeva <a href="#" onclick="location.href='mai'+'lto:'+'A89'+'16'+'822'+'68'+'76@'+'ya'+'nde'+'x.'+'ru'; return false;">A8916<span style="display: none;">.nosp@m.</span>8226<span style="display: none;">.nosp@m.</span>876@y<span style="display: none;">.nosp@m.</span>ande<span style="display: none;">.nosp@m.</span>x.ru</a> </dd></dl>
+</li>
+</ol>
+
+</div>
+</div>
+<a id="ab8086d21a544b25ce966de9ff506e5d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8086d21a544b25ce966de9ff506e5d1">&#9670;&nbsp;</a></span>is_primitive()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;uint32_t P&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool is_primitive </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="polynomialgf_8hpp.html#ac9ea228b519ed0b6b1c26d6b0eb20bd7">polynomialgf</a>&lt; P &gt; &amp;&#160;</td>
+          <td class="paramname"><em>val</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Алгоритм проверки многочлена на примитивность. Многочлен является примитивным над полем GF[P], если выполнены три условия:</p><ol type="1">
+<li>элемент mp = (-1)^n * val[0] является примитивным элементом поля GF[P^n], т.е. k^((p-1) / q) != 1 для каждого q - простого множителя P-1 данный пункт не применим для P = 2 по объективным причинам</li>
+<li>x^r = k (mod val), где r = (p^n - 1) / (p - 1)</li>
+<li>deg[x^(r / q) (mod val)] &gt; 0 для каждого 1 &lt; q &lt; r - простого множителя r Кроме того, многочлен x является примитивным для любого поля GF[P]. <dl class="section author"><dt>Автор</dt><dd>Veronika Biryukova <a href="#" onclick="location.href='mai'+'lto:'+'bir'+'yu'+'kov'+'av'+'ero'+'ni'+'ka@'+'ma'+'il.'+'ru'; return false;">biryu<span style="display: none;">.nosp@m.</span>kova<span style="display: none;">.nosp@m.</span>veron<span style="display: none;">.nosp@m.</span>ika@<span style="display: none;">.nosp@m.</span>mail.<span style="display: none;">.nosp@m.</span>ru</a> </dd></dl>
+</li>
+</ol>
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Документация по irrpoly. Последние изменения: Вс 3 Ноя 2019 23:02:17. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.16
+</small></address>
+</body>
+</html>

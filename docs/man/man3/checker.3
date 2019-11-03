@@ -1,0 +1,96 @@
+.TH "checker< P >" 3 "Вс 3 Ноя 2019" "Version 1.0.0" "irrpoly" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+checker< P > \- Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P]\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <checker\&.hpp>\fP
+.SS "Классы"
+
+.in +1c
+.ti -1c
+.RI "class \fBcontrol_type\fP"
+.br
+.RI "Cлужебный класс, используется для выполнения проверки в несколько потоков\&. "
+.ti -1c
+.RI "struct \fBresult_type\fP"
+.br
+.RI "Структура, представляющая результаты проверки многочлена\&. "
+.in -1c
+.SS "Открытые типы"
+
+.in +1c
+.ti -1c
+.RI "enum \fBmethod\fP { \fBberlekamp\fP = 0, \fBrabin\fP }"
+.br
+.RI "Доступные методы проверки на неприводимость\&. "
+.in -1c
+.SS "Открытые члены"
+
+.in +1c
+.ti -1c
+.RI "\fBchecker\fP (\fBcontrol_type\fP *, \fBmethod\fP=\fBberlekamp\fP) noexcept"
+.br
+.ti -1c
+.RI "\fBpolynomialgf\fP< P > \fBget\fP () const"
+.br
+.RI "Многочлен, проверка которого выполнялась\&. "
+.ti -1c
+.RI "void \fBset\fP (\fBpolynomialgf\fP< P >)"
+.br
+.ti -1c
+.RI "bool \fBbusy\fP () const noexcept"
+.br
+.RI "Возвращает текущее состояние потока\&. "
+.ti -1c
+.RI "void \fBterminate\fP () noexcept"
+.br
+.RI "Устанавливает флаг, требующий завершить работу потока по завершении вычислений\&. "
+.ti -1c
+.RI "const \fBresult_type\fP & \fBresult\fP () const noexcept"
+.br
+.RI "Возвращает результат проверки текущего многочлена на неприводимость и примитивность\&. "
+.ti -1c
+.RI "void \fBcheck\fP () noexcept"
+.br
+.in -1c
+.SH "Подробное описание"
+.PP 
+
+.SS "template<uint32_t P>
+.br
+class checker< P >"
+Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P]\&. 
+.SH "Перечисления"
+.PP 
+.SS "template<uint32_t P> enum \fBchecker::method\fP"
+
+.PP
+Доступные методы проверки на неприводимость\&. 
+.PP
+\fBЭлементы перечислений\fP
+.in +1c
+.TP
+\fB\fIberlekamp \fP\fP
+алгоритм Берлекампа 
+.TP
+\fB\fIrabin \fP\fP
+алгоритм Рабина 
+.SH "Конструктор(ы)"
+.PP 
+.SS "template<uint32_t P> \fBchecker\fP< P >::\fBchecker\fP (\fBcontrol_type\fP * ctrl, \fBmethod\fP meth = \fC\fBberlekamp\fP\fP)\fC [explicit]\fP, \fC [noexcept]\fP"
+Конструктор структуры с данными для проверки и результатом\&. Начальное состояние - busy = false\&. 
+.SH "Методы"
+.PP 
+.SS "template<uint32_t P> void \fBchecker\fP< P >::check ()\fC [noexcept]\fP"
+Собственно функция, выполняющая проверку многочлена на неприводимость и примитивность\&. Поток бесконечно ожидает получения новых данных\&. Если данные получены - выполняется их проверка, выставление результата и уведомление условной переменной\&. Кроме того, постоянно проверяется, не должен ли поток завершить работу\&. Выход из функции прекращает работу потока и освобожает его ресурсы\&. В случае с pthread для этого требуется выполнить pthread_exit\&. 
+.SS "template<uint32_t P> void \fBchecker\fP< P >::set (\fBpolynomialgf\fP< P > val)"
+Установка нового многочлена для проверки, сбрасывает результаты предыдущей проверки и выставляет busy = true\&. 
+
+.SH "Автор"
+.PP 
+Автоматически создано Doxygen для irrpoly из исходного текста\&.

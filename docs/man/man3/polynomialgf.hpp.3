@@ -1,0 +1,113 @@
+.TH "/Users/vadimpiven/Development/irrpoly/polynomialgf.hpp" 3 "Вс 3 Ноя 2019" "Version 1.0.0" "irrpoly" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/Users/vadimpiven/Development/irrpoly/polynomialgf.hpp
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <algorithm>\fP
+.br
+\fC#include <cmath>\fP
+.br
+\fC#include <stdexcept>\fP
+.br
+\fC#include <vector>\fP
+.br
+\fC#include 'gf\&.hpp'\fP
+.br
+\fC#include 'polynomial\&.hpp'\fP
+.br
+
+.SS "Определения типов"
+
+.in +1c
+.ti -1c
+.RI "template<uint32_t P = 2> using \fBpolynomialgf\fP = \fBpolynomial\fP< \fBgf\fP< P > >"
+.br
+.RI "Класс многочленов над полем Галуа\&. "
+.in -1c
+.SS "Функции"
+
+.in +1c
+.ti -1c
+.RI "template<uint32_t P> \fBpolynomialgf\fP< P > \fBderivative\fP (const \fBpolynomialgf\fP< P > &val)"
+.br
+.RI "Вычисляет производную данного многочлена\&. "
+.ti -1c
+.RI "template<uint32_t P> \fBpolynomialgf\fP< P > \fBgcd\fP (\fBpolynomialgf\fP< P > m, \fBpolynomialgf\fP< P > n)"
+.br
+.ti -1c
+.RI "template<uint32_t P> bool \fBis_irreducible_berlekamp\fP (const \fBpolynomialgf\fP< P > &val)"
+.br
+.ti -1c
+.RI "template<uint32_t P> \fBpolynomialgf\fP< P > \fBrandom\fP (typename \fBpolynomialgf\fP< P >::size_type degree)"
+.br
+.RI "Генерирует случайный многочлен над полем GF[P] заданной степени\&. "
+.ti -1c
+.RI "template<uint32_t P> bool \fBis_primitive\fP (const \fBpolynomialgf\fP< P > &val)"
+.br
+.ti -1c
+.RI "template<uint32_t P> bool \fBis_irreducible_rabin\fP (const \fBpolynomialgf\fP< P > &val)"
+.br
+.in -1c
+.SH "Подробное описание"
+.PP 
+
+.PP
+\fBАвтор\fP
+.RS 4
+Vadim Piven vadim@piven.tech, Anastasia Chekhoeva A89168226876@yandex.ru, Veronika Biryukova biryukovaveronika@mail.ru, Igor Bogdanov bogdanov.igor.98@mail.ru, Vadim Volkov volk.vad.p@gmail.com, Zimin Fedor zimfv@yandex.ru @license Free use of this library is permitted under the guidelines and in accordance with the MIT License (MIT)\&. @url https://github.com/irreducible-polynoms/irrpoly 
+.RE
+.PP
+
+.SH "Функции"
+.PP 
+.SS "template<uint32_t P> \fBpolynomialgf\fP<P> gcd (\fBpolynomialgf\fP< P > m, \fBpolynomialgf\fP< P > n)"
+Расширенный алгоритм Евклида для поиска наибольшего общего делителя (greatest common divisor) двух многочленов\&. Реализация сделана на основе кода из библиотеки Boost 1\&.71\&.0\&. 
+.SS "template<uint32_t P> bool is_irreducible_berlekamp (const \fBpolynomialgf\fP< P > & val)"
+Алгоритм Берлекампа проверки многочлена на неприводимость в поле GF[P]\&. Первый шаг - вычисление производной данного многочлена\&. Если производная равна нулю, то многочлен является степенью какого-то другого многочлена, то есть он приводим\&. Второй шаг - поиск общих множителей многочлена и его производной\&. Если общие множители (многочлены, а не числа) есть, т\&.е\&. многочлены не взаимно просты, то val делится на них, т\&.е\&. он не неприводим\&. Третий шаг - простоение матрицы Берлекампа и вычисление её ранга\&. Строится матрица M[nxn], где строки - коэффициенты многочлена x^(ip) (mod val), где p - двойка, 0 < i < n, P(x) - текущий многочлен над полем GF[2] степени n\&. Подробное описание и пример расчёта можно найти в статье 'A Formalization of Berlekamp’s Factorization Algorithm' по ссылке http://www21.in.tum.de/~nipkow/Isabelle2016/Isabelle2016_6.pdf (стр\&. 3-4)\&. Из матрицы M вычитается единичная матрица и получается матрица Берлекампа\&. Если ранг матрицы Берлекампа равен степени многочлена минус 1, то многочлен неприводим\&. Для вычисления ранга используется приведение матрицы к ступенчатому виду и подсчёт числа ступеней в ней\&. Кроме того, все многочлены первой степени неприводимы в любом поле\&. 
+.PP
+\fBАвтор\fP
+.RS 4
+Vadim Piven vadim@piven.tech 
+.RE
+.PP
+
+.SS "template<uint32_t P> bool is_irreducible_rabin (const \fBpolynomialgf\fP< P > & val)"
+Алгоритм Рабина проверки многочлена на неприводимость в поле GF[P]\&. Для использования алгоритма предварительно строится список простых множителей для числа n - степени многочлена\&. Вместо множителей в список добавляется отношение n_i = n / d_i, где d_i - простой делитель (divisor) n\&. Если n - простое, то список состоит из одной единицы\&. Далее выполняется несколько шагов:
+.IP "1." 4
+строится многочлен temp = x^(P ^ n_i) - x (mod val)
+.IP "2." 4
+находится наиболиший общий дилитель temp и val, если НОД не константе, отличной от нуля, то это многочлен, и val, очевидно, делится на него, а значит приводим\&.
+.IP "3." 4
+если условия 1-2 выполнены для всех n_i, проверяем их для n\&. Если для n получаем результат 0, то val неприводим\&. Кроме того, все многочлены первой степени неприводимы в любом поле\&. 
+.PP
+\fBАвтор\fP
+.RS 4
+Anastasia Chekhoeva A89168226876@yandex.ru 
+.RE
+.PP
+
+.PP
+
+.SS "template<uint32_t P> bool is_primitive (const \fBpolynomialgf\fP< P > & val)"
+Алгоритм проверки многочлена на примитивность\&. Многочлен является примитивным над полем GF[P], если выполнены три условия:
+.IP "1." 4
+элемент mp = (-1)^n * val[0] является примитивным элементом поля GF[P^n], т\&.е\&. k^((p-1) / q) != 1 для каждого q - простого множителя P-1 данный пункт не применим для P = 2 по объективным причинам
+.IP "2." 4
+x^r = k (mod val), где r = (p^n - 1) / (p - 1)
+.IP "3." 4
+deg[x^(r / q) (mod val)] > 0 для каждого 1 < q < r - простого множителя r Кроме того, многочлен x является примитивным для любого поля GF[P]\&. 
+.PP
+\fBАвтор\fP
+.RS 4
+Veronika Biryukova biryukovaveronika@mail.ru 
+.RE
+.PP
+
+.PP
+
+.SH "Автор"
+.PP 
+Автоматически создано Doxygen для irrpoly из исходного текста\&.

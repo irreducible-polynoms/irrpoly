@@ -1,3 +1,11 @@
+/**
+ * @file    gf.hpp
+ * @author  Vadim Piven <vadim@piven.tech>, Zimin Fedor <zimfv@yandex.ru>
+ * @license Free use of this library is permitted under the
+ * guidelines and in accordance with the MIT License (MIT).
+ * @url     https://github.com/irreducible-polynoms/irrpoly
+ */
+
 #ifndef GF_HPP
 #define GF_HPP
 
@@ -8,6 +16,12 @@
 #include <random>
 #include <stdexcept>
 
+/**
+ * Класс gf представляет из себя число над полем GF[P].
+ * @tparam P основание поля Галуа GF[P], по умолчанию рассматривается поле GF[2].
+ * Существование поля Галуа для заданного P не гарантируется, за использование корректного
+ * значения для P несут ответственность пользователи данного класса.
+ */
 template<uint32_t P = 2>
 class gf {
     int_fast64_t v;
@@ -80,12 +94,14 @@ public:
     std::istream &operator>>(std::istream &, gf<Q> &);
 };
 
+/// Возвращает число над полем GF[P] в пределы [0, P-1].
 template<uint32_t P>
 void gf<P>::fix() noexcept {
     v = v % P;
     v = v >= 0 ? v : P + v;
 }
 
+/// Генерирует случайное число в пределах [0, P-1].
 template<uint32_t P>
 gf<P> gf<P>::random() noexcept {
     static std::random_device rd;
@@ -94,6 +110,7 @@ gf<P> gf<P>::random() noexcept {
     return gf<P>(dis(gen));
 }
 
+/// Конструктор по умолчанию, обнуляет переменную.
 template<uint32_t P>
 constexpr
 gf<P>::gf() noexcept : v(0) {}
@@ -106,6 +123,7 @@ gf<P>::gf(const int_fast64_t val) noexcept : v(val) {
     fix();
 }
 
+/// Возвращает значение класса в виде целого числа.
 template<uint32_t P>
 int_fast64_t gf<P>::data() const noexcept {
     return v;
@@ -181,6 +199,12 @@ gf<P> gf<P>::operator*(const gf<P> &val) const noexcept {
     return gf<P>(*this) *= val;
 }
 
+/**
+ * Находит обратный по умножению (multiplicative inverse) элемент для данного элемента GF[P].
+ * Найденное однажды значение заносится в массив и повторно не вычисляется.
+ * Для поиска используется расширенный алгоритм Евклида, реализация с минимальными
+ * модификациями копирует код из библиотеки Boost 1.71.0.
+ */
 template<uint32_t P>
 [[nodiscard]]
 gf<P> gf<P>::mul_inv() const noexcept(false) {
@@ -213,6 +237,11 @@ gf<P> gf<P>::mul_inv() const noexcept(false) {
     }
 }
 
+/**
+ * Деление реализуется как умножение на обратный по умножению.
+ * Если обратный не существует - деление не возможно.
+ * Для существование обратного необходимо, чтобы GF[P] было полем (зависит от выбора P).
+ */
 template<uint32_t P>
 gf<P> &gf<P>::operator/=(const gf<P> &val) noexcept(false) {
     if (val.v == 0) { throw std::invalid_argument("division by zero"); }
@@ -224,6 +253,7 @@ gf<P> gf<P>::operator/(const gf<P> &val) const noexcept(false) {
     return gf<P>(*this) /= val;
 }
 
+/// Проверяет равенство данного числа нулю.
 template<uint32_t P>
 [[nodiscard]]
 bool gf<P>::is_zero() const noexcept {

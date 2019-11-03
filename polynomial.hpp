@@ -1,5 +1,11 @@
-//  (C) Copyright John Maddock 2006.
-//  (C) Copyright Jeremy William Murphy 2015.
+/**
+ * @file    boost/math/tools/polynomial.hpp
+ * @author  John Maddock 2006, Jeremy William Murphy 2015
+ * @license Use, modification and distribution are subject to the
+ * Boost Software License, Version 1.0. (See accompanying file
+ * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ * @url     https://www.boost.org/doc/libs/1_71_0/
+ */
 
 #ifndef POLYNOMIAL_HPP
 #define POLYNOMIAL_HPP
@@ -10,6 +16,11 @@
 #include <algorithm>
 #include <initializer_list>
 
+/**
+ * Реализация класса polynomial взыта из библиотеки Boost 1.71.0.
+ * За комментариями к реализации обращайтесь к первоисточнику
+ * https://www.boost.org/doc/libs/1_71_0/boost/math/tools/polynomial.hpp
+ */
 template<typename T>
 class polynomial;
 

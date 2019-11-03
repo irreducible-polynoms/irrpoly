@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.16"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>irrpoly: Проверка многочленов на неприводимость и примитивность над заданным полем Галуа</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">irrpoly
+   &#160;<span id="projectnumber">1.0.0</span>
+   </div>
+   <div id="projectbrief">Проверка многочленов на неприводимость и примитивность над заданным полем Галуа</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.8.16 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Поиск');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+</div><!-- top -->
+<div class="PageDoc"><div class="header">
+  <div class="headertitle">
+<div class="title">Проверка многочленов на неприводимость и примитивность над заданным полем Галуа </div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><h1><a class="anchor" id="autotoc_md1"></a>
+Требования</h1>
+<p>Для работы программы необходимо наличие:</p><ul>
+<li>компилятора с поддержкой C++ 17</li>
+<li>Cmake для сборки проекта</li>
+<li>64-битного процессора с как минимум двумя ядрами</li>
+</ul>
+<p>При сборке данного проекта проверяется наличие библиотеки POSIX threads, в случае наличия программа с ней линкуется, в противном случае для многопоточности используются потоки <code>std::thread</code>.</p>
+<h1><a class="anchor" id="autotoc_md2"></a>
+Состав</h1>
+<p>Данная программа состоит из нескольких классов:</p><ul>
+<li>gf - класс чисел над полем Галуа заданной характеристика</li>
+<li>polynomial - класс арифметики многочленов</li>
+<li>polynomialgf - многочлены над полем Галуа</li>
+<li>checker - реализует проверку многочленов на неприводимость и примитивность в несколько потоков</li>
+</ul>
+<p>В файле <a href="polynomialgf.hpp">polynomialgf.hpp</a> реализованы следующие алгоритмы:</p><ul>
+<li>поиск наибольшего общего делителя двух многочленов</li>
+<li>проверка многочлена на неприводимость методом Берлекампа</li>
+<li>проверка многочлена на неприводимость методом Рабина</li>
+<li>проверка многочлена на примитивность</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md3"></a>
+Документация</h1>
+<p>Описание кода программы может быть найдено в папке [docs](docs) или на соответствующей странице <a href="https://github.com/irreducible-polynoms/irrpoly/html">GitHub Pages</a>.</p>
+<p>Сборка проекта и обновление документации может выполняться с использованием [Makefile](Makefile). Доступные команды:</p><ul>
+<li><code>make debug</code> - сборка версии Debug</li>
+<li><code>make release</code> - сборка версии Release</li>
+<li><code>make docs</code> - перегенерация документации (требуется установленный Doxygen)</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md4"></a>
+Использование</h1>
+<p>Для использования программы требуется определиться с тем, какие именно многочлены нужно получить:</p><ul>
+<li>характеристика поля Галуа</li>
+<li>степень многочленов</li>
+<li>их количество</li>
+<li>неприводимость или примитивность требуется проверять</li>
+<li>порядок перебора многочленов</li>
+</ul>
+<p>После чего требуется необходимым образом модифицировать функцию-шиблон в <a href="main.cpp">main.cpp</a>. Скорее всего потребуется реализовать собственный неслучайный способ подбора многочленов на проверку. </p>
+</div></div><!-- contents -->
+</div><!-- PageDoc -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Документация по irrpoly. Последние изменения: Вс 3 Ноя 2019 23:02:17. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.16
+</small></address>
+</body>
+</html>

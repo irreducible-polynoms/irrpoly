@@ -1,3 +1,13 @@
+/**
+ * @file    polynomialgf.hpp
+ * @author  Vadim Piven <vadim@piven.tech>, Anastasia Chekhoeva <A89168226876@yandex.ru>,
+ * Veronika Biryukova <biryukovaveronika@mail.ru>, Igor Bogdanov <bogdanov.igor.98@mail.ru>,
+ * Vadim Volkov <volk.vad.p@gmail.com>, Zimin Fedor <zimfv@yandex.ru>
+ * @license Free use of this library is permitted under the
+ * guidelines and in accordance with the MIT License (MIT).
+ * @url     https://github.com/irreducible-polynoms/irrpoly
+ */
+
 #ifndef POLYNOMIALGF_HPP
 #define POLYNOMIALGF_HPP
 
@@ -9,9 +19,11 @@
 #include "gf.hpp"
 #include "polynomial.hpp"
 
+/// Класс многочленов над полем Галуа.
 template<uint32_t P = 2>
 using polynomialgf = polynomial<gf<P>>;
 
+/// Вычисляет производную данного многочлена.
 template<uint32_t P>
 polynomialgf<P> derivative(const polynomialgf<P> &val) {
     polynomialgf<P> res = val;
@@ -23,6 +35,11 @@ polynomialgf<P> derivative(const polynomialgf<P> &val) {
     return res;
 }
 
+/**
+ * Расширенный алгоритм Евклида для поиска наибольшего общего делителя
+ * (greatest common divisor) двух многочленов. Реализация сделана на основе
+ * кода из библиотеки Boost 1.71.0.
+ */
 template<uint32_t P>
 polynomialgf<P> gcd(polynomialgf<P> m, polynomialgf<P> n) {
     if (m.is_zero() || n.is_zero()) {
@@ -42,26 +59,51 @@ polynomialgf<P> gcd(polynomialgf<P> m, polynomialgf<P> n) {
     return u0;
 }
 
+/**
+ * Алгоритм Берлекампа проверки многочлена на неприводимость в поле GF[P].
+ * Первый шаг - вычисление производной данного многочлена. Если производная
+ * равна нулю, то многочлен является степенью какого-то другого многочлена,
+ * то есть он приводим.
+ * Второй шаг - поиск общих множителей многочлена и его производной.
+ * Если общие множители (многочлены, а не числа) есть, т.е. многочлены
+ * не взаимно просты, то val делится на них, т.е. он не неприводим.
+ * Третий шаг - простоение матрицы Берлекампа и вычисление её ранга.
+ * Строится матрица M[nxn], где строки - коэффициенты многочлена x^(ip) (mod val),
+ * где p - двойка, 0 < i < n, P(x) - текущий многочлен над полем GF[2] степени n.
+ * Подробное описание и пример расчёта можно найти в статье
+ * "A Formalization of Berlekamp’s Factorization Algorithm" по ссылке
+ * http://www21.in.tum.de/~nipkow/Isabelle2016/Isabelle2016_6.pdf (стр. 3-4).
+ * Из матрицы M вычитается единичная матрица и получается матрица Берлекампа.
+ * Если ранг матрицы Берлекампа равен степени многочлена минус 1,
+ * то многочлен неприводим. Для вычисления ранга используется приведение
+ * матрицы к ступенчатому виду и подсчёт числа ступеней в ней.
+ * Кроме того, все многочлены первой степени неприводимы в любом поле.
+ * @author Vadim Piven <vadim@piven.tech>
+ */
 template<uint32_t P>
 bool is_irreducible_berlekamp(const polynomialgf<P> &val) {
     const auto n = val.degree();
+
+    // проверка вырожденных случаев
     if (val.is_zero() || n == 0 || (val[0].is_zero() && n > 1)) { return false; }
     if (n == 1) { return true; }
+
+    // функция для построения матрицы берлекампа и вычисления её ранга
     auto berlekampMatrixRank = [](const polynomialgf<P> &val) {
         polynomialgf<P> tmp;
         typename polynomialgf<P>::size_type i, j, k, l;
         const gf<P> zer = 0;
         const auto n = val.degree();
-        std::vector<std::vector<gf<P>>> m(n, std::vector<gf<P>>(n, zer)); // berlekamp matrix
+        std::vector<std::vector<gf<P>>> m(n, std::vector<gf<P>>(n, zer)); // M = 0
         for (i = 0; i < n; ++i) {
-            tmp = (polynomialgf<P>({1}) << i * P) % val; // temp = x ^ ip (mod val)
+            tmp = (polynomialgf<P>({1}) << i * P) % val; // M[i,*] = x ^ ip (mod val)
             for (j = 0, k = tmp.degree(); j <= k; ++j) {
                 m[i][j] += tmp[j];
             }
-            m[i][i] -= 1; // m -= E
+            m[i][i] -= 1; // M - E
         }
 
-        // reduction of a matrix to a step form with calculation of its rank
+        // приведение матрицы к ступенчатому виду
         bool f;
         gf<P> mul;
         for (i = k = 0; i < n && k < n; ++k) {
@@ -86,28 +128,55 @@ bool is_irreducible_berlekamp(const polynomialgf<P> &val) {
         }
         return i;
     };
+
+    // алгоритм Берлекампа
     auto d = derivative(val);
     return !d.is_zero() && gcd(val, d).degree() == 0 &&
            berlekampMatrixRank(val) == val.degree() - 1;
 }
 
+/// Генерирует случайный многочлен над полем GF[P] заданной степени.
 template<uint32_t P>
 polynomialgf<P> random(typename polynomialgf<P>::size_type degree) {
     std::vector<gf<P>> data(degree + 1);
     for (auto &d : data) { d = gf<P>::random(); }
     while (data[degree].is_zero()) { data[degree] = gf<P>::random(); }
+    // старший коэффициент не должен быть равень нулю, иначе многочлен будет меньшей степени
     while (data[0].is_zero()) { data[0] = gf<P>::random(); }
-    return data;
+    return data; // неявное преобразование вектора коэффициентов к классу polynomialgf
 }
 
+/**
+ * Алгоритм проверки многочлена на примитивность. Многочлен является примитивным над
+ * полем GF[P], если выполнены три условия:
+ * 1. элемент mp = (-1)^n * val[0] является примитивным элементом поля GF[P^n], т.е.
+ * k^((p-1) / q) != 1 для каждого q - простого множителя P-1
+ * данный пункт не применим для P = 2 по объективным причинам
+ * 2. x^r = k (mod val), где r = (p^n - 1) / (p - 1)
+ * 3. deg[x^(r / q) (mod val)] > 0 для каждого 1 < q < r - простого множителя r
+ * Кроме того, многочлен x является примитивным для любого поля GF[P].
+ * @author Veronika Biryukova <biryukovaveronika@mail.ru>
+ */
 template<uint32_t P>
 bool is_primitive(const polynomialgf<P> &val) {
     const auto n = val.degree();
+
+    // проверка вырожденных случаев
     if (val.is_zero() || n == 0 || (val[0].is_zero() && n > 1)) { return false; }
+    if (n == 1 && val[0] == 0) { return true; } // val = k * x + 0
+
+    // выполняется нормировка, т.к. данный алгоритм справедлив только
+    // для многочленов со старшим коэффициентом, равным единице
+    // умножение многочлена на число не меняет его примитивность
     const auto poly = val / val[n];
+
+    // ещё один вырожденный случай, на работу с которым алгоритм не рассчитан
     if (P == 2 && poly == polynomialgf<P>({ 1,1 })) { return false; }
+
     auto mp = (n % 2) ? -poly[0] : poly[0];
 
+    // функция для разложения (факторизации) числа на множители
+    // единица и само число (в случае его простоты) в разложение не входят
     auto factorize = [](uint64_t n) {
         std::vector<uint64_t> list;
         const auto begin = n;
@@ -120,7 +189,7 @@ bool is_primitive(const polynomialgf<P> &val) {
         return list;
     };
 
-    // step 1
+    // проверяется выполнение первого условия
     if (P > 2) {
         const auto p = P - 1;
         auto list = (p == 2) ? std::vector<uint64_t>{2} : factorize(p);
@@ -133,14 +202,14 @@ bool is_primitive(const polynomialgf<P> &val) {
         }
     }
 
-    // step 2
+    // проверяется выполнение второго условия
     uint_fast64_t r = 1;
     for (auto i = n; i > 0; --i) { r *= P; }
     r = (r - 1) / (P - 1);
     auto tmp = (polynomialgf<P>({ 1 }) << r) - polynomialgf<P>({ mp });
     if (!(tmp % val).is_zero()) { return false; }
 
-    // step 3
+    // проверяется выполнение третьего условия
     auto list3 = factorize(r);
     const auto m = list3.size();
     for (size_t i = 0; i < m; ++i) {
@@ -148,15 +217,33 @@ bool is_primitive(const polynomialgf<P> &val) {
         if (tmp.is_zero() || tmp.degree() == 0) { return false; }
     }
 
+    // если все условия выполнены - многочлен примитивен
     return true;
 }
 
+/**
+ * Алгоритм Рабина проверки многочлена на неприводимость в поле GF[P].
+ * Для использования алгоритма предварительно строится список простых множителей
+ * для числа n - степени многочлена. Вместо множителей в список добавляется отношение
+ * n_i = n / d_i, где d_i - простой делитель (divisor) n. Если n - простое, то
+ * список состоит из одной единицы. Далее выполняется несколько шагов:
+ * 1. строится многочлен temp =  x^(P ^ n_i) - x (mod val)
+ * 2. находится наиболиший общий дилитель temp и val, если НОД не константе,
+ * отличной от нуля, то это многочлен, и val, очевидно, делится на него, а значит приводим.
+ * 3. если условия 1-2 выполнены для всех n_i, проверяем их для n.
+ * Если для n получаем результат 0, то val неприводим.
+ * Кроме того, все многочлены первой степени неприводимы в любом поле.
+ * @author Anastasia Chekhoeva <A89168226876@yandex.ru>
+ */
 template<uint32_t P>
 bool is_irreducible_rabin(const polynomialgf<P> &val) {
     const auto n = val.degree();
+
+    // проверка вырожденных случаев
     if (val.is_zero() || n == 0 || (val[0].is_zero() && n > 1)) { return false; }
     if (n == 1) { return true; }
 
+    // функция разложения числа на множители
     auto get_list = [](uint64_t n) {
         std::vector<uint64_t> list;
         const auto begin = n;
@@ -169,6 +256,7 @@ bool is_irreducible_rabin(const polynomialgf<P> &val) {
         return list;
     };
 
+    // шаги 1-2
     auto list = get_list(n);
     polynomialgf<P> tmp;
     for (auto i: list) {
@@ -177,6 +265,8 @@ bool is_irreducible_rabin(const polynomialgf<P> &val) {
         tmp %= val;
         if (tmp.is_zero() || gcd(val, tmp).degree() > 0) { return false; }
     }
+
+    // шаг 3
     tmp = polynomialgf<P>({1}) << pow(P, n);
     tmp -= polynomialgf<P>({1}) << 1;
     tmp %= val;
