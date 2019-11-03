@@ -47,7 +47,7 @@ polynomialgf<P> generate_primitive(
     }
     for (unsigned i = 0; i < threadsNum; ++i) {
         // создаём новый поток для выполнения проверки
-        pthread_create(&threads[i], nullptr, &checker<P>::check, &checkers[i]);
+        pthread_create(&threads[i], &thread_attr, &checker<P>::check, &checkers[i]);
     }
 
     while (true) {
