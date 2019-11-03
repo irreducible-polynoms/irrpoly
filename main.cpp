@@ -1,66 +1,72 @@
 #include <iostream>
+#include <stdexcept>
+#include <thread>
 
+#include <pthread.h>
+#include "checker.hpp"
 #include "polynomialgf.hpp"
 
-using namespace std;
+template <uint32_t P>
+[[nodiscard]]
+polynomialgf<P> generate_primitive(typename polynomialgf<P>::size_type degree, const typename checker<P>::method meth) {
+    static const unsigned threadsNum = (std::thread::hardware_concurrency() > 0 ? std::thread::hardware_concurrency() : 1);
 
-int main() {
-//    // irreducible
-//    polynomialgf<2> p0({1, 1, 1});
-//    cout << "expected: 1, got: " << is_irreducible_berlekamp(p0) << endl;
-//    cout << "expected: 1, got: " << is_irreducible_rabin(p0) << endl;
-//
-//    // primitive
-//    polynomialgf<2> p1({1, 0, 1, 0, 0, 1});
-//    cout << "expected: 1, got: " << is_primitive(p1) << endl;
-//    polynomialgf<3> p2({2, 1, 0, 2, 1, 0, 0, 0, 1});
-//    cout << "expected: 1, got: " << is_primitive(p2) << endl;
-//    polynomialgf<5> p3({2, 2, 1, 0, 1});
-//    cout << "expected: 1, got: " << is_primitive(p3) << endl;
-//
-//    //non-primitive
-//    polynomialgf<2> p5({1, 1});
-//    cout << "expected: 0, got: " << is_primitive(p5) << endl;
-//    polynomialgf<2> p6({1, 1, 1, 1, 1});
-//    cout << "expected: 0, got: " << is_primitive(p6) << endl;
-//    polynomialgf<2> p7({1, 0, 0, 1, 0, 0, 1});
-//    cout << "expected: 0, got: " << is_primitive(p7) << endl;
-//    polynomialgf<2> p8({1, 1, 0, 0, 1, 0, 1});
-//    cout << "expected: 0, got: " << is_primitive(p8) << endl;
-//    polynomialgf<2> p9({1, 1, 1, 0, 1, 0, 1});
-//    cout << "expected: 0, got: " << is_primitive(p9) << endl;
+    auto countBusy = [](const std::vector<checker<P>> &c) noexcept {
+        unsigned n = 0;
+        for (auto &checker : c) { n += checker.busy(); }
+        return n;
+    };
 
-    // TESTING
-    const uint32_t P = 5; // change P to what ever you want
-    for (size_t i = 4; i < 24; ++i) {
-        for (size_t j = 0; j < 5; ++j) {
-            polynomialgf<P> p = random<P>(i);
-            cout << (is_irreducible_rabin(p) ? '1' : '0') << " " // also is_irreducible_berlekamp
-                 << (is_primitive(p) ? '1' : '0') << " " << P << " "
-                 << p << endl;
+    polynomialgf<P> res; // возвращаемое значение
+
+    // всё для работы с потоками
+    pthread_t threads[threadsNum];
+    pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+    pthread_mutexattr_t attr;
+    pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+
+    if (pthread_mutexattr_init(&attr) ||
+        pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK) ||
+        pthread_mutex_init(&mutex, &attr) ||
+        pthread_cond_init(&cond, nullptr)) { throw std::runtime_error("pthread initialisation failed"); }
+
+    // по одному проверщику в каждом потоке
+    auto c = std::vector<checker<P>>(threadsNum, checker<P>(&mutex, &cond, meth));
+
+    while (true) {
+        while (countBusy(c) >= threadsNum) {
+            // ждём изменения числа занятых потоков
+            pthread_cond_wait(&cond, &mutex);
+        }
+
+        for (unsigned j = 0; j < threadsNum; ++j) {
+            // находим первый свободный поток
+            if (c[j].busy()) { continue; }
+            if (c[j].result().primitive) {
+                res = c[j].get();
+                goto END;
+            }
+            // генерируем случайный многочлен для проверки
+            c[j].set(random<P>(degree));
+            // создаём новый поток для выполнения проверки
+            pthread_create(&threads[j], nullptr, &checker<P>::check, &c[j]);
+            // отсоединеняем поток
+            pthread_detach(threads[j]);
         }
     }
-    // copy output and save to file named "input" (WITHOUT EXTENSION!)
-    // use Wolfram Mathematica
-    // define function for validating the result
-    // f[irr_, prim_, m_, p_] :=
-    // irr == Boole[
-    //    IrreduciblePolynomialQ[Dot[Power[x, Range[0, Length[p] - 1]], p],
-    //     Modulus -> m]] &&
-    //  prim == Boole[
-    //    PrimitivePolynomialQ[Dot[Power[x, Range[0, Length[p] - 1]], p],
-    //     Modulus -> m]]
-    // open "input" file for read (CHANGE PATH TO FILE!)
-    // file = OpenRead["/Users/vadimpiven/Downloads/input"]
-    // validate results line by line
-    // While[Not[(irr = Read[file, Number]) === EndOfFile],
-    // prim = Read[file, Number]; m = Read[file, Number];
-    // p = Read[StringToStream[#], Number] & /@
-    //   StringSplit[StringTrim[ReadLine[file], ("{" | "}" | " ") ...],
-    //    ", "]; Print[f[irr, prim, m, p]]]
-    // EXPECTED RESULT IS COLUMN OF "True", if there is some False - this program has some errors
-    // close the file
-    // Close[file]
+    END:
+    // ждём завершения всех созданных потоков
+    while (countBusy(c)) {
+        pthread_cond_wait(&cond, &mutex);
+    }
+    if (pthread_cond_destroy(&cond) || pthread_mutex_destroy(&mutex)
+        || pthread_mutexattr_destroy(&attr)) { throw std::runtime_error("pthread destruction failed"); }
+    return res;
+}
+
+int main() {
+    const uint32_t P = 2;
+    std::cout << generate_primitive<P>(5, checker<P>::method::rabin) << std::endl;
 
     return 0;
 }

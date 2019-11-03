@@ -95,7 +95,8 @@ template<uint32_t P>
 polynomialgf<P> random(typename polynomialgf<P>::size_type degree) {
     std::vector<gf<P>> data(degree + 1);
     for (auto &d : data) { d = gf<P>::random(); }
-    data[degree] = 1; // generate only monic polynomials
+    while (data[degree].is_zero()) { data[degree] = gf<P>::random(); }
+    while (data[0].is_zero()) { data[0] = gf<P>::random(); }
     return data;
 }
 
