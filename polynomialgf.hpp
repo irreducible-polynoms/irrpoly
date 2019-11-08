@@ -60,6 +60,50 @@ polynomialgf<P> gcd(polynomialgf<P> m, polynomialgf<P> n) {
     return u0;
 }
 
+namespace detail {
+    /**
+     * Вычисляет значение (x^pow - sub) % mod.
+     * @param pow степень, в которую требуется возвести x
+     * @param mod многочлен, остаток деления на который необходимо найти
+     * @param sub вычитаемое, в случае, когда степень многочлена sub меньше
+     * степени многочлена mod, можно заменить (x^pow - sub) % mod на
+     * (x^pow % mod) - sub без изменения результата, таким образом использование
+     * данной функции возможно только в подобной ситуации; это и происходит,
+     * поскольку в методе Берлекампа она вызывается всегда с sub = 0,
+     * в проверке на примитивность всегда с sub равным константе, при этом
+     * mod - как минимум первой степени, поэтому условие выполнено,
+     * в методе Рабина sub = x, но при этом mod как минимум второй степени,
+     * т.к. все многочлены первой степени неприводимы, что обеспечивает
+     * возврат не доходя до вызова данной функции
+     */
+    template<uint32_t P>
+    [[nodiscard]]
+    polynomialgf<P> x_pow_mod_sub(
+            uint64_t pow,
+            const polynomialgf<P> &mod,
+            const polynomialgf<P> &sub = polynomialgf<P>({0})
+    ) noexcept {
+        // Эта функция возврадает по сути следующий редультат:
+        // return ((polynomialgf<P>({1}) << pow) - sub) % mod;
+        // её существование необходимо, т.к. в методе Рабина
+        // и в методе проверки на примитивность требуется вычислить
+        // её результат для столь больших pow, что x^pow не влезает
+        // в оперативную память, данный метод решает эту проблему,
+        // но он всё ещё адски медленный
+        const auto n = mod.degree();
+        polynomialgf<P> res({1});
+
+        typename polynomialgf<P>::size_type tmp;
+        for (auto m = res.degree(); pow + m >= n; m = res.degree()) {
+            tmp = n - m;
+            res <<= tmp;
+            res %= mod;
+            pow -= tmp;
+        }
+        return (res << pow) - sub;
+    }
+}
+
 /**
  * Алгоритм Берлекампа проверки многочлена на неприводимость в поле GF[P].
  * Первый шаг - вычисление производной данного многочлена. Если производная
@@ -97,7 +141,7 @@ bool is_irreducible_berlekamp(const polynomialgf<P> &val) {
         const auto n = val.degree();
         std::vector<std::vector<gf<P>>> m(n, std::vector<gf<P>>(n, zer)); // M = 0
         for (i = 0; i < n; ++i) {
-            tmp = (polynomialgf<P>({1}) << i * P) % val; // M[i,*] = x ^ ip (mod val)
+            tmp = detail::x_pow_mod_sub(i * P, val); // M[i,*] = x ^ ip (mod val)
             for (j = 0, k = tmp.degree(); j <= k; ++j) {
                 m[i][j] += tmp[j];
             }
@@ -205,14 +249,14 @@ bool is_primitive(const polynomialgf<P> &val) {
 
     // проверяется выполнение второго условия
     uint64_t r = (detail::integer_power(static_cast<uint64_t>(P), n) - 1) / (P - 1);
-    auto tmp = (polynomialgf<P>({1}) << r) - polynomialgf<P>({mp});
-    if (!(tmp % val).is_zero()) { return false; }
+    auto tmp = detail::x_pow_mod_sub(r, val, polynomialgf<P>({mp}));
+    if (!tmp.is_zero()) { return false; }
 
     // проверяется выполнение третьего условия
     auto list3 = factorize(r);
     const auto m = list3.size();
     for (size_t i = 0; i < m; ++i) {
-        tmp = (polynomialgf<P>({1}) << (r / list3[i])) % poly;
+        tmp = detail::x_pow_mod_sub(r / list3[i], poly);
         if (tmp.is_zero() || tmp.degree() == 0) { return false; }
     }
 
@@ -257,14 +301,14 @@ bool is_irreducible_rabin(const polynomialgf<P> &val) {
 
     // шаги 1-2
     auto list = get_list(n);
-    polynomialgf<P> tmp, x = polynomialgf<P>({ 0, 1 });
+    polynomialgf<P> tmp, x = polynomialgf<P>({0, 1});
     for (auto i: list) {
-        tmp = ((polynomialgf<P>({1}) << detail::integer_power(static_cast<uint64_t>(P), i)) - x) % val;
+        tmp = detail::x_pow_mod_sub(detail::integer_power(static_cast<uint64_t>(P), i), val, x);
         if (tmp.is_zero() || gcd(val, tmp).degree() > 0) { return false; }
     }
 
     // шаг 3
-    tmp = ((polynomialgf<P>({1}) << detail::integer_power(static_cast<uint64_t>(P), n)) - x) % val;
+    tmp = detail::x_pow_mod_sub(detail::integer_power(static_cast<uint64_t>(P), n), val, x);
     return tmp.is_zero();
 }
 
