@@ -15,6 +15,7 @@
 #include <iostream>
 #include <random>
 #include <stdexcept>
+#include <type_traits>
 
 /**
  * Класс gf представляет из себя число над полем GF[P].
@@ -24,6 +25,16 @@
  */
 template<uint32_t P = 2>
 class gf {
+public:
+    /// Выбираем тип внутреннего хранилища как минимально возможный для экономии памяти
+    typedef typename std::conditional<((P - 1) * (P - 1) > INT32_MAX), int64_t,
+            typename std::conditional<((P - 1) * (P - 1) > INT16_MAX), int32_t,
+                    typename std::conditional<((P - 1) * (P - 1) > INT8_MAX), int16_t,
+                            int8_t>::type
+            >::type
+    >::type gf_type;
+
+private:
     int_fast64_t v;
 
     void fix() noexcept;
@@ -37,6 +48,7 @@ public:
 
     gf(int_fast64_t) noexcept;
 
+    [[nodiscard]]
     int_fast64_t data() const noexcept;
 
     gf<P> operator+() const noexcept;
@@ -117,14 +129,12 @@ gf<P>::gf() noexcept : v(0) {}
 
 template<uint32_t P>
 gf<P>::gf(const int_fast64_t val) noexcept : v(val) {
-    if (P < 2) {
-        throw std::domain_error("P must be > 1");
-    }
     fix();
 }
 
 /// Возвращает значение класса в виде целого числа.
 template<uint32_t P>
+[[nodiscard]]
 int_fast64_t gf<P>::data() const noexcept {
     return v;
 }

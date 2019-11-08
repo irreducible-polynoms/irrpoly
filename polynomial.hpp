@@ -271,8 +271,8 @@ public:
             return;
         }
         std::vector<T> prod(a.size() + b.size() - 1, T(0));
-        for (unsigned i = 0; i < a.size(); ++i)
-            for (unsigned j = 0; j < b.size(); ++j)
+        for (typename std::vector<T>::size_type i = 0; i < a.size(); ++i)
+            for (typename std::vector<T>::size_type j = 0; j < b.size(); ++j)
                 prod[i + j] += a.m_data[i] * b.m_data[j];
         m_data.swap(prod);
     }

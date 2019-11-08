@@ -32,7 +32,7 @@ public:
     };
 
     /// Доступные методы проверки на неприводимость.
-    enum method {
+    enum class method {
         berlekamp = 0, ///< алгоритм Берлекампа
         rabin ///< алгоритм Рабина
     };
@@ -175,7 +175,7 @@ private:
 
 public:
     explicit
-    checker(control_type *, method = berlekamp) noexcept;
+    checker(control_type *, method = method::berlekamp) noexcept;
 
     polynomialgf<P> get() const;
 

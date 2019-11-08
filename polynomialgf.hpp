@@ -204,9 +204,7 @@ bool is_primitive(const polynomialgf<P> &val) {
     }
 
     // проверяется выполнение второго условия
-    uint_fast64_t r = 1;
-    for (auto i = n; i > 0; --i) { r *= P; }
-    r = (r - 1) / (P - 1);
+    uint64_t r = (detail::integer_power(static_cast<uint64_t>(P), n) - 1) / (P - 1);
     auto tmp = (polynomialgf<P>({1}) << r) - polynomialgf<P>({mp});
     if (!(tmp % val).is_zero()) { return false; }
 
@@ -248,7 +246,7 @@ bool is_irreducible_rabin(const polynomialgf<P> &val) {
     auto get_list = [](uint64_t n) {
         std::vector<uint64_t> list;
         const auto begin = n;
-        for (int64_t d = 2; d * d <= n; ++d) {
+        for (uint64_t d = 2; d * d <= n; ++d) {
             if (n % d) { continue; }
             list.emplace_back(begin / d);
             while (n % d == 0) { n /= d; }
@@ -259,18 +257,14 @@ bool is_irreducible_rabin(const polynomialgf<P> &val) {
 
     // шаги 1-2
     auto list = get_list(n);
-    polynomialgf<P> tmp;
+    polynomialgf<P> tmp, x = polynomialgf<P>({ 0, 1 });
     for (auto i: list) {
-        tmp = polynomialgf<P>({1}) << pow(P, i);
-        tmp -= polynomialgf<P>({1}) << 1;
-        tmp %= val;
+        tmp = ((polynomialgf<P>({1}) << detail::integer_power(static_cast<uint64_t>(P), i)) - x) % val;
         if (tmp.is_zero() || gcd(val, tmp).degree() > 0) { return false; }
     }
 
     // шаг 3
-    tmp = polynomialgf<P>({1}) << pow(P, n);
-    tmp -= polynomialgf<P>({1}) << 1;
-    tmp %= val;
+    tmp = ((polynomialgf<P>({1}) << detail::integer_power(static_cast<uint64_t>(P), n)) - x) % val;
     return tmp.is_zero();
 }
 
