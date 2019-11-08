@@ -2,7 +2,8 @@
  * @file    polynomialgf.hpp
  * @author  Vadim Piven <vadim@piven.tech>, Anastasia Chekhoeva <A89168226876@yandex.ru>,
  * Veronika Biryukova <biryukovaveronika@mail.ru>, Igor Bogdanov <bogdanov.igor.98@mail.ru>,
- * Vadim Volkov <volk.vad.p@gmail.com>, Zimin Fedor <zimfv@yandex.ru>
+ * Vadim Volkov <volk.vad.p@gmail.com>, Zimin Fedor <zimfv@yandex.ru>,
+ * Cheshkova Anna <cheshkoann@gmail.com>
  * @license Free use of this library is permitted under the
  * guidelines and in accordance with the MIT License (MIT).
  * @url     https://github.com/irreducible-polynoms/irrpoly
