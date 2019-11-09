@@ -330,8 +330,8 @@ $(function() {
 <div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;            <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;        }</div>
 <div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        std::vector&lt;T&gt; prod(a.size() + b.size() - 1, T(0));</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i = 0; i &lt; a.size(); ++i)</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> j = 0; j &lt; b.size(); ++j)</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">typename</span> std::vector&lt;T&gt;::size_type i = 0; i &lt; a.size(); ++i)</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">typename</span> std::vector&lt;T&gt;::size_type j = 0; j &lt; b.size(); ++j)</div>
 <div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;                prod[i + j] += a.m_data[i] * b.m_data[j];</div>
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        m_data.swap(prod);</div>
 <div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;    }</div>
@@ -609,7 +609,7 @@ $(function() {
 <div class="ttc" id="astructdetail_1_1minus_html"><div class="ttname"><a href="structdetail_1_1minus.html">detail::minus</a></div><div class="ttdef"><b>Definition:</b> polynomial.hpp:93</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Вс 3 Ноя 2019 23:02:16. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Вс 10 Ноя 2019 00:47:12. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.16
 </small></address>

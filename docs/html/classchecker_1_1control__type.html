@@ -88,8 +88,8 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Открытые члены</h2></td></tr>
-<tr class="memitem:a3ceb9be4fc30e0572d4d05ece9ddf370"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchecker_1_1control__type.html#a3ceb9be4fc30e0572d4d05ece9ddf370">control_type</a> (const typename <a class="el" href="classchecker.html">checker</a>&lt; P &gt;::<a class="el" href="classchecker.html#ad7308b8ba68904e35e8278621632c430">method</a> meth, const unsigned threads_num) noexcept(false)</td></tr>
-<tr class="separator:a3ceb9be4fc30e0572d4d05ece9ddf370"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57a532dca3bdfe50ffd0d3810b52fcec"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchecker_1_1control__type.html#a57a532dca3bdfe50ffd0d3810b52fcec">control_type</a> (const typename <a class="el" href="classchecker.html">checker</a>&lt; P &gt;::<a class="el" href="classchecker.html#a9de71f192d92f8fa13775e3936449f6c">irreducible_method</a> irr_meth, const typename <a class="el" href="classchecker.html">checker</a>&lt; P &gt;::<a class="el" href="classchecker.html#a21307d46f6d67d9a39fa43ea4f311a46">primitive_method</a> prim_meth, const unsigned threads_num) noexcept(false)</td></tr>
+<tr class="separator:a57a532dca3bdfe50ffd0d3810b52fcec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad8bc9ab78b6f87aea1826ee47914e449"><td class="memItemLeft" align="right" valign="top"><a id="ad8bc9ab78b6f87aea1826ee47914e449"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchecker_1_1control__type.html#ad8bc9ab78b6f87aea1826ee47914e449">lock</a> () noexcept</td></tr>
 <tr class="memdesc:ad8bc9ab78b6f87aea1826ee47914e449"><td class="mdescLeft">&#160;</td><td class="mdescRight">Блокировка мьютекса. <br /></td></tr>
@@ -115,8 +115,8 @@ class checker&lt; P &gt;::control_type</h3>
 
 <p>Cлужебный класс, используется для выполнения проверки в несколько потоков. </p>
 </div><h2 class="groupheader">Конструктор(ы)</h2>
-<a id="a3ceb9be4fc30e0572d4d05ece9ddf370"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3ceb9be4fc30e0572d4d05ece9ddf370">&#9670;&nbsp;</a></span>control_type()</h2>
+<a id="a57a532dca3bdfe50ffd0d3810b52fcec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a57a532dca3bdfe50ffd0d3810b52fcec">&#9670;&nbsp;</a></span>control_type()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -129,8 +129,14 @@ template&lt;uint32_t P&gt; </div>
         <tr>
           <td class="memname"><a class="el" href="classchecker.html">checker</a>&lt; P &gt;::control_type::control_type </td>
           <td>(</td>
-          <td class="paramtype">const typename <a class="el" href="classchecker.html">checker</a>&lt; P &gt;::<a class="el" href="classchecker.html#ad7308b8ba68904e35e8278621632c430">method</a>&#160;</td>
-          <td class="paramname"><em>meth</em>, </td>
+          <td class="paramtype">const typename <a class="el" href="classchecker.html">checker</a>&lt; P &gt;::<a class="el" href="classchecker.html#a9de71f192d92f8fa13775e3936449f6c">irreducible_method</a>&#160;</td>
+          <td class="paramname"><em>irr_meth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const typename <a class="el" href="classchecker.html">checker</a>&lt; P &gt;::<a class="el" href="classchecker.html#a21307d46f6d67d9a39fa43ea4f311a46">primitive_method</a>&#160;</td>
+          <td class="paramname"><em>prim_meth</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -189,7 +195,7 @@ template&lt;uint32_t P&gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Вс 3 Ноя 2019 23:02:17. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Вс 10 Ноя 2019 00:47:12. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.16
 </small></address>

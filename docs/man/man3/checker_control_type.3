@@ -1,4 +1,4 @@
-.TH "checker< P >::control_type" 3 "Вс 3 Ноя 2019" "Version 1.0.0" "irrpoly" \" -*- nroff -*-
+.TH "checker< P >::control_type" 3 "Вс 10 Ноя 2019" "Version 1.0.0" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,7 +13,7 @@ checker< P >::control_type \- Cлужебный класс, использует
 
 .in +1c
 .ti -1c
-.RI "\fBcontrol_type\fP (const typename \fBchecker\fP< P >::\fBmethod\fP meth, const unsigned threads_num) noexcept(false)"
+.RI "\fBcontrol_type\fP (const typename \fBchecker\fP< P >::\fBirreducible_method\fP irr_meth, const typename \fBchecker\fP< P >::\fBprimitive_method\fP prim_meth, const unsigned threads_num) noexcept(false)"
 .br
 .ti -1c
 .RI "void \fBlock\fP () noexcept"
@@ -44,7 +44,7 @@ class checker< P >::control_type"
 Cлужебный класс, используется для выполнения проверки в несколько потоков\&. 
 .SH "Конструктор(ы)"
 .PP 
-.SS "template<uint32_t P> \fBchecker\fP< P >::control_type::control_type (const typename \fBchecker\fP< P >::\fBmethod\fP meth, const unsigned threads_num)\fC [inline]\fP, \fC [noexcept]\fP"
+.SS "template<uint32_t P> \fBchecker\fP< P >::control_type::control_type (const typename \fBchecker\fP< P >::\fBirreducible_method\fP irr_meth, const typename \fBchecker\fP< P >::\fBprimitive_method\fP prim_meth, const unsigned threads_num)\fC [inline]\fP, \fC [noexcept]\fP"
 Инициализация мьютекса и условной переменной, создание требуемого числа потоков и хранилищ данных\&. На выходе мьютекс находится в состоянии locked, все потоки запущены и находятся в состоянии detached\&. 
 .SH "Методы"
 .PP 

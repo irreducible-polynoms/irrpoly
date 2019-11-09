@@ -31,10 +31,17 @@ public:
         bool primitive;
     };
 
-    /// Доступные методы проверки на неприводимость.
-    enum class method {
-        berlekamp = 0, ///< алгоритм Берлекампа
+    /// Доступные методы проверки нанеприводимость.
+    enum class irreducible_method {
+        nil, ///< не проверять
+        berlekamp, ///< алгоритм Берлекампа
         rabin ///< алгоритм Рабина
+    };
+
+    /// Доступные методы проверки примитивность.
+    enum class primitive_method {
+        nil, ///< не проверять
+        definition ///< проверка по определению
     };
 
     /// Cлужебный класс, используется для выполнения проверки в несколько потоков.
@@ -63,10 +70,11 @@ public:
          * запущены и находятся в состоянии detached.
          */
         control_type(
-                const typename checker<P>::method meth,
+                const typename checker<P>::irreducible_method irr_meth,
+                const typename checker<P>::primitive_method prim_meth,
                 const unsigned threads_num
         ) noexcept(false) : cond(), mutex() {
-            _checkers = std::vector<checker<P>>(threads_num, checker<P>(this, meth));
+            _checkers = std::vector<checker<P>>(threads_num, checker<P>(this, irr_meth, prim_meth));
 #ifdef PTHREAD
             threads = std::vector<pthread_t>(threads_num);
 
@@ -171,11 +179,12 @@ private:
     bool _busy; ///< поток занят полезной работой
     bool _terminate; ///< поток должен быть завершён
     result_type res; ///< результат проверки
-    method _method; ///< используемый метод проверки на неприводимость
+    irreducible_method irr_meth; ///< используемый метод проверки на неприводимость
+    primitive_method prim_meth; ///< используемый метод проверки на примитивность
 
 public:
     explicit
-    checker(control_type *, method = method::berlekamp) noexcept;
+    checker(control_type *, irreducible_method, primitive_method) noexcept;
 
     polynomialgf<P> get() const;
 
@@ -204,8 +213,13 @@ public:
  * Начальное состояние - busy = false.
  */
 template<uint32_t P>
-checker<P>::checker(control_type *ctrl, const method meth) noexcept :
-        poly(), ctrl(ctrl), _busy(false), res({false, false}), _method(meth), _terminate(false) {}
+checker<P>::checker(
+        control_type *ctrl,
+        const irreducible_method irr_meth,
+        const primitive_method prim_meth
+) noexcept :
+        poly(), ctrl(ctrl), _busy(false), res({false, false}),
+        irr_meth(irr_meth), prim_meth(prim_meth), _terminate(false) {}
 
 /// Многочлен, проверка которого выполнялась.
 template<uint32_t P>
@@ -242,15 +256,27 @@ void *checker<P>::check(void *arg) noexcept {
     while (true) {
         if (c->_terminate) { break; }
         if (!c->_busy) { continue; }
-        switch (c->_method) {
-            case method::rabin:
-                c->res.irreducible = is_irreducible_rabin(c->poly);
-                break;
-            default: // method::berlekamp
+
+        // в случае, когда проверка не выполняется устанавливается результат true
+        switch (c->irr_meth) {
+            case irreducible_method::berlekamp:
                 c->res.irreducible = is_irreducible_berlekamp(c->poly);
                 break;
+            case irreducible_method::rabin:
+                c->res.irreducible = is_irreducible_rabin(c->poly);
+                break;
+            default: // irreducible_method::nil
+                c->res.irreducible = true;
+                break;
         }
-        c->res.primitive = c->res.irreducible ? is_primitive(c->poly) : false;
+        switch (c->prim_meth) {
+            case primitive_method::definition:
+                c->res.primitive = c->res.irreducible ? is_primitive_definition(c->poly) : false;
+                break;
+            default: // primitive_method::nil
+                c->res.primitive = true;
+                break;
+        }
 
         c->ctrl->lock();
         c->_busy = false;

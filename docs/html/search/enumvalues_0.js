@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['berlekamp_76',['berlekamp',['../classchecker.html#ad7308b8ba68904e35e8278621632c430a742b66da07f5b7298f43bc7560db81f7',1,'checker']]]
+  ['berlekamp_84',['berlekamp',['../classchecker.html#a9de71f192d92f8fa13775e3936449f6ca7ba1489db9e5f06273d215956331258c',1,'checker']]]
 ];

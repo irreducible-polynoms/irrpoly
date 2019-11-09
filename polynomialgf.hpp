@@ -192,8 +192,8 @@ polynomialgf<P> random(typename polynomialgf<P>::size_type degree) {
 }
 
 /**
- * Алгоритм проверки многочлена на примитивность. Многочлен является примитивным над
- * полем GF[P], если выполнены три условия:
+ * Алгоритм проверки многочлена на примитивность по определению. Многочлен является
+ * примитивным над полем GF[P], если выполнены три условия:
  * 1. элемент mp = (-1)^n * val[0] является примитивным элементом поля GF[P^n], т.е.
  * k^((p-1) / q) != 1 для каждого q - простого множителя P-1
  * данный пункт не применим для P = 2 по объективным причинам
@@ -203,7 +203,7 @@ polynomialgf<P> random(typename polynomialgf<P>::size_type degree) {
  * @author Veronika Biryukova <biryukovaveronika@mail.ru>
  */
 template<uint32_t P>
-bool is_primitive(const polynomialgf<P> &val) {
+bool is_primitive_definition(const polynomialgf<P> &val) {
     const auto n = val.degree();
 
     // проверка вырожденных случаев

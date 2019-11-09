@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['method_75',['method',['../classchecker.html#ad7308b8ba68904e35e8278621632c430',1,'checker']]]
+  ['irreducible_5fmethod_82',['irreducible_method',['../classchecker.html#a9de71f192d92f8fa13775e3936449f6c',1,'checker']]]
 ];

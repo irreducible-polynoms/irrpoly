@@ -29,8 +29,8 @@ var menudata={children:[
 {text:"Члены классов",url:"functions.html",children:[
 {text:"Указатель",url:"functions.html"},
 {text:"Функции",url:"functions_func.html"},
-{text:"Перечисления",url:"functions_enum.html"},
-{text:"Элементы перечислений",url:"functions_eval.html"}]}]},
+{text:"Определения типов",url:"functions_type.html"},
+{text:"Перечисления",url:"functions_enum.html"}]}]},
 {text:"Файлы",url:"files.html",children:[
 {text:"Файлы",url:"files.html"},
 {text:"Список членов всех файлов",url:"globals.html",children:[

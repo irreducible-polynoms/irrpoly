@@ -1,4 +1,4 @@
-.TH "/Users/vadimpiven/Development/irrpoly/polynomialgf.hpp" 3 "Вс 3 Ноя 2019" "Version 1.0.0" "irrpoly" \" -*- nroff -*-
+.TH "/Users/vadimpiven/Development/irrpoly/polynomialgf.hpp" 3 "Вс 10 Ноя 2019" "Version 1.0.0" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -38,6 +38,9 @@
 .RI "template<uint32_t P> \fBpolynomialgf\fP< P > \fBgcd\fP (\fBpolynomialgf\fP< P > m, \fBpolynomialgf\fP< P > n)"
 .br
 .ti -1c
+.RI "template<uint32_t P> \fBpolynomialgf\fP< P > \fBdetail::x_pow_mod_sub\fP (uint64_t pow, const \fBpolynomialgf\fP< P > &mod, const \fBpolynomialgf\fP< P > &sub=\fBpolynomialgf\fP< P >({0})) noexcept"
+.br
+.ti -1c
 .RI "template<uint32_t P> bool \fBis_irreducible_berlekamp\fP (const \fBpolynomialgf\fP< P > &val)"
 .br
 .ti -1c
@@ -45,7 +48,7 @@
 .br
 .RI "Генерирует случайный многочлен над полем GF[P] заданной степени\&. "
 .ti -1c
-.RI "template<uint32_t P> bool \fBis_primitive\fP (const \fBpolynomialgf\fP< P > &val)"
+.RI "template<uint32_t P> bool \fBis_primitive_definition\fP (const \fBpolynomialgf\fP< P > &val)"
 .br
 .ti -1c
 .RI "template<uint32_t P> bool \fBis_irreducible_rabin\fP (const \fBpolynomialgf\fP< P > &val)"
@@ -57,7 +60,7 @@
 .PP
 \fBАвтор\fP
 .RS 4
-Vadim Piven vadim@piven.tech, Anastasia Chekhoeva A89168226876@yandex.ru, Veronika Biryukova biryukovaveronika@mail.ru, Igor Bogdanov bogdanov.igor.98@mail.ru, Vadim Volkov volk.vad.p@gmail.com, Zimin Fedor zimfv@yandex.ru @license Free use of this library is permitted under the guidelines and in accordance with the MIT License (MIT)\&. @url https://github.com/irreducible-polynoms/irrpoly 
+Vadim Piven vadim@piven.tech, Anastasia Chekhoeva A89168226876@yandex.ru, Veronika Biryukova biryukovaveronika@mail.ru, Igor Bogdanov bogdanov.igor.98@mail.ru, Vadim Volkov volk.vad.p@gmail.com, Zimin Fedor zimfv@yandex.ru, Cheshkova Anna cheshkoann@gmail.com @license Free use of this library is permitted under the guidelines and in accordance with the MIT License (MIT)\&. @url https://github.com/irreducible-polynoms/irrpoly 
 .RE
 .PP
 
@@ -91,8 +94,8 @@ Anastasia Chekhoeva A89168226876@yandex.ru
 
 .PP
 
-.SS "template<uint32_t P> bool is_primitive (const \fBpolynomialgf\fP< P > & val)"
-Алгоритм проверки многочлена на примитивность\&. Многочлен является примитивным над полем GF[P], если выполнены три условия:
+.SS "template<uint32_t P> bool is_primitive_definition (const \fBpolynomialgf\fP< P > & val)"
+Алгоритм проверки многочлена на примитивность по определению\&. Многочлен является примитивным над полем GF[P], если выполнены три условия:
 .IP "1." 4
 элемент mp = (-1)^n * val[0] является примитивным элементом поля GF[P^n], т\&.е\&. k^((p-1) / q) != 1 для каждого q - простого множителя P-1 данный пункт не применим для P = 2 по объективным причинам
 .IP "2." 4
@@ -106,6 +109,19 @@ Veronika Biryukova biryukovaveronika@mail.ru
 .RE
 .PP
 
+.PP
+
+.SS "template<uint32_t P> \fBpolynomialgf\fP<P> detail::x_pow_mod_sub (uint64_t pow, const \fBpolynomialgf\fP< P > & mod, const \fBpolynomialgf\fP< P > & sub = \fC\fBpolynomialgf\fP<P>({0})\fP)\fC [noexcept]\fP"
+Вычисляет значение (x^pow - sub) % mod\&. 
+.PP
+\fBАргументы\fP
+.RS 4
+\fIpow\fP степень, в которую требуется возвести x 
+.br
+\fImod\fP многочлен, остаток деления на который необходимо найти 
+.br
+\fIsub\fP вычитаемое, в случае, когда степень многочлена sub меньше степени многочлена mod, можно заменить (x^pow - sub) % mod на (x^pow % mod) - sub без изменения результата, таким образом использование данной функции возможно только в подобной ситуации; это и происходит, поскольку в методе Берлекампа она вызывается всегда с sub = 0, в проверке на примитивность всегда с sub равным константе, при этом mod - как минимум первой степени, поэтому условие выполнено, в методе Рабина sub = x, но при этом mod как минимум второй степени, т\&.к\&. все многочлены первой степени неприводимы, что обеспечивает возврат не доходя до вызова данной функции 
+.RE
 .PP
 
 .SH "Автор"

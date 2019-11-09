@@ -1,4 +1,4 @@
-.TH "checker< P >" 3 "Вс 3 Ноя 2019" "Version 1.0.0" "irrpoly" \" -*- nroff -*-
+.TH "checker< P >" 3 "Вс 10 Ноя 2019" "Version 1.0.0" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -25,15 +25,19 @@ checker< P > \- Выполняет проверку на неприводимо�
 
 .in +1c
 .ti -1c
-.RI "enum \fBmethod\fP { \fBberlekamp\fP = 0, \fBrabin\fP }"
+.RI "enum \fBirreducible_method\fP { \fBirreducible_method::nil\fP, \fBirreducible_method::berlekamp\fP, \fBirreducible_method::rabin\fP }"
 .br
-.RI "Доступные методы проверки на неприводимость\&. "
+.RI "Доступные методы проверки нанеприводимость\&. "
+.ti -1c
+.RI "enum \fBprimitive_method\fP { \fBprimitive_method::nil\fP, \fBprimitive_method::definition\fP }"
+.br
+.RI "Доступные методы проверки примитивность\&. "
 .in -1c
 .SS "Открытые члены"
 
 .in +1c
 .ti -1c
-.RI "\fBchecker\fP (\fBcontrol_type\fP *, \fBmethod\fP=\fBberlekamp\fP) noexcept"
+.RI "\fBchecker\fP (\fBcontrol_type\fP *, \fBirreducible_method\fP, \fBprimitive_method\fP) noexcept"
 .br
 .ti -1c
 .RI "\fBpolynomialgf\fP< P > \fBget\fP () const"
@@ -67,22 +71,38 @@ class checker< P >"
 Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P]\&. 
 .SH "Перечисления"
 .PP 
-.SS "template<uint32_t P> enum \fBchecker::method\fP"
+.SS "template<uint32_t P> enum \fBchecker::irreducible_method\fP\fC [strong]\fP"
 
 .PP
-Доступные методы проверки на неприводимость\&. 
+Доступные методы проверки нанеприводимость\&. 
 .PP
 \fBЭлементы перечислений\fP
 .in +1c
+.TP
+\fB\fInil \fP\fP
+не проверять 
 .TP
 \fB\fIberlekamp \fP\fP
 алгоритм Берлекампа 
 .TP
 \fB\fIrabin \fP\fP
 алгоритм Рабина 
+.SS "template<uint32_t P> enum \fBchecker::primitive_method\fP\fC [strong]\fP"
+
+.PP
+Доступные методы проверки примитивность\&. 
+.PP
+\fBЭлементы перечислений\fP
+.in +1c
+.TP
+\fB\fInil \fP\fP
+не проверять 
+.TP
+\fB\fIdefinition \fP\fP
+проверка по определению 
 .SH "Конструктор(ы)"
 .PP 
-.SS "template<uint32_t P> \fBchecker\fP< P >::\fBchecker\fP (\fBcontrol_type\fP * ctrl, \fBmethod\fP meth = \fC\fBberlekamp\fP\fP)\fC [explicit]\fP, \fC [noexcept]\fP"
+.SS "template<uint32_t P> \fBchecker\fP< P >::\fBchecker\fP (\fBcontrol_type\fP * ctrl, \fBirreducible_method\fP irr_meth, \fBprimitive_method\fP prim_meth)\fC [explicit]\fP, \fC [noexcept]\fP"
 Конструктор структуры с данными для проверки и результатом\&. Начальное состояние - busy = false\&. 
 .SH "Методы"
 .PP 

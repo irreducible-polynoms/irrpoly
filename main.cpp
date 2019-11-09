@@ -5,21 +5,23 @@
 
 /**
  * Шаблон функции, применяемой для генерации многочленов с требуемыми характеристиками.
- * В данном случае генерируется заданное количество примитивных многочленов требуемой степени.
  * В функции генерируются случайные многочлены требуемой степени и выполняется их проверка
- * на неприводимость и примитивность. Для проверки на неприводимость можно использовать
- * один из алгоритмов - Рабина или Берлекампа. Для осмысленного применения рекоммендуется
- * перебирать многочлены последовательно, а не выбирать каждый раз случайный (во избежание
- * повторов). Проверка многочленов выполняется параллельно заданным числом потоков. Число
- * потоков должно соответствовать числу физических ядер минус один (одно ядро задействуется
- * основным потоком приложения, передающим многочлены на проверку в другие потоки).
+ * на неприводимость и примитивность. Для осмысленного применения рекоммендуется перебирать
+ * многочлены последовательно, а не выбирать каждый раз случайный (во избежание повторов).
+ * @param num число многочленов с требуемыми характеристиками, которые необходимо получить
+ * @param degree степень многочленов, которые требуется проверять
+ * @param irr_meth метод проверки на неприводимость
+ * @param prim_meth метод проверки на примитивность
+ * @param threads_num число потоков, выполняющих проверку (число физических ядер минус один)
+ * @return вектор сгенерированных многочленов с требуемыми характеристиками
  */
 template<uint32_t P>
 [[nodiscard]]
-std::vector<polynomialgf<P>> generate_primitive(
+std::vector<polynomialgf<P>> generate_irreducible(
         typename std::vector<polynomialgf<P>>::size_type num,
         const typename polynomialgf<P>::size_type degree,
-        const typename checker<P>::method meth,
+        const typename checker<P>::irreducible_method irr_meth,
+        const typename checker<P>::primitive_method prim_meth,
         const unsigned threads_num
 ) {
     // функция для подсчёта потоков, в данный момент выполняющих проверку
@@ -33,7 +35,7 @@ std::vector<polynomialgf<P>> generate_primitive(
     std::vector<polynomialgf<P>> res(num--);
 
     // создаём всё необходимое для многопоточности
-    typename checker<P>::control_type ctrl(meth, threads_num);
+    typename checker<P>::control_type ctrl(irr_meth, prim_meth, threads_num);
 
     // пока не нашли необходимое количество многочленов требуемой характеристики
     while (true) {
@@ -46,9 +48,9 @@ std::vector<polynomialgf<P>> generate_primitive(
         // находим свободный поток
         for (unsigned i = 0; i < threads_num; ++i) {
             if (ctrl.checkers()[i].busy()) { continue; }
-            // если многочлен примитивный (именно их и ищем) - сохраняем результат
-            // для поиска неприводимых используйте .irreducible
-            if (ctrl.checkers()[i].result().primitive) {
+            // если многочлен неприводимый (именно их и ищем) - сохраняем результат
+            // для поиска неприводимых используйте .primitive
+            if (ctrl.checkers()[i].result().irreducible) {
                 res[num] = ctrl.checkers()[i].get();
                 if (num > 0) { num -= 1; }
                     // если нашли необходимое число многочленов заданной
@@ -80,14 +82,17 @@ int main() {
     // степень искомых многочленов
     const typename polynomialgf<P>::size_type degree = 5;
     // какой из методов проверки на неприводимость хотим использовать
-    // возможные вариенты - Берлекампа (berlekamp) и Рабин (rabin)
-    const typename checker<P>::method meth = checker<P>::method::rabin;
+    // возможные варианты - отсутствие приверки (nil), Берлекампа (berlekamp) и Рабин (rabin)
+    const typename checker<P>::irreducible_method irr_meth = checker<P>::irreducible_method::berlekamp;
+    // какой из методов проверки на примитивность хотим использовать
+    // возможные варианты - отсутствие приверки (nil) и проверка по определению (definition)
+    const typename checker<P>::primitive_method prim_meth = checker<P>::primitive_method::nil;
     // число потоков, выполняюих проверку многочленов на соответствие заданной характеристике
     // должно быть равно числу физических ядер минус один
     const unsigned threads_num = std::thread::hardware_concurrency() - 1;
 
     // генерируем многочлены и выводим результат
-    auto poly = generate_primitive<P>(num, degree, meth, threads_num);
+    auto poly = generate_irreducible<P>(num, degree, irr_meth, prim_meth, threads_num);
     for (const auto &p : poly) {
         std::cout << p << std::endl;
     }
