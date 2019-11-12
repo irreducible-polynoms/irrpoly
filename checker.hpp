@@ -196,8 +196,13 @@ public:
          * Если все потоки заняты - ожидаем пока появится свободный,
          * иначе управление сразу возвращается вызывающей функции.
          */
-        void wait_free_thread() {
+        void wait_one() {
             while (countBusy() == threads.size()) { wait(); }
+        }
+
+        /// Ждём завершения всех потоков
+        void wait_all() {
+            while (countBusy()) { wait(); }
         }
 
         /**
@@ -209,7 +214,7 @@ public:
         }
 
         ~control_type() noexcept override {
-            while (countBusy()) { wait(); }
+            wait_all();
             for (auto *c : _checkers) {
                 c->terminate();
                 delete c;

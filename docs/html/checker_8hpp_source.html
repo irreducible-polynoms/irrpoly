@@ -238,188 +238,193 @@ $(function() {
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;            <span class="keywordflow">return</span> n;</div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        }</div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160; </div>
-<div class="line"><a name="l00199"></a><span class="lineno"><a class="line" href="classchecker_1_1control__type.html#a4ef4e977d76db3a6cf51a948abed3afb">  199</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classchecker_1_1control__type.html#a4ef4e977d76db3a6cf51a948abed3afb">wait_free_thread</a>() {</div>
+<div class="line"><a name="l00199"></a><span class="lineno"><a class="line" href="classchecker_1_1control__type.html#a0862b26ddc79e7e6e19351d41e7010a7">  199</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classchecker_1_1control__type.html#a0862b26ddc79e7e6e19351d41e7010a7">wait_one</a>() {</div>
 <div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;            <span class="keywordflow">while</span> (<a class="code" href="classchecker_1_1control__type.html#a6fafd00cd511f15fda9a2bb2d18e295d">countBusy</a>() == threads.size()) { <a class="code" href="classdetail_1_1sync.html#aa10a8571deacfdc0a6835c00fe7d9b79">wait</a>(); }</div>
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        }</div>
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160; </div>
-<div class="line"><a name="l00207"></a><span class="lineno"><a class="line" href="classchecker_1_1control__type.html#a900b8420d6b0807479ada245e76f533d">  207</a></span>&#160;        std::vector&lt;checker&lt;P&gt; *&gt; &amp;<a class="code" href="classchecker_1_1control__type.html#a900b8420d6b0807479ada245e76f533d">checkers</a>() noexcept {</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;            <span class="keywordflow">return</span> _checkers;</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        }</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160; </div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        ~<a class="code" href="classchecker_1_1control__type.html">control_type</a>() noexcept<span class="keyword"> override </span>{</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;            <span class="keywordflow">while</span> (<a class="code" href="classchecker_1_1control__type.html#a6fafd00cd511f15fda9a2bb2d18e295d">countBusy</a>()) { <a class="code" href="classdetail_1_1sync.html#aa10a8571deacfdc0a6835c00fe7d9b79">wait</a>(); }</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> *c : _checkers) {</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;                c-&gt;terminate();</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;                <span class="keyword">delete</span> c;</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;            }</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        }</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    };</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;    <a class="code" href="classpolynomial.html">polynomialgf&lt;P&gt;</a> poly;</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160; </div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    control_type *ctrl;</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160; </div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    <span class="keywordtype">bool</span> _busy; </div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    <span class="keywordtype">bool</span> _terminate; </div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    result_type res; </div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    <a class="code" href="classchecker.html#a9de71f192d92f8fa13775e3936449f6c">irreducible_method</a> irr_meth; </div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;    <a class="code" href="classchecker.html#a21307d46f6d67d9a39fa43ea4f311a46">primitive_method</a> prim_meth; </div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160; </div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;    <span class="keyword">explicit</span></div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;    <a class="code" href="classchecker.html#adef19bf4deb2daa75b44cd5845b5c108">checker</a>(control_type *, <a class="code" href="classchecker.html#a9de71f192d92f8fa13775e3936449f6c">irreducible_method</a>, <a class="code" href="classchecker.html#a21307d46f6d67d9a39fa43ea4f311a46">primitive_method</a>) noexcept;</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160; </div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    <a class="code" href="classpolynomial.html">polynomialgf&lt;P&gt;</a> <a class="code" href="classchecker.html#a586a75fd1e181338d2cda60b300a6869">get</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160; </div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classchecker.html#a4b0e7d4b60cc68b363cb64625756bfa1">set</a>(<a class="code" href="classpolynomial.html">polynomialgf&lt;P&gt;</a>);</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160; </div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;    [[nodiscard]]</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classchecker.html#aff747e2fd695f0d5b4ba16fefcae21d3">busy</a>() const noexcept;</div>
+<div class="line"><a name="l00204"></a><span class="lineno"><a class="line" href="classchecker_1_1control__type.html#a9a51899ff527d5dcf3c4387623ce3a30">  204</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classchecker_1_1control__type.html#a9a51899ff527d5dcf3c4387623ce3a30">wait_all</a>() {</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;            <span class="keywordflow">while</span> (<a class="code" href="classchecker_1_1control__type.html#a6fafd00cd511f15fda9a2bb2d18e295d">countBusy</a>()) { <a class="code" href="classdetail_1_1sync.html#aa10a8571deacfdc0a6835c00fe7d9b79">wait</a>(); }</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        }</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; </div>
+<div class="line"><a name="l00212"></a><span class="lineno"><a class="line" href="classchecker_1_1control__type.html#a900b8420d6b0807479ada245e76f533d">  212</a></span>&#160;        std::vector&lt;checker&lt;P&gt; *&gt; &amp;<a class="code" href="classchecker_1_1control__type.html#a900b8420d6b0807479ada245e76f533d">checkers</a>() noexcept {</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;            <span class="keywordflow">return</span> _checkers;</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;        }</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160; </div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;        ~<a class="code" href="classchecker_1_1control__type.html">control_type</a>() noexcept<span class="keyword"> override </span>{</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;            <a class="code" href="classchecker_1_1control__type.html#a9a51899ff527d5dcf3c4387623ce3a30">wait_all</a>();</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> *c : _checkers) {</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;                c-&gt;terminate();</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;                <span class="keyword">delete</span> c;</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;            }</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        }</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    };</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160; </div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    <a class="code" href="classpolynomial.html">polynomialgf&lt;P&gt;</a> poly;</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160; </div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    control_type *ctrl;</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160; </div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    <span class="keywordtype">bool</span> _busy; </div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;    <span class="keywordtype">bool</span> _terminate; </div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;    result_type res; </div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;    <a class="code" href="classchecker.html#a9de71f192d92f8fa13775e3936449f6c">irreducible_method</a> irr_meth; </div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    <a class="code" href="classchecker.html#a21307d46f6d67d9a39fa43ea4f311a46">primitive_method</a> prim_meth; </div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160; </div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    <span class="keyword">explicit</span></div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    <a class="code" href="classchecker.html#adef19bf4deb2daa75b44cd5845b5c108">checker</a>(control_type *, <a class="code" href="classchecker.html#a9de71f192d92f8fa13775e3936449f6c">irreducible_method</a>, <a class="code" href="classchecker.html#a21307d46f6d67d9a39fa43ea4f311a46">primitive_method</a>) noexcept;</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160; </div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    <a class="code" href="classpolynomial.html">polynomialgf&lt;P&gt;</a> <a class="code" href="classchecker.html#a586a75fd1e181338d2cda60b300a6869">get</a>() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160; </div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classchecker.html#a59418eea0b8d25bad5ffd34293f6f3ae">terminate</a>() noexcept;</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classchecker.html#a4b0e7d4b60cc68b363cb64625756bfa1">set</a>(<a class="code" href="classpolynomial.html">polynomialgf&lt;P&gt;</a>);</div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160; </div>
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    [[nodiscard]]</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    const result_type &amp;<a class="code" href="classchecker.html#acb4da60a9e69f72d697349a3303fe4af">result</a>() const noexcept;</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classchecker.html#aff747e2fd695f0d5b4ba16fefcae21d3">busy</a>() const noexcept;</div>
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classchecker.html#a59418eea0b8d25bad5ffd34293f6f3ae">terminate</a>() noexcept;</div>
 <div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160; </div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    <span class="keyword">static</span></div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    <span class="keywordtype">void</span> *<a class="code" href="classchecker.html#a522aca0d20e063f0a13b838b792db174">check</a>(<span class="keywordtype">void</span> *arg) noexcept;</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    [[nodiscard]]</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    const result_type &amp;<a class="code" href="classchecker.html#acb4da60a9e69f72d697349a3303fe4af">result</a>() const noexcept;</div>
 <div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160; </div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
 <div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160; </div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classchecker.html#a522aca0d20e063f0a13b838b792db174">check</a>() noexcept;</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160; </div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;};</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    <span class="keyword">static</span></div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    <span class="keywordtype">void</span> *<a class="code" href="classchecker.html#a522aca0d20e063f0a13b838b792db174">check</a>(<span class="keywordtype">void</span> *arg) noexcept;</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160; </div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;<span class="preprocessor">#else</span></div>
 <div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160; </div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="keyword">template</span>&lt;u<span class="keywordtype">int</span>32_t P&gt;</div>
-<div class="line"><a name="l00266"></a><span class="lineno"><a class="line" href="classchecker.html#adef19bf4deb2daa75b44cd5845b5c108">  266</a></span>&#160;<a class="code" href="classchecker.html#adef19bf4deb2daa75b44cd5845b5c108">checker&lt;P&gt;::checker</a>(</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <a class="code" href="classchecker_1_1control__type.html">control_type</a> *ctrl,</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;        <span class="keyword">const</span> <a class="code" href="classchecker.html#a9de71f192d92f8fa13775e3936449f6c">irreducible_method</a> irr_meth,</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        <span class="keyword">const</span> <a class="code" href="classchecker.html#a21307d46f6d67d9a39fa43ea4f311a46">primitive_method</a> prim_meth</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;) noexcept :</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        poly(), ctrl(ctrl), _busy(<span class="keyword">false</span>), res({<span class="keyword">false</span>, <span class="keyword">false</span>}),</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;        irr_meth(irr_meth), prim_meth(prim_meth), _terminate(<span class="keyword">false</span>) {}</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160; </div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="keyword">template</span>&lt;u<span class="keywordtype">int</span>32_t P&gt;</div>
-<div class="line"><a name="l00276"></a><span class="lineno"><a class="line" href="classchecker.html#a586a75fd1e181338d2cda60b300a6869">  276</a></span>&#160;<a class="code" href="classpolynomial.html">polynomialgf&lt;P&gt;</a> <a class="code" href="classchecker.html#a586a75fd1e181338d2cda60b300a6869">checker&lt;P&gt;::get</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    <span class="keywordflow">return</span> poly;</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;}</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160; </div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;<span class="keyword">template</span>&lt;u<span class="keywordtype">int</span>32_t P&gt;</div>
-<div class="line"><a name="l00285"></a><span class="lineno"><a class="line" href="classchecker.html#a4b0e7d4b60cc68b363cb64625756bfa1">  285</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classchecker.html#a4b0e7d4b60cc68b363cb64625756bfa1">checker&lt;P&gt;::set</a>(<a class="code" href="classpolynomial.html">polynomialgf&lt;P&gt;</a> val) {</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    lock();</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    poly = val;</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    _busy = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    signal();</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    unlock();</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;}</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160; </div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;<span class="keyword">template</span>&lt;u<span class="keywordtype">int</span>32_t P&gt;</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;<span class="keywordtype">void</span> *<a class="code" href="classchecker.html#a522aca0d20e063f0a13b838b792db174">checker&lt;P&gt;::check</a>(<span class="keywordtype">void</span> *arg) noexcept {</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    <span class="keyword">auto</span> *c = static_cast&lt;checker *&gt;(arg);</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00306"></a><span class="lineno"><a class="line" href="classchecker.html#a522aca0d20e063f0a13b838b792db174">  306</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classchecker.html#a522aca0d20e063f0a13b838b792db174">checker&lt;P&gt;::check</a>() noexcept {</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;    <span class="keyword">auto</span> *c = <span class="keyword">this</span>;</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;    <span class="keywordflow">while</span> (!c-&gt;_terminate) {</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        <span class="keywordflow">while</span> (!c-&gt;_busy &amp;&amp; !c-&gt;_terminate) { c-&gt;wait(); }</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;        <span class="keywordflow">if</span> (c-&gt;_terminate) { <span class="keywordflow">break</span>; }</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160; </div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        <span class="comment">// в случае, когда проверка не выполняется устанавливается результат true</span></div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        <span class="keywordflow">switch</span> (c-&gt;irr_meth) {</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;            <span class="keywordflow">case</span> irreducible_method::berlekamp:</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;                c-&gt;res.irreducible = <a class="code" href="polynomialgf_8hpp.html#a7acdd0302d75f85688c1abd92e1c5093">is_irreducible_berlekamp</a>(c-&gt;poly);</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;            <span class="keywordflow">case</span> irreducible_method::rabin:</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;                c-&gt;res.irreducible = <a class="code" href="polynomialgf_8hpp.html#a6a261950bb4d2e5b869f8f9b357bdb2e">is_irreducible_rabin</a>(c-&gt;poly);</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;            <span class="keywordflow">default</span>: <span class="comment">// irreducible_method::nil</span></div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;                c-&gt;res.irreducible = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        }</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        <span class="keywordflow">switch</span> (c-&gt;prim_meth) {</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;            <span class="keywordflow">case</span> primitive_method::definition:</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;                c-&gt;res.primitive = c-&gt;res.irreducible ? <a class="code" href="polynomialgf_8hpp.html#a11ed9dadfe1c40b08eecefae05b0d8b6">is_primitive_definition</a>(c-&gt;poly) : <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classchecker.html#a522aca0d20e063f0a13b838b792db174">check</a>() noexcept;</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160; </div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;};</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160; </div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;<span class="keyword">template</span>&lt;u<span class="keywordtype">int</span>32_t P&gt;</div>
+<div class="line"><a name="l00271"></a><span class="lineno"><a class="line" href="classchecker.html#adef19bf4deb2daa75b44cd5845b5c108">  271</a></span>&#160;<a class="code" href="classchecker.html#adef19bf4deb2daa75b44cd5845b5c108">checker&lt;P&gt;::checker</a>(</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;        <a class="code" href="classchecker_1_1control__type.html">control_type</a> *ctrl,</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        <span class="keyword">const</span> <a class="code" href="classchecker.html#a9de71f192d92f8fa13775e3936449f6c">irreducible_method</a> irr_meth,</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        <span class="keyword">const</span> <a class="code" href="classchecker.html#a21307d46f6d67d9a39fa43ea4f311a46">primitive_method</a> prim_meth</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;) noexcept :</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        poly(), ctrl(ctrl), _busy(<span class="keyword">false</span>), res({<span class="keyword">false</span>, <span class="keyword">false</span>}),</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        irr_meth(irr_meth), prim_meth(prim_meth), _terminate(<span class="keyword">false</span>) {}</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160; </div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;<span class="keyword">template</span>&lt;u<span class="keywordtype">int</span>32_t P&gt;</div>
+<div class="line"><a name="l00281"></a><span class="lineno"><a class="line" href="classchecker.html#a586a75fd1e181338d2cda60b300a6869">  281</a></span>&#160;<a class="code" href="classpolynomial.html">polynomialgf&lt;P&gt;</a> <a class="code" href="classchecker.html#a586a75fd1e181338d2cda60b300a6869">checker&lt;P&gt;::get</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    <span class="keywordflow">return</span> poly;</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;}</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160; </div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;<span class="keyword">template</span>&lt;u<span class="keywordtype">int</span>32_t P&gt;</div>
+<div class="line"><a name="l00290"></a><span class="lineno"><a class="line" href="classchecker.html#a4b0e7d4b60cc68b363cb64625756bfa1">  290</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classchecker.html#a4b0e7d4b60cc68b363cb64625756bfa1">checker&lt;P&gt;::set</a>(<a class="code" href="classpolynomial.html">polynomialgf&lt;P&gt;</a> val) {</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    lock();</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    poly = val;</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    _busy = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    signal();</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    unlock();</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;}</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160; </div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;<span class="keyword">template</span>&lt;u<span class="keywordtype">int</span>32_t P&gt;</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;<span class="keywordtype">void</span> *<a class="code" href="classchecker.html#a522aca0d20e063f0a13b838b792db174">checker&lt;P&gt;::check</a>(<span class="keywordtype">void</span> *arg) noexcept {</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;    <span class="keyword">auto</span> *c = static_cast&lt;checker *&gt;(arg);</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00311"></a><span class="lineno"><a class="line" href="classchecker.html#a522aca0d20e063f0a13b838b792db174">  311</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classchecker.html#a522aca0d20e063f0a13b838b792db174">checker&lt;P&gt;::check</a>() noexcept {</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;    <span class="keyword">auto</span> *c = <span class="keyword">this</span>;</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;    <span class="keywordflow">while</span> (!c-&gt;_terminate) {</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;        <span class="keywordflow">while</span> (!c-&gt;_busy &amp;&amp; !c-&gt;_terminate) { c-&gt;wait(); }</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        <span class="keywordflow">if</span> (c-&gt;_terminate) { <span class="keywordflow">break</span>; }</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160; </div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        <span class="comment">// в случае, когда проверка не выполняется устанавливается результат true</span></div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        <span class="keywordflow">switch</span> (c-&gt;irr_meth) {</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;            <span class="keywordflow">case</span> irreducible_method::berlekamp:</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;                c-&gt;res.irreducible = <a class="code" href="polynomialgf_8hpp.html#a7acdd0302d75f85688c1abd92e1c5093">is_irreducible_berlekamp</a>(c-&gt;poly);</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;            <span class="keywordflow">case</span> irreducible_method::rabin:</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;                c-&gt;res.irreducible = <a class="code" href="polynomialgf_8hpp.html#a6a261950bb4d2e5b869f8f9b357bdb2e">is_irreducible_rabin</a>(c-&gt;poly);</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;            <span class="keywordflow">default</span>: <span class="comment">// irreducible_method::nil</span></div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;                c-&gt;res.irreducible = <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;            <span class="keywordflow">default</span>: <span class="comment">// primitive_method::nil</span></div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;                c-&gt;res.primitive = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        }</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160; </div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;        c-&gt;ctrl-&gt;lock();</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;        c-&gt;_busy = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        c-&gt;ctrl-&gt;signal();</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;        c-&gt;ctrl-&gt;unlock();</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;    }</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;    pthread_exit(<span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;}</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160; </div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;<span class="keyword">template</span>&lt;u<span class="keywordtype">int</span>32_t P&gt;</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;[[nodiscard]]</div>
-<div class="line"><a name="l00347"></a><span class="lineno"><a class="line" href="classchecker.html#aff747e2fd695f0d5b4ba16fefcae21d3">  347</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classchecker.html#aff747e2fd695f0d5b4ba16fefcae21d3">checker&lt;P&gt;::busy</a>() const noexcept {</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    <span class="keywordflow">return</span> _busy;</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;}</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160; </div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;<span class="keyword">template</span>&lt;u<span class="keywordtype">int</span>32_t P&gt;</div>
-<div class="line"><a name="l00353"></a><span class="lineno"><a class="line" href="classchecker.html#a59418eea0b8d25bad5ffd34293f6f3ae">  353</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classchecker.html#a59418eea0b8d25bad5ffd34293f6f3ae">checker&lt;P&gt;::terminate</a>() noexcept {</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    _terminate = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    <span class="keywordflow">if</span> (!_busy) {</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        lock();</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;        signal();</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        unlock();</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;    }</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;}</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160; </div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;<span class="keyword">template</span>&lt;u<span class="keywordtype">int</span>32_t P&gt;</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;[[nodiscard]]</div>
-<div class="line"><a name="l00365"></a><span class="lineno"><a class="line" href="classchecker.html#acb4da60a9e69f72d697349a3303fe4af">  365</a></span>&#160;<span class="keyword">const</span> <span class="keyword">typename</span> <a class="code" href="structchecker_1_1result__type.html">checker&lt;P&gt;::result_type</a> &amp;<a class="code" href="classchecker.html#acb4da60a9e69f72d697349a3303fe4af">checker&lt;P&gt;::result</a>() const noexcept {</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;    <span class="keywordflow">return</span> res;</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;}</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160; </div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;<span class="preprocessor">#endif //IRRPOLY_CHECKER_HPP</span></div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;        }</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;        <span class="keywordflow">switch</span> (c-&gt;prim_meth) {</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;            <span class="keywordflow">case</span> primitive_method::definition:</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;                c-&gt;res.primitive = c-&gt;res.irreducible ? <a class="code" href="polynomialgf_8hpp.html#a11ed9dadfe1c40b08eecefae05b0d8b6">is_primitive_definition</a>(c-&gt;poly) : <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;            <span class="keywordflow">default</span>: <span class="comment">// primitive_method::nil</span></div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;                c-&gt;res.primitive = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;        }</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160; </div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        c-&gt;ctrl-&gt;lock();</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;        c-&gt;_busy = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;        c-&gt;ctrl-&gt;signal();</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        c-&gt;ctrl-&gt;unlock();</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    }</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    pthread_exit(<span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;}</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160; </div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;<span class="keyword">template</span>&lt;u<span class="keywordtype">int</span>32_t P&gt;</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;[[nodiscard]]</div>
+<div class="line"><a name="l00352"></a><span class="lineno"><a class="line" href="classchecker.html#aff747e2fd695f0d5b4ba16fefcae21d3">  352</a></span>&#160;<span class="keywordtype">bool</span> <a class="code" href="classchecker.html#aff747e2fd695f0d5b4ba16fefcae21d3">checker&lt;P&gt;::busy</a>() const noexcept {</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    <span class="keywordflow">return</span> _busy;</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;}</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160; </div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;<span class="keyword">template</span>&lt;u<span class="keywordtype">int</span>32_t P&gt;</div>
+<div class="line"><a name="l00358"></a><span class="lineno"><a class="line" href="classchecker.html#a59418eea0b8d25bad5ffd34293f6f3ae">  358</a></span>&#160;<span class="keywordtype">void</span> <a class="code" href="classchecker.html#a59418eea0b8d25bad5ffd34293f6f3ae">checker&lt;P&gt;::terminate</a>() noexcept {</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;    _terminate = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;    <span class="keywordflow">if</span> (!_busy) {</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;        lock();</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;        signal();</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;        unlock();</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;    }</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;}</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160; </div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;<span class="keyword">template</span>&lt;u<span class="keywordtype">int</span>32_t P&gt;</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;[[nodiscard]]</div>
+<div class="line"><a name="l00370"></a><span class="lineno"><a class="line" href="classchecker.html#acb4da60a9e69f72d697349a3303fe4af">  370</a></span>&#160;<span class="keyword">const</span> <span class="keyword">typename</span> <a class="code" href="structchecker_1_1result__type.html">checker&lt;P&gt;::result_type</a> &amp;<a class="code" href="classchecker.html#acb4da60a9e69f72d697349a3303fe4af">checker&lt;P&gt;::result</a>() const noexcept {</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;    <span class="keywordflow">return</span> res;</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;}</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160; </div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;<span class="preprocessor">#endif //IRRPOLY_CHECKER_HPP</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclasschecker_html_a522aca0d20e063f0a13b838b792db174"><div class="ttname"><a href="classchecker.html#a522aca0d20e063f0a13b838b792db174">checker::check</a></div><div class="ttdeci">void check() noexcept</div><div class="ttdef"><b>Definition:</b> checker.hpp:306</div></div>
+<div class="ttc" id="aclasschecker_html_a522aca0d20e063f0a13b838b792db174"><div class="ttname"><a href="classchecker.html#a522aca0d20e063f0a13b838b792db174">checker::check</a></div><div class="ttdeci">void check() noexcept</div><div class="ttdef"><b>Definition:</b> checker.hpp:311</div></div>
 <div class="ttc" id="aclassdetail_1_1sync_html_aa10a8571deacfdc0a6835c00fe7d9b79"><div class="ttname"><a href="classdetail_1_1sync.html#aa10a8571deacfdc0a6835c00fe7d9b79">detail::sync::wait</a></div><div class="ttdeci">void wait() noexcept</div><div class="ttdoc">Ожидание уведомления условной переменной.</div><div class="ttdef"><b>Definition:</b> checker.hpp:91</div></div>
 <div class="ttc" id="aclasschecker_html_a9de71f192d92f8fa13775e3936449f6ca852438d026c018c4307b916406f98c62"><div class="ttname"><a href="classchecker.html#a9de71f192d92f8fa13775e3936449f6ca852438d026c018c4307b916406f98c62">checker::irreducible_method::nil</a></div><div class="ttdoc">не проверять</div></div>
-<div class="ttc" id="aclasschecker_html_adef19bf4deb2daa75b44cd5845b5c108"><div class="ttname"><a href="classchecker.html#adef19bf4deb2daa75b44cd5845b5c108">checker::checker</a></div><div class="ttdeci">checker(control_type *, irreducible_method, primitive_method) noexcept</div><div class="ttdef"><b>Definition:</b> checker.hpp:266</div></div>
+<div class="ttc" id="aclasschecker_html_adef19bf4deb2daa75b44cd5845b5c108"><div class="ttname"><a href="classchecker.html#adef19bf4deb2daa75b44cd5845b5c108">checker::checker</a></div><div class="ttdeci">checker(control_type *, irreducible_method, primitive_method) noexcept</div><div class="ttdef"><b>Definition:</b> checker.hpp:271</div></div>
 <div class="ttc" id="apolynomialgf_8hpp_html_a6a261950bb4d2e5b869f8f9b357bdb2e"><div class="ttname"><a href="polynomialgf_8hpp.html#a6a261950bb4d2e5b869f8f9b357bdb2e">is_irreducible_rabin</a></div><div class="ttdeci">bool is_irreducible_rabin(const polynomialgf&lt; P &gt; &amp;val)</div><div class="ttdef"><b>Definition:</b> polynomialgf.hpp:284</div></div>
 <div class="ttc" id="astructchecker_1_1result__type_html"><div class="ttname"><a href="structchecker_1_1result__type.html">checker::result_type</a></div><div class="ttdoc">Структура, представляющая результаты проверки многочлена.</div><div class="ttdef"><b>Definition:</b> checker.hpp:116</div></div>
 <div class="ttc" id="aclassdetail_1_1sync_html_a3b5be6837ef2c38caf5816cca2aaa7cd"><div class="ttname"><a href="classdetail_1_1sync.html#a3b5be6837ef2c38caf5816cca2aaa7cd">detail::sync::sync</a></div><div class="ttdeci">sync() noexcept(false)</div><div class="ttdoc">Инициализация и блокировка мьютекса.</div><div class="ttdef"><b>Definition:</b> checker.hpp:41</div></div>
 <div class="ttc" id="aclasschecker_1_1control__type_html_a57a532dca3bdfe50ffd0d3810b52fcec"><div class="ttname"><a href="classchecker_1_1control__type.html#a57a532dca3bdfe50ffd0d3810b52fcec">checker::control_type::control_type</a></div><div class="ttdeci">control_type(const typename checker&lt; P &gt;::irreducible_method irr_meth, const typename checker&lt; P &gt;::primitive_method prim_meth, const unsigned threads_num) noexcept(false)</div><div class="ttdef"><b>Definition:</b> checker.hpp:154</div></div>
-<div class="ttc" id="aclasschecker_html_a59418eea0b8d25bad5ffd34293f6f3ae"><div class="ttname"><a href="classchecker.html#a59418eea0b8d25bad5ffd34293f6f3ae">checker::terminate</a></div><div class="ttdeci">void terminate() noexcept</div><div class="ttdoc">Устанавливает флаг, требующий завершить работу потока по завершении вычислений.</div><div class="ttdef"><b>Definition:</b> checker.hpp:353</div></div>
+<div class="ttc" id="aclasschecker_html_a59418eea0b8d25bad5ffd34293f6f3ae"><div class="ttname"><a href="classchecker.html#a59418eea0b8d25bad5ffd34293f6f3ae">checker::terminate</a></div><div class="ttdeci">void terminate() noexcept</div><div class="ttdoc">Устанавливает флаг, требующий завершить работу потока по завершении вычислений.</div><div class="ttdef"><b>Definition:</b> checker.hpp:358</div></div>
 <div class="ttc" id="aclasschecker_html_a21307d46f6d67d9a39fa43ea4f311a46a852438d026c018c4307b916406f98c62"><div class="ttname"><a href="classchecker.html#a21307d46f6d67d9a39fa43ea4f311a46a852438d026c018c4307b916406f98c62">checker::primitive_method::nil</a></div><div class="ttdoc">не проверять</div></div>
 <div class="ttc" id="apolynomialgf_8hpp_html_a7acdd0302d75f85688c1abd92e1c5093"><div class="ttname"><a href="polynomialgf_8hpp.html#a7acdd0302d75f85688c1abd92e1c5093">is_irreducible_berlekamp</a></div><div class="ttdeci">bool is_irreducible_berlekamp(const polynomialgf&lt; P &gt; &amp;val)</div><div class="ttdef"><b>Definition:</b> polynomialgf.hpp:129</div></div>
 <div class="ttc" id="aclasschecker_html_a21307d46f6d67d9a39fa43ea4f311a46a30618b3b44fa316257d07e387759fae5"><div class="ttname"><a href="classchecker.html#a21307d46f6d67d9a39fa43ea4f311a46a30618b3b44fa316257d07e387759fae5">checker::primitive_method::definition</a></div><div class="ttdoc">проверка по определению</div></div>
-<div class="ttc" id="aclasschecker_html_a4b0e7d4b60cc68b363cb64625756bfa1"><div class="ttname"><a href="classchecker.html#a4b0e7d4b60cc68b363cb64625756bfa1">checker::set</a></div><div class="ttdeci">void set(polynomialgf&lt; P &gt;)</div><div class="ttdef"><b>Definition:</b> checker.hpp:285</div></div>
+<div class="ttc" id="aclasschecker_html_a4b0e7d4b60cc68b363cb64625756bfa1"><div class="ttname"><a href="classchecker.html#a4b0e7d4b60cc68b363cb64625756bfa1">checker::set</a></div><div class="ttdeci">void set(polynomialgf&lt; P &gt;)</div><div class="ttdef"><b>Definition:</b> checker.hpp:290</div></div>
 <div class="ttc" id="aclasschecker_html_a21307d46f6d67d9a39fa43ea4f311a46"><div class="ttname"><a href="classchecker.html#a21307d46f6d67d9a39fa43ea4f311a46">checker::primitive_method</a></div><div class="ttdeci">primitive_method</div><div class="ttdoc">Доступные методы проверки примитивность.</div><div class="ttdef"><b>Definition:</b> checker.hpp:129</div></div>
-<div class="ttc" id="aclasschecker_html_acb4da60a9e69f72d697349a3303fe4af"><div class="ttname"><a href="classchecker.html#acb4da60a9e69f72d697349a3303fe4af">checker::result</a></div><div class="ttdeci">const result_type &amp; result() const noexcept</div><div class="ttdoc">Возвращает результат проверки текущего многочлена на неприводимость и примитивность.</div><div class="ttdef"><b>Definition:</b> checker.hpp:365</div></div>
+<div class="ttc" id="aclasschecker_html_acb4da60a9e69f72d697349a3303fe4af"><div class="ttname"><a href="classchecker.html#acb4da60a9e69f72d697349a3303fe4af">checker::result</a></div><div class="ttdeci">const result_type &amp; result() const noexcept</div><div class="ttdoc">Возвращает результат проверки текущего многочлена на неприводимость и примитивность.</div><div class="ttdef"><b>Definition:</b> checker.hpp:370</div></div>
 <div class="ttc" id="aclasschecker_1_1control__type_html"><div class="ttname"><a href="classchecker_1_1control__type.html">checker::control_type</a></div><div class="ttdoc">Cлужебный класс, используется для выполнения проверки в несколько потоков.</div><div class="ttdef"><b>Definition:</b> checker.hpp:135</div></div>
 <div class="ttc" id="aclassdetail_1_1sync_html_a9e39817f75656f655c9ebdd89e00204a"><div class="ttname"><a href="classdetail_1_1sync.html#a9e39817f75656f655c9ebdd89e00204a">detail::sync::unlock</a></div><div class="ttdeci">void unlock() noexcept</div><div class="ttdoc">Разблокировка мьютекса.</div><div class="ttdef"><b>Definition:</b> checker.hpp:82</div></div>
 <div class="ttc" id="aclassdetail_1_1sync_html_af7ced7fee5e133e912a67fef91650049"><div class="ttname"><a href="classdetail_1_1sync.html#af7ced7fee5e133e912a67fef91650049">detail::sync::lock</a></div><div class="ttdeci">void lock() noexcept</div><div class="ttdoc">Блокировка мьютекса.</div><div class="ttdef"><b>Definition:</b> checker.hpp:73</div></div>
+<div class="ttc" id="aclasschecker_1_1control__type_html_a9a51899ff527d5dcf3c4387623ce3a30"><div class="ttname"><a href="classchecker_1_1control__type.html#a9a51899ff527d5dcf3c4387623ce3a30">checker::control_type::wait_all</a></div><div class="ttdeci">void wait_all()</div><div class="ttdoc">Ждём завершения всех потоков</div><div class="ttdef"><b>Definition:</b> checker.hpp:204</div></div>
 <div class="ttc" id="aclasschecker_html_a9de71f192d92f8fa13775e3936449f6ca787a618784bcf88454b94edc3d0821f1"><div class="ttname"><a href="classchecker.html#a9de71f192d92f8fa13775e3936449f6ca787a618784bcf88454b94edc3d0821f1">checker::irreducible_method::rabin</a></div><div class="ttdoc">алгоритм Рабина</div></div>
 <div class="ttc" id="aclasschecker_html_a9de71f192d92f8fa13775e3936449f6ca7ba1489db9e5f06273d215956331258c"><div class="ttname"><a href="classchecker.html#a9de71f192d92f8fa13775e3936449f6ca7ba1489db9e5f06273d215956331258c">checker::irreducible_method::berlekamp</a></div><div class="ttdoc">алгоритм Берлекампа</div></div>
 <div class="ttc" id="aclasspolynomial_html"><div class="ttname"><a href="classpolynomial.html">polynomial</a></div><div class="ttdef"><b>Definition:</b> polynomial.hpp:25</div></div>
-<div class="ttc" id="aclasschecker_html_a586a75fd1e181338d2cda60b300a6869"><div class="ttname"><a href="classchecker.html#a586a75fd1e181338d2cda60b300a6869">checker::get</a></div><div class="ttdeci">polynomialgf&lt; P &gt; get() const</div><div class="ttdoc">Многочлен, проверка которого выполнялась.</div><div class="ttdef"><b>Definition:</b> checker.hpp:276</div></div>
+<div class="ttc" id="aclasschecker_html_a586a75fd1e181338d2cda60b300a6869"><div class="ttname"><a href="classchecker.html#a586a75fd1e181338d2cda60b300a6869">checker::get</a></div><div class="ttdeci">polynomialgf&lt; P &gt; get() const</div><div class="ttdoc">Многочлен, проверка которого выполнялась.</div><div class="ttdef"><b>Definition:</b> checker.hpp:281</div></div>
+<div class="ttc" id="aclasschecker_1_1control__type_html_a0862b26ddc79e7e6e19351d41e7010a7"><div class="ttname"><a href="classchecker_1_1control__type.html#a0862b26ddc79e7e6e19351d41e7010a7">checker::control_type::wait_one</a></div><div class="ttdeci">void wait_one()</div><div class="ttdef"><b>Definition:</b> checker.hpp:199</div></div>
 <div class="ttc" id="aclassdetail_1_1sync_html"><div class="ttname"><a href="classdetail_1_1sync.html">detail::sync</a></div><div class="ttdoc">Класс для управления мьютексом и условной переменной.</div><div class="ttdef"><b>Definition:</b> checker.hpp:28</div></div>
 <div class="ttc" id="aclassdetail_1_1sync_html_a26e2d9e7f74103b5ffafa7d91be869f5"><div class="ttname"><a href="classdetail_1_1sync.html#a26e2d9e7f74103b5ffafa7d91be869f5">detail::sync::~sync</a></div><div class="ttdeci">virtual ~sync()=default</div><div class="ttdoc">Освобождение ресурсов, здесь происходит разблокировка мьютекса.</div></div>
 <div class="ttc" id="apolynomialgf_8hpp_html_a11ed9dadfe1c40b08eecefae05b0d8b6"><div class="ttname"><a href="polynomialgf_8hpp.html#a11ed9dadfe1c40b08eecefae05b0d8b6">is_primitive_definition</a></div><div class="ttdeci">bool is_primitive_definition(const polynomialgf&lt; P &gt; &amp;val)</div><div class="ttdef"><b>Definition:</b> polynomialgf.hpp:207</div></div>
 <div class="ttc" id="aclasschecker_html"><div class="ttname"><a href="classchecker.html">checker</a></div><div class="ttdoc">Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P].</div><div class="ttdef"><b>Definition:</b> checker.hpp:113</div></div>
 <div class="ttc" id="aclasschecker_html_a9de71f192d92f8fa13775e3936449f6c"><div class="ttname"><a href="classchecker.html#a9de71f192d92f8fa13775e3936449f6c">checker::irreducible_method</a></div><div class="ttdeci">irreducible_method</div><div class="ttdoc">Доступные методы проверки нанеприводимость.</div><div class="ttdef"><b>Definition:</b> checker.hpp:122</div></div>
-<div class="ttc" id="aclasschecker_1_1control__type_html_a4ef4e977d76db3a6cf51a948abed3afb"><div class="ttname"><a href="classchecker_1_1control__type.html#a4ef4e977d76db3a6cf51a948abed3afb">checker::control_type::wait_free_thread</a></div><div class="ttdeci">void wait_free_thread()</div><div class="ttdef"><b>Definition:</b> checker.hpp:199</div></div>
 <div class="ttc" id="aclasschecker_1_1control__type_html_a6fafd00cd511f15fda9a2bb2d18e295d"><div class="ttname"><a href="classchecker_1_1control__type.html#a6fafd00cd511f15fda9a2bb2d18e295d">checker::control_type::countBusy</a></div><div class="ttdeci">unsigned countBusy()</div><div class="ttdoc">Считает, сколько потоков заняты.</div><div class="ttdef"><b>Definition:</b> checker.hpp:189</div></div>
-<div class="ttc" id="aclasschecker_html_aff747e2fd695f0d5b4ba16fefcae21d3"><div class="ttname"><a href="classchecker.html#aff747e2fd695f0d5b4ba16fefcae21d3">checker::busy</a></div><div class="ttdeci">bool busy() const noexcept</div><div class="ttdoc">Возвращает текущее состояние потока.</div><div class="ttdef"><b>Definition:</b> checker.hpp:347</div></div>
+<div class="ttc" id="aclasschecker_html_aff747e2fd695f0d5b4ba16fefcae21d3"><div class="ttname"><a href="classchecker.html#aff747e2fd695f0d5b4ba16fefcae21d3">checker::busy</a></div><div class="ttdeci">bool busy() const noexcept</div><div class="ttdoc">Возвращает текущее состояние потока.</div><div class="ttdef"><b>Definition:</b> checker.hpp:352</div></div>
 <div class="ttc" id="apolynomialgf_8hpp_html"><div class="ttname"><a href="polynomialgf_8hpp.html">polynomialgf.hpp</a></div></div>
-<div class="ttc" id="aclasschecker_1_1control__type_html_a900b8420d6b0807479ada245e76f533d"><div class="ttname"><a href="classchecker_1_1control__type.html#a900b8420d6b0807479ada245e76f533d">checker::control_type::checkers</a></div><div class="ttdeci">std::vector&lt; checker&lt; P &gt; * &gt; &amp; checkers() noexcept</div><div class="ttdef"><b>Definition:</b> checker.hpp:207</div></div>
+<div class="ttc" id="aclasschecker_1_1control__type_html_a900b8420d6b0807479ada245e76f533d"><div class="ttname"><a href="classchecker_1_1control__type.html#a900b8420d6b0807479ada245e76f533d">checker::control_type::checkers</a></div><div class="ttdeci">std::vector&lt; checker&lt; P &gt; * &gt; &amp; checkers() noexcept</div><div class="ttdef"><b>Definition:</b> checker.hpp:212</div></div>
 <div class="ttc" id="aclassdetail_1_1sync_html_a0578bf588dca6606fd23684191c2eb49"><div class="ttname"><a href="classdetail_1_1sync.html#a0578bf588dca6606fd23684191c2eb49">detail::sync::signal</a></div><div class="ttdeci">void signal() noexcept</div><div class="ttdoc">Уведомление условной переменной.</div><div class="ttdef"><b>Definition:</b> checker.hpp:100</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Ср 13 Ноя 2019 01:06:41. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Ср 13 Ноя 2019 01:30:19. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.16
 </small></address>

@@ -1,5 +1,6 @@
 var searchData=
 [
   ['wait_42',['wait',['../classdetail_1_1sync.html#aa10a8571deacfdc0a6835c00fe7d9b79',1,'detail::sync']]],
-  ['wait_5ffree_5fthread_43',['wait_free_thread',['../classchecker_1_1control__type.html#a4ef4e977d76db3a6cf51a948abed3afb',1,'checker::control_type']]]
+  ['wait_5fall_43',['wait_all',['../classchecker_1_1control__type.html#a9a51899ff527d5dcf3c4387623ce3a30',1,'checker::control_type']]],
+  ['wait_5fone_44',['wait_one',['../classchecker_1_1control__type.html#a0862b26ddc79e7e6e19351d41e7010a7',1,'checker::control_type']]]
 ];

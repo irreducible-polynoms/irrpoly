@@ -22,8 +22,12 @@ checker< P >::control_type \- Cлужебный класс, использует
 .br
 .RI "Считает, сколько потоков заняты\&. "
 .ti -1c
-.RI "void \fBwait_free_thread\fP ()"
+.RI "void \fBwait_one\fP ()"
 .br
+.ti -1c
+.RI "void \fBwait_all\fP ()"
+.br
+.RI "Ждём завершения всех потоков "
 .ti -1c
 .RI "std::vector< \fBchecker\fP< P > * > & \fBcheckers\fP () noexcept"
 .br
@@ -43,7 +47,7 @@ Cлужебный класс, используется для выполнени
 .PP 
 .SS "template<uint32_t P> std::vector<\fBchecker\fP<P> *>& \fBchecker\fP< P >::control_type::checkers ()\fC [inline]\fP, \fC [noexcept]\fP"
 Возвращает структуры, хранящие все данные потока: проверяемый многочлен, текущее состояение потока и результат проверки многочлена\&. 
-.SS "template<uint32_t P> void \fBchecker\fP< P >::control_type::wait_free_thread ()\fC [inline]\fP"
+.SS "template<uint32_t P> void \fBchecker\fP< P >::control_type::wait_one ()\fC [inline]\fP"
 Если все потоки заняты - ожидаем пока появится свободный, иначе управление сразу возвращается вызывающей функции\&. 
 
 .SH "Автор"

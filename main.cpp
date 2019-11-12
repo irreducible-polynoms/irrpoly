@@ -34,7 +34,7 @@ std::vector<polynomialgf<P>> generate_irreducible(
     // пока не нашли необходимое количество многочленов требуемой характеристики
     while (res.size() < num) {
         // ждём свободный поток
-        ctrl.wait_free_thread();
+        ctrl.wait_one();
         // находим свободные потоки и заряжаем новыми входными данными
         for (unsigned i = 0; i < threads_num; ++i) {
             if (ctrl.checkers()[i]->busy()) { continue; }
