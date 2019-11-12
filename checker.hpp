@@ -174,11 +174,10 @@ public:
                 throw std::runtime_error("pthread destroy failed");
             }
 #else
-            threads = std::vector<std::thread>(threads_num);
-
+            threads.reserve(threads_num);
             for (unsigned i = 0; i < threads_num; ++i) {
-                threads[i] = std::thread(&checker<P>::check, _checkers[i]);
-                threads[i].detach();
+                threads.emplace_back(std::thread(&checker<P>::check, _checkers[i]));
+                threads.back().detach();
             }
 #endif
         }
@@ -189,6 +188,12 @@ public:
          */
         std::vector<checker<P>*> &checkers() noexcept {
             return _checkers;
+        }
+
+        ~control_type() noexcept {
+            for (auto *c : _checkers) {
+                delete c;
+            }
         }
     };
 
@@ -279,8 +284,8 @@ void *checker<P>::check(void *arg) noexcept {
     void checker<P>::check() noexcept {
         auto *c = this;
 #endif
-    while (true) {
-        while (!(c->_busy || c->_terminate)) { c->wait(); }
+    while (!c->_terminate) {
+        while (!c->_busy && !c->_terminate) { c->wait(); }
         if (c->_terminate) { break; }
 
         // в случае, когда проверка не выполняется устанавливается результат true
@@ -324,10 +329,12 @@ bool checker<P>::busy() const noexcept {
 /// Устанавливает флаг, требующий завершить работу потока по завершении вычислений.
 template<uint32_t P>
 void checker<P>::terminate() noexcept {
-    lock();
     _terminate = true;
-    signal();
-    unlock();
+    if (!_busy) {
+        lock();
+        signal();
+        unlock();
+    }
 }
 
 /// Возвращает результат проверки текущего многочлена на неприводимость и примитивность.
