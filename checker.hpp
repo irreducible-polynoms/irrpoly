@@ -21,103 +21,45 @@
 
 #include "polynomialgf.hpp"
 
-/// Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P].
-template<uint32_t P>
-class checker {
-public:
-    /// Структура, представляющая результаты проверки многочлена.
-    struct result_type {
-        bool irreducible;
-        bool primitive;
-    };
-
-    /// Доступные методы проверки нанеприводимость.
-    enum class irreducible_method {
-        nil, ///< не проверять
-        berlekamp, ///< алгоритм Берлекампа
-        rabin ///< алгоритм Рабина
-    };
-
-    /// Доступные методы проверки примитивность.
-    enum class primitive_method {
-        nil, ///< не проверять
-        definition ///< проверка по определению
-    };
-
-    /// Cлужебный класс, используется для выполнения проверки в несколько потоков.
-    class control_type {
+namespace detail {
+    /// Класс для управления мьютексом и условной переменной.
+    class sync {
     private:
-        /**
-         * Для проверки требуется мьютекс, условная переменная, заданное число потоков
-         * и по одному хранилищу данных на каждый поток.
-         */
 #ifdef PTHREAD
         pthread_mutex_t mutex;
         pthread_cond_t cond;
-        std::vector<pthread_t> threads;
 #else
         std::mutex mutex;
         std::unique_lock<std::mutex> lk;
         std::condition_variable cond;
-        std::vector<std::thread> threads;
 #endif
-        std::vector<checker<P>> _checkers;
 
     public:
-        /**
-         * Инициализация мьютекса и условной переменной, создание требуемого числа потоков
-         * и хранилищ данных. На выходе мьютекс находится в состоянии locked, все потоки
-         * запущены и находятся в состоянии detached.
-         */
-        control_type(
-                const typename checker<P>::irreducible_method irr_meth,
-                const typename checker<P>::primitive_method prim_meth,
-                const unsigned threads_num
-        ) noexcept(false) : cond(), mutex() {
-            _checkers = std::vector<checker<P>>(threads_num, checker<P>(this, irr_meth, prim_meth));
+        /// Инициализация и блокировка мьютекса.
+        sync() noexcept(false) : cond(), mutex() {
 #ifdef PTHREAD
-            threads = std::vector<pthread_t>(threads_num);
-
             pthread_mutexattr_t attr;
-            pthread_attr_t thread_attr;
-
             if (pthread_mutexattr_init(&attr) ||
                 pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK) ||
                 pthread_mutex_init(&mutex, &attr) ||
                 pthread_cond_init(&cond, nullptr) ||
-                pthread_attr_init(&thread_attr) ||
-                pthread_attr_setdetachstate(&thread_attr, PTHREAD_CREATE_DETACHED)) {
+                pthread_mutexattr_destroy(&attr)) {
                 throw std::runtime_error("pthread init failed");
             }
-
             pthread_mutex_lock(&mutex);
-
-            for (unsigned i = 0; i < threads_num; ++i) {
-                pthread_create(&threads[i], &thread_attr, &checker<P>::check, &_checkers[i]);
-            }
-
-            if (pthread_mutexattr_destroy(&attr) ||
-                pthread_attr_destroy(&thread_attr)) {
-                throw std::runtime_error("pthread destroy failed");
-            }
 #else
             lk = std::unique_lock<std::mutex>(mutex);
-            threads = std::vector<std::thread>(threads_num);
-
-            for (unsigned i = 0; i < threads_num; ++i) {
-                threads[i] = std::thread(&checker<P>::check, &_checkers[i]);
-                threads[i].detach();
-            }
 #endif
         }
 
 #ifdef PTHREAD
 
         /// Освобождение ресурсов, здесь происходит разблокировка мьютекса.
-        ~control_type() noexcept(false) {
+        virtual
+        ~sync() noexcept(false) {
             pthread_mutex_unlock(&mutex);
-            if (pthread_cond_destroy(&cond) ||
-                pthread_mutex_destroy(&mutex)) {
+            if (pthread_mutex_destroy(&mutex) ||
+                pthread_cond_destroy(&cond)) {
                 throw std::runtime_error("pthread destroy failed");
             }
         }
@@ -157,6 +99,84 @@ public:
             pthread_cond_signal(&cond);
 #else
             cond.notify_one();
+#endif
+        }
+    };
+}
+
+
+/// Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P].
+template<uint32_t P>
+class checker : private detail::sync {
+public:
+    /// Структура, представляющая результаты проверки многочлена.
+    struct result_type {
+        bool irreducible;
+        bool primitive;
+    };
+
+    /// Доступные методы проверки нанеприводимость.
+    enum class irreducible_method {
+        nil, ///< не проверять
+        berlekamp, ///< алгоритм Берлекампа
+        rabin ///< алгоритм Рабина
+    };
+
+    /// Доступные методы проверки примитивность.
+    enum class primitive_method {
+        nil, ///< не проверять
+        definition ///< проверка по определению
+    };
+
+    /// Cлужебный класс, используется для выполнения проверки в несколько потоков.
+    class control_type : public detail::sync {
+    private:
+        /**
+         * Для проверки требуется мьютекс, условная переменная, заданное число потоков
+         * и по одному хранилищу данных на каждый поток.
+         */
+#ifdef PTHREAD
+        std::vector<pthread_t> threads;
+#else
+        std::vector<std::thread> threads;
+#endif
+        std::vector<checker<P>> _checkers;
+
+    public:
+        /**
+         * Инициализация мьютекса и условной переменной, создание требуемого числа потоков
+         * и хранилищ данных. На выходе мьютекс находится в состоянии locked, все потоки
+         * запущены и находятся в состоянии detached.
+         */
+        control_type(
+                const typename checker<P>::irreducible_method irr_meth,
+                const typename checker<P>::primitive_method prim_meth,
+                const unsigned threads_num
+        ) noexcept(false) {
+            _checkers = std::vector<checker<P>>(threads_num, checker<P>(this, irr_meth, prim_meth));
+#ifdef PTHREAD
+            threads = std::vector<pthread_t>(threads_num);
+
+            pthread_attr_t thread_attr;
+            if (pthread_attr_init(&thread_attr) ||
+                pthread_attr_setdetachstate(&thread_attr, PTHREAD_CREATE_DETACHED)) {
+                throw std::runtime_error("pthread init failed");
+            }
+
+            for (unsigned i = 0; i < threads_num; ++i) {
+                pthread_create(&threads[i], &thread_attr, &checker<P>::check, &_checkers[i]);
+            }
+
+            if (pthread_attr_destroy(&thread_attr)) {
+                throw std::runtime_error("pthread destroy failed");
+            }
+#else
+            threads = std::vector<std::thread>(threads_num);
+
+            for (unsigned i = 0; i < threads_num; ++i) {
+                threads[i] = std::thread(&checker<P>::check, &_checkers[i]);
+                threads[i].detach();
+            }
 #endif
         }
 
@@ -233,8 +253,11 @@ polynomialgf<P> checker<P>::get() const {
  */
 template<uint32_t P>
 void checker<P>::set(polynomialgf<P> val) {
+    lock();
     poly = val;
     _busy = true;
+    signal();
+    unlock();
 }
 
 /**
@@ -254,8 +277,8 @@ void *checker<P>::check(void *arg) noexcept {
         auto *c = this;
 #endif
     while (true) {
+        while (!(c->_busy || c->_terminate)) { c->wait(); }
         if (c->_terminate) { break; }
-        if (!c->_busy) { continue; }
 
         // в случае, когда проверка не выполняется устанавливается результат true
         switch (c->irr_meth) {
@@ -298,7 +321,10 @@ bool checker<P>::busy() const noexcept {
 /// Устанавливает флаг, требующий завершить работу потока по завершении вычислений.
 template<uint32_t P>
 void checker<P>::terminate() noexcept {
+    lock();
     _terminate = true;
+    signal();
+    unlock();
 }
 
 /// Возвращает результат проверки текущего многочлена на неприводимость и примитивность.

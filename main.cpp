@@ -18,7 +18,7 @@
 template<uint32_t P>
 [[nodiscard]]
 std::vector<polynomialgf<P>> generate_irreducible(
-        typename std::vector<polynomialgf<P>>::size_type num,
+        const typename std::vector<polynomialgf<P>>::size_type num,
         const typename polynomialgf<P>::size_type degree,
         const typename checker<P>::irreducible_method irr_meth,
         const typename checker<P>::primitive_method prim_meth,
@@ -32,13 +32,14 @@ std::vector<polynomialgf<P>> generate_irreducible(
     };
 
     // возвращаемое значение
-    std::vector<polynomialgf<P>> res(num--);
+    std::vector<polynomialgf<P>> res;
+    res.reserve(num);
 
     // создаём всё необходимое для многопоточности
     typename checker<P>::control_type ctrl(irr_meth, prim_meth, threads_num);
 
     // пока не нашли необходимое количество многочленов требуемой характеристики
-    while (true) {
+    while (res.size() < num) {
         // проверяем, что есть свободный поток
         if (countBusy(ctrl.checkers()) == threads_num) {
             // ждём, пока свободный поток появится
@@ -51,11 +52,8 @@ std::vector<polynomialgf<P>> generate_irreducible(
             // если многочлен неприводимый (именно их и ищем) - сохраняем результат
             // для поиска неприводимых используйте .primitive
             if (ctrl.checkers()[i].result().irreducible) {
-                res[num] = ctrl.checkers()[i].get();
-                if (num > 0) { num -= 1; }
-                    // если нашли необходимое число многочленов заданной
-                    // характеристики - выходим из цикла
-                else { goto END; }
+                res.emplace_back(ctrl.checkers()[i].get());
+                if (res.size() == num) { goto END; }
             }
             // генерируем новый многочлен для проверки (в данном случае просто случайный)
             ctrl.checkers()[i].set(random<P>(degree));
@@ -74,6 +72,8 @@ std::vector<polynomialgf<P>> generate_irreducible(
     return res;
 }
 
+
+/// Функция, формирующая данные для тестов. Результаты скопировать в файл test_input.
 void test() {
     {
         const uint32_t P = 2;
@@ -130,6 +130,17 @@ void test() {
             }
         }
     }
+    {
+        const uint32_t P = 13;
+        for (size_t i = 4; i < 4; ++i) {
+            for (size_t j = 0; j < i / 2; ++j) {
+                polynomialgf<P> p = random<P>(i);
+                std::cout << (is_irreducible_berlekamp(p) ? '1' : '0') << " "
+                          << (is_primitive_definition(p) ? '1' : '0') << " " << P << " "
+                          << p << std::endl;
+            }
+        }
+    }
 }
 
 int main() {
@@ -147,7 +158,7 @@ int main() {
     const typename checker<P>::primitive_method prim_meth = checker<P>::primitive_method::nil;
     // число потоков, выполняюих проверку многочленов на соответствие заданной характеристике
     // должно быть равно числу физических ядер минус один
-    const unsigned threads_num = std::thread::hardware_concurrency() - 1;
+    const unsigned threads_num = 1; // std::thread::hardware_concurrency() - 1;
 
     // генерируем многочлены и выводим результат
     auto poly = generate_irreducible<P>(num, degree, irr_meth, prim_meth, threads_num);

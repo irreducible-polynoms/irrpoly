@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['wait_40',['wait',['../classchecker_1_1control__type.html#aca2a1e15fba802e88150007eae502316',1,'checker::control_type']]]
+  ['wait_41',['wait',['../classdetail_1_1sync.html#aa10a8571deacfdc0a6835c00fe7d9b79',1,'detail::sync']]]
 ];

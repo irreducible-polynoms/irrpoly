@@ -127,10 +127,12 @@ namespace detail {
  */
 template<uint32_t P>
 bool is_irreducible_berlekamp(const polynomialgf<P> &val) {
+    if (val.is_zero()) {
+        return false; }
     const auto n = val.degree();
 
     // проверка вырожденных случаев
-    if (val.is_zero() || n == 0 || (val[0].is_zero() && n > 1)) { return false; }
+    if (n == 0 || (val[0].is_zero() && n > 1)) { return false; }
     if (n == 1) { return true; }
 
     // функция для построения матрицы берлекампа и вычисления её ранга
@@ -203,10 +205,11 @@ polynomialgf<P> random(typename polynomialgf<P>::size_type degree) {
  */
 template<uint32_t P>
 bool is_primitive_definition(const polynomialgf<P> &val) {
+    if (val.is_zero()) { return false; }
     const auto n = val.degree();
 
     // проверка вырожденных случаев
-    if (val.is_zero() || n == 0 || (val[0].is_zero() && n > 1)) { return false; }
+    if (n == 0 || (val[0].is_zero() && n > 1)) { return false; }
     if (n == 1 && val[0] == 0) { return true; } // val = k * x + 0
 
     // выполняется нормировка, т.к. данный алгоритм справедлив только
@@ -279,10 +282,11 @@ bool is_primitive_definition(const polynomialgf<P> &val) {
  */
 template<uint32_t P>
 bool is_irreducible_rabin(const polynomialgf<P> &val) {
+    if (val.is_zero()) { return false; }
     const auto n = val.degree();
 
     // проверка вырожденных случаев
-    if (val.is_zero() || n == 0 || (val[0].is_zero() && n > 1)) { return false; }
+    if (n == 0 || (val[0].is_zero() && n > 1)) { return false; }
     if (n == 1) { return true; }
 
     // функция разложения числа на множители

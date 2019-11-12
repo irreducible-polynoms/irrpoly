@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['unlock_39',['unlock',['../classchecker_1_1control__type.html#ae1bf063018417a827d6558f0bfe2aa68',1,'checker::control_type']]]
+  ['unlock_40',['unlock',['../classdetail_1_1sync.html#a9e39817f75656f655c9ebdd89e00204a',1,'detail::sync']]]
 ];

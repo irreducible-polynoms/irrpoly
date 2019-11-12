@@ -1,4 +1,4 @@
-.TH "checker< P >::control_type" 3 "Пн 11 Ноя 2019" "Version 1.0.0" "irrpoly" \" -*- nroff -*-
+.TH "checker< P >::control_type" 3 "Вт 12 Ноя 2019" "Version 1.0.0" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -9,28 +9,14 @@ checker< P >::control_type \- Cлужебный класс, использует
 .PP
 .PP
 \fC#include <checker\&.hpp>\fP
+.PP
+Базовые классы:\fBdetail::sync\fP\&.
 .SS "Открытые члены"
 
 .in +1c
 .ti -1c
 .RI "\fBcontrol_type\fP (const typename \fBchecker\fP< P >::\fBirreducible_method\fP irr_meth, const typename \fBchecker\fP< P >::\fBprimitive_method\fP prim_meth, const unsigned threads_num) noexcept(false)"
 .br
-.ti -1c
-.RI "void \fBlock\fP () noexcept"
-.br
-.RI "Блокировка мьютекса\&. "
-.ti -1c
-.RI "void \fBunlock\fP () noexcept"
-.br
-.RI "Разблокировка мьютекса\&. "
-.ti -1c
-.RI "void \fBwait\fP () noexcept"
-.br
-.RI "Ожидание уведомления условной переменной\&. "
-.ti -1c
-.RI "void \fBsignal\fP () noexcept"
-.br
-.RI "Уведомление условной переменной\&. "
 .ti -1c
 .RI "std::vector< \fBchecker\fP< P > > & \fBcheckers\fP () noexcept"
 .br
