@@ -60,13 +60,13 @@ std::vector<polynomialgf<P>> generate_irreducible(
         }
     }
     END:
-    // сообщаем всем потокам, что они должны прекратить работу
-    for (auto *c : ctrl.checkers()) {
-        c->terminate();
-    }
     // ждём завершения всех потоков
     while (countBusy(ctrl.checkers())) {
         ctrl.wait();
+    }
+    // сообщаем всем потокам, что они должны прекратить работу
+    for (auto *c : ctrl.checkers()) {
+        c->terminate();
     }
 
     return res;
