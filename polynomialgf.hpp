@@ -185,9 +185,8 @@ template<uint32_t P>
 polynomialgf<P> random(typename polynomialgf<P>::size_type degree) {
     std::vector<gf<P>> data(degree + 1);
     for (auto &d : data) { d = gf<P>::random(); }
-    while (data[degree].is_zero()) { data[degree] = gf<P>::random(); }
-    // старший коэффициент не должен быть равень нулю, иначе многочлен будет меньшей степени
     while (data[0].is_zero()) { data[0] = gf<P>::random(); }
+    data[degree] = 1;
     return data; // неявное преобразование вектора коэффициентов к классу polynomialgf
 }
 
