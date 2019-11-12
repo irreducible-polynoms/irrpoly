@@ -168,7 +168,7 @@ int main() {
     //    PrimitivePolynomialQ[Dot[Power[x, Range[0, Length[p] - 1]], p],
     //     Modulus -> m]]
     // open "input" file for read (CHANGE PATH TO FILE!)
-    // file = OpenRead["/Users/vadimpiven/Downloads/input"]
+    // file = OpenRead["/Users/vadimpiven/Downloads/test_input"]
     // validate results line by line
     // While[Not[(irr = Read[file, Number]) === EndOfFile],
     // prim = Read[file, Number]; m = Read[file, Number];
