@@ -14,9 +14,11 @@
 #include <pthread.h>
 
 #else
+
 #include <thread>
 #include <mutex>
 #include <condition_variable>
+
 #endif
 
 #include "polynomialgf.hpp"
@@ -52,10 +54,12 @@ namespace detail {
 #endif
         }
 
-#ifdef PTHREAD
-
         /// Освобождение ресурсов, здесь происходит разблокировка мьютекса.
         virtual
+#ifndef PTHREAD
+        ~sync() = default;
+
+#else
         ~sync() noexcept(false) {
             pthread_mutex_unlock(&mutex);
             if (pthread_mutex_destroy(&mutex) ||
@@ -63,7 +67,6 @@ namespace detail {
                 throw std::runtime_error("pthread destroy failed");
             }
         }
-
 #endif
 
         /// Блокировка мьютекса.
@@ -142,6 +145,13 @@ public:
 #endif
         std::vector<checker<P> *> _checkers;
 
+        /// Считает, сколько потоков заняты.
+        unsigned countBusy() {
+            unsigned n = 0;
+            for (const auto *checker : _checkers) { n += checker->busy(); }
+            return n;
+        }
+
     public:
         /**
          * Инициализация мьютекса и условной переменной, создание требуемого числа потоков
@@ -153,10 +163,10 @@ public:
                 const typename checker<P>::primitive_method prim_meth,
                 const unsigned threads_num
         ) noexcept(false) {
-			_checkers.reserve(threads_num);
-			for (unsigned i = 0; i < threads_num; ++i) {
-				_checkers.emplace_back(new checker<P>(this, irr_meth, prim_meth));
-			}
+            _checkers.reserve(threads_num);
+            for (unsigned i = 0; i < threads_num; ++i) {
+                _checkers.emplace_back(new checker<P>(this, irr_meth, prim_meth));
+            }
 #ifdef PTHREAD
             threads = std::vector<pthread_t>(threads_num);
 
@@ -183,14 +193,23 @@ public:
         }
 
         /**
+         * Если все потоки заняты - ожидаем пока появится свободный,
+         * иначе управление сразу возвращается вызывающей функции.
+         */
+        void wait_free_thread() {
+            while (countBusy() == threads.size()) { wait(); }
+        }
+
+        /**
          * Возвращает структуры, хранящие все данные потока: проверяемый многочлен,
          * текущее состояение потока и результат проверки многочлена.
          */
-        std::vector<checker<P>*> &checkers() noexcept {
+        std::vector<checker<P> *> &checkers() noexcept {
             return _checkers;
         }
 
-        ~control_type() noexcept {
+        ~control_type() noexcept override {
+            while (countBusy()) { wait(); }
             for (auto *c : _checkers) {
                 c->terminate();
                 delete c;
@@ -233,7 +252,9 @@ public:
     void *check(void *arg) noexcept;
 
 #else
+
     void check() noexcept;
+
 #endif
 };
 
@@ -282,8 +303,8 @@ template<uint32_t P>
 void *checker<P>::check(void *arg) noexcept {
     auto *c = static_cast<checker *>(arg);
 #else
-    void checker<P>::check() noexcept {
-        auto *c = this;
+void checker<P>::check() noexcept {
+    auto *c = this;
 #endif
     while (!c->_terminate) {
         while (!c->_busy && !c->_terminate) { c->wait(); }

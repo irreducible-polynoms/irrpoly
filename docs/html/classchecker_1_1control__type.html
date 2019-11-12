@@ -99,13 +99,19 @@ $(function() {
 Открытые члены</h2></td></tr>
 <tr class="memitem:a57a532dca3bdfe50ffd0d3810b52fcec"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchecker_1_1control__type.html#a57a532dca3bdfe50ffd0d3810b52fcec">control_type</a> (const typename <a class="el" href="classchecker.html">checker</a>&lt; P &gt;::<a class="el" href="classchecker.html#a9de71f192d92f8fa13775e3936449f6c">irreducible_method</a> irr_meth, const typename <a class="el" href="classchecker.html">checker</a>&lt; P &gt;::<a class="el" href="classchecker.html#a21307d46f6d67d9a39fa43ea4f311a46">primitive_method</a> prim_meth, const unsigned threads_num) noexcept(false)</td></tr>
 <tr class="separator:a57a532dca3bdfe50ffd0d3810b52fcec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a164f2065912265d305265acc3f749ad4"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classchecker.html">checker</a>&lt; P &gt; * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchecker_1_1control__type.html#a164f2065912265d305265acc3f749ad4">checkers</a> () noexcept</td></tr>
-<tr class="separator:a164f2065912265d305265acc3f749ad4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ef4e977d76db3a6cf51a948abed3afb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchecker_1_1control__type.html#a4ef4e977d76db3a6cf51a948abed3afb">wait_free_thread</a> ()</td></tr>
+<tr class="separator:a4ef4e977d76db3a6cf51a948abed3afb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a900b8420d6b0807479ada245e76f533d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classchecker.html">checker</a>&lt; P &gt; * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classchecker_1_1control__type.html#a900b8420d6b0807479ada245e76f533d">checkers</a> () noexcept</td></tr>
+<tr class="separator:a900b8420d6b0807479ada245e76f533d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classdetail_1_1sync"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classdetail_1_1sync')"><img src="closed.png" alt="-"/>&#160;Открытые члены унаследованные от <a class="el" href="classdetail_1_1sync.html">detail::sync</a></td></tr>
 <tr class="memitem:a3b5be6837ef2c38caf5816cca2aaa7cd inherit pub_methods_classdetail_1_1sync"><td class="memItemLeft" align="right" valign="top"><a id="a3b5be6837ef2c38caf5816cca2aaa7cd"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdetail_1_1sync.html#a3b5be6837ef2c38caf5816cca2aaa7cd">sync</a> () noexcept(false)</td></tr>
 <tr class="memdesc:a3b5be6837ef2c38caf5816cca2aaa7cd inherit pub_methods_classdetail_1_1sync"><td class="mdescLeft">&#160;</td><td class="mdescRight">Инициализация и блокировка мьютекса. <br /></td></tr>
 <tr class="separator:a3b5be6837ef2c38caf5816cca2aaa7cd inherit pub_methods_classdetail_1_1sync"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a26e2d9e7f74103b5ffafa7d91be869f5 inherit pub_methods_classdetail_1_1sync"><td class="memItemLeft" align="right" valign="top"><a id="a26e2d9e7f74103b5ffafa7d91be869f5"></a>
+virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdetail_1_1sync.html#a26e2d9e7f74103b5ffafa7d91be869f5">~sync</a> ()=default</td></tr>
+<tr class="memdesc:a26e2d9e7f74103b5ffafa7d91be869f5 inherit pub_methods_classdetail_1_1sync"><td class="mdescLeft">&#160;</td><td class="mdescRight">Освобождение ресурсов, здесь происходит разблокировка мьютекса. <br /></td></tr>
+<tr class="separator:a26e2d9e7f74103b5ffafa7d91be869f5 inherit pub_methods_classdetail_1_1sync"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7ced7fee5e133e912a67fef91650049 inherit pub_methods_classdetail_1_1sync"><td class="memItemLeft" align="right" valign="top"><a id="af7ced7fee5e133e912a67fef91650049"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdetail_1_1sync.html#af7ced7fee5e133e912a67fef91650049">lock</a> () noexcept</td></tr>
 <tr class="memdesc:af7ced7fee5e133e912a67fef91650049 inherit pub_methods_classdetail_1_1sync"><td class="mdescLeft">&#160;</td><td class="mdescRight">Блокировка мьютекса. <br /></td></tr>
@@ -175,8 +181,8 @@ template&lt;uint32_t P&gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Методы</h2>
-<a id="a164f2065912265d305265acc3f749ad4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a164f2065912265d305265acc3f749ad4">&#9670;&nbsp;</a></span>checkers()</h2>
+<a id="a900b8420d6b0807479ada245e76f533d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a900b8420d6b0807479ada245e76f533d">&#9670;&nbsp;</a></span>checkers()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -187,7 +193,7 @@ template&lt;uint32_t P&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="classchecker.html">checker</a>&lt;P&gt;*&gt;&amp; <a class="el" href="classchecker.html">checker</a>&lt; P &gt;::control_type::checkers </td>
+          <td class="memname">std::vector&lt;<a class="el" href="classchecker.html">checker</a>&lt;P&gt; *&gt;&amp; <a class="el" href="classchecker.html">checker</a>&lt; P &gt;::control_type::checkers </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -203,13 +209,41 @@ template&lt;uint32_t P&gt; </div>
 
 </div>
 </div>
+<a id="a4ef4e977d76db3a6cf51a948abed3afb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ef4e977d76db3a6cf51a948abed3afb">&#9670;&nbsp;</a></span>wait_free_thread()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;uint32_t P&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classchecker.html">checker</a>&lt; P &gt;::control_type::wait_free_thread </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Если все потоки заняты - ожидаем пока появится свободный, иначе управление сразу возвращается вызывающей функции. </p>
+
+</div>
+</div>
 <hr/>Объявления и описания членов класса находятся в файле:<ul>
 <li>/Users/vadimpiven/Development/irrpoly/<a class="el" href="checker_8hpp_source.html">checker.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Вт 12 Ноя 2019 23:28:16. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Ср 13 Ноя 2019 00:50:47. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.16
 </small></address>

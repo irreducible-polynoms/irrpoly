@@ -24,13 +24,6 @@ std::vector<polynomialgf<P>> generate_irreducible(
         const typename checker<P>::primitive_method prim_meth,
         const unsigned threads_num
 ) {
-    // функция для подсчёта потоков, в данный момент выполняющих проверку
-    auto countBusy = [](const std::vector<checker<P>*> &c) noexcept {
-        unsigned n = 0;
-        for (const auto *checker : c) { n += checker->busy(); }
-        return n;
-    };
-
     // возвращаемое значение
     std::vector<polynomialgf<P>> res;
     res.reserve(num);
@@ -40,13 +33,9 @@ std::vector<polynomialgf<P>> generate_irreducible(
 
     // пока не нашли необходимое количество многочленов требуемой характеристики
     while (res.size() < num) {
-        // проверяем, что есть свободный поток
-        if (countBusy(ctrl.checkers()) == threads_num) {
-            // ждём, пока свободный поток появится
-            ctrl.wait();
-        }
-
-        // находим свободный поток
+        // ждём свободный поток
+        ctrl.wait_free_thread();
+        // находим свободные потоки и заряжаем новыми входными данными
         for (unsigned i = 0; i < threads_num; ++i) {
             if (ctrl.checkers()[i]->busy()) { continue; }
             // если многочлен неприводимый (именно их и ищем) - сохраняем результат
@@ -60,11 +49,6 @@ std::vector<polynomialgf<P>> generate_irreducible(
         }
     }
     END:
-    // ждём завершения всех потоков
-    while (countBusy(ctrl.checkers())) {
-        ctrl.wait();
-    }
-
     return res;
 }
 
