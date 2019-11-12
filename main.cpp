@@ -52,7 +52,6 @@ std::vector<polynomialgf<P>> generate_irreducible(
     return res;
 }
 
-
 /// Функция, формирующая данные для тестов. Результаты скопировать в файл test_input.
 void test() {
     {

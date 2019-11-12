@@ -145,13 +145,6 @@ public:
 #endif
         std::vector<checker<P> *> _checkers;
 
-        /// Считает, сколько потоков заняты.
-        unsigned countBusy() {
-            unsigned n = 0;
-            for (const auto *checker : _checkers) { n += checker->busy(); }
-            return n;
-        }
-
     public:
         /**
          * Инициализация мьютекса и условной переменной, создание требуемого числа потоков
@@ -190,6 +183,13 @@ public:
                 threads.back().detach();
             }
 #endif
+        }
+
+        /// Считает, сколько потоков заняты.
+        unsigned countBusy() {
+            unsigned n = 0;
+            for (const auto *checker : _checkers) { n += checker->busy(); }
+            return n;
         }
 
         /**

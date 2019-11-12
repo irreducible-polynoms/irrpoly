@@ -197,49 +197,49 @@ $(function() {
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        std::vector&lt;checker&lt;P&gt; *&gt; _checkers;</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        <span class="keywordtype">unsigned</span> countBusy() {</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;            <span class="keywordtype">unsigned</span> n = 0;</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span> *<a class="code" href="classchecker.html">checker</a> : _checkers) { n += <a class="code" href="classchecker.html">checker</a>-&gt;<a class="code" href="classchecker.html#aff747e2fd695f0d5b4ba16fefcae21d3">busy</a>(); }</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;            <span class="keywordflow">return</span> n;</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        }</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00161"></a><span class="lineno"><a class="line" href="classchecker_1_1control__type.html#a57a532dca3bdfe50ffd0d3810b52fcec">  161</a></span>&#160;        <a class="code" href="classchecker_1_1control__type.html#a57a532dca3bdfe50ffd0d3810b52fcec">control_type</a>(</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                <span class="keyword">const</span> <span class="keyword">typename</span> <a class="code" href="classchecker.html#a9de71f192d92f8fa13775e3936449f6c">checker&lt;P&gt;::irreducible_method</a> irr_meth,</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;                <span class="keyword">const</span> <span class="keyword">typename</span> <a class="code" href="classchecker.html#a21307d46f6d67d9a39fa43ea4f311a46">checker&lt;P&gt;::primitive_method</a> prim_meth,</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                <span class="keyword">const</span> <span class="keywordtype">unsigned</span> threads_num</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        ) noexcept(<span class="keyword">false</span>) {</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;            _checkers.reserve(threads_num);</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i = 0; i &lt; threads_num; ++i) {</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;                _checkers.emplace_back(<span class="keyword">new</span> <a class="code" href="classchecker.html">checker&lt;P&gt;</a>(<span class="keyword">this</span>, irr_meth, prim_meth));</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;            }</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;            threads = std::vector&lt;pthread_t&gt;(threads_num);</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160; </div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;            pthread_attr_t thread_attr;</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;            <span class="keywordflow">if</span> (pthread_attr_init(&amp;thread_attr) ||</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;                pthread_attr_setdetachstate(&amp;thread_attr, PTHREAD_CREATE_DETACHED)) {</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;                <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;pthread init failed&quot;</span>);</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;            }</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160; </div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i = 0; i &lt; threads_num; ++i) {</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;                pthread_create(&amp;threads[i], &amp;thread_attr, &amp;<a class="code" href="classchecker.html">checker&lt;P&gt;::check</a>, _checkers[i]);</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;            }</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160; </div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;            <span class="keywordflow">if</span> (pthread_attr_destroy(&amp;thread_attr)) {</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;                <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;pthread destroy failed&quot;</span>);</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;            }</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;            threads.reserve(threads_num);</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i = 0; i &lt; threads_num; ++i) {</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;                threads.emplace_back(std::thread(&amp;<a class="code" href="classchecker.html">checker&lt;P&gt;::check</a>, _checkers[i]));</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;                threads.back().detach();</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;            }</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00154"></a><span class="lineno"><a class="line" href="classchecker_1_1control__type.html#a57a532dca3bdfe50ffd0d3810b52fcec">  154</a></span>&#160;        <a class="code" href="classchecker_1_1control__type.html#a57a532dca3bdfe50ffd0d3810b52fcec">control_type</a>(</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;                <span class="keyword">const</span> <span class="keyword">typename</span> <a class="code" href="classchecker.html#a9de71f192d92f8fa13775e3936449f6c">checker&lt;P&gt;::irreducible_method</a> irr_meth,</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;                <span class="keyword">const</span> <span class="keyword">typename</span> <a class="code" href="classchecker.html#a21307d46f6d67d9a39fa43ea4f311a46">checker&lt;P&gt;::primitive_method</a> prim_meth,</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;                <span class="keyword">const</span> <span class="keywordtype">unsigned</span> threads_num</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        ) noexcept(<span class="keyword">false</span>) {</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;            _checkers.reserve(threads_num);</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i = 0; i &lt; threads_num; ++i) {</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                _checkers.emplace_back(<span class="keyword">new</span> <a class="code" href="classchecker.html">checker&lt;P&gt;</a>(<span class="keyword">this</span>, irr_meth, prim_meth));</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;            }</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;            threads = std::vector&lt;pthread_t&gt;(threads_num);</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160; </div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;            pthread_attr_t thread_attr;</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;            <span class="keywordflow">if</span> (pthread_attr_init(&amp;thread_attr) ||</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;                pthread_attr_setdetachstate(&amp;thread_attr, PTHREAD_CREATE_DETACHED)) {</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;                <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;pthread init failed&quot;</span>);</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;            }</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160; </div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i = 0; i &lt; threads_num; ++i) {</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;                pthread_create(&amp;threads[i], &amp;thread_attr, &amp;<a class="code" href="classchecker.html">checker&lt;P&gt;::check</a>, _checkers[i]);</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;            }</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;            <span class="keywordflow">if</span> (pthread_attr_destroy(&amp;thread_attr)) {</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;                <span class="keywordflow">throw</span> std::runtime_error(<span class="stringliteral">&quot;pthread destroy failed&quot;</span>);</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;            }</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;            threads.reserve(threads_num);</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i = 0; i &lt; threads_num; ++i) {</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;                threads.emplace_back(std::thread(&amp;<a class="code" href="classchecker.html">checker&lt;P&gt;::check</a>, _checkers[i]));</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;                threads.back().detach();</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;            }</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        }</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
+<div class="line"><a name="l00189"></a><span class="lineno"><a class="line" href="classchecker_1_1control__type.html#a6fafd00cd511f15fda9a2bb2d18e295d">  189</a></span>&#160;        <span class="keywordtype">unsigned</span> <a class="code" href="classchecker_1_1control__type.html#a6fafd00cd511f15fda9a2bb2d18e295d">countBusy</a>() {</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;            <span class="keywordtype">unsigned</span> n = 0;</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span> *<a class="code" href="classchecker.html">checker</a> : _checkers) { n += <a class="code" href="classchecker.html">checker</a>-&gt;<a class="code" href="classchecker.html#aff747e2fd695f0d5b4ba16fefcae21d3">busy</a>(); }</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;            <span class="keywordflow">return</span> n;</div>
 <div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        }</div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160; </div>
 <div class="line"><a name="l00199"></a><span class="lineno"><a class="line" href="classchecker_1_1control__type.html#a4ef4e977d76db3a6cf51a948abed3afb">  199</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classchecker_1_1control__type.html#a4ef4e977d76db3a6cf51a948abed3afb">wait_free_thread</a>() {</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;            <span class="keywordflow">while</span> (countBusy() == threads.size()) { <a class="code" href="classdetail_1_1sync.html#aa10a8571deacfdc0a6835c00fe7d9b79">wait</a>(); }</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;            <span class="keywordflow">while</span> (<a class="code" href="classchecker_1_1control__type.html#a6fafd00cd511f15fda9a2bb2d18e295d">countBusy</a>() == threads.size()) { <a class="code" href="classdetail_1_1sync.html#aa10a8571deacfdc0a6835c00fe7d9b79">wait</a>(); }</div>
 <div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        }</div>
 <div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160; </div>
 <div class="line"><a name="l00207"></a><span class="lineno"><a class="line" href="classchecker_1_1control__type.html#a900b8420d6b0807479ada245e76f533d">  207</a></span>&#160;        std::vector&lt;checker&lt;P&gt; *&gt; &amp;<a class="code" href="classchecker_1_1control__type.html#a900b8420d6b0807479ada245e76f533d">checkers</a>() noexcept {</div>
@@ -247,7 +247,7 @@ $(function() {
 <div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        }</div>
 <div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160; </div>
 <div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        ~<a class="code" href="classchecker_1_1control__type.html">control_type</a>() noexcept<span class="keyword"> override </span>{</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;            <span class="keywordflow">while</span> (countBusy()) { <a class="code" href="classdetail_1_1sync.html#aa10a8571deacfdc0a6835c00fe7d9b79">wait</a>(); }</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;            <span class="keywordflow">while</span> (<a class="code" href="classchecker_1_1control__type.html#a6fafd00cd511f15fda9a2bb2d18e295d">countBusy</a>()) { <a class="code" href="classdetail_1_1sync.html#aa10a8571deacfdc0a6835c00fe7d9b79">wait</a>(); }</div>
 <div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> *c : _checkers) {</div>
 <div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;                c-&gt;terminate();</div>
 <div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;                <span class="keyword">delete</span> c;</div>
@@ -391,7 +391,7 @@ $(function() {
 <div class="ttc" id="apolynomialgf_8hpp_html_a6a261950bb4d2e5b869f8f9b357bdb2e"><div class="ttname"><a href="polynomialgf_8hpp.html#a6a261950bb4d2e5b869f8f9b357bdb2e">is_irreducible_rabin</a></div><div class="ttdeci">bool is_irreducible_rabin(const polynomialgf&lt; P &gt; &amp;val)</div><div class="ttdef"><b>Definition:</b> polynomialgf.hpp:284</div></div>
 <div class="ttc" id="astructchecker_1_1result__type_html"><div class="ttname"><a href="structchecker_1_1result__type.html">checker::result_type</a></div><div class="ttdoc">Структура, представляющая результаты проверки многочлена.</div><div class="ttdef"><b>Definition:</b> checker.hpp:116</div></div>
 <div class="ttc" id="aclassdetail_1_1sync_html_a3b5be6837ef2c38caf5816cca2aaa7cd"><div class="ttname"><a href="classdetail_1_1sync.html#a3b5be6837ef2c38caf5816cca2aaa7cd">detail::sync::sync</a></div><div class="ttdeci">sync() noexcept(false)</div><div class="ttdoc">Инициализация и блокировка мьютекса.</div><div class="ttdef"><b>Definition:</b> checker.hpp:41</div></div>
-<div class="ttc" id="aclasschecker_1_1control__type_html_a57a532dca3bdfe50ffd0d3810b52fcec"><div class="ttname"><a href="classchecker_1_1control__type.html#a57a532dca3bdfe50ffd0d3810b52fcec">checker::control_type::control_type</a></div><div class="ttdeci">control_type(const typename checker&lt; P &gt;::irreducible_method irr_meth, const typename checker&lt; P &gt;::primitive_method prim_meth, const unsigned threads_num) noexcept(false)</div><div class="ttdef"><b>Definition:</b> checker.hpp:161</div></div>
+<div class="ttc" id="aclasschecker_1_1control__type_html_a57a532dca3bdfe50ffd0d3810b52fcec"><div class="ttname"><a href="classchecker_1_1control__type.html#a57a532dca3bdfe50ffd0d3810b52fcec">checker::control_type::control_type</a></div><div class="ttdeci">control_type(const typename checker&lt; P &gt;::irreducible_method irr_meth, const typename checker&lt; P &gt;::primitive_method prim_meth, const unsigned threads_num) noexcept(false)</div><div class="ttdef"><b>Definition:</b> checker.hpp:154</div></div>
 <div class="ttc" id="aclasschecker_html_a59418eea0b8d25bad5ffd34293f6f3ae"><div class="ttname"><a href="classchecker.html#a59418eea0b8d25bad5ffd34293f6f3ae">checker::terminate</a></div><div class="ttdeci">void terminate() noexcept</div><div class="ttdoc">Устанавливает флаг, требующий завершить работу потока по завершении вычислений.</div><div class="ttdef"><b>Definition:</b> checker.hpp:353</div></div>
 <div class="ttc" id="aclasschecker_html_a21307d46f6d67d9a39fa43ea4f311a46a852438d026c018c4307b916406f98c62"><div class="ttname"><a href="classchecker.html#a21307d46f6d67d9a39fa43ea4f311a46a852438d026c018c4307b916406f98c62">checker::primitive_method::nil</a></div><div class="ttdoc">не проверять</div></div>
 <div class="ttc" id="apolynomialgf_8hpp_html_a7acdd0302d75f85688c1abd92e1c5093"><div class="ttname"><a href="polynomialgf_8hpp.html#a7acdd0302d75f85688c1abd92e1c5093">is_irreducible_berlekamp</a></div><div class="ttdeci">bool is_irreducible_berlekamp(const polynomialgf&lt; P &gt; &amp;val)</div><div class="ttdef"><b>Definition:</b> polynomialgf.hpp:129</div></div>
@@ -412,13 +412,14 @@ $(function() {
 <div class="ttc" id="aclasschecker_html"><div class="ttname"><a href="classchecker.html">checker</a></div><div class="ttdoc">Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P].</div><div class="ttdef"><b>Definition:</b> checker.hpp:113</div></div>
 <div class="ttc" id="aclasschecker_html_a9de71f192d92f8fa13775e3936449f6c"><div class="ttname"><a href="classchecker.html#a9de71f192d92f8fa13775e3936449f6c">checker::irreducible_method</a></div><div class="ttdeci">irreducible_method</div><div class="ttdoc">Доступные методы проверки нанеприводимость.</div><div class="ttdef"><b>Definition:</b> checker.hpp:122</div></div>
 <div class="ttc" id="aclasschecker_1_1control__type_html_a4ef4e977d76db3a6cf51a948abed3afb"><div class="ttname"><a href="classchecker_1_1control__type.html#a4ef4e977d76db3a6cf51a948abed3afb">checker::control_type::wait_free_thread</a></div><div class="ttdeci">void wait_free_thread()</div><div class="ttdef"><b>Definition:</b> checker.hpp:199</div></div>
+<div class="ttc" id="aclasschecker_1_1control__type_html_a6fafd00cd511f15fda9a2bb2d18e295d"><div class="ttname"><a href="classchecker_1_1control__type.html#a6fafd00cd511f15fda9a2bb2d18e295d">checker::control_type::countBusy</a></div><div class="ttdeci">unsigned countBusy()</div><div class="ttdoc">Считает, сколько потоков заняты.</div><div class="ttdef"><b>Definition:</b> checker.hpp:189</div></div>
 <div class="ttc" id="aclasschecker_html_aff747e2fd695f0d5b4ba16fefcae21d3"><div class="ttname"><a href="classchecker.html#aff747e2fd695f0d5b4ba16fefcae21d3">checker::busy</a></div><div class="ttdeci">bool busy() const noexcept</div><div class="ttdoc">Возвращает текущее состояние потока.</div><div class="ttdef"><b>Definition:</b> checker.hpp:347</div></div>
 <div class="ttc" id="apolynomialgf_8hpp_html"><div class="ttname"><a href="polynomialgf_8hpp.html">polynomialgf.hpp</a></div></div>
 <div class="ttc" id="aclasschecker_1_1control__type_html_a900b8420d6b0807479ada245e76f533d"><div class="ttname"><a href="classchecker_1_1control__type.html#a900b8420d6b0807479ada245e76f533d">checker::control_type::checkers</a></div><div class="ttdeci">std::vector&lt; checker&lt; P &gt; * &gt; &amp; checkers() noexcept</div><div class="ttdef"><b>Definition:</b> checker.hpp:207</div></div>
 <div class="ttc" id="aclassdetail_1_1sync_html_a0578bf588dca6606fd23684191c2eb49"><div class="ttname"><a href="classdetail_1_1sync.html#a0578bf588dca6606fd23684191c2eb49">detail::sync::signal</a></div><div class="ttdeci">void signal() noexcept</div><div class="ttdoc">Уведомление условной переменной.</div><div class="ttdef"><b>Definition:</b> checker.hpp:100</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Ср 13 Ноя 2019 00:50:47. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Ср 13 Ноя 2019 01:06:41. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.16
 </small></address>
