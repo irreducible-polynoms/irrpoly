@@ -25,9 +25,9 @@ std::vector<polynomialgf<P>> generate_irreducible(
         const unsigned threads_num
 ) {
     // функция для подсчёта потоков, в данный момент выполняющих проверку
-    auto countBusy = [](const std::vector<checker<P>> &c) noexcept {
+    auto countBusy = [](const std::vector<checker<P>*> &c) noexcept {
         unsigned n = 0;
-        for (const auto &checker : c) { n += checker.busy(); }
+        for (const auto *checker : c) { n += checker->busy(); }
         return n;
     };
 
@@ -48,21 +48,21 @@ std::vector<polynomialgf<P>> generate_irreducible(
 
         // находим свободный поток
         for (unsigned i = 0; i < threads_num; ++i) {
-            if (ctrl.checkers()[i].busy()) { continue; }
+            if (ctrl.checkers()[i]->busy()) { continue; }
             // если многочлен неприводимый (именно их и ищем) - сохраняем результат
             // для поиска неприводимых используйте .primitive
-            if (ctrl.checkers()[i].result().irreducible) {
-                res.emplace_back(ctrl.checkers()[i].get());
+            if (ctrl.checkers()[i]->result().irreducible) {
+                res.emplace_back(ctrl.checkers()[i]->get());
                 if (res.size() == num) { goto END; }
             }
             // генерируем новый многочлен для проверки (в данном случае просто случайный)
-            ctrl.checkers()[i].set(random<P>(degree));
+            ctrl.checkers()[i]->set(random<P>(degree));
         }
     }
     END:
     // сообщаем всем потокам, что они должны прекратить работу
-    for (auto &c : ctrl.checkers()) {
-        c.terminate();
+    for (auto *c : ctrl.checkers()) {
+        c->terminate();
     }
     // ждём завершения всех потоков
     while (countBusy(ctrl.checkers())) {
@@ -158,7 +158,7 @@ int main() {
     const typename checker<P>::primitive_method prim_meth = checker<P>::primitive_method::nil;
     // число потоков, выполняюих проверку многочленов на соответствие заданной характеристике
     // должно быть равно числу физических ядер минус один
-    const unsigned threads_num = 1; // std::thread::hardware_concurrency() - 1;
+    const unsigned threads_num = std::thread::hardware_concurrency() - 1;
 
     // генерируем многочлены и выводим результат
     auto poly = generate_irreducible<P>(num, degree, irr_meth, prim_meth, threads_num);

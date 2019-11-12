@@ -140,7 +140,7 @@ public:
 #else
         std::vector<std::thread> threads;
 #endif
-        std::vector<checker<P>> _checkers;
+        std::vector<checker<P> *> _checkers;
 
     public:
         /**
@@ -153,7 +153,10 @@ public:
                 const typename checker<P>::primitive_method prim_meth,
                 const unsigned threads_num
         ) noexcept(false) {
-            _checkers = std::vector<checker<P>>(threads_num, checker<P>(this, irr_meth, prim_meth));
+			_checkers.reserve(threads_num);
+			for (unsigned i = 0; i < threads_num; ++i) {
+				_checkers.emplace_back(new checker<P>(this, irr_meth, prim_meth));
+			}
 #ifdef PTHREAD
             threads = std::vector<pthread_t>(threads_num);
 
@@ -164,7 +167,7 @@ public:
             }
 
             for (unsigned i = 0; i < threads_num; ++i) {
-                pthread_create(&threads[i], &thread_attr, &checker<P>::check, &_checkers[i]);
+                pthread_create(&threads[i], &thread_attr, &checker<P>::check, _checkers[i]);
             }
 
             if (pthread_attr_destroy(&thread_attr)) {
@@ -174,7 +177,7 @@ public:
             threads = std::vector<std::thread>(threads_num);
 
             for (unsigned i = 0; i < threads_num; ++i) {
-                threads[i] = std::thread(&checker<P>::check, &_checkers[i]);
+                threads[i] = std::thread(&checker<P>::check, _checkers[i]);
                 threads[i].detach();
             }
 #endif
@@ -184,7 +187,7 @@ public:
          * Возвращает структуры, хранящие все данные потока: проверяемый многочлен,
          * текущее состояение потока и результат проверки многочлена.
          */
-        std::vector<checker<P>> &checkers() noexcept {
+        std::vector<checker<P>*> &checkers() noexcept {
             return _checkers;
         }
     };
