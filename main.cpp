@@ -64,10 +64,6 @@ std::vector<polynomialgf<P>> generate_irreducible(
     while (countBusy(ctrl.checkers())) {
         ctrl.wait();
     }
-    // сообщаем всем потокам, что они должны прекратить работу
-    for (auto *c : ctrl.checkers()) {
-        c->terminate();
-    }
 
     return res;
 }

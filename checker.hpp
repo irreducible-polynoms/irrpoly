@@ -192,6 +192,7 @@ public:
 
         ~control_type() noexcept {
             for (auto *c : _checkers) {
+                c->terminate();
                 delete c;
             }
         }
