@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['polynomialgf_92',['polynomialgf',['../polynomialgf_8hpp.html#ac9ea228b519ed0b6b1c26d6b0eb20bd7',1,'polynomialgf.hpp']]]
+  ['gf_5ftype_74',['gf_type',['../classirrpoly_1_1gf.html#ab778f2c06916b001227ea047928f8927',1,'irrpoly::gf']]]
 ];

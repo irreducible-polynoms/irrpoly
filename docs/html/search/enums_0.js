@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['irreducible_5fmethod_93',['irreducible_method',['../classchecker.html#a9de71f192d92f8fa13775e3936449f6c',1,'checker']]]
+  ['irreducible_5fmethod_77',['irreducible_method',['../classirrpoly_1_1checker.html#af83acf8c65e6fa2f86348398920d9fa4',1,'irrpoly::checker']]]
 ];

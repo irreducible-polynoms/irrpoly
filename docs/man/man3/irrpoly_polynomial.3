@@ -1,0 +1,137 @@
+.TH "irrpoly::polynomial< T >" 3 "Ср 13 Ноя 2019" "Version 1.0.0" "irrpoly" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+irrpoly::polynomial< T >
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <polynomial\&.hpp>\fP
+.SS "Открытые типы"
+
+.in +1c
+.ti -1c
+.RI "typedef ::std::vector< T >::value_type \fBvalue_type\fP"
+.br
+.ti -1c
+.RI "typedef ::std::vector< T >::size_type \fBsize_type\fP"
+.br
+.in -1c
+.SS "Открытые члены"
+
+.in +1c
+.ti -1c
+.RI "template<class U > \fBpolynomial\fP (const U *data, unsigned order)"
+.br
+.ti -1c
+.RI "template<class I > \fBpolynomial\fP (I first, I last)"
+.br
+.ti -1c
+.RI "\fBpolynomial\fP (::std::vector< T > &&p)"
+.br
+.ti -1c
+.RI "template<class U > \fBpolynomial\fP (const U &point, U *=0)"
+.br
+.ti -1c
+.RI "\fBpolynomial\fP (\fBpolynomial\fP &&p) noexcept"
+.br
+.ti -1c
+.RI "\fBpolynomial\fP (const \fBpolynomial\fP &p)"
+.br
+.ti -1c
+.RI "template<class U > \fBpolynomial\fP (const \fBpolynomial\fP< U > &p)"
+.br
+.ti -1c
+.RI "\fBpolynomial\fP (::std::initializer_list< T > l)"
+.br
+.ti -1c
+.RI "\fBpolynomial\fP & \fBoperator=\fP (::std::initializer_list< T > l)"
+.br
+.ti -1c
+.RI "size_type \fBsize\fP () const"
+.br
+.ti -1c
+.RI "size_type \fBdegree\fP () const"
+.br
+.ti -1c
+.RI "value_type & \fBoperator[]\fP (size_type i)"
+.br
+.ti -1c
+.RI "const value_type & \fBoperator[]\fP (size_type i) const"
+.br
+.ti -1c
+.RI "const ::std::vector< T > & \fBdata\fP () const"
+.br
+.ti -1c
+.RI "::std::vector< T > & \fBdata\fP ()"
+.br
+.ti -1c
+.RI "\fBpolynomial\fP & \fBoperator=\fP (\fBpolynomial\fP &&p) noexcept"
+.br
+.ti -1c
+.RI "\fBpolynomial\fP & \fBoperator=\fP (const \fBpolynomial\fP &p)"
+.br
+.ti -1c
+.RI "template<class U > \fBpolynomial\fP & \fBoperator+=\fP (const U &value)"
+.br
+.ti -1c
+.RI "template<class U > \fBpolynomial\fP & \fBoperator\-=\fP (const U &value)"
+.br
+.ti -1c
+.RI "template<class U > \fBpolynomial\fP & \fBoperator*=\fP (const U &value)"
+.br
+.ti -1c
+.RI "template<class U > \fBpolynomial\fP & \fBoperator/=\fP (const U &value)"
+.br
+.ti -1c
+.RI "template<class U > \fBpolynomial\fP & \fBoperator%=\fP (const U &)"
+.br
+.ti -1c
+.RI "template<class U > \fBpolynomial\fP & \fBoperator+=\fP (const \fBpolynomial\fP< U > &value)"
+.br
+.ti -1c
+.RI "template<class U > \fBpolynomial\fP & \fBoperator\-=\fP (const \fBpolynomial\fP< U > &value)"
+.br
+.ti -1c
+.RI "template<typename U , typename V > void \fBmultiply\fP (const \fBpolynomial\fP< U > &a, const \fBpolynomial\fP< V > &b)"
+.br
+.ti -1c
+.RI "template<class U > \fBpolynomial\fP & \fBoperator*=\fP (const \fBpolynomial\fP< U > &value)"
+.br
+.ti -1c
+.RI "template<typename U > \fBpolynomial\fP & \fBoperator/=\fP (const \fBpolynomial\fP< U > &value)"
+.br
+.ti -1c
+.RI "template<typename U > \fBpolynomial\fP & \fBoperator%=\fP (const \fBpolynomial\fP< U > &value)"
+.br
+.ti -1c
+.RI "template<typename U > \fBpolynomial\fP & \fBoperator>>=\fP (U const &n)"
+.br
+.ti -1c
+.RI "template<typename U > \fBpolynomial\fP & \fBoperator<<=\fP (U const &n)"
+.br
+.ti -1c
+.RI "bool \fBis_zero\fP () const"
+.br
+.ti -1c
+.RI "\fBoperator bool\fP () const"
+.br
+.ti -1c
+.RI "void \fBset_zero\fP ()"
+.br
+.ti -1c
+.RI "void \fBnormalize\fP ()"
+.br
+.in -1c
+.SH "Подробное описание"
+.PP 
+
+.SS "template<class T>
+.br
+class irrpoly::polynomial< T >"
+Реализация класса polynomial взыта из библиотеки Boost 1\&.71\&.0\&. За комментариями к реализации обращайтесь к первоисточнику https://www.boost.org/doc/libs/1_71_0/boost/math/tools/polynomial.hpp 
+
+.SH "Автор"
+.PP 
+Автоматически создано Doxygen для irrpoly из исходного текста\&.

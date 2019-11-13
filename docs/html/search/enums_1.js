@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['primitive_5fmethod_94',['primitive_method',['../classchecker.html#a21307d46f6d67d9a39fa43ea4f311a46',1,'checker']]]
+  ['primitive_5fmethod_78',['primitive_method',['../classirrpoly_1_1checker.html#a2d3c2f24666db5c036f3ad968204e913',1,'irrpoly::checker']]]
 ];

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['checker_48',['checker',['../classchecker.html',1,'']]],
-  ['control_5ftype_49',['control_type',['../classchecker_1_1control__type.html',1,'checker']]]
+  ['checker_41',['checker',['../classirrpoly_1_1checker.html',1,'irrpoly']]]
 ];

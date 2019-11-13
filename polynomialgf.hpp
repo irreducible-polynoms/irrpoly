@@ -20,89 +20,91 @@
 #include "gf.hpp"
 #include "polynomial.hpp"
 
+namespace irrpoly {
+
 /// Класс многочленов над полем Галуа.
-template<uint32_t P = 2>
-using polynomialgf = polynomial<gf<P>>;
+    template<uint32_t P = 2>
+    using polynomialgf = polynomial<gf<P>>;
 
 /// Вычисляет производную данного многочлена.
-template<uint32_t P>
-polynomialgf<P> derivative(const polynomialgf<P> &val) {
-    polynomialgf<P> res = val;
-    auto i = val.degree();
-    for (res[i] = 0; i > 0; --i) {
-        res[i - 1] = gf<P>(i) * val[i];
+    template<uint32_t P>
+    polynomialgf<P> derivative(const polynomialgf<P> &val) {
+        polynomialgf<P> res = val;
+        auto i = val.degree();
+        for (res[i] = 0; i > 0; --i) {
+            res[i - 1] = gf<P>(i) * val[i];
+        }
+        res.normalize();
+        return res;
     }
-    res.normalize();
-    return res;
-}
 
 /**
  * Расширенный алгоритм Евклида для поиска наибольшего общего делителя
  * (greatest common divisor) двух многочленов. Реализация сделана на основе
  * кода из библиотеки Boost 1.71.0.
  */
-template<uint32_t P>
-polynomialgf<P> gcd(polynomialgf<P> m, polynomialgf<P> n) {
-    if (m.is_zero() || n.is_zero()) {
-        throw std::domain_error("arguments must be strictly positive");
-    }
-    if (m.degree() < n.degree()) {
-        std::swap(m, n);
-    }
-    polynomialgf<P> u0 = m, u1 = polynomialgf<P>({1}), u2 = polynomialgf<P>({0}),
-            v0 = n, v1 = polynomialgf<P>({0}), v2 = polynomialgf<P>({1}),
-            w0, w1, w2, q;
-    while (!v0.is_zero()) {
-        q = u0 / v0;
-        w0 = u0 - q * v0, w1 = u1 - q * v1, w2 = u2 - q * v2;
-        u0 = v0, u1 = v1, u2 = v2, v0 = w0, v1 = w1, v2 = w2;
-    }
-    return u0;
-}
-
-namespace detail {
-    /**
-     * Вычисляет значение (x^pow - sub) % mod.
-     * @param pow степень, в которую требуется возвести x
-     * @param mod многочлен, остаток деления на который необходимо найти
-     * @param sub вычитаемое, в случае, когда степень многочлена sub меньше
-     * степени многочлена mod, можно заменить (x^pow - sub) % mod на
-     * (x^pow % mod) - sub без изменения результата, таким образом использование
-     * данной функции возможно только в подобной ситуации; это и происходит,
-     * поскольку в методе Берлекампа она вызывается всегда с sub = 0,
-     * в проверке на примитивность всегда с sub равным константе, при этом
-     * mod - как минимум первой степени, поэтому условие выполнено,
-     * в методе Рабина sub = x, но при этом mod как минимум второй степени,
-     * т.к. все многочлены первой степени неприводимы, что обеспечивает
-     * возврат не доходя до вызова данной функции
-     */
     template<uint32_t P>
-    [[nodiscard]]
-    polynomialgf<P> x_pow_mod_sub(
-            uint64_t pow,
-            const polynomialgf<P> &mod,
-            const polynomialgf<P> &sub = polynomialgf<P>({0})
-    ) noexcept {
-        // Эта функция возврадает по сути следующий редультат:
-        // return ((polynomialgf<P>({1}) << pow) - sub) % mod;
-        // её существование необходимо, т.к. в методе Рабина
-        // и в методе проверки на примитивность требуется вычислить
-        // её результат для столь больших pow, что x^pow не влезает
-        // в оперативную память, данный метод решает эту проблему,
-        // но он всё ещё адски медленный
-        const auto n = mod.degree();
-        polynomialgf<P> res({1});
-
-        typename polynomialgf<P>::size_type tmp;
-        for (auto m = res.degree(); pow + m >= n; m = res.degree()) {
-            tmp = n - m;
-            res <<= tmp;
-            res %= mod;
-            pow -= tmp;
+    polynomialgf<P> gcd(polynomialgf<P> m, polynomialgf<P> n) {
+        if (m.is_zero() || n.is_zero()) {
+            throw ::std::domain_error("arguments must be strictly positive");
         }
-        return (res << pow) - sub;
+        if (m.degree() < n.degree()) {
+            ::std::swap(m, n);
+        }
+        polynomialgf<P> u0 = m, u1 = polynomialgf<P>({1}), u2 = polynomialgf<P>({0}),
+                v0 = n, v1 = polynomialgf<P>({0}), v2 = polynomialgf<P>({1}),
+                w0, w1, w2, q;
+        while (!v0.is_zero()) {
+            q = u0 / v0;
+            w0 = u0 - q * v0, w1 = u1 - q * v1, w2 = u2 - q * v2;
+            u0 = v0, u1 = v1, u2 = v2, v0 = w0, v1 = w1, v2 = w2;
+        }
+        return u0;
     }
-}
+
+    namespace detail {
+        /**
+         * Вычисляет значение (x^pow - sub) % mod.
+         * @param pow степень, в которую требуется возвести x
+         * @param mod многочлен, остаток деления на который необходимо найти
+         * @param sub вычитаемое, в случае, когда степень многочлена sub меньше
+         * степени многочлена mod, можно заменить (x^pow - sub) % mod на
+         * (x^pow % mod) - sub без изменения результата, таким образом использование
+         * данной функции возможно только в подобной ситуации; это и происходит,
+         * поскольку в методе Берлекампа она вызывается всегда с sub = 0,
+         * в проверке на примитивность всегда с sub равным константе, при этом
+         * mod - как минимум первой степени, поэтому условие выполнено,
+         * в методе Рабина sub = x, но при этом mod как минимум второй степени,
+         * т.к. все многочлены первой степени неприводимы, что обеспечивает
+         * возврат не доходя до вызова данной функции
+         */
+        template<uint32_t P>
+        [[nodiscard]]
+        polynomialgf<P> x_pow_mod_sub(
+                uint64_t pow,
+                const polynomialgf<P> &mod,
+                const polynomialgf<P> &sub = polynomialgf<P>({0})
+        ) noexcept {
+            // Эта функция возврадает по сути следующий редультат:
+            // return ((polynomialgf<P>({1}) << pow) - sub) % mod;
+            // её существование необходимо, т.к. в методе Рабина
+            // и в методе проверки на примитивность требуется вычислить
+            // её результат для столь больших pow, что x^pow не влезает
+            // в оперативную память, данный метод решает эту проблему,
+            // но он всё ещё адски медленный
+            const auto n = mod.degree();
+            polynomialgf<P> res({1});
+
+            typename polynomialgf<P>::size_type tmp;
+            for (auto m = res.degree(); pow + m >= n; m = res.degree()) {
+                tmp = n - m;
+                res <<= tmp;
+                res %= mod;
+                pow -= tmp;
+            }
+            return (res << pow) - sub;
+        }
+    }
 
 /**
  * Алгоритм Берлекампа проверки многочлена на неприводимость в поле GF[P].
@@ -125,72 +127,73 @@ namespace detail {
  * Кроме того, все многочлены первой степени неприводимы в любом поле.
  * @author Vadim Piven <vadim@piven.tech>
  */
-template<uint32_t P>
-bool is_irreducible_berlekamp(const polynomialgf<P> &val) {
-    if (val.is_zero()) {
-        return false; }
-    const auto n = val.degree();
-
-    // проверка вырожденных случаев
-    if (n == 0 || (val[0].is_zero() && n > 1)) { return false; }
-    if (n == 1) { return true; }
-
-    // функция для построения матрицы берлекампа и вычисления её ранга
-    auto berlekampMatrixRank = [](const polynomialgf<P> &val) {
-        polynomialgf<P> tmp;
-        typename polynomialgf<P>::size_type i, j, k, l;
-        const gf<P> zer = 0;
-        const auto n = val.degree();
-        std::vector<std::vector<gf<P>>> m(n, std::vector<gf<P>>(n, zer)); // M = 0
-        for (i = 0; i < n; ++i) {
-            tmp = detail::x_pow_mod_sub(i * P, val); // M[i,*] = x ^ ip (mod val)
-            for (j = 0, k = tmp.degree(); j <= k; ++j) {
-                m[i][j] += tmp[j];
-            }
-            m[i][i] -= 1; // M - E
+    template<uint32_t P>
+    bool is_irreducible_berlekamp(const polynomialgf<P> &val) {
+        if (val.is_zero()) {
+            return false;
         }
+        const auto n = val.degree();
 
-        // приведение матрицы к ступенчатому виду
-        bool f;
-        gf<P> mul;
-        for (i = k = 0; i < n && k < n; ++k) {
-            f = !m[i][k].is_zero();
-            for (j = i + 1; j < n; ++j) {
-                if (!m[j][k].is_zero()) {
-                    if (f) {
-                        mul = m[i][k].mul_inv() * m[j][k];
-                        m[j][k] = zer;
-                        for (l = k + 1; l < n; ++l) {
-                            m[j][l] -= m[i][l] * mul;
+        // проверка вырожденных случаев
+        if (n == 0 || (val[0].is_zero() && n > 1)) { return false; }
+        if (n == 1) { return true; }
+
+        // функция для построения матрицы берлекампа и вычисления её ранга
+        auto berlekampMatrixRank = [](const polynomialgf<P> &val) {
+            polynomialgf<P> tmp;
+            typename polynomialgf<P>::size_type i, j, k, l;
+            const gf<P> zer = 0;
+            const auto n = val.degree();
+            ::std::vector<::std::vector<gf<P>>> m(n, ::std::vector<gf<P>>(n, zer)); // M = 0
+            for (i = 0; i < n; ++i) {
+                tmp = detail::x_pow_mod_sub(i * P, val); // M[i,*] = x ^ ip (mod val)
+                for (j = 0, k = tmp.degree(); j <= k; ++j) {
+                    m[i][j] += tmp[j];
+                }
+                m[i][i] -= 1; // M - E
+            }
+
+            // приведение матрицы к ступенчатому виду
+            bool f;
+            gf<P> mul;
+            for (i = k = 0; i < n && k < n; ++k) {
+                f = !m[i][k].is_zero();
+                for (j = i + 1; j < n; ++j) {
+                    if (!m[j][k].is_zero()) {
+                        if (f) {
+                            mul = m[i][k].mul_inv() * m[j][k];
+                            m[j][k] = zer;
+                            for (l = k + 1; l < n; ++l) {
+                                m[j][l] -= m[i][l] * mul;
+                            }
+                        } else {
+                            for (l = k; l < n; ++l) {
+                                ::std::swap(m[i][l], m[j][l]);
+                            }
+                            f = true;
                         }
-                    } else {
-                        for (l = k; l < n; ++l) {
-                            std::swap(m[i][l], m[j][l]);
-                        }
-                        f = true;
                     }
                 }
+                i += f;
             }
-            i += f;
-        }
-        return i;
-    };
+            return i;
+        };
 
-    // алгоритм Берлекампа
-    auto d = derivative(val);
-    return !d.is_zero() && gcd(val, d).degree() == 0 &&
-           berlekampMatrixRank(val) == val.degree() - 1;
-}
+        // алгоритм Берлекампа
+        auto d = derivative(val);
+        return !d.is_zero() && gcd(val, d).degree() == 0 &&
+               berlekampMatrixRank(val) == val.degree() - 1;
+    }
 
 /// Генерирует случайный многочлен над полем GF[P] заданной степени.
-template<uint32_t P>
-polynomialgf<P> random(typename polynomialgf<P>::size_type degree) {
-    std::vector<gf<P>> data(degree + 1);
-    for (auto &d : data) { d = gf<P>::random(); }
-    while (data[0].is_zero()) { data[0] = gf<P>::random(); }
-    data[degree] = 1;
-    return data; // неявное преобразование вектора коэффициентов к классу polynomialgf
-}
+    template<uint32_t P>
+    polynomialgf<P> random(typename polynomialgf<P>::size_type degree) {
+        ::std::vector<gf<P>> data(degree + 1);
+        for (auto &d : data) { d = gf<P>::random(); }
+        while (data[0].is_zero()) { data[0] = gf<P>::random(); }
+        data[degree] = 1;
+        return data; // неявное преобразование вектора коэффициентов к классу polynomialgf
+    }
 
 /**
  * Алгоритм проверки многочлена на примитивность по определению. Многочлен является
@@ -203,68 +206,68 @@ polynomialgf<P> random(typename polynomialgf<P>::size_type degree) {
  * Кроме того, многочлен x является примитивным для любого поля GF[P].
  * @author Veronika Biryukova <biryukovaveronika@mail.ru>
  */
-template<uint32_t P>
-bool is_primitive_definition(const polynomialgf<P> &val) {
-    if (val.is_zero()) { return false; }
-    const auto n = val.degree();
+    template<uint32_t P>
+    bool is_primitive_definition(const polynomialgf<P> &val) {
+        if (val.is_zero()) { return false; }
+        const auto n = val.degree();
 
-    // проверка вырожденных случаев
-    if (n == 0 || (val[0].is_zero() && n > 1)) { return false; }
-    if (n == 1 && val[0] == 0) { return true; } // val = k * x + 0
+        // проверка вырожденных случаев
+        if (n == 0 || (val[0].is_zero() && n > 1)) { return false; }
+        if (n == 1 && val[0] == 0) { return true; } // val = k * x + 0
 
-    // выполняется нормировка, т.к. данный алгоритм справедлив только
-    // для многочленов со старшим коэффициентом, равным единице
-    // умножение многочлена на число не меняет его примитивность
-    const auto poly = val / val[n];
+        // выполняется нормировка, т.к. данный алгоритм справедлив только
+        // для многочленов со старшим коэффициентом, равным единице
+        // умножение многочлена на число не меняет его примитивность
+        const auto poly = val / val[n];
 
-    // ещё один вырожденный случай, на работу с которым алгоритм не рассчитан
-    if (P == 2 && poly == polynomialgf<P>({1, 1})) { return false; }
+        // ещё один вырожденный случай, на работу с которым алгоритм не рассчитан
+        if (P == 2 && poly == polynomialgf<P>({1, 1})) { return false; }
 
-    auto mp = (n % 2) ? -poly[0] : poly[0];
+        auto mp = (n % 2) ? -poly[0] : poly[0];
 
-    // функция для разложения (факторизации) числа на множители
-    // единица и само число (в случае его простоты) в разложение не входят
-    auto factorize = [](uint64_t n) {
-        std::vector<uint64_t> list;
-        const auto begin = n;
-        for (uint64_t d = 2; d * d <= n; ++d) {
-            if (n % d) { continue; }
-            list.emplace_back(d);
-            while (n % d == 0) { n /= d; }
+        // функция для разложения (факторизации) числа на множители
+        // единица и само число (в случае его простоты) в разложение не входят
+        auto factorize = [](uint64_t n) {
+            ::std::vector<uint64_t> list;
+            const auto begin = n;
+            for (uint64_t d = 2; d * d <= n; ++d) {
+                if (n % d) { continue; }
+                list.emplace_back(d);
+                while (n % d == 0) { n /= d; }
+            }
+            if (n != 1 && n != begin) { list.emplace_back(n); }
+            return list;
+        };
+
+        // проверяется выполнение первого условия
+        if (P > 2) {
+            const auto p = P - 1;
+            auto list = (p == 2) ? ::std::vector<uint64_t>{2} : factorize(p);
+            auto m = list.size() - 1;
+            auto tmp = mp;
+            for (uint32_t i = 1; i <= p; ++i, tmp *= mp) {
+                if (i != p / list[m]) { continue; }
+                if (tmp.data() == 1) { return false; }
+                if (m == 0) { break; } else { m -= 1; }
+            }
         }
-        if (n != 1 && n != begin) { list.emplace_back(n); }
-        return list;
-    };
 
-    // проверяется выполнение первого условия
-    if (P > 2) {
-        const auto p = P - 1;
-        auto list = (p == 2) ? std::vector<uint64_t>{2} : factorize(p);
-        auto m = list.size() - 1;
-        auto tmp = mp;
-        for (uint32_t i = 1; i <= p; ++i, tmp *= mp) {
-            if (i != p / list[m]) { continue; }
-            if (tmp.data() == 1) { return false; }
-            if (m == 0) { break; } else { m -= 1; }
+        // проверяется выполнение второго условия
+        uint64_t r = (detail::integer_power(static_cast<uint64_t>(P), n) - 1) / (P - 1);
+        auto tmp = detail::x_pow_mod_sub(r, val, polynomialgf<P>({mp}));
+        if (!tmp.is_zero()) { return false; }
+
+        // проверяется выполнение третьего условия
+        auto list3 = factorize(r);
+        const auto m = list3.size();
+        for (size_t i = 0; i < m; ++i) {
+            tmp = detail::x_pow_mod_sub(r / list3[i], poly);
+            if (tmp.is_zero() || tmp.degree() == 0) { return false; }
         }
+
+        // если все условия выполнены - многочлен примитивен
+        return true;
     }
-
-    // проверяется выполнение второго условия
-    uint64_t r = (detail::integer_power(static_cast<uint64_t>(P), n) - 1) / (P - 1);
-    auto tmp = detail::x_pow_mod_sub(r, val, polynomialgf<P>({mp}));
-    if (!tmp.is_zero()) { return false; }
-
-    // проверяется выполнение третьего условия
-    auto list3 = factorize(r);
-    const auto m = list3.size();
-    for (size_t i = 0; i < m; ++i) {
-        tmp = detail::x_pow_mod_sub(r / list3[i], poly);
-        if (tmp.is_zero() || tmp.degree() == 0) { return false; }
-    }
-
-    // если все условия выполнены - многочлен примитивен
-    return true;
-}
 
 /**
  * Алгоритм Рабина проверки многочлена на неприводимость в поле GF[P].
@@ -280,39 +283,41 @@ bool is_primitive_definition(const polynomialgf<P> &val) {
  * Кроме того, все многочлены первой степени неприводимы в любом поле.
  * @author Anastasia Chekhoeva <A89168226876@yandex.ru>
  */
-template<uint32_t P>
-bool is_irreducible_rabin(const polynomialgf<P> &val) {
-    if (val.is_zero()) { return false; }
-    const auto n = val.degree();
+    template<uint32_t P>
+    bool is_irreducible_rabin(const polynomialgf<P> &val) {
+        if (val.is_zero()) { return false; }
+        const auto n = val.degree();
 
-    // проверка вырожденных случаев
-    if (n == 0 || (val[0].is_zero() && n > 1)) { return false; }
-    if (n == 1) { return true; }
+        // проверка вырожденных случаев
+        if (n == 0 || (val[0].is_zero() && n > 1)) { return false; }
+        if (n == 1) { return true; }
 
-    // функция разложения числа на множители
-    auto get_list = [](uint64_t n) {
-        std::vector<uint64_t> list;
-        const auto begin = n;
-        for (uint64_t d = 2; d * d <= n; ++d) {
-            if (n % d) { continue; }
-            list.emplace_back(begin / d);
-            while (n % d == 0) { n /= d; }
+        // функция разложения числа на множители
+        auto get_list = [](uint64_t n) {
+            ::std::vector<uint64_t> list;
+            const auto begin = n;
+            for (uint64_t d = 2; d * d <= n; ++d) {
+                if (n % d) { continue; }
+                list.emplace_back(begin / d);
+                while (n % d == 0) { n /= d; }
+            }
+            if (n != 1) { list.emplace_back(begin / n); }
+            return list;
+        };
+
+        // шаги 1-2
+        auto list = get_list(n);
+        polynomialgf<P> tmp, x = polynomialgf<P>({0, 1});
+        for (auto i: list) {
+            tmp = detail::x_pow_mod_sub(detail::integer_power(static_cast<uint64_t>(P), i), val, x);
+            if (tmp.is_zero() || gcd(val, tmp).degree() > 0) { return false; }
         }
-        if (n != 1) { list.emplace_back(begin / n); }
-        return list;
-    };
 
-    // шаги 1-2
-    auto list = get_list(n);
-    polynomialgf<P> tmp, x = polynomialgf<P>({0, 1});
-    for (auto i: list) {
-        tmp = detail::x_pow_mod_sub(detail::integer_power(static_cast<uint64_t>(P), i), val, x);
-        if (tmp.is_zero() || gcd(val, tmp).degree() > 0) { return false; }
+        // шаг 3
+        tmp = detail::x_pow_mod_sub(detail::integer_power(static_cast<uint64_t>(P), n), val, x);
+        return tmp.is_zero();
     }
 
-    // шаг 3
-    tmp = detail::x_pow_mod_sub(detail::integer_power(static_cast<uint64_t>(P), n), val, x);
-    return tmp.is_zero();
 }
 
 #endif //POLYNOMIALGF_HPP

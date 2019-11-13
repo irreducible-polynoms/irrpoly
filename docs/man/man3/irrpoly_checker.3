@@ -1,0 +1,99 @@
+.TH "irrpoly::checker< P >" 3 "Ср 13 Ноя 2019" "Version 1.0.0" "irrpoly" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+irrpoly::checker< P > \- Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P]\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <checker\&.hpp>\fP
+.SS "Классы"
+
+.in +1c
+.ti -1c
+.RI "struct \fBresult_type\fP"
+.br
+.RI "Структура, представляющая результаты проверки многочлена\&. "
+.in -1c
+.SS "Открытые типы"
+
+.in +1c
+.ti -1c
+.RI "enum \fBirreducible_method\fP { \fBirreducible_method::nil\fP, \fBirreducible_method::berlekamp\fP, \fBirreducible_method::rabin\fP }"
+.br
+.RI "Доступные методы проверки нанеприводимость\&. "
+.ti -1c
+.RI "enum \fBprimitive_method\fP { \fBprimitive_method::nil\fP, \fBprimitive_method::definition\fP }"
+.br
+.RI "Доступные методы проверки примитивность\&. "
+.ti -1c
+.RI "typedef ::std::function< \fBpolynomialgf\fP< P >)> \fBinput_func\fP"
+.br
+.RI "Вид функции, генерирующей многочлены для проверки\&. "
+.ti -1c
+.RI "typedef ::std::function< bool(const \fBresult_type\fP &, const \fBpolynomialgf\fP< P > &)> \fBcallback_func\fP"
+.br
+.in -1c
+.SS "Открытые члены"
+
+.in +1c
+.ti -1c
+.RI "\fBchecker\fP (const \fBirreducible_method\fP irr_meth, const \fBprimitive_method\fP prim_meth, const unsigned n=::std::thread::hardware_concurrency() \- 1) noexcept"
+.br
+.ti -1c
+.RI "void \fBcheck\fP (uint64_t n, \fBinput_func\fP input, \fBcallback_func\fP callback, const bool strict=true) noexcept"
+.br
+.RI "Основной цикл разделения работы на потоки\&. "
+.ti -1c
+.RI "\fB~checker\fP () noexcept"
+.br
+.RI "Завершаем работу всех потоков\&. "
+.in -1c
+.SH "Подробное описание"
+.PP 
+
+.SS "template<uint32_t P>
+.br
+class irrpoly::checker< P >"
+Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P]\&. 
+.SH "Определения типов"
+.PP 
+.SS "template<uint32_t P> typedef ::std::function<bool(const \fBresult_type\fP &, const \fBpolynomialgf\fP<P> &)> \fBirrpoly::checker\fP< P >::\fBcallback_func\fP"
+Вид функции, обрабатывающей результат проверки (если многочлен удовлетворяет требуемым условиям возвращает true, иначе - false)\&. 
+.SH "Перечисления"
+.PP 
+.SS "template<uint32_t P> enum \fBirrpoly::checker::irreducible_method\fP\fC [strong]\fP"
+
+.PP
+Доступные методы проверки нанеприводимость\&. 
+.PP
+\fBЭлементы перечислений\fP
+.in +1c
+.TP
+\fB\fInil \fP\fP
+не проверять 
+.TP
+\fB\fIberlekamp \fP\fP
+алгоритм Берлекампа 
+.TP
+\fB\fIrabin \fP\fP
+алгоритм Рабина 
+.SS "template<uint32_t P> enum \fBirrpoly::checker::primitive_method\fP\fC [strong]\fP"
+
+.PP
+Доступные методы проверки примитивность\&. 
+.PP
+\fBЭлементы перечислений\fP
+.in +1c
+.TP
+\fB\fInil \fP\fP
+не проверять 
+.TP
+\fB\fIdefinition \fP\fP
+проверка по определению 
+
+.SH "Автор"
+.PP 
+Автоматически создано Doxygen для irrpoly из исходного текста\&.

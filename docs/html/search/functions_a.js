@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['terminate_84',['terminate',['../classchecker.html#a59418eea0b8d25bad5ffd34293f6f3ae',1,'checker']]]
+  ['wait_69',['wait',['../classirrpoly_1_1detail_1_1sync.html#a67f7424249809fd8f6654691e0e53f0c',1,'irrpoly::detail::sync']]]
 ];

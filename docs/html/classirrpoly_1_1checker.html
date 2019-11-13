@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.16"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>irrpoly: Шаблон класса irrpoly::checker&lt; P &gt;</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">irrpoly
+   &#160;<span id="projectnumber">1.0.0</span>
+   </div>
+   <div id="projectbrief">Проверка многочленов на неприводимость и примитивность над заданным полем Галуа</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.8.16 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Поиск');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><b>irrpoly</b></li><li class="navelem"><a class="el" href="classirrpoly_1_1checker.html">checker</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Классы</a> &#124;
+<a href="#pub-types">Открытые типы</a> &#124;
+<a href="#pub-methods">Открытые члены</a> &#124;
+<a href="classirrpoly_1_1checker-members.html">Полный список членов класса</a>  </div>
+  <div class="headertitle">
+<div class="title">Шаблон класса irrpoly::checker&lt; P &gt;</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P].  
+ <a href="classirrpoly_1_1checker.html#details">Подробнее...</a></p>
+
+<p><code>#include &lt;<a class="el" href="checker_8hpp_source.html">checker.hpp</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Классы</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structirrpoly_1_1checker_1_1result__type.html">result_type</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Структура, представляющая результаты проверки многочлена.  <a href="structirrpoly_1_1checker_1_1result__type.html#details">Подробнее...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Открытые типы</h2></td></tr>
+<tr class="memitem:af83acf8c65e6fa2f86348398920d9fa4"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1checker.html#af83acf8c65e6fa2f86348398920d9fa4">irreducible_method</a> { <a class="el" href="classirrpoly_1_1checker.html#af83acf8c65e6fa2f86348398920d9fa4a852438d026c018c4307b916406f98c62">irreducible_method::nil</a>, 
+<a class="el" href="classirrpoly_1_1checker.html#af83acf8c65e6fa2f86348398920d9fa4a7ba1489db9e5f06273d215956331258c">irreducible_method::berlekamp</a>, 
+<a class="el" href="classirrpoly_1_1checker.html#af83acf8c65e6fa2f86348398920d9fa4a787a618784bcf88454b94edc3d0821f1">irreducible_method::rabin</a>
+ }</td></tr>
+<tr class="memdesc:af83acf8c65e6fa2f86348398920d9fa4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Доступные методы проверки нанеприводимость.  <a href="classirrpoly_1_1checker.html#af83acf8c65e6fa2f86348398920d9fa4">Подробнее...</a><br /></td></tr>
+<tr class="separator:af83acf8c65e6fa2f86348398920d9fa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d3c2f24666db5c036f3ad968204e913"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1checker.html#a2d3c2f24666db5c036f3ad968204e913">primitive_method</a> { <a class="el" href="classirrpoly_1_1checker.html#a2d3c2f24666db5c036f3ad968204e913a852438d026c018c4307b916406f98c62">primitive_method::nil</a>, 
+<a class="el" href="classirrpoly_1_1checker.html#a2d3c2f24666db5c036f3ad968204e913a30618b3b44fa316257d07e387759fae5">primitive_method::definition</a>
+ }</td></tr>
+<tr class="memdesc:a2d3c2f24666db5c036f3ad968204e913"><td class="mdescLeft">&#160;</td><td class="mdescRight">Доступные методы проверки примитивность.  <a href="classirrpoly_1_1checker.html#a2d3c2f24666db5c036f3ad968204e913">Подробнее...</a><br /></td></tr>
+<tr class="separator:a2d3c2f24666db5c036f3ad968204e913"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace2d7c781303738e2e4e8773f6fdd3f0"><td class="memItemLeft" align="right" valign="top"><a id="ace2d7c781303738e2e4e8773f6fdd3f0"></a>
+typedef ::std::function&lt; <a class="el" href="polynomialgf_8hpp.html#a1d56784d0d37b9abd4f463332d242ff0">polynomialgf</a>&lt; P &gt;)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1checker.html#ace2d7c781303738e2e4e8773f6fdd3f0">input_func</a></td></tr>
+<tr class="memdesc:ace2d7c781303738e2e4e8773f6fdd3f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Вид функции, генерирующей многочлены для проверки. <br /></td></tr>
+<tr class="separator:ace2d7c781303738e2e4e8773f6fdd3f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ce5b9a193b5f8364bf5329d9b400afa"><td class="memItemLeft" align="right" valign="top">typedef ::std::function&lt; bool(const <a class="el" href="structirrpoly_1_1checker_1_1result__type.html">result_type</a> &amp;, const <a class="el" href="polynomialgf_8hpp.html#a1d56784d0d37b9abd4f463332d242ff0">polynomialgf</a>&lt; P &gt; &amp;)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1checker.html#a3ce5b9a193b5f8364bf5329d9b400afa">callback_func</a></td></tr>
+<tr class="separator:a3ce5b9a193b5f8364bf5329d9b400afa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Открытые члены</h2></td></tr>
+<tr class="memitem:acd7503bfd50b031454c5012e41228782"><td class="memItemLeft" align="right" valign="top"><a id="acd7503bfd50b031454c5012e41228782"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>checker</b> (const <a class="el" href="classirrpoly_1_1checker.html#af83acf8c65e6fa2f86348398920d9fa4">irreducible_method</a> irr_meth, const <a class="el" href="classirrpoly_1_1checker.html#a2d3c2f24666db5c036f3ad968204e913">primitive_method</a> prim_meth, const unsigned n=::std::thread::hardware_concurrency() - 1) noexcept</td></tr>
+<tr class="separator:acd7503bfd50b031454c5012e41228782"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02d06146a13829f4c318d2cd4b30eb63"><td class="memItemLeft" align="right" valign="top"><a id="a02d06146a13829f4c318d2cd4b30eb63"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1checker.html#a02d06146a13829f4c318d2cd4b30eb63">check</a> (uint64_t n, <a class="el" href="classirrpoly_1_1checker.html#ace2d7c781303738e2e4e8773f6fdd3f0">input_func</a> input, <a class="el" href="classirrpoly_1_1checker.html#a3ce5b9a193b5f8364bf5329d9b400afa">callback_func</a> callback, const bool strict=true) noexcept</td></tr>
+<tr class="memdesc:a02d06146a13829f4c318d2cd4b30eb63"><td class="mdescLeft">&#160;</td><td class="mdescRight">Основной цикл разделения работы на потоки. <br /></td></tr>
+<tr class="separator:a02d06146a13829f4c318d2cd4b30eb63"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adeab97ffa75b1ce57820e2a72786937a"><td class="memItemLeft" align="right" valign="top"><a id="adeab97ffa75b1ce57820e2a72786937a"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1checker.html#adeab97ffa75b1ce57820e2a72786937a">~checker</a> () noexcept</td></tr>
+<tr class="memdesc:adeab97ffa75b1ce57820e2a72786937a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Завершаем работу всех потоков. <br /></td></tr>
+<tr class="separator:adeab97ffa75b1ce57820e2a72786937a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
+<div class="textblock"><h3>template&lt;uint32_t P&gt;<br />
+class irrpoly::checker&lt; P &gt;</h3>
+
+<p>Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P]. </p>
+</div><h2 class="groupheader">Определения типов</h2>
+<a id="a3ce5b9a193b5f8364bf5329d9b400afa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ce5b9a193b5f8364bf5329d9b400afa">&#9670;&nbsp;</a></span>callback_func</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;uint32_t P&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef ::std::function&lt;bool(const <a class="el" href="structirrpoly_1_1checker_1_1result__type.html">result_type</a> &amp;, const <a class="el" href="polynomialgf_8hpp.html#a1d56784d0d37b9abd4f463332d242ff0">polynomialgf</a>&lt;P&gt; &amp;)&gt; <a class="el" href="classirrpoly_1_1checker.html">irrpoly::checker</a>&lt; P &gt;::<a class="el" href="classirrpoly_1_1checker.html#a3ce5b9a193b5f8364bf5329d9b400afa">callback_func</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Вид функции, обрабатывающей результат проверки (если многочлен удовлетворяет требуемым условиям возвращает true, иначе - false). </p>
+
+</div>
+</div>
+<h2 class="groupheader">Перечисления</h2>
+<a id="af83acf8c65e6fa2f86348398920d9fa4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af83acf8c65e6fa2f86348398920d9fa4">&#9670;&nbsp;</a></span>irreducible_method</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;uint32_t P&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classirrpoly_1_1checker.html#af83acf8c65e6fa2f86348398920d9fa4">irrpoly::checker::irreducible_method</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Доступные методы проверки нанеприводимость. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Элементы перечислений</th></tr><tr><td class="fieldname"><a id="af83acf8c65e6fa2f86348398920d9fa4a852438d026c018c4307b916406f98c62"></a>nil&#160;</td><td class="fielddoc"><p>не проверять </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af83acf8c65e6fa2f86348398920d9fa4a7ba1489db9e5f06273d215956331258c"></a>berlekamp&#160;</td><td class="fielddoc"><p>алгоритм Берлекампа </p>
+</td></tr>
+<tr><td class="fieldname"><a id="af83acf8c65e6fa2f86348398920d9fa4a787a618784bcf88454b94edc3d0821f1"></a>rabin&#160;</td><td class="fielddoc"><p>алгоритм Рабина </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="a2d3c2f24666db5c036f3ad968204e913"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d3c2f24666db5c036f3ad968204e913">&#9670;&nbsp;</a></span>primitive_method</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;uint32_t P&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classirrpoly_1_1checker.html#a2d3c2f24666db5c036f3ad968204e913">irrpoly::checker::primitive_method</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Доступные методы проверки примитивность. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Элементы перечислений</th></tr><tr><td class="fieldname"><a id="a2d3c2f24666db5c036f3ad968204e913a852438d026c018c4307b916406f98c62"></a>nil&#160;</td><td class="fielddoc"><p>не проверять </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a2d3c2f24666db5c036f3ad968204e913a30618b3b44fa316257d07e387759fae5"></a>definition&#160;</td><td class="fielddoc"><p>проверка по определению </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<hr/>Объявления и описания членов класса находятся в файле:<ul>
+<li>/Users/vadimpiven/Development/irrpoly/<a class="el" href="checker_8hpp_source.html">checker.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Документация по irrpoly. Последние изменения: Ср 13 Ноя 2019 15:20:39. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.16
+</small></address>
+</body>
+</html>

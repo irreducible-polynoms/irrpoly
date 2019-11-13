@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['gcd_11',['gcd',['../polynomialgf_8hpp.html#a2dcac9e33d11fec27737ac7aad53ef29',1,'polynomialgf.hpp']]],
-  ['get_12',['get',['../classchecker.html#a586a75fd1e181338d2cda60b300a6869',1,'checker']]],
-  ['gf_13',['gf',['../classgf.html',1,'gf&lt; P &gt;'],['../classgf.html#a31f012e6138efa619e9326ce42a4d183',1,'gf::gf()']]],
-  ['gf_2ehpp_14',['gf.hpp',['../gf_8hpp.html',1,'']]],
-  ['gf_5ftype_15',['gf_type',['../classgf.html#a85b6a73c495d831f84d6c8356b527685',1,'gf']]]
+  ['gcd_8',['gcd',['../polynomialgf_8hpp.html#a80b412b43964fdcc3f3adb1f9a9906c0',1,'irrpoly']]],
+  ['gf_9',['gf',['../classirrpoly_1_1gf.html',1,'irrpoly::gf&lt; P &gt;'],['../classirrpoly_1_1gf.html#a41e88745fb1c59699ed159c52f6d8d3e',1,'irrpoly::gf::gf()']]],
+  ['gf_2ehpp_10',['gf.hpp',['../gf_8hpp.html',1,'']]],
+  ['gf_5ftype_11',['gf_type',['../classirrpoly_1_1gf.html#ab778f2c06916b001227ea047928f8927',1,'irrpoly::gf']]]
 ];

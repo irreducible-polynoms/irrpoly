@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['wait_86',['wait',['../classdetail_1_1sync.html#aa10a8571deacfdc0a6835c00fe7d9b79',1,'detail::sync']]],
-  ['wait_5fall_87',['wait_all',['../classchecker_1_1control__type.html#a9a51899ff527d5dcf3c4387623ce3a30',1,'checker::control_type']]],
-  ['wait_5fone_88',['wait_one',['../classchecker_1_1control__type.html#a0862b26ddc79e7e6e19351d41e7010a7',1,'checker::control_type']]]
+  ['_7echecker_71',['~checker',['../classirrpoly_1_1checker.html#adeab97ffa75b1ce57820e2a72786937a',1,'irrpoly::checker']]],
+  ['_7esync_72',['~sync',['../classirrpoly_1_1detail_1_1sync.html#ad659121e9c158dc28f1ebddb5a140f77',1,'irrpoly::detail::sync']]]
 ];

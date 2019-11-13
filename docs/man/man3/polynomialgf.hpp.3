@@ -23,7 +23,7 @@
 
 .in +1c
 .ti -1c
-.RI "template<uint32_t P = 2> using \fBpolynomialgf\fP = \fBpolynomial\fP< \fBgf\fP< P > >"
+.RI "template<uint32_t P = 2> using \fBirrpoly::polynomialgf\fP = polynomial< gf< P > >"
 .br
 .RI "Класс многочленов над полем Галуа\&. "
 .in -1c
@@ -31,27 +31,27 @@
 
 .in +1c
 .ti -1c
-.RI "template<uint32_t P> \fBpolynomialgf\fP< P > \fBderivative\fP (const \fBpolynomialgf\fP< P > &val)"
+.RI "template<uint32_t P> polynomialgf< P > \fBirrpoly::derivative\fP (const polynomialgf< P > &val)"
 .br
 .RI "Вычисляет производную данного многочлена\&. "
 .ti -1c
-.RI "template<uint32_t P> \fBpolynomialgf\fP< P > \fBgcd\fP (\fBpolynomialgf\fP< P > m, \fBpolynomialgf\fP< P > n)"
+.RI "template<uint32_t P> polynomialgf< P > \fBirrpoly::gcd\fP (polynomialgf< P > m, polynomialgf< P > n)"
 .br
 .ti -1c
-.RI "template<uint32_t P> \fBpolynomialgf\fP< P > \fBdetail::x_pow_mod_sub\fP (uint64_t pow, const \fBpolynomialgf\fP< P > &mod, const \fBpolynomialgf\fP< P > &sub=\fBpolynomialgf\fP< P >({0})) noexcept"
+.RI "template<uint32_t P> polynomialgf< P > \fBirrpoly::detail::x_pow_mod_sub\fP (uint64_t pow, const polynomialgf< P > &mod, const polynomialgf< P > &sub=polynomialgf< P >({0})) noexcept"
 .br
 .ti -1c
-.RI "template<uint32_t P> bool \fBis_irreducible_berlekamp\fP (const \fBpolynomialgf\fP< P > &val)"
+.RI "template<uint32_t P> bool \fBirrpoly::is_irreducible_berlekamp\fP (const polynomialgf< P > &val)"
 .br
 .ti -1c
-.RI "template<uint32_t P> \fBpolynomialgf\fP< P > \fBrandom\fP (typename \fBpolynomialgf\fP< P >::size_type degree)"
+.RI "template<uint32_t P> polynomialgf< P > \fBirrpoly::random\fP (typename polynomialgf< P >::size_type degree)"
 .br
 .RI "Генерирует случайный многочлен над полем GF[P] заданной степени\&. "
 .ti -1c
-.RI "template<uint32_t P> bool \fBis_primitive_definition\fP (const \fBpolynomialgf\fP< P > &val)"
+.RI "template<uint32_t P> bool \fBirrpoly::is_primitive_definition\fP (const polynomialgf< P > &val)"
 .br
 .ti -1c
-.RI "template<uint32_t P> bool \fBis_irreducible_rabin\fP (const \fBpolynomialgf\fP< P > &val)"
+.RI "template<uint32_t P> bool \fBirrpoly::is_irreducible_rabin\fP (const polynomialgf< P > &val)"
 .br
 .in -1c
 .SH "Подробное описание"
@@ -66,9 +66,9 @@ Vadim Piven vadim@piven.tech, Anastasia Chekhoeva A89168226876@yandex.ru, Veroni
 
 .SH "Функции"
 .PP 
-.SS "template<uint32_t P> \fBpolynomialgf\fP<P> gcd (\fBpolynomialgf\fP< P > m, \fBpolynomialgf\fP< P > n)"
+.SS "template<uint32_t P> polynomialgf<P> irrpoly::gcd (\fBpolynomialgf\fP< P > m, \fBpolynomialgf\fP< P > n)"
 Расширенный алгоритм Евклида для поиска наибольшего общего делителя (greatest common divisor) двух многочленов\&. Реализация сделана на основе кода из библиотеки Boost 1\&.71\&.0\&. 
-.SS "template<uint32_t P> bool is_irreducible_berlekamp (const \fBpolynomialgf\fP< P > & val)"
+.SS "template<uint32_t P> bool irrpoly::is_irreducible_berlekamp (const \fBpolynomialgf\fP< P > & val)"
 Алгоритм Берлекампа проверки многочлена на неприводимость в поле GF[P]\&. Первый шаг - вычисление производной данного многочлена\&. Если производная равна нулю, то многочлен является степенью какого-то другого многочлена, то есть он приводим\&. Второй шаг - поиск общих множителей многочлена и его производной\&. Если общие множители (многочлены, а не числа) есть, т\&.е\&. многочлены не взаимно просты, то val делится на них, т\&.е\&. он не неприводим\&. Третий шаг - простоение матрицы Берлекампа и вычисление её ранга\&. Строится матрица M[nxn], где строки - коэффициенты многочлена x^(iP) (mod val), где P - основание поля галуа, 0 < i < n, val - текущий многочлен над полем GF[P]\&. Подробное описание и пример расчёта можно найти в статье 'A Formalization of Berlekamp’s Factorization Algorithm' по ссылке http://www21.in.tum.de/~nipkow/Isabelle2016/Isabelle2016_6.pdf (стр\&. 3-4)\&. Из матрицы M вычитается единичная матрица и получается матрица Берлекампа\&. Если ранг матрицы Берлекампа равен степени многочлена минус 1, то многочлен неприводим\&. Для вычисления ранга используется приведение матрицы к ступенчатому виду и подсчёт числа ступеней в ней\&. Кроме того, все многочлены первой степени неприводимы в любом поле\&. 
 .PP
 \fBАвтор\fP
@@ -77,7 +77,7 @@ Vadim Piven vadim@piven.tech
 .RE
 .PP
 
-.SS "template<uint32_t P> bool is_irreducible_rabin (const \fBpolynomialgf\fP< P > & val)"
+.SS "template<uint32_t P> bool irrpoly::is_irreducible_rabin (const \fBpolynomialgf\fP< P > & val)"
 Алгоритм Рабина проверки многочлена на неприводимость в поле GF[P]\&. Для использования алгоритма предварительно строится список простых множителей для числа n - степени многочлена\&. Вместо множителей в список добавляется отношение n_i = n / d_i, где d_i - простой делитель (divisor) n\&. Если n - простое, то список состоит из одной единицы\&. Далее выполняется несколько шагов:
 .IP "1." 4
 строится многочлен temp = x^(P ^ n_i) - x (mod val)
@@ -94,7 +94,7 @@ Anastasia Chekhoeva A89168226876@yandex.ru
 
 .PP
 
-.SS "template<uint32_t P> bool is_primitive_definition (const \fBpolynomialgf\fP< P > & val)"
+.SS "template<uint32_t P> bool irrpoly::is_primitive_definition (const \fBpolynomialgf\fP< P > & val)"
 Алгоритм проверки многочлена на примитивность по определению\&. Многочлен является примитивным над полем GF[P], если выполнены три условия:
 .IP "1." 4
 элемент mp = (-1)^n * val[0] является примитивным элементом поля GF[P^n], т\&.е\&. k^((p-1) / q) != 1 для каждого q - простого множителя P-1 данный пункт не применим для P = 2 по объективным причинам
@@ -111,7 +111,7 @@ Veronika Biryukova biryukovaveronika@mail.ru
 
 .PP
 
-.SS "template<uint32_t P> \fBpolynomialgf\fP<P> detail::x_pow_mod_sub (uint64_t pow, const \fBpolynomialgf\fP< P > & mod, const \fBpolynomialgf\fP< P > & sub = \fC\fBpolynomialgf\fP<P>({0})\fP)\fC [noexcept]\fP"
+.SS "template<uint32_t P> polynomialgf<P> irrpoly::detail::x_pow_mod_sub (uint64_t pow, const \fBpolynomialgf\fP< P > & mod, const \fBpolynomialgf\fP< P > & sub = \fC\fBpolynomialgf\fP<P>({0})\fP)\fC [noexcept]\fP"
 Вычисляет значение (x^pow - sub) % mod\&. 
 .PP
 \fBАргументы\fP

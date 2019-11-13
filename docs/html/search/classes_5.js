@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['result_5ftype_56',['result_type',['../structchecker_1_1result__type.html',1,'checker']]]
+  ['result_5ftype_48',['result_type',['../structirrpoly_1_1checker_1_1result__type.html',1,'irrpoly::checker']]]
 ];

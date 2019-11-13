@@ -8,6 +8,10 @@
 .PP
 \fC#include <thread>\fP
 .br
+\fC#include <cassert>\fP
+.br
+\fC#include <functional>\fP
+.br
 \fC#include <mutex>\fP
 .br
 \fC#include <condition_variable>\fP
@@ -19,21 +23,17 @@
 
 .in +1c
 .ti -1c
-.RI "class \fBdetail::sync\fP"
+.RI "class \fBirrpoly::detail::sync\fP"
 .br
 .RI "Класс для управления мьютексом и условной переменной\&. "
 .ti -1c
-.RI "class \fBchecker< P >\fP"
+.RI "class \fBirrpoly::checker< P >\fP"
 .br
 .RI "Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P]\&. "
 .ti -1c
-.RI "struct \fBchecker< P >::result_type\fP"
+.RI "struct \fBirrpoly::checker< P >::result_type\fP"
 .br
 .RI "Структура, представляющая результаты проверки многочлена\&. "
-.ti -1c
-.RI "class \fBchecker< P >::control_type\fP"
-.br
-.RI "Cлужебный класс, используется для выполнения проверки в несколько потоков\&. "
 .in -1c
 .SH "Подробное описание"
 .PP 

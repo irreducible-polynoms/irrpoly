@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['definition_96',['definition',['../classchecker.html#a21307d46f6d67d9a39fa43ea4f311a46a30618b3b44fa316257d07e387759fae5',1,'checker']]]
+  ['definition_80',['definition',['../classirrpoly_1_1checker.html#a2d3c2f24666db5c036f3ad968204e913a30618b3b44fa316257d07e387759fae5',1,'irrpoly::checker']]]
 ];

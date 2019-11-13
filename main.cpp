@@ -3,6 +3,8 @@
 
 #include "checker.hpp"
 
+using namespace irrpoly;
+
 /**
  * Шаблон функции, применяемой для генерации многочленов с требуемыми характеристиками.
  * В функции генерируются случайные многочлены требуемой степени и выполняется их проверка
@@ -25,31 +27,27 @@ std::vector<polynomialgf<P>> generate_irreducible(
         const unsigned threads_num
 ) {
     // возвращаемое значение
-    std::vector<polynomialgf<P>> res;
-    res.reserve(num);
+    std::vector<polynomialgf<P>> arr;
+    arr.reserve(num);
 
     // создаём всё необходимое для многопоточности
-    typename checker<P>::control_type ctrl(irr_meth, prim_meth, threads_num);
+    checker<P> ch(irr_meth, prim_meth, threads_num);
 
-    // пока не нашли необходимое количество многочленов требуемой характеристики
-    while (res.size() < num) {
-        // ждём свободный поток
-        ctrl.wait_one();
-        // находим свободные потоки и заряжаем новыми входными данными
-        for (unsigned i = 0; i < threads_num; ++i) {
-            if (ctrl.checkers()[i]->busy()) { continue; }
-            // если многочлен неприводимый (именно их и ищем) - сохраняем результат
-            // для поиска неприводимых используйте .primitive
-            if (ctrl.checkers()[i]->result().irreducible) {
-                res.emplace_back(ctrl.checkers()[i]->get());
-                if (res.size() == num) { goto END; }
-            }
-            // генерируем новый многочлен для проверки (в данном случае просто случайный)
-            ctrl.checkers()[i]->set(random<P>(degree));
+    auto input = [&]() -> polynomialgf<P> {
+        return random<P>(degree);
+    };
+
+    auto callback = [&](const typename checker<P>::result_type &res, const polynomialgf<P> &poly) -> bool {
+        if (res.irreducible) {
+            arr.emplace_back(poly);
+            return true;
         }
-    }
-    END:
-    return res;
+        return false;
+    };
+
+    ch.check(num, input, callback);
+
+    return arr;
 }
 
 /// Функция, формирующая данные для тестов. Результаты скопировать в файл test_input.

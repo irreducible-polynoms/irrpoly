@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['minus_51',['minus',['../structdetail_1_1minus.html',1,'detail']]]
+  ['minus_43',['minus',['../structirrpoly_1_1detail_1_1minus.html',1,'irrpoly::detail']]]
 ];

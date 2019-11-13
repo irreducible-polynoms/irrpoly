@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['mul_5finv_77',['mul_inv',['../classgf.html#a4e74997dd16551da7cbca0da2dd6b792',1,'gf']]]
+  ['operator_2f_3d_64',['operator/=',['../classirrpoly_1_1gf.html#a2b1d2b6abb82c691236dfba19c8029b8',1,'irrpoly::gf']]]
 ];

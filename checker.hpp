@@ -9,13 +9,16 @@
 #ifndef IRRPOLY_CHECKER_HPP
 #define IRRPOLY_CHECKER_HPP
 
+#include <thread>
+#include <cassert>
+#include <functional>
+
 #ifdef PTHREAD
 
 #include <pthread.h>
 
 #else
 
-#include <thread>
 #include <mutex>
 #include <condition_variable>
 
@@ -23,352 +26,296 @@
 
 #include "polynomialgf.hpp"
 
-namespace detail {
-    /// Класс для управления мьютексом и условной переменной.
-    class sync {
-    private:
+namespace irrpoly {
+
+    namespace detail {
+        /// Класс для управления мьютексом и условной переменной.
+        class sync {
+        private:
 #ifdef PTHREAD
-        pthread_mutex_t mutex;
-        pthread_cond_t cond;
+            pthread_mutex_t mutex;
+            pthread_cond_t cond;
 #else
-        std::mutex mutex;
-        std::unique_lock<std::mutex> lk;
-        std::condition_variable cond;
+            ::std::mutex mutex;
+            ::std::unique_lock<::std::mutex> lk;
+            ::std::condition_variable cond;
 #endif
 
-    public:
-        /// Инициализация и блокировка мьютекса.
-        sync() noexcept(false) : cond(), mutex() {
+        public:
+            /// Инициализация и блокировка мьютекса.
+            sync() noexcept(false) : cond(), mutex() {
 #ifdef PTHREAD
-            pthread_mutexattr_t attr;
-            if (pthread_mutexattr_init(&attr) ||
-                pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK) ||
-                pthread_mutex_init(&mutex, &attr) ||
-                pthread_cond_init(&cond, nullptr) ||
-                pthread_mutexattr_destroy(&attr)) {
-                throw std::runtime_error("pthread init failed");
+                pthread_mutexattr_t attr;
+                assert(!pthread_mutexattr_init(&attr));
+                assert(!pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_ERRORCHECK));
+                assert(!pthread_mutex_init(&mutex, &attr));
+                assert(!pthread_cond_init(&cond, nullptr));
+                assert(!pthread_mutexattr_destroy(&attr));
+                pthread_mutex_lock(&mutex);
+#else
+                lk = ::std::unique_lock<::std::mutex>(mutex);
+#endif
             }
-            pthread_mutex_lock(&mutex);
-#else
-            lk = std::unique_lock<std::mutex>(mutex);
-#endif
-        }
 
-        /// Освобождение ресурсов, здесь происходит разблокировка мьютекса.
-        virtual
+            /// Освобождение ресурсов, здесь происходит разблокировка мьютекса.
+            virtual
 #ifndef PTHREAD
-        ~sync() = default;
+            ~sync() = default;
 
 #else
-        ~sync() noexcept(false) {
-            pthread_mutex_unlock(&mutex);
-            if (pthread_mutex_destroy(&mutex) ||
-                pthread_cond_destroy(&cond)) {
-                throw std::runtime_error("pthread destroy failed");
+            ~sync() noexcept(false) {
+                pthread_mutex_unlock(&mutex);
+                assert(!pthread_mutex_destroy(&mutex));
+                assert(!pthread_cond_destroy(&cond));
             }
-        }
+
 #endif
 
-        /// Блокировка мьютекса.
-        void lock() noexcept {
+            /// Блокировка мьютекса.
+            void lock() noexcept {
 #ifdef PTHREAD
-            pthread_mutex_lock(&mutex);
+                pthread_mutex_lock(&mutex);
 #else
-            mutex.lock();
+                mutex.lock();
 #endif
-        }
+            }
 
-        /// Разблокировка мьютекса.
-        void unlock() noexcept {
+            /// Разблокировка мьютекса.
+            void unlock() noexcept {
 #ifdef PTHREAD
-            pthread_mutex_unlock(&mutex);
+                pthread_mutex_unlock(&mutex);
 #else
-            mutex.unlock();
+                mutex.unlock();
 #endif
-        }
+            }
 
-        /// Ожидание уведомления условной переменной.
-        void wait() noexcept {
+            /// Ожидание уведомления условной переменной.
+            void wait() noexcept {
 #ifdef PTHREAD
-            pthread_cond_wait(&cond, &mutex);
+                pthread_cond_wait(&cond, &mutex);
 #else
-            cond.wait(lk);
+                cond.wait(lk);
 #endif
-        }
+            }
 
-        /// Уведомление условной переменной.
-        void signal() noexcept {
+            /// Уведомление условной переменной.
+            void signal() noexcept {
 #ifdef PTHREAD
-            pthread_cond_signal(&cond);
+                pthread_cond_signal(&cond);
 #else
-            cond.notify_one();
+                cond.notify_one();
 #endif
-        }
-    };
-}
-
+            }
+        };
+    }
 
 /// Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P].
-template<uint32_t P>
-class checker : private detail::sync {
-public:
-    /// Структура, представляющая результаты проверки многочлена.
-    struct result_type {
-        bool irreducible;
-        bool primitive;
-    };
-
-    /// Доступные методы проверки нанеприводимость.
-    enum class irreducible_method {
-        nil, ///< не проверять
-        berlekamp, ///< алгоритм Берлекампа
-        rabin ///< алгоритм Рабина
-    };
-
-    /// Доступные методы проверки примитивность.
-    enum class primitive_method {
-        nil, ///< не проверять
-        definition ///< проверка по определению
-    };
-
-    /// Cлужебный класс, используется для выполнения проверки в несколько потоков.
-    class control_type : public detail::sync {
-    private:
-        /**
-         * Для проверки требуется мьютекс, условная переменная, заданное число потоков
-         * и по одному хранилищу данных на каждый поток.
-         */
-#ifdef PTHREAD
-        std::vector<pthread_t> threads;
-#else
-        std::vector<std::thread> threads;
-#endif
-        std::vector<checker<P> *> _checkers;
-
+    template<uint32_t P>
+    class checker {
     public:
-        /**
-         * Инициализация мьютекса и условной переменной, создание требуемого числа потоков
-         * и хранилищ данных. На выходе мьютекс находится в состоянии locked, все потоки
-         * запущены и находятся в состоянии detached.
-         */
-        control_type(
-                const typename checker<P>::irreducible_method irr_meth,
-                const typename checker<P>::primitive_method prim_meth,
-                const unsigned threads_num
-        ) noexcept(false) {
-            _checkers.reserve(threads_num);
-            for (unsigned i = 0; i < threads_num; ++i) {
-                _checkers.emplace_back(new checker<P>(this, irr_meth, prim_meth));
-            }
+        /// Структура, представляющая результаты проверки многочлена.
+        struct result_type {
+            bool irreducible;
+            bool primitive;
+        };
+
+        /// Доступные методы проверки нанеприводимость.
+        enum class irreducible_method {
+            nil, ///< не проверять
+            berlekamp, ///< алгоритм Берлекампа
+            rabin ///< алгоритм Рабина
+        };
+
+        /// Доступные методы проверки примитивность.
+        enum class primitive_method {
+            nil, ///< не проверять
+            definition ///< проверка по определению
+        };
+
+        /// Вид функции, генерирующей многочлены для проверки.
+        typedef ::std::function<polynomialgf<P>()> input_func;
+
+        /// Вид функции, обрабатывающей результат проверки (если многочлен удовлетворяет требуемым условиям возвращает true,
+        /// иначе - false).
+        typedef ::std::function<bool(const result_type &, const polynomialgf<P> &)> callback_func;
+
+    private:
+        /// Потоки, непосредственно выполняющие проверку многочленов на неприводимость и примитивность.
+        class node : public detail::sync {
+            detail::sync *m; ///< Основной объект синхронизации
+
+            irreducible_method irr_meth; ///< Используемый метод проверки на неприводимость
+            primitive_method prim_meth; ///< Используемый метод проверки на примитивность
+
+            polynomialgf<P> poly; ///< Проверяемый многочлен.
+            result_type res; ///< Результат проверки
+
+            bool _busy; ///< Поток занят полезной работой
+            bool _terminate; ///< Поток должен быть завершён
+
 #ifdef PTHREAD
-            threads = std::vector<pthread_t>(threads_num);
-
-            pthread_attr_t thread_attr;
-            if (pthread_attr_init(&thread_attr) ||
-                pthread_attr_setdetachstate(&thread_attr, PTHREAD_CREATE_DETACHED)) {
-                throw std::runtime_error("pthread init failed");
-            }
-
-            for (unsigned i = 0; i < threads_num; ++i) {
-                pthread_create(&threads[i], &thread_attr, &checker<P>::check, _checkers[i]);
-            }
-
-            if (pthread_attr_destroy(&thread_attr)) {
-                throw std::runtime_error("pthread destroy failed");
-            }
+            pthread_t thread;
 #else
-            threads.reserve(threads_num);
-            for (unsigned i = 0; i < threads_num; ++i) {
-                threads.emplace_back(std::thread(&checker<P>::check, _checkers[i]));
-                threads.back().detach();
-            }
+            ::std::thread thread;
 #endif
-        }
+
+            /**
+             * Собственно функция, выполняющая проверку многочлена на неприводимость и примитивность.
+             * Поток бесконечно ожидает получения новых данных. Если данные получены - выполняется их
+             * проверка, выставление результата и уведомление условной переменной.
+             * Кроме того, постоянно проверяется, не должен ли поток завершить работу.
+             * Выход из функции прекращает работу потока и освобожает его ресурсы.
+             * В случае с pthread для этого требуется выполнить pthread_exit.
+             */
+#ifdef PTHREAD
+
+            static
+            void *check(void *arg) noexcept {
+                auto *sl = static_cast<node *>(arg);
+#else
+                void check() noexcept {
+                    auto *sl = this;
+#endif
+                while (!sl->_terminate) {
+                    while (!sl->_busy && !sl->_terminate) { sl->wait(); }
+                    if (sl->_terminate) { break; }
+
+                    // в случае, когда проверка не выполняется устанавливается результат true
+                    switch (sl->irr_meth) {
+                        case irreducible_method::berlekamp:
+                            sl->res.irreducible = is_irreducible_berlekamp(sl->poly);
+                            break;
+                        case irreducible_method::rabin:
+                            sl->res.irreducible = is_irreducible_rabin(sl->poly);
+                            break;
+                        default: // irreducible_method::nil
+                            sl->res.irreducible = true;
+                            break;
+                    }
+                    switch (sl->prim_meth) {
+                        case primitive_method::definition:
+                            sl->res.primitive = sl->res.irreducible ? is_primitive_definition(sl->poly) : false;
+                            break;
+                        default: // primitive_method::nil
+                            sl->res.primitive = true;
+                            break;
+                    }
+
+                    sl->m->lock();
+                    sl->_busy = false;
+                    sl->m->signal();
+                    sl->m->unlock();
+                }
+#ifdef PTHREAD
+                pthread_exit(nullptr);
+#endif
+            }
+
+        public:
+            node(detail::sync *m, irreducible_method irr_meth, primitive_method prim_meth) noexcept :
+                    m(m), irr_meth(irr_meth), prim_meth(prim_meth), poly(), res(), _busy(false), _terminate(false),
+                    thread() {
+#ifdef PTHREAD
+                pthread_attr_t thread_attr;
+                assert(!pthread_attr_init(&thread_attr));
+                assert(!pthread_attr_setdetachstate(&thread_attr, PTHREAD_CREATE_DETACHED));
+                pthread_create(&thread, &thread_attr, &node::check, this);
+                assert(!pthread_attr_destroy(&thread_attr));
+#else
+                thread = ::std::thread(&node::check, this);
+                thread.detach();
+#endif
+            }
+
+            /// Многочлен, проверка которого выполнялась.
+            [[nodiscard]]
+            const polynomialgf<P> &get() const {
+                return poly;
+            }
+
+            /**
+             * Установка нового многочлена для проверки, сбрасывает результаты
+             * предыдущей проверки и выставляет busy = true.
+             */
+            void set(polynomialgf<P> val) {
+                lock();
+                poly = val;
+                _busy = true;
+                signal();
+                unlock();
+            }
+
+            /// Возвращает текущее состояние потока.
+            [[nodiscard]]
+            bool busy() const noexcept {
+                return _busy;
+            }
+
+            /// Устанавливает флаг, требующий завершить работу потока по завершении вычислений.
+            void terminate() noexcept {
+                lock();
+                _terminate = true;
+                signal();
+                unlock();
+            }
+
+            /// Возвращает результат проверки текущего многочлена на неприводимость и примитивность.
+            [[nodiscard]]
+            const typename checker<P>::result_type &result() const noexcept {
+                return res;
+            }
+        };
+
+        detail::sync m; // master
+        ::std::vector<node *> s; // slave
 
         /// Считает, сколько потоков заняты.
         unsigned countBusy() {
-            unsigned n = 0;
-            for (const auto *checker : _checkers) { n += checker->busy(); }
-            return n;
+            unsigned res = 0;
+            for (const auto *n : s) { res += n->busy(); }
+            return res;
         }
 
-        /**
-         * Если все потоки заняты - ожидаем пока появится свободный,
-         * иначе управление сразу возвращается вызывающей функции.
-         */
-        void wait_one() {
-            while (countBusy() == threads.size()) { wait(); }
-        }
-
-        /// Ждём завершения всех потоков
-        void wait_all() {
-            while (countBusy()) { wait(); }
-        }
-
-        /**
-         * Возвращает структуры, хранящие все данные потока: проверяемый многочлен,
-         * текущее состояение потока и результат проверки многочлена.
-         */
-        std::vector<checker<P> *> &checkers() noexcept {
-            return _checkers;
-        }
-
-        ~control_type() noexcept override {
-            wait_all();
-            for (auto *c : _checkers) {
-                c->terminate();
-                delete c;
+    public:
+        checker(
+                const irreducible_method irr_meth,
+                const primitive_method prim_meth,
+                const unsigned n = ::std::thread::hardware_concurrency() - 1
+        ) noexcept : m(), s() {
+            s.reserve(n);
+            for (unsigned i = 0; i < n; ++i) {
+                s.emplace_back(new node(&m, irr_meth, prim_meth));
             }
+        }
+
+        /// Основной цикл разделения работы на потоки.
+        void check(uint64_t n, input_func input, callback_func callback, const bool strict = true) noexcept {
+            // заряжаем многочлены на проверку
+            for (auto *sl : s) { sl->set(input()); }
+            while (n) {
+                // ждём свободный поток
+                while (countBusy() == s.size()) { m.wait(); }
+                // находим свободные потоки и заряжаем новыми входными данными
+                for (unsigned i = 0; i < s.size() && n; ++i) {
+                    if (s[i]->busy()) { continue; }
+                    if (callback(s[i]->result(), s[i]->get())) { --n; }
+                    s[i]->set(input());
+                }
+            }
+            // ожидаем завершения всех потоков
+            while (countBusy()) { m.wait(); }
+            if (!strict) {
+                // обрабатываем все проверенные многочлены, даже если их больше, чем требовалось найти
+                for (auto *sl : s) { callback(sl->result(), sl->get()); }
+            }
+        }
+
+        /// Завершаем работу всех потоков.
+        ~checker() noexcept {
+            for (auto *sl : s) { sl->terminate(); }
         }
     };
 
-private:
-    /// Проверяемый многочлен.
-    polynomialgf<P> poly;
-
-    /// Ссылка на управляющую структуру, нужна для использования мьютекса и условной переменной.
-    control_type *ctrl;
-
-    bool _busy; ///< поток занят полезной работой
-    bool _terminate; ///< поток должен быть завершён
-    result_type res; ///< результат проверки
-    irreducible_method irr_meth; ///< используемый метод проверки на неприводимость
-    primitive_method prim_meth; ///< используемый метод проверки на примитивность
-
-public:
-    explicit
-    checker(control_type *, irreducible_method, primitive_method) noexcept;
-
-    polynomialgf<P> get() const;
-
-    void set(polynomialgf<P>);
-
-    [[nodiscard]]
-    bool busy() const noexcept;
-
-    void terminate() noexcept;
-
-    [[nodiscard]]
-    const result_type &result() const noexcept;
-
-#ifdef PTHREAD
-
-    static
-    void *check(void *arg) noexcept;
-
-#else
-
-    void check() noexcept;
-
-#endif
-};
-
-/**
- * Конструктор структуры с данными для проверки и результатом.
- * Начальное состояние - busy = false.
- */
-template<uint32_t P>
-checker<P>::checker(
-        control_type *ctrl,
-        const irreducible_method irr_meth,
-        const primitive_method prim_meth
-) noexcept :
-        poly(), ctrl(ctrl), _busy(false), res({false, false}),
-        irr_meth(irr_meth), prim_meth(prim_meth), _terminate(false) {}
-
-/// Многочлен, проверка которого выполнялась.
-template<uint32_t P>
-polynomialgf<P> checker<P>::get() const {
-    return poly;
-}
-
-/**
- * Установка нового многочлена для проверки, сбрасывает результаты
- * предыдущей проверки и выставляет busy = true.
- */
-template<uint32_t P>
-void checker<P>::set(polynomialgf<P> val) {
-    lock();
-    poly = val;
-    _busy = true;
-    signal();
-    unlock();
-}
-
-/**
- * Собственно функция, выполняющая проверку многочлена на неприводимость и примитивность.
- * Поток бесконечно ожидает получения новых данных. Если данные получены - выполняется их
- * проверка, выставление результата и уведомление условной переменной.
- * Кроме того, постоянно проверяется, не должен ли поток завершить работу.
- * Выход из функции прекращает работу потока и освобожает его ресурсы.
- * В случае с pthread для этого требуется выполнить pthread_exit.
- */
-template<uint32_t P>
-#ifdef PTHREAD
-void *checker<P>::check(void *arg) noexcept {
-    auto *c = static_cast<checker *>(arg);
-#else
-void checker<P>::check() noexcept {
-    auto *c = this;
-#endif
-    while (!c->_terminate) {
-        while (!c->_busy && !c->_terminate) { c->wait(); }
-        if (c->_terminate) { break; }
-
-        // в случае, когда проверка не выполняется устанавливается результат true
-        switch (c->irr_meth) {
-            case irreducible_method::berlekamp:
-                c->res.irreducible = is_irreducible_berlekamp(c->poly);
-                break;
-            case irreducible_method::rabin:
-                c->res.irreducible = is_irreducible_rabin(c->poly);
-                break;
-            default: // irreducible_method::nil
-                c->res.irreducible = true;
-                break;
-        }
-        switch (c->prim_meth) {
-            case primitive_method::definition:
-                c->res.primitive = c->res.irreducible ? is_primitive_definition(c->poly) : false;
-                break;
-            default: // primitive_method::nil
-                c->res.primitive = true;
-                break;
-        }
-
-        c->ctrl->lock();
-        c->_busy = false;
-        c->ctrl->signal();
-        c->ctrl->unlock();
-    }
-#ifdef PTHREAD
-    pthread_exit(nullptr);
-#endif
-}
-
-/// Возвращает текущее состояние потока.
-template<uint32_t P>
-[[nodiscard]]
-bool checker<P>::busy() const noexcept {
-    return _busy;
-}
-
-/// Устанавливает флаг, требующий завершить работу потока по завершении вычислений.
-template<uint32_t P>
-void checker<P>::terminate() noexcept {
-    _terminate = true;
-    if (!_busy) {
-        lock();
-        signal();
-        unlock();
-    }
-}
-
-/// Возвращает результат проверки текущего многочлена на неприводимость и примитивность.
-template<uint32_t P>
-[[nodiscard]]
-const typename checker<P>::result_type &checker<P>::result() const noexcept {
-    return res;
 }
 
 #endif //IRRPOLY_CHECKER_HPP

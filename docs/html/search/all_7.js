@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['negate_24',['negate',['../structdetail_1_1negate.html',1,'detail']]],
-  ['nil_25',['nil',['../classchecker.html#a9de71f192d92f8fa13775e3936449f6ca852438d026c018c4307b916406f98c62',1,'checker::nil()'],['../classchecker.html#a21307d46f6d67d9a39fa43ea4f311a46a852438d026c018c4307b916406f98c62',1,'checker::nil()']]]
+  ['negate_21',['negate',['../structirrpoly_1_1detail_1_1negate.html',1,'irrpoly::detail']]],
+  ['nil_22',['nil',['../classirrpoly_1_1checker.html#af83acf8c65e6fa2f86348398920d9fa4a852438d026c018c4307b916406f98c62',1,'irrpoly::checker::nil()'],['../classirrpoly_1_1checker.html#a2d3c2f24666db5c036f3ad968204e913a852438d026c018c4307b916406f98c62',1,'irrpoly::checker::nil()']]]
 ];

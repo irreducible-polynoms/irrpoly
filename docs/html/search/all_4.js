@@ -1,8 +1,9 @@
 var searchData=
 [
-  ['irreducible_5fmethod_16',['irreducible_method',['../classchecker.html#a9de71f192d92f8fa13775e3936449f6c',1,'checker']]],
-  ['is_5firreducible_5fberlekamp_17',['is_irreducible_berlekamp',['../polynomialgf_8hpp.html#a7acdd0302d75f85688c1abd92e1c5093',1,'polynomialgf.hpp']]],
-  ['is_5firreducible_5frabin_18',['is_irreducible_rabin',['../polynomialgf_8hpp.html#a6a261950bb4d2e5b869f8f9b357bdb2e',1,'polynomialgf.hpp']]],
-  ['is_5fprimitive_5fdefinition_19',['is_primitive_definition',['../polynomialgf_8hpp.html#a11ed9dadfe1c40b08eecefae05b0d8b6',1,'polynomialgf.hpp']]],
-  ['is_5fzero_20',['is_zero',['../classgf.html#a1cd9a7caad739a0a79370fff1b224d37',1,'gf']]]
+  ['input_5ffunc_12',['input_func',['../classirrpoly_1_1checker.html#ace2d7c781303738e2e4e8773f6fdd3f0',1,'irrpoly::checker']]],
+  ['irreducible_5fmethod_13',['irreducible_method',['../classirrpoly_1_1checker.html#af83acf8c65e6fa2f86348398920d9fa4',1,'irrpoly::checker']]],
+  ['is_5firreducible_5fberlekamp_14',['is_irreducible_berlekamp',['../polynomialgf_8hpp.html#aa80aa0c65714a76d61a4e373b3dec477',1,'irrpoly']]],
+  ['is_5firreducible_5frabin_15',['is_irreducible_rabin',['../polynomialgf_8hpp.html#a58f4ff6a7b0e3c2e25b5e38384c2f1b6',1,'irrpoly']]],
+  ['is_5fprimitive_5fdefinition_16',['is_primitive_definition',['../polynomialgf_8hpp.html#aab478c81d581fc4dbbc0ca4eec097038',1,'irrpoly']]],
+  ['is_5fzero_17',['is_zero',['../classirrpoly_1_1gf.html#a68dd176aabb32f004818dfbf7c189756',1,'irrpoly::gf']]]
 ];

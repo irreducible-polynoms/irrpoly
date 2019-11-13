@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['data_67',['data',['../classgf.html#a9d5255bedccc0fed276121a504c4fa50',1,'gf']]],
-  ['derivative_68',['derivative',['../polynomialgf_8hpp.html#afe88401ab1b6ac0300976d543f634a33',1,'polynomialgf.hpp']]]
+  ['gcd_56',['gcd',['../polynomialgf_8hpp.html#a80b412b43964fdcc3f3adb1f9a9906c0',1,'irrpoly']]],
+  ['gf_57',['gf',['../classirrpoly_1_1gf.html#a41e88745fb1c59699ed159c52f6d8d3e',1,'irrpoly::gf']]]
 ];

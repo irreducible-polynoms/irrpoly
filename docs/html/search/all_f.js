@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['x_5fpow_5fmod_5fsub_45',['x_pow_mod_sub',['../polynomialgf_8hpp.html#a409681758e0947af37d445122f3af1ec',1,'detail']]]
+  ['_7echecker_38',['~checker',['../classirrpoly_1_1checker.html#adeab97ffa75b1ce57820e2a72786937a',1,'irrpoly::checker']]],
+  ['_7esync_39',['~sync',['../classirrpoly_1_1detail_1_1sync.html#ad659121e9c158dc28f1ebddb5a140f77',1,'irrpoly::detail::sync']]]
 ];

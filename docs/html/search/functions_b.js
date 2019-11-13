@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['unlock_85',['unlock',['../classdetail_1_1sync.html#a9e39817f75656f655c9ebdd89e00204a',1,'detail::sync']]]
+  ['x_5fpow_5fmod_5fsub_70',['x_pow_mod_sub',['../polynomialgf_8hpp.html#a06fed753e7e3e1cc7f9b7acacc6aea77',1,'irrpoly::detail']]]
 ];
