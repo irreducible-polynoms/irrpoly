@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['callback_5ffunc_1',['callback_func',['../classirrpoly_1_1checker.html#a3ce5b9a193b5f8364bf5329d9b400afa',1,'irrpoly::checker']]],
-  ['check_2',['check',['../classirrpoly_1_1checker.html#a02d06146a13829f4c318d2cd4b30eb63',1,'irrpoly::checker']]],
-  ['checker_3',['checker',['../classirrpoly_1_1checker.html',1,'irrpoly']]],
-  ['checker_2ehpp_4',['checker.hpp',['../checker_8hpp.html',1,'']]]
+  ['data_5',['data',['../classirrpoly_1_1gf.html#a1268fd65897541776d51345152db4564',1,'irrpoly::gf']]],
+  ['derivative_6',['derivative',['../polynomialgf_8hpp.html#ab10709be7ce96e0c582d797e5707637a',1,'irrpoly']]]
 ];

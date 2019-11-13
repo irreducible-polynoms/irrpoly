@@ -18,7 +18,17 @@
 .br
 \fC#include 'polynomial\&.hpp'\fP
 .br
+\fC#include 'checker\&.hpp'\fP
+.br
 
+.SS "Классы"
+
+.in +1c
+.ti -1c
+.RI "struct \fBirrpoly::multithread::result_type\fP"
+.br
+.RI "Структура, представляющая результаты проверки многочлена\&. "
+.in -1c
 .SS "Определения типов"
 
 .in +1c
@@ -26,6 +36,21 @@
 .RI "template<uint32_t P = 2> using \fBirrpoly::polynomialgf\fP = polynomial< gf< P > >"
 .br
 .RI "Класс многочленов над полем Галуа\&. "
+.ti -1c
+.RI "template<uint32_t P> using \fBirrpoly::multithread::polychecker\fP = checker< polynomialgf< P >, result_type >"
+.br
+.in -1c
+.SS "Перечисления"
+
+.in +1c
+.ti -1c
+.RI "enum \fBirrpoly::multithread::irreducible_method\fP { \fBirrpoly::multithread::irreducible_method::nil\fP, \fBirrpoly::multithread::irreducible_method::berlekamp\fP, \fBirrpoly::multithread::irreducible_method::rabin\fP }"
+.br
+.RI "Доступные методы проверки нанеприводимость\&. "
+.ti -1c
+.RI "enum \fBirrpoly::multithread::primitive_method\fP { \fBirrpoly::multithread::primitive_method::nil\fP, \fBirrpoly::multithread::primitive_method::definition\fP }"
+.br
+.RI "Доступные методы проверки примитивность\&. "
 .in -1c
 .SS "Функции"
 
@@ -53,6 +78,10 @@
 .ti -1c
 .RI "template<uint32_t P> bool \fBirrpoly::is_irreducible_rabin\fP (const polynomialgf< P > &val)"
 .br
+.ti -1c
+.RI "template<uint32_t P> checker< polynomialgf< P >, result_type >::check_func \fBirrpoly::multithread::make_checker\fP (irreducible_method irr_meth, primitive_method prim_meth)"
+.br
+.RI "Формируется универсальная функция проверки многочленов\&. "
 .in -1c
 .SH "Подробное описание"
 .PP 

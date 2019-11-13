@@ -24,8 +24,6 @@
 
 #endif
 
-#include "polynomialgf.hpp"
-
 namespace irrpoly {
 
     namespace detail {
@@ -110,44 +108,26 @@ namespace irrpoly {
     }
 
 /// Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P].
-    template<uint32_t P>
+    template<typename value_type, typename result_type>
     class checker {
     public:
-        /// Структура, представляющая результаты проверки многочлена.
-        struct result_type {
-            bool irreducible;
-            bool primitive;
-        };
-
-        /// Доступные методы проверки нанеприводимость.
-        enum class irreducible_method {
-            nil, ///< не проверять
-            berlekamp, ///< алгоритм Берлекампа
-            rabin ///< алгоритм Рабина
-        };
-
-        /// Доступные методы проверки примитивность.
-        enum class primitive_method {
-            nil, ///< не проверять
-            definition ///< проверка по определению
-        };
-
         /// Вид функции, генерирующей многочлены для проверки.
-        typedef ::std::function<polynomialgf<P>()> input_func;
+        typedef ::std::function<value_type()> input_func;
 
-        /// Вид функции, обрабатывающей результат проверки (если многочлен удовлетворяет требуемым условиям возвращает true,
-        /// иначе - false).
-        typedef ::std::function<bool(const result_type &, const polynomialgf<P> &)> callback_func;
+        /// Вид функции, выполняющей проверку и сохраняющей результат.
+        typedef ::std::function<void(const value_type &, result_type &)> check_func;
+
+        /// Вид функции, обрабатывающей результат проверки (если многочлен удовлетворяет
+        /// требуемым условиям возвращает true, иначе - false).
+        typedef ::std::function<bool(const value_type &, const result_type &)> callback_func;
 
     private:
         /// Потоки, непосредственно выполняющие проверку многочленов на неприводимость и примитивность.
         class node : public detail::sync {
             detail::sync *m; ///< Основной объект синхронизации
+            check_func cf; ///< Основная функция проверки
 
-            irreducible_method irr_meth; ///< Используемый метод проверки на неприводимость
-            primitive_method prim_meth; ///< Используемый метод проверки на примитивность
-
-            polynomialgf<P> poly; ///< Проверяемый многочлен.
+            value_type val; ///< Входные данные
             result_type res; ///< Результат проверки
 
             bool _busy; ///< Поток занят полезной работой
@@ -180,26 +160,7 @@ namespace irrpoly {
                     while (!sl->_busy && !sl->_terminate) { sl->wait(); }
                     if (sl->_terminate) { break; }
 
-                    // в случае, когда проверка не выполняется устанавливается результат true
-                    switch (sl->irr_meth) {
-                        case irreducible_method::berlekamp:
-                            sl->res.irreducible = is_irreducible_berlekamp(sl->poly);
-                            break;
-                        case irreducible_method::rabin:
-                            sl->res.irreducible = is_irreducible_rabin(sl->poly);
-                            break;
-                        default: // irreducible_method::nil
-                            sl->res.irreducible = true;
-                            break;
-                    }
-                    switch (sl->prim_meth) {
-                        case primitive_method::definition:
-                            sl->res.primitive = sl->res.irreducible ? is_primitive_definition(sl->poly) : false;
-                            break;
-                        default: // primitive_method::nil
-                            sl->res.primitive = true;
-                            break;
-                    }
+                    sl->cf(sl->val, sl->res);
 
                     sl->m->lock();
                     sl->_busy = false;
@@ -212,9 +173,9 @@ namespace irrpoly {
             }
 
         public:
-            node(detail::sync *m, irreducible_method irr_meth, primitive_method prim_meth) noexcept :
-                    m(m), irr_meth(irr_meth), prim_meth(prim_meth), poly(), res(), _busy(false), _terminate(false),
-                    thread() {
+            explicit
+            node(detail::sync *m) noexcept :
+                    m(m), cf(), val(), res(), _busy(false), _terminate(false), thread() {
 #ifdef PTHREAD
                 pthread_attr_t thread_attr;
                 assert(!pthread_attr_init(&thread_attr));
@@ -227,19 +188,24 @@ namespace irrpoly {
 #endif
             }
 
+            /// Устанавливает функцию, которая будет вызываться в процессе проверки
+            void set_check(check_func c) noexcept {
+                cf = c;
+            }
+
             /// Многочлен, проверка которого выполнялась.
             [[nodiscard]]
-            const polynomialgf<P> &get() const {
-                return poly;
+            const value_type &get() const {
+                return val;
             }
 
             /**
              * Установка нового многочлена для проверки, сбрасывает результаты
              * предыдущей проверки и выставляет busy = true.
              */
-            void set(polynomialgf<P> val) {
+            void set(value_type v) {
                 lock();
-                poly = val;
+                val = v;
                 _busy = true;
                 signal();
                 unlock();
@@ -261,7 +227,7 @@ namespace irrpoly {
 
             /// Возвращает результат проверки текущего многочлена на неприводимость и примитивность.
             [[nodiscard]]
-            const typename checker<P>::result_type &result() const noexcept {
+            const result_type &result() const noexcept {
                 return res;
             }
         };
@@ -277,36 +243,36 @@ namespace irrpoly {
         }
 
     public:
-        checker(
-                const irreducible_method irr_meth,
-                const primitive_method prim_meth,
-                const unsigned n = ::std::thread::hardware_concurrency() - 1
-        ) noexcept : m(), s() {
+        explicit
+        checker(const unsigned n = ::std::thread::hardware_concurrency() - 1) noexcept : m(), s() {
             s.reserve(n);
             for (unsigned i = 0; i < n; ++i) {
-                s.emplace_back(new node(&m, irr_meth, prim_meth));
+                s.emplace_back(new node(&m));
             }
         }
 
         /// Основной цикл разделения работы на потоки.
-        void check(uint64_t n, input_func input, callback_func callback, const bool strict = true) noexcept {
+        void check(uint64_t n, input_func in, check_func cf, callback_func back, const bool strict = true) noexcept {
             // заряжаем многочлены на проверку
-            for (auto *sl : s) { sl->set(input()); }
+            for (auto *sl : s) {
+                sl->set_check(cf);
+                sl->set(in());
+            }
             while (n) {
                 // ждём свободный поток
                 while (countBusy() == s.size()) { m.wait(); }
                 // находим свободные потоки и заряжаем новыми входными данными
                 for (unsigned i = 0; i < s.size() && n; ++i) {
                     if (s[i]->busy()) { continue; }
-                    if (callback(s[i]->result(), s[i]->get())) { --n; }
-                    s[i]->set(input());
+                    if (back(s[i]->get(), s[i]->result())) { --n; }
+                    s[i]->set(in());
                 }
             }
             // ожидаем завершения всех потоков
             while (countBusy()) { m.wait(); }
             if (!strict) {
                 // обрабатываем все проверенные многочлены, даже если их больше, чем требовалось найти
-                for (auto *sl : s) { callback(sl->result(), sl->get()); }
+                for (auto *sl : s) { back(sl->get(), sl->result()); }
             }
         }
 

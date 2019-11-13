@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['data_5',['data',['../classirrpoly_1_1gf.html#a1268fd65897541776d51345152db4564',1,'irrpoly::gf']]],
-  ['definition_6',['definition',['../classirrpoly_1_1checker.html#a2d3c2f24666db5c036f3ad968204e913a30618b3b44fa316257d07e387759fae5',1,'irrpoly::checker']]],
-  ['derivative_7',['derivative',['../polynomialgf_8hpp.html#ab10709be7ce96e0c582d797e5707637a',1,'irrpoly']]]
+  ['gcd_7',['gcd',['../polynomialgf_8hpp.html#a80b412b43964fdcc3f3adb1f9a9906c0',1,'irrpoly']]],
+  ['gf_8',['gf',['../classirrpoly_1_1gf.html',1,'irrpoly::gf&lt; P &gt;'],['../classirrpoly_1_1gf.html#a41e88745fb1c59699ed159c52f6d8d3e',1,'irrpoly::gf::gf()']]],
+  ['gf_2ehpp_9',['gf.hpp',['../gf_8hpp.html',1,'']]],
+  ['gf_5ftype_10',['gf_type',['../classirrpoly_1_1gf.html#ab778f2c06916b001227ea047928f8927',1,'irrpoly::gf']]]
 ];

@@ -246,7 +246,7 @@ namespace irrpoly {
 
         template<class U>
         polynomial &
-        operator%=(const U & /*value*/) {
+        operator%=(const U & /*value_type*/) {
             // We can always divide by a scalar, so there is no remainder:
             this->set_zero();
             return *this;
@@ -535,7 +535,8 @@ namespace irrpoly {
     }
 
     template<class charT, class traits, class T>
-    ::std::basic_ostream<charT, traits> &operator<<(::std::basic_ostream<charT, traits> &os, const polynomial<T> &poly) {
+    ::std::basic_ostream<charT, traits> &
+    operator<<(::std::basic_ostream<charT, traits> &os, const polynomial<T> &poly) {
         os << "{ ";
         for (unsigned i = 0; i < poly.size(); ++i) {
             if (i) os << ", ";

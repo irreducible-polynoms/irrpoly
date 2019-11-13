@@ -1,9 +1,5 @@
 var searchData=
 [
-  ['plus_24',['plus',['../structirrpoly_1_1detail_1_1plus.html',1,'irrpoly::detail']]],
-  ['polynomial_25',['polynomial',['../classirrpoly_1_1polynomial.html',1,'irrpoly']]],
-  ['polynomial_3c_20p_20_3e_26',['polynomial&lt; P &gt;',['../classirrpoly_1_1polynomial.html',1,'irrpoly']]],
-  ['polynomialgf_27',['polynomialgf',['../polynomialgf_8hpp.html#a1d56784d0d37b9abd4f463332d242ff0',1,'irrpoly']]],
-  ['polynomialgf_2ehpp_28',['polynomialgf.hpp',['../polynomialgf_8hpp.html',1,'']]],
-  ['primitive_5fmethod_29',['primitive_method',['../classirrpoly_1_1checker.html#a2d3c2f24666db5c036f3ad968204e913',1,'irrpoly::checker']]]
+  ['random_28',['random',['../classirrpoly_1_1gf.html#a8f8643eabd6e9e689b248f487ed7b55d',1,'irrpoly::gf::random()'],['../polynomialgf_8hpp.html#a79ca2c7e6664943767270c3072a2c46c',1,'irrpoly::random()']]],
+  ['result_5ftype_29',['result_type',['../structirrpoly_1_1multithread_1_1result__type.html',1,'irrpoly::multithread']]]
 ];

@@ -70,7 +70,9 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#nested-classes">Классы</a> &#124;
 <a href="#typedef-members">Определения типов</a> &#124;
+<a href="#enum-members">Перечисления</a> &#124;
 <a href="#func-members">Функции</a>  </div>
   <div class="headertitle">
 <div class="title">Файл /Users/vadimpiven/Development/irrpoly/polynomialgf.hpp</div>  </div>
@@ -82,9 +84,16 @@ $(function() {
 <code>#include &lt;vector&gt;</code><br />
 <code>#include &quot;<a class="el" href="gf_8hpp_source.html">gf.hpp</a>&quot;</code><br />
 <code>#include &quot;polynomial.hpp&quot;</code><br />
+<code>#include &quot;<a class="el" href="checker_8hpp_source.html">checker.hpp</a>&quot;</code><br />
 </div>
 <p><a href="polynomialgf_8hpp_source.html">См. исходные тексты.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Классы</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structirrpoly_1_1multithread_1_1result__type.html">irrpoly::multithread::result_type</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Структура, представляющая результаты проверки многочлена.  <a href="structirrpoly_1_1multithread_1_1result__type.html#details">Подробнее...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Определения типов</h2></td></tr>
 <tr class="memitem:a1d56784d0d37b9abd4f463332d242ff0"><td class="memTemplParams" colspan="2"><a id="a1d56784d0d37b9abd4f463332d242ff0"></a>
@@ -92,6 +101,24 @@ template&lt;uint32_t P = 2&gt; </td></tr>
 <tr class="memitem:a1d56784d0d37b9abd4f463332d242ff0"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="polynomialgf_8hpp.html#a1d56784d0d37b9abd4f463332d242ff0">irrpoly::polynomialgf</a> = polynomial&lt; gf&lt; P &gt; &gt;</td></tr>
 <tr class="memdesc:a1d56784d0d37b9abd4f463332d242ff0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Класс многочленов над полем Галуа. <br /></td></tr>
 <tr class="separator:a1d56784d0d37b9abd4f463332d242ff0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99393a0ea61cb4ca98c216201cbef758"><td class="memTemplParams" colspan="2"><a id="a99393a0ea61cb4ca98c216201cbef758"></a>
+template&lt;uint32_t P&gt; </td></tr>
+<tr class="memitem:a99393a0ea61cb4ca98c216201cbef758"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::multithread::polychecker</b> = checker&lt; polynomialgf&lt; P &gt;, result_type &gt;</td></tr>
+<tr class="separator:a99393a0ea61cb4ca98c216201cbef758"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Перечисления</h2></td></tr>
+<tr class="memitem:ae9f36426e236691c6f2df55dac11d75d"><td class="memItemLeft" align="right" valign="top"><a id="ae9f36426e236691c6f2df55dac11d75d"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="polynomialgf_8hpp.html#ae9f36426e236691c6f2df55dac11d75d">irrpoly::multithread::irreducible_method</a> { <b>irrpoly::multithread::irreducible_method::nil</b>, 
+<b>irrpoly::multithread::irreducible_method::berlekamp</b>, 
+<b>irrpoly::multithread::irreducible_method::rabin</b>
+ }</td></tr>
+<tr class="memdesc:ae9f36426e236691c6f2df55dac11d75d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Доступные методы проверки нанеприводимость. <br /></td></tr>
+<tr class="separator:ae9f36426e236691c6f2df55dac11d75d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a2be1b504f5fc03961da0f9a9a36d00"><td class="memItemLeft" align="right" valign="top"><a id="a7a2be1b504f5fc03961da0f9a9a36d00"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="polynomialgf_8hpp.html#a7a2be1b504f5fc03961da0f9a9a36d00">irrpoly::multithread::primitive_method</a> { <b>irrpoly::multithread::primitive_method::nil</b>, 
+<b>irrpoly::multithread::primitive_method::definition</b>
+ }</td></tr>
+<tr class="memdesc:a7a2be1b504f5fc03961da0f9a9a36d00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Доступные методы проверки примитивность. <br /></td></tr>
+<tr class="separator:a7a2be1b504f5fc03961da0f9a9a36d00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Функции</h2></td></tr>
@@ -120,6 +147,11 @@ template&lt;uint32_t P&gt; </td></tr>
 <tr class="memitem:a58f4ff6a7b0e3c2e25b5e38384c2f1b6"><td class="memTemplParams" colspan="2">template&lt;uint32_t P&gt; </td></tr>
 <tr class="memitem:a58f4ff6a7b0e3c2e25b5e38384c2f1b6"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="polynomialgf_8hpp.html#a58f4ff6a7b0e3c2e25b5e38384c2f1b6">irrpoly::is_irreducible_rabin</a> (const polynomialgf&lt; P &gt; &amp;val)</td></tr>
 <tr class="separator:a58f4ff6a7b0e3c2e25b5e38384c2f1b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5519d7e84c18b1a083057e25edfe70bc"><td class="memTemplParams" colspan="2"><a id="a5519d7e84c18b1a083057e25edfe70bc"></a>
+template&lt;uint32_t P&gt; </td></tr>
+<tr class="memitem:a5519d7e84c18b1a083057e25edfe70bc"><td class="memTemplItemLeft" align="right" valign="top">checker&lt; polynomialgf&lt; P &gt;, result_type &gt;::check_func&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="polynomialgf_8hpp.html#a5519d7e84c18b1a083057e25edfe70bc">irrpoly::multithread::make_checker</a> (irreducible_method irr_meth, primitive_method prim_meth)</td></tr>
+<tr class="memdesc:a5519d7e84c18b1a083057e25edfe70bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Формируется универсальная функция проверки многочленов. <br /></td></tr>
+<tr class="separator:a5519d7e84c18b1a083057e25edfe70bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
 <div class="textblock"><dl class="section author"><dt>Автор</dt><dd>Vadim Piven <a href="#" onclick="location.href='mai'+'lto:'+'vad'+'im'+'@pi'+'ve'+'n.t'+'ec'+'h'; return false;">vadim<span style="display: none;">.nosp@m.</span>@piv<span style="display: none;">.nosp@m.</span>en.te<span style="display: none;">.nosp@m.</span>ch</a>, Anastasia Chekhoeva <a href="#" onclick="location.href='mai'+'lto:'+'A89'+'16'+'822'+'68'+'76@'+'ya'+'nde'+'x.'+'ru'; return false;">A8916<span style="display: none;">.nosp@m.</span>8226<span style="display: none;">.nosp@m.</span>876@y<span style="display: none;">.nosp@m.</span>ande<span style="display: none;">.nosp@m.</span>x.ru</a>, Veronika Biryukova <a href="#" onclick="location.href='mai'+'lto:'+'bir'+'yu'+'kov'+'av'+'ero'+'ni'+'ka@'+'ma'+'il.'+'ru'; return false;">biryu<span style="display: none;">.nosp@m.</span>kova<span style="display: none;">.nosp@m.</span>veron<span style="display: none;">.nosp@m.</span>ika@<span style="display: none;">.nosp@m.</span>mail.<span style="display: none;">.nosp@m.</span>ru</a>, Igor Bogdanov <a href="#" onclick="location.href='mai'+'lto:'+'bog'+'da'+'nov'+'.i'+'gor'+'.9'+'8@m'+'ai'+'l.r'+'u'; return false;">bogda<span style="display: none;">.nosp@m.</span>nov.<span style="display: none;">.nosp@m.</span>igor.<span style="display: none;">.nosp@m.</span>98@m<span style="display: none;">.nosp@m.</span>ail.r<span style="display: none;">.nosp@m.</span>u</a>, Vadim Volkov <a href="#" onclick="location.href='mai'+'lto:'+'vol'+'k.'+'vad'+'.p'+'@gm'+'ai'+'l.c'+'om'; return false;">volk.<span style="display: none;">.nosp@m.</span>vad.<span style="display: none;">.nosp@m.</span>p@gma<span style="display: none;">.nosp@m.</span>il.c<span style="display: none;">.nosp@m.</span>om</a>, Zimin Fedor <a href="#" onclick="location.href='mai'+'lto:'+'zim'+'fv'+'@ya'+'nd'+'ex.'+'ru'; return false;">zimfv<span style="display: none;">.nosp@m.</span>@yan<span style="display: none;">.nosp@m.</span>dex.r<span style="display: none;">.nosp@m.</span>u</a>, Cheshkova Anna <a href="#" onclick="location.href='mai'+'lto:'+'che'+'sh'+'koa'+'nn'+'@gm'+'ai'+'l.c'+'om'; return false;">chesh<span style="display: none;">.nosp@m.</span>koan<span style="display: none;">.nosp@m.</span>n@gma<span style="display: none;">.nosp@m.</span>il.c<span style="display: none;">.nosp@m.</span>om</a> @license Free use of this library is permitted under the guidelines and in accordance with the MIT License (MIT). @url <a href="https://github.com/irreducible-polynoms/irrpoly">https://github.com/irreducible-polynoms/irrpoly</a> </dd></dl>
@@ -283,7 +315,7 @@ template&lt;uint32_t P&gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Ср 13 Ноя 2019 15:20:39. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Ср 13 Ноя 2019 19:08:13. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.16
 </small></address>

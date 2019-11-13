@@ -1,7 +1,7 @@
 #include <iostream>
 #include <thread>
 
-#include "checker.hpp"
+#include "polynomialgf.hpp"
 
 using namespace irrpoly;
 
@@ -22,8 +22,8 @@ template<uint32_t P>
 std::vector<polynomialgf<P>> generate_irreducible(
         const typename std::vector<polynomialgf<P>>::size_type num,
         const typename polynomialgf<P>::size_type degree,
-        const typename checker<P>::irreducible_method irr_meth,
-        const typename checker<P>::primitive_method prim_meth,
+        const typename multithread::irreducible_method irr_meth,
+        const typename multithread::primitive_method prim_meth,
         const unsigned threads_num
 ) {
     // возвращаемое значение
@@ -31,13 +31,15 @@ std::vector<polynomialgf<P>> generate_irreducible(
     arr.reserve(num);
 
     // создаём всё необходимое для многопоточности
-    checker<P> ch(irr_meth, prim_meth, threads_num);
+    multithread::polychecker<P> ch(threads_num);
 
     auto input = [&]() -> polynomialgf<P> {
-        return random<P>(degree);
+        return random < P > (degree);
     };
 
-    auto callback = [&](const typename checker<P>::result_type &res, const polynomialgf<P> &poly) -> bool {
+    auto proceed = multithread::make_checker<P>(irr_meth, prim_meth);
+
+    auto callback = [&](const polynomialgf<P> &poly, const typename multithread::result_type &res) -> bool {
         if (res.irreducible) {
             arr.emplace_back(poly);
             return true;
@@ -45,7 +47,7 @@ std::vector<polynomialgf<P>> generate_irreducible(
         return false;
     };
 
-    ch.check(num, input, callback);
+    ch.check(num, input, proceed, callback);
 
     return arr;
 }
@@ -56,7 +58,7 @@ void test() {
         const uint32_t P = 2;
         for (size_t i = 4; i < 24; ++i) {
             for (size_t j = 0; j < i / 2; ++j) {
-                polynomialgf<P> p = random<P>(i);
+                polynomialgf<P> p = random < P > (i);
                 std::cout << (is_irreducible_rabin(p) ? '1' : '0') << " "
                           << (is_primitive_definition(p) ? '1' : '0') << " " << P << " "
                           << p << std::endl;
@@ -67,7 +69,7 @@ void test() {
         const uint32_t P = 3;
         for (size_t i = 4; i < 18; ++i) {
             for (size_t j = 0; j < i / 2; ++j) {
-                polynomialgf<P> p = random<P>(i);
+                polynomialgf<P> p = random < P > (i);
                 std::cout << (is_irreducible_rabin(p) ? '1' : '0') << " "
                           << (is_primitive_definition(p) ? '1' : '0') << " " << P << " "
                           << p << std::endl;
@@ -78,7 +80,7 @@ void test() {
         const uint32_t P = 5;
         for (size_t i = 4; i < 14; ++i) {
             for (size_t j = 0; j < i / 2; ++j) {
-                polynomialgf<P> p = random<P>(i);
+                polynomialgf<P> p = random < P > (i);
                 std::cout << (is_irreducible_berlekamp(p) ? '1' : '0') << " "
                           << (is_primitive_definition(p) ? '1' : '0') << " " << P << " "
                           << p << std::endl;
@@ -89,7 +91,7 @@ void test() {
         const uint32_t P = 7;
         for (size_t i = 4; i < 10; ++i) {
             for (size_t j = 0; j < i / 2; ++j) {
-                polynomialgf<P> p = random<P>(i);
+                polynomialgf<P> p = random < P > (i);
                 std::cout << (is_irreducible_berlekamp(p) ? '1' : '0') << " "
                           << (is_primitive_definition(p) ? '1' : '0') << " " << P << " "
                           << p << std::endl;
@@ -100,7 +102,7 @@ void test() {
         const uint32_t P = 11;
         for (size_t i = 4; i < 6; ++i) {
             for (size_t j = 0; j < i / 2; ++j) {
-                polynomialgf<P> p = random<P>(i);
+                polynomialgf<P> p = random < P > (i);
                 std::cout << (is_irreducible_berlekamp(p) ? '1' : '0') << " "
                           << (is_primitive_definition(p) ? '1' : '0') << " " << P << " "
                           << p << std::endl;
@@ -111,7 +113,7 @@ void test() {
         const uint32_t P = 13;
         for (size_t i = 4; i < 4; ++i) {
             for (size_t j = 0; j < i / 2; ++j) {
-                polynomialgf<P> p = random<P>(i);
+                polynomialgf<P> p = random < P > (i);
                 std::cout << (is_irreducible_berlekamp(p) ? '1' : '0') << " "
                           << (is_primitive_definition(p) ? '1' : '0') << " " << P << " "
                           << p << std::endl;
@@ -129,10 +131,10 @@ int main() {
     const typename polynomialgf<P>::size_type degree = 5;
     // какой из методов проверки на неприводимость хотим использовать
     // возможные варианты - отсутствие приверки (nil), Берлекампа (berlekamp) и Рабин (rabin)
-    const typename checker<P>::irreducible_method irr_meth = checker<P>::irreducible_method::berlekamp;
+    const typename multithread::irreducible_method irr_meth = multithread::irreducible_method::berlekamp;
     // какой из методов проверки на примитивность хотим использовать
     // возможные варианты - отсутствие приверки (nil) и проверка по определению (definition)
-    const typename checker<P>::primitive_method prim_meth = checker<P>::primitive_method::nil;
+    const typename multithread::primitive_method prim_meth = multithread::primitive_method::nil;
     // число потоков, выполняюих проверку многочленов на соответствие заданной характеристике
     // должно быть равно числу физических ядер минус один
     const unsigned threads_num = std::thread::hardware_concurrency() - 1;

@@ -19,6 +19,7 @@
 
 #include "gf.hpp"
 #include "polynomial.hpp"
+#include "checker.hpp"
 
 namespace irrpoly {
 
@@ -318,6 +319,59 @@ namespace irrpoly {
         return tmp.is_zero();
     }
 
+    namespace multithread {
+
+        /// Структура, представляющая результаты проверки многочлена.
+        struct result_type {
+            bool irreducible;
+            bool primitive;
+        };
+
+        /// Доступные методы проверки нанеприводимость.
+        enum class irreducible_method {
+            nil, ///< не проверять
+            berlekamp, ///< алгоритм Берлекампа
+            rabin ///< алгоритм Рабина
+        };
+
+        /// Доступные методы проверки примитивность.
+        enum class primitive_method {
+            nil, ///< не проверять
+            definition ///< проверка по определению
+        };
+
+        template<uint32_t P>
+        using polychecker = checker<polynomialgf<P>, result_type>;
+
+        /// Формируется универсальная функция проверки многочленов.
+        template<uint32_t P>
+        typename checker<polynomialgf<P>, result_type>::check_func make_checker(
+                irreducible_method irr_meth, primitive_method prim_meth) {
+            return [=](const polynomialgf<P> &poly, result_type &res) {
+                // в случае, когда проверка не выполняется устанавливается результат true
+                switch (irr_meth) {
+                    case irreducible_method::berlekamp:
+                        res.irreducible = is_irreducible_berlekamp(poly);
+                        break;
+                    case irreducible_method::rabin:
+                        res.irreducible = is_irreducible_rabin(poly);
+                        break;
+                    default: // irreducible_method::nil
+                        res.irreducible = true;
+                        break;
+                }
+                switch (prim_meth) {
+                    case primitive_method::definition:
+                        res.primitive = res.irreducible ? is_primitive_definition(poly) : false;
+                        break;
+                    default: // primitive_method::nil
+                        res.primitive = true;
+                        break;
+                }
+            };
+        }
+
+    }
 }
 
 #endif //POLYNOMIALGF_HPP
