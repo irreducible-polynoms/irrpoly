@@ -96,10 +96,10 @@ $(function() {
 </ul>
 <p>Всё необходимое для проверки многочленов на неприводимость и примитивность в несколько потоков погружено в <code>namespace multithread</code>, кроме того, весь код заголовочных файлов помещён в <code>namespace irrpoly</code>.</p>
 <p>В файле <a href="polynomialgf.hpp">polynomialgf.hpp</a> реализованы следующие алгоритмы:</p><ul>
-<li>поиск наибольшего общего делителя двух многочленов</li>
-<li>проверка многочлена на неприводимость методом Берлекампа</li>
-<li>проверка многочлена на неприводимость методом Рабина</li>
-<li>проверка многочлена на примитивность</li>
+<li><code>gcd</code> - поиск наибольшего общего делителя двух многочленов</li>
+<li><code>is_irreducible_berlekamp</code> - проверка многочлена на неприводимость методом Берлекампа</li>
+<li><code>is_irreducible_rabin</code> - проверка многочлена на неприводимость методом Рабина</li>
+<li><code>is_primitive_definition</code> - проверка многочлена на примитивность по определению</li>
 </ul>
 <h1><a class="anchor" id="autotoc_md3"></a>
 Документация</h1>
@@ -128,7 +128,7 @@ $(function() {
 </div><!-- PageDoc -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Чт 14 Ноя 2019 12:58:50. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Чт 14 Ноя 2019 13:10:52. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.16
 </small></address>

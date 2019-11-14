@@ -27,6 +27,7 @@
 namespace irrpoly {
 
     namespace detail {
+
         /// Класс для управления мьютексом и условной переменной.
         class sync {
         private:
@@ -105,9 +106,10 @@ namespace irrpoly {
 #endif
             }
         };
-    }
 
-/// Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P].
+    } // namespace detail
+
+    /// Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P].
     template<typename value_type, typename result_type>
     class checker {
     public:
@@ -230,7 +232,7 @@ namespace irrpoly {
             const result_type &result() const noexcept {
                 return res;
             }
-        };
+        }; // class node
 
         detail::sync m; // master
         ::std::vector<node *> s; // slave
@@ -282,6 +284,6 @@ namespace irrpoly {
         }
     };
 
-}
+} // namespace irrpoly
 
 #endif //IRRPOLY_CHECKER_HPP

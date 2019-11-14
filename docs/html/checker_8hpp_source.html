@@ -95,248 +95,250 @@ $(function() {
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">namespace </span>irrpoly {</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keyword">namespace </span>detail {</div>
-<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="classirrpoly_1_1detail_1_1sync.html">   31</a></span>&#160;        <span class="keyword">class </span><a class="code" href="classirrpoly_1_1detail_1_1sync.html">sync</a> {</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            pthread_mutex_t mutex;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            pthread_cond_t cond;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            ::std::mutex mutex;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            ::std::unique_lock&lt;::std::mutex&gt; lk;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            ::std::condition_variable cond;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classirrpoly_1_1detail_1_1sync.html#a08357c3c9e7a1d03dde62364b2e0a60a">   44</a></span>&#160;            <a class="code" href="classirrpoly_1_1detail_1_1sync.html#a08357c3c9e7a1d03dde62364b2e0a60a">sync</a>() noexcept(false) : cond(), mutex() {</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;                pthread_mutexattr_t attr;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                assert(!pthread_mutexattr_init(&amp;attr));</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                assert(!pthread_mutexattr_settype(&amp;attr, PTHREAD_MUTEX_ERRORCHECK));</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                assert(!pthread_mutex_init(&amp;mutex, &amp;attr));</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                assert(!pthread_cond_init(&amp;cond, <span class="keyword">nullptr</span>));</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                assert(!pthread_mutexattr_destroy(&amp;attr));</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                pthread_mutex_lock(&amp;mutex);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;                lk = ::std::unique_lock&lt;::std::mutex&gt;(mutex);</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            }</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            <span class="keyword">virtual</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="preprocessor">#ifndef PTHREAD</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            <a class="code" href="classirrpoly_1_1detail_1_1sync.html#ad659121e9c158dc28f1ebddb5a140f77">~sync</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            <a class="code" href="classirrpoly_1_1detail_1_1sync.html#ad659121e9c158dc28f1ebddb5a140f77">~sync</a>() noexcept(false) {</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                pthread_mutex_unlock(&amp;mutex);</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                assert(!pthread_mutex_destroy(&amp;mutex));</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                assert(!pthread_cond_destroy(&amp;cond));</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            }</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="classirrpoly_1_1detail_1_1sync.html#a27155fd8c0b3b3c9d8123fcc3ae28c89">   73</a></span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classirrpoly_1_1detail_1_1sync.html#a27155fd8c0b3b3c9d8123fcc3ae28c89">lock</a>() noexcept {</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                pthread_mutex_lock(&amp;mutex);</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                mutex.lock();</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            }</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="classirrpoly_1_1detail_1_1sync.html#a4eebab782338e3a5c42e644f5716bfcf">   82</a></span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classirrpoly_1_1detail_1_1sync.html#a4eebab782338e3a5c42e644f5716bfcf">unlock</a>() noexcept {</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                pthread_mutex_unlock(&amp;mutex);</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                mutex.unlock();</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            }</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
-<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="classirrpoly_1_1detail_1_1sync.html#a67f7424249809fd8f6654691e0e53f0c">   91</a></span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classirrpoly_1_1detail_1_1sync.html#a67f7424249809fd8f6654691e0e53f0c">wait</a>() noexcept {</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                pthread_cond_wait(&amp;cond, &amp;mutex);</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                cond.wait(lk);</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;            }</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
-<div class="line"><a name="l00100"></a><span class="lineno"><a class="line" href="classirrpoly_1_1detail_1_1sync.html#a3284ab8518f9a9d6675f1b6401ac0e46">  100</a></span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classirrpoly_1_1detail_1_1sync.html#a3284ab8518f9a9d6675f1b6401ac0e46">signal</a>() noexcept {</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                pthread_cond_signal(&amp;cond);</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                cond.notify_one();</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            }</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        };</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    }</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="classirrpoly_1_1detail_1_1sync.html">   32</a></span>&#160;        <span class="keyword">class </span><a class="code" href="classirrpoly_1_1detail_1_1sync.html">sync</a> {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            pthread_mutex_t mutex;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            pthread_cond_t cond;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            ::std::mutex mutex;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            ::std::unique_lock&lt;::std::mutex&gt; lk;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            ::std::condition_variable cond;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classirrpoly_1_1detail_1_1sync.html#a08357c3c9e7a1d03dde62364b2e0a60a">   45</a></span>&#160;            <a class="code" href="classirrpoly_1_1detail_1_1sync.html#a08357c3c9e7a1d03dde62364b2e0a60a">sync</a>() noexcept(false) : cond(), mutex() {</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                pthread_mutexattr_t attr;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                assert(!pthread_mutexattr_init(&amp;attr));</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                assert(!pthread_mutexattr_settype(&amp;attr, PTHREAD_MUTEX_ERRORCHECK));</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                assert(!pthread_mutex_init(&amp;mutex, &amp;attr));</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                assert(!pthread_cond_init(&amp;cond, <span class="keyword">nullptr</span>));</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                assert(!pthread_mutexattr_destroy(&amp;attr));</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;                pthread_mutex_lock(&amp;mutex);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                lk = ::std::unique_lock&lt;::std::mutex&gt;(mutex);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            }</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            <span class="keyword">virtual</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor">#ifndef PTHREAD</span></div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            <a class="code" href="classirrpoly_1_1detail_1_1sync.html#ad659121e9c158dc28f1ebddb5a140f77">~sync</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <a class="code" href="classirrpoly_1_1detail_1_1sync.html#ad659121e9c158dc28f1ebddb5a140f77">~sync</a>() noexcept(false) {</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                pthread_mutex_unlock(&amp;mutex);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                assert(!pthread_mutex_destroy(&amp;mutex));</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                assert(!pthread_cond_destroy(&amp;cond));</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            }</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="classirrpoly_1_1detail_1_1sync.html#a27155fd8c0b3b3c9d8123fcc3ae28c89">   74</a></span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classirrpoly_1_1detail_1_1sync.html#a27155fd8c0b3b3c9d8123fcc3ae28c89">lock</a>() noexcept {</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                pthread_mutex_lock(&amp;mutex);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                mutex.lock();</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;            }</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="classirrpoly_1_1detail_1_1sync.html#a4eebab782338e3a5c42e644f5716bfcf">   83</a></span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classirrpoly_1_1detail_1_1sync.html#a4eebab782338e3a5c42e644f5716bfcf">unlock</a>() noexcept {</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                pthread_mutex_unlock(&amp;mutex);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                mutex.unlock();</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            }</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="classirrpoly_1_1detail_1_1sync.html#a67f7424249809fd8f6654691e0e53f0c">   92</a></span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classirrpoly_1_1detail_1_1sync.html#a67f7424249809fd8f6654691e0e53f0c">wait</a>() noexcept {</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                pthread_cond_wait(&amp;cond, &amp;mutex);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                cond.wait(lk);</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;            }</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno"><a class="line" href="classirrpoly_1_1detail_1_1sync.html#a3284ab8518f9a9d6675f1b6401ac0e46">  101</a></span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classirrpoly_1_1detail_1_1sync.html#a3284ab8518f9a9d6675f1b6401ac0e46">signal</a>() noexcept {</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                pthread_cond_signal(&amp;cond);</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                cond.notify_one();</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            }</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        };</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> value_type, <span class="keyword">typename</span> result_type&gt;</div>
-<div class="line"><a name="l00112"></a><span class="lineno"><a class="line" href="classirrpoly_1_1checker.html">  112</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classirrpoly_1_1checker.html">checker</a> {</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00115"></a><span class="lineno"><a class="line" href="classirrpoly_1_1checker.html#a27449cb3e8e5683bb53dfaf94bb763c8">  115</a></span>&#160;        typedef ::std::function&lt;value_type()&gt; <a class="code" href="classirrpoly_1_1checker.html#a27449cb3e8e5683bb53dfaf94bb763c8">input_func</a>;</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
-<div class="line"><a name="l00118"></a><span class="lineno"><a class="line" href="classirrpoly_1_1checker.html#aa9bc4e4bf9845119012671d9ec7fefcd">  118</a></span>&#160;        typedef ::std::function&lt;void(<span class="keyword">const</span> value_type &amp;, result_type &amp;)&gt; <a class="code" href="classirrpoly_1_1checker.html#aa9bc4e4bf9845119012671d9ec7fefcd">check_func</a>;</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
-<div class="line"><a name="l00122"></a><span class="lineno"><a class="line" href="classirrpoly_1_1checker.html#a2ef44c3281fb12d236704e32c7e19c53">  122</a></span>&#160;        typedef ::std::function&lt;bool(<span class="keyword">const</span> value_type &amp;, <span class="keyword">const</span> result_type &amp;)&gt; <a class="code" href="classirrpoly_1_1checker.html#a2ef44c3281fb12d236704e32c7e19c53">callback_func</a>;</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        <span class="keyword">class </span>node : <span class="keyword">public</span> <a class="code" href="classirrpoly_1_1detail_1_1sync.html">detail::sync</a> {</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;            <a class="code" href="classirrpoly_1_1detail_1_1sync.html">detail::sync</a> *m; </div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;            <a class="code" href="classirrpoly_1_1checker.html#aa9bc4e4bf9845119012671d9ec7fefcd">check_func</a> cf; </div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;            value_type val; </div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;            result_type res; </div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;            <span class="keywordtype">bool</span> _busy; </div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;            <span class="keywordtype">bool</span> _terminate; </div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;            pthread_t thread;</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;            ::std::thread thread;</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160; </div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160; </div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;            <span class="keyword">static</span></div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;            <span class="keywordtype">void</span> *<a class="code" href="classirrpoly_1_1checker.html#a5dcf452b9cbe93393e153c2212b1f2f5">check</a>(<span class="keywordtype">void</span> *arg) noexcept {</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;                <span class="keyword">auto</span> *sl = static_cast&lt;node *&gt;(arg);</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;                <span class="keywordtype">void</span> <a class="code" href="classirrpoly_1_1checker.html#a5dcf452b9cbe93393e153c2212b1f2f5">check</a>() noexcept {</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;                    <span class="keyword">auto</span> *sl = <span class="keyword">this</span>;</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;                <span class="keywordflow">while</span> (!sl-&gt;_terminate) {</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;                    <span class="keywordflow">while</span> (!sl-&gt;_busy &amp;&amp; !sl-&gt;_terminate) { sl-&gt;wait(); }</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                    <span class="keywordflow">if</span> (sl-&gt;_terminate) { <span class="keywordflow">break</span>; }</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160; </div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;                    sl-&gt;cf(sl-&gt;val, sl-&gt;res);</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    } <span class="comment">// namespace detail</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> value_type, <span class="keyword">typename</span> result_type&gt;</div>
+<div class="line"><a name="l00114"></a><span class="lineno"><a class="line" href="classirrpoly_1_1checker.html">  114</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classirrpoly_1_1checker.html">checker</a> {</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00117"></a><span class="lineno"><a class="line" href="classirrpoly_1_1checker.html#a27449cb3e8e5683bb53dfaf94bb763c8">  117</a></span>&#160;        typedef ::std::function&lt;value_type()&gt; <a class="code" href="classirrpoly_1_1checker.html#a27449cb3e8e5683bb53dfaf94bb763c8">input_func</a>;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno"><a class="line" href="classirrpoly_1_1checker.html#aa9bc4e4bf9845119012671d9ec7fefcd">  120</a></span>&#160;        typedef ::std::function&lt;void(<span class="keyword">const</span> value_type &amp;, result_type &amp;)&gt; <a class="code" href="classirrpoly_1_1checker.html#aa9bc4e4bf9845119012671d9ec7fefcd">check_func</a>;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
+<div class="line"><a name="l00124"></a><span class="lineno"><a class="line" href="classirrpoly_1_1checker.html#a2ef44c3281fb12d236704e32c7e19c53">  124</a></span>&#160;        typedef ::std::function&lt;bool(<span class="keyword">const</span> value_type &amp;, <span class="keyword">const</span> result_type &amp;)&gt; <a class="code" href="classirrpoly_1_1checker.html#a2ef44c3281fb12d236704e32c7e19c53">callback_func</a>;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        <span class="keyword">class </span>node : <span class="keyword">public</span> <a class="code" href="classirrpoly_1_1detail_1_1sync.html">detail::sync</a> {</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;            <a class="code" href="classirrpoly_1_1detail_1_1sync.html">detail::sync</a> *m; </div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;            <a class="code" href="classirrpoly_1_1checker.html#aa9bc4e4bf9845119012671d9ec7fefcd">check_func</a> cf; </div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;            value_type val; </div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;            result_type res; </div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;            <span class="keywordtype">bool</span> _busy; </div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;            <span class="keywordtype">bool</span> _terminate; </div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;            pthread_t thread;</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;            ::std::thread thread;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160; </div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160; </div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;            <span class="keyword">static</span></div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;            <span class="keywordtype">void</span> *<a class="code" href="classirrpoly_1_1checker.html#a5dcf452b9cbe93393e153c2212b1f2f5">check</a>(<span class="keywordtype">void</span> *arg) noexcept {</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;                <span class="keyword">auto</span> *sl = static_cast&lt;node *&gt;(arg);</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;                <span class="keywordtype">void</span> <a class="code" href="classirrpoly_1_1checker.html#a5dcf452b9cbe93393e153c2212b1f2f5">check</a>() noexcept {</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;                    <span class="keyword">auto</span> *sl = <span class="keyword">this</span>;</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                <span class="keywordflow">while</span> (!sl-&gt;_terminate) {</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                    <span class="keywordflow">while</span> (!sl-&gt;_busy &amp;&amp; !sl-&gt;_terminate) { sl-&gt;wait(); }</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;                    <span class="keywordflow">if</span> (sl-&gt;_terminate) { <span class="keywordflow">break</span>; }</div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;                    sl-&gt;m-&gt;lock();</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;                    sl-&gt;_busy = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;                    sl-&gt;m-&gt;signal();</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;                    sl-&gt;m-&gt;unlock();</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;                }</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;                pthread_exit(<span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;            }</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160; </div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;            <span class="keyword">explicit</span></div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;            node(<a class="code" href="classirrpoly_1_1detail_1_1sync.html">detail::sync</a> *m) noexcept :</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;                    m(m), cf(), val(), res(), _busy(<span class="keyword">false</span>), _terminate(<span class="keyword">false</span>), thread() {</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;                pthread_attr_t thread_attr;</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;                assert(!pthread_attr_init(&amp;thread_attr));</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;                assert(!pthread_attr_setdetachstate(&amp;thread_attr, PTHREAD_CREATE_DETACHED));</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;                pthread_create(&amp;thread, &amp;thread_attr, &amp;node::check, <span class="keyword">this</span>);</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;                assert(!pthread_attr_destroy(&amp;thread_attr));</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;                thread = ::std::thread(&amp;node::check, <span class="keyword">this</span>);</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;                thread.detach();</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;            }</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;            <span class="keywordtype">void</span> set_check(<a class="code" href="classirrpoly_1_1checker.html#aa9bc4e4bf9845119012671d9ec7fefcd">check_func</a> c) noexcept {</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;                cf = c;</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;            }</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160; </div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;            [[nodiscard]]</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;            <span class="keyword">const</span> value_type &amp;get()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;                <span class="keywordflow">return</span> val;</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;            }</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160; </div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;            <span class="keywordtype">void</span> set(value_type v) {</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;                lock();</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;                val = v;</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;                _busy = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;                signal();</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;                unlock();</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;            }</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160; </div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;            [[nodiscard]]</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;            <span class="keywordtype">bool</span> busy() <span class="keyword">const</span> noexcept {</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;                <span class="keywordflow">return</span> _busy;</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;            }</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;            <span class="keywordtype">void</span> terminate() noexcept {</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;                lock();</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;                _terminate = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;                signal();</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;                unlock();</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;            }</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160; </div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;            [[nodiscard]]</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;            <span class="keyword">const</span> result_type &amp;result() <span class="keyword">const</span> noexcept {</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;                <span class="keywordflow">return</span> res;</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;            }</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        };</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160; </div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        <a class="code" href="classirrpoly_1_1detail_1_1sync.html">detail::sync</a> m; <span class="comment">// master</span></div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;        ::std::vector&lt;node *&gt; s; <span class="comment">// slave</span></div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160; </div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;        <span class="keywordtype">unsigned</span> countBusy() {</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;            <span class="keywordtype">unsigned</span> res = 0;</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span> *n : s) { res += n-&gt;busy(); }</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;            <span class="keywordflow">return</span> res;</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        }</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160; </div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        <span class="keyword">explicit</span></div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        <a class="code" href="classirrpoly_1_1checker.html">checker</a>(<span class="keyword">const</span> <span class="keywordtype">unsigned</span> n = ::std::thread::hardware_concurrency() - 1) noexcept : m(), s() {</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;            s.reserve(n);</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i = 0; i &lt; n; ++i) {</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;                s.emplace_back(<span class="keyword">new</span> node(&amp;m));</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;            }</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        }</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160; </div>
-<div class="line"><a name="l00255"></a><span class="lineno"><a class="line" href="classirrpoly_1_1checker.html#a5dcf452b9cbe93393e153c2212b1f2f5">  255</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classirrpoly_1_1checker.html#a5dcf452b9cbe93393e153c2212b1f2f5">check</a>(uint64_t n, <a class="code" href="classirrpoly_1_1checker.html#a27449cb3e8e5683bb53dfaf94bb763c8">input_func</a> in, <a class="code" href="classirrpoly_1_1checker.html#aa9bc4e4bf9845119012671d9ec7fefcd">check_func</a> cf, <a class="code" href="classirrpoly_1_1checker.html#a2ef44c3281fb12d236704e32c7e19c53">callback_func</a> back, <span class="keyword">const</span> <span class="keywordtype">bool</span> strict = <span class="keyword">true</span>) noexcept {</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;            <span class="comment">// заряжаем многочлены на проверку</span></div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> *sl : s) {</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;                sl-&gt;set_check(cf);</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;                sl-&gt;set(in());</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;            }</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;            <span class="keywordflow">while</span> (n) {</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;                <span class="comment">// ждём свободный поток</span></div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;                <span class="keywordflow">while</span> (countBusy() == s.size()) { m.<a class="code" href="classirrpoly_1_1detail_1_1sync.html#a67f7424249809fd8f6654691e0e53f0c">wait</a>(); }</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;                <span class="comment">// находим свободные потоки и заряжаем новыми входными данными</span></div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;                <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i = 0; i &lt; s.size() &amp;&amp; n; ++i) {</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;                    <span class="keywordflow">if</span> (s[i]-&gt;busy()) { <span class="keywordflow">continue</span>; }</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;                    <span class="keywordflow">if</span> (back(s[i]-&gt;get(), s[i]-&gt;result())) { --n; }</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;                    s[i]-&gt;set(in());</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;                }</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;            }</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;            <span class="comment">// ожидаем завершения всех потоков</span></div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;            <span class="keywordflow">while</span> (countBusy()) { m.<a class="code" href="classirrpoly_1_1detail_1_1sync.html#a67f7424249809fd8f6654691e0e53f0c">wait</a>(); }</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;            <span class="keywordflow">if</span> (!strict) {</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;                <span class="comment">// обрабатываем все проверенные многочлены, даже если их больше, чем требовалось найти</span></div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">auto</span> *sl : s) { back(sl-&gt;get(), sl-&gt;result()); }</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;            }</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        }</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160; </div>
-<div class="line"><a name="l00280"></a><span class="lineno"><a class="line" href="classirrpoly_1_1checker.html#a3dd3ac3deddf70873dac44c36d31094c">  280</a></span>&#160;        <a class="code" href="classirrpoly_1_1checker.html#a3dd3ac3deddf70873dac44c36d31094c">~checker</a>() noexcept {</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> *sl : s) { sl-&gt;terminate(); }</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        }</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    };</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160; </div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;}</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;                    sl-&gt;cf(sl-&gt;val, sl-&gt;res);</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;                    sl-&gt;m-&gt;lock();</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;                    sl-&gt;_busy = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;                    sl-&gt;m-&gt;signal();</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;                    sl-&gt;m-&gt;unlock();</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;                }</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;                pthread_exit(<span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;            }</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160; </div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;            <span class="keyword">explicit</span></div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;            node(<a class="code" href="classirrpoly_1_1detail_1_1sync.html">detail::sync</a> *m) noexcept :</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;                    m(m), cf(), val(), res(), _busy(<span class="keyword">false</span>), _terminate(<span class="keyword">false</span>), thread() {</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;<span class="preprocessor">#ifdef PTHREAD</span></div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;                pthread_attr_t thread_attr;</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;                assert(!pthread_attr_init(&amp;thread_attr));</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;                assert(!pthread_attr_setdetachstate(&amp;thread_attr, PTHREAD_CREATE_DETACHED));</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;                pthread_create(&amp;thread, &amp;thread_attr, &amp;node::check, <span class="keyword">this</span>);</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;                assert(!pthread_attr_destroy(&amp;thread_attr));</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;                thread = ::std::thread(&amp;node::check, <span class="keyword">this</span>);</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;                thread.detach();</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;            }</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160; </div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;            <span class="keywordtype">void</span> set_check(<a class="code" href="classirrpoly_1_1checker.html#aa9bc4e4bf9845119012671d9ec7fefcd">check_func</a> c) noexcept {</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;                cf = c;</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;            }</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160; </div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;            [[nodiscard]]</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;            <span class="keyword">const</span> value_type &amp;get()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;                <span class="keywordflow">return</span> val;</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;            }</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160; </div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;            <span class="keywordtype">void</span> set(value_type v) {</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;                lock();</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;                val = v;</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;                _busy = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;                signal();</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;                unlock();</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;            }</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160; </div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;            [[nodiscard]]</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;            <span class="keywordtype">bool</span> busy() <span class="keyword">const</span> noexcept {</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;                <span class="keywordflow">return</span> _busy;</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;            }</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160; </div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;            <span class="keywordtype">void</span> terminate() noexcept {</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;                lock();</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;                _terminate = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;                signal();</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;                unlock();</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;            }</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;            [[nodiscard]]</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;            <span class="keyword">const</span> result_type &amp;result() <span class="keyword">const</span> noexcept {</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;                <span class="keywordflow">return</span> res;</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;            }</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        }; <span class="comment">// class node</span></div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160; </div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;        <a class="code" href="classirrpoly_1_1detail_1_1sync.html">detail::sync</a> m; <span class="comment">// master</span></div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;        ::std::vector&lt;node *&gt; s; <span class="comment">// slave</span></div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160; </div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        <span class="keywordtype">unsigned</span> countBusy() {</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;            <span class="keywordtype">unsigned</span> res = 0;</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span> *n : s) { res += n-&gt;busy(); }</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;            <span class="keywordflow">return</span> res;</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        }</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160; </div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        <span class="keyword">explicit</span></div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        <a class="code" href="classirrpoly_1_1checker.html">checker</a>(<span class="keyword">const</span> <span class="keywordtype">unsigned</span> n = ::std::thread::hardware_concurrency() - 1) noexcept : m(), s() {</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;            s.reserve(n);</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;            <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i = 0; i &lt; n; ++i) {</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;                s.emplace_back(<span class="keyword">new</span> node(&amp;m));</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;            }</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        }</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160; </div>
+<div class="line"><a name="l00257"></a><span class="lineno"><a class="line" href="classirrpoly_1_1checker.html#a5dcf452b9cbe93393e153c2212b1f2f5">  257</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classirrpoly_1_1checker.html#a5dcf452b9cbe93393e153c2212b1f2f5">check</a>(uint64_t n, <a class="code" href="classirrpoly_1_1checker.html#a27449cb3e8e5683bb53dfaf94bb763c8">input_func</a> in, <a class="code" href="classirrpoly_1_1checker.html#aa9bc4e4bf9845119012671d9ec7fefcd">check_func</a> cf, <a class="code" href="classirrpoly_1_1checker.html#a2ef44c3281fb12d236704e32c7e19c53">callback_func</a> back, <span class="keyword">const</span> <span class="keywordtype">bool</span> strict = <span class="keyword">true</span>) noexcept {</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;            <span class="comment">// заряжаем многочлены на проверку</span></div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> *sl : s) {</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;                sl-&gt;set_check(cf);</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;                sl-&gt;set(in());</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;            }</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;            <span class="keywordflow">while</span> (n) {</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;                <span class="comment">// ждём свободный поток</span></div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;                <span class="keywordflow">while</span> (countBusy() == s.size()) { m.<a class="code" href="classirrpoly_1_1detail_1_1sync.html#a67f7424249809fd8f6654691e0e53f0c">wait</a>(); }</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;                <span class="comment">// находим свободные потоки и заряжаем новыми входными данными</span></div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;                <span class="keywordflow">for</span> (<span class="keywordtype">unsigned</span> i = 0; i &lt; s.size() &amp;&amp; n; ++i) {</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;                    <span class="keywordflow">if</span> (s[i]-&gt;busy()) { <span class="keywordflow">continue</span>; }</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;                    <span class="keywordflow">if</span> (back(s[i]-&gt;get(), s[i]-&gt;result())) { --n; }</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;                    s[i]-&gt;set(in());</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;                }</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;            }</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;            <span class="comment">// ожидаем завершения всех потоков</span></div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;            <span class="keywordflow">while</span> (countBusy()) { m.<a class="code" href="classirrpoly_1_1detail_1_1sync.html#a67f7424249809fd8f6654691e0e53f0c">wait</a>(); }</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;            <span class="keywordflow">if</span> (!strict) {</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;                <span class="comment">// обрабатываем все проверенные многочлены, даже если их больше, чем требовалось найти</span></div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;                <span class="keywordflow">for</span> (<span class="keyword">auto</span> *sl : s) { back(sl-&gt;get(), sl-&gt;result()); }</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;            }</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        }</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160; </div>
+<div class="line"><a name="l00282"></a><span class="lineno"><a class="line" href="classirrpoly_1_1checker.html#a3dd3ac3deddf70873dac44c36d31094c">  282</a></span>&#160;        <a class="code" href="classirrpoly_1_1checker.html#a3dd3ac3deddf70873dac44c36d31094c">~checker</a>() noexcept {</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;            <span class="keywordflow">for</span> (<span class="keyword">auto</span> *sl : s) { sl-&gt;terminate(); }</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        }</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    };</div>
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160; </div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="preprocessor">#endif //IRRPOLY_CHECKER_HPP</span></div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;} <span class="comment">// namespace irrpoly</span></div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160; </div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;<span class="preprocessor">#endif //IRRPOLY_CHECKER_HPP</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclassirrpoly_1_1checker_html_a2ef44c3281fb12d236704e32c7e19c53"><div class="ttname"><a href="classirrpoly_1_1checker.html#a2ef44c3281fb12d236704e32c7e19c53">irrpoly::checker::callback_func</a></div><div class="ttdeci">::std::function&lt; bool(const value_type &amp;, const result_type &amp;)&gt; callback_func</div><div class="ttdef"><b>Definition:</b> checker.hpp:122</div></div>
+<div class="ttc" id="aclassirrpoly_1_1checker_html_a2ef44c3281fb12d236704e32c7e19c53"><div class="ttname"><a href="classirrpoly_1_1checker.html#a2ef44c3281fb12d236704e32c7e19c53">irrpoly::checker::callback_func</a></div><div class="ttdeci">::std::function&lt; bool(const value_type &amp;, const result_type &amp;)&gt; callback_func</div><div class="ttdef"><b>Definition:</b> checker.hpp:124</div></div>
 <div class="ttc" id="aclassirrpoly_1_1detail_1_1sync_html_ad659121e9c158dc28f1ebddb5a140f77"><div class="ttname"><a href="classirrpoly_1_1detail_1_1sync.html#ad659121e9c158dc28f1ebddb5a140f77">irrpoly::detail::sync::~sync</a></div><div class="ttdeci">virtual ~sync()=default</div><div class="ttdoc">Освобождение ресурсов, здесь происходит разблокировка мьютекса.</div></div>
-<div class="ttc" id="aclassirrpoly_1_1detail_1_1sync_html_a67f7424249809fd8f6654691e0e53f0c"><div class="ttname"><a href="classirrpoly_1_1detail_1_1sync.html#a67f7424249809fd8f6654691e0e53f0c">irrpoly::detail::sync::wait</a></div><div class="ttdeci">void wait() noexcept</div><div class="ttdoc">Ожидание уведомления условной переменной.</div><div class="ttdef"><b>Definition:</b> checker.hpp:91</div></div>
-<div class="ttc" id="aclassirrpoly_1_1checker_html_aa9bc4e4bf9845119012671d9ec7fefcd"><div class="ttname"><a href="classirrpoly_1_1checker.html#aa9bc4e4bf9845119012671d9ec7fefcd">irrpoly::checker::check_func</a></div><div class="ttdeci">::std::function&lt; void(const value_type &amp;, result_type &amp;)&gt; check_func</div><div class="ttdoc">Вид функции, выполняющей проверку и сохраняющей результат.</div><div class="ttdef"><b>Definition:</b> checker.hpp:118</div></div>
-<div class="ttc" id="aclassirrpoly_1_1detail_1_1sync_html"><div class="ttname"><a href="classirrpoly_1_1detail_1_1sync.html">irrpoly::detail::sync</a></div><div class="ttdoc">Класс для управления мьютексом и условной переменной.</div><div class="ttdef"><b>Definition:</b> checker.hpp:31</div></div>
-<div class="ttc" id="aclassirrpoly_1_1detail_1_1sync_html_a08357c3c9e7a1d03dde62364b2e0a60a"><div class="ttname"><a href="classirrpoly_1_1detail_1_1sync.html#a08357c3c9e7a1d03dde62364b2e0a60a">irrpoly::detail::sync::sync</a></div><div class="ttdeci">sync() noexcept(false)</div><div class="ttdoc">Инициализация и блокировка мьютекса.</div><div class="ttdef"><b>Definition:</b> checker.hpp:44</div></div>
-<div class="ttc" id="aclassirrpoly_1_1detail_1_1sync_html_a4eebab782338e3a5c42e644f5716bfcf"><div class="ttname"><a href="classirrpoly_1_1detail_1_1sync.html#a4eebab782338e3a5c42e644f5716bfcf">irrpoly::detail::sync::unlock</a></div><div class="ttdeci">void unlock() noexcept</div><div class="ttdoc">Разблокировка мьютекса.</div><div class="ttdef"><b>Definition:</b> checker.hpp:82</div></div>
-<div class="ttc" id="aclassirrpoly_1_1detail_1_1sync_html_a27155fd8c0b3b3c9d8123fcc3ae28c89"><div class="ttname"><a href="classirrpoly_1_1detail_1_1sync.html#a27155fd8c0b3b3c9d8123fcc3ae28c89">irrpoly::detail::sync::lock</a></div><div class="ttdeci">void lock() noexcept</div><div class="ttdoc">Блокировка мьютекса.</div><div class="ttdef"><b>Definition:</b> checker.hpp:73</div></div>
-<div class="ttc" id="aclassirrpoly_1_1checker_html_a27449cb3e8e5683bb53dfaf94bb763c8"><div class="ttname"><a href="classirrpoly_1_1checker.html#a27449cb3e8e5683bb53dfaf94bb763c8">irrpoly::checker::input_func</a></div><div class="ttdeci">::std::function&lt; value_type()&gt; input_func</div><div class="ttdoc">Вид функции, генерирующей многочлены для проверки.</div><div class="ttdef"><b>Definition:</b> checker.hpp:115</div></div>
-<div class="ttc" id="aclassirrpoly_1_1checker_html"><div class="ttname"><a href="classirrpoly_1_1checker.html">irrpoly::checker</a></div><div class="ttdoc">Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P].</div><div class="ttdef"><b>Definition:</b> checker.hpp:112</div></div>
-<div class="ttc" id="aclassirrpoly_1_1checker_html_a3dd3ac3deddf70873dac44c36d31094c"><div class="ttname"><a href="classirrpoly_1_1checker.html#a3dd3ac3deddf70873dac44c36d31094c">irrpoly::checker::~checker</a></div><div class="ttdeci">~checker() noexcept</div><div class="ttdoc">Завершаем работу всех потоков.</div><div class="ttdef"><b>Definition:</b> checker.hpp:280</div></div>
-<div class="ttc" id="aclassirrpoly_1_1detail_1_1sync_html_a3284ab8518f9a9d6675f1b6401ac0e46"><div class="ttname"><a href="classirrpoly_1_1detail_1_1sync.html#a3284ab8518f9a9d6675f1b6401ac0e46">irrpoly::detail::sync::signal</a></div><div class="ttdeci">void signal() noexcept</div><div class="ttdoc">Уведомление условной переменной.</div><div class="ttdef"><b>Definition:</b> checker.hpp:100</div></div>
-<div class="ttc" id="aclassirrpoly_1_1checker_html_a5dcf452b9cbe93393e153c2212b1f2f5"><div class="ttname"><a href="classirrpoly_1_1checker.html#a5dcf452b9cbe93393e153c2212b1f2f5">irrpoly::checker::check</a></div><div class="ttdeci">void check(uint64_t n, input_func in, check_func cf, callback_func back, const bool strict=true) noexcept</div><div class="ttdoc">Основной цикл разделения работы на потоки.</div><div class="ttdef"><b>Definition:</b> checker.hpp:255</div></div>
+<div class="ttc" id="aclassirrpoly_1_1detail_1_1sync_html_a67f7424249809fd8f6654691e0e53f0c"><div class="ttname"><a href="classirrpoly_1_1detail_1_1sync.html#a67f7424249809fd8f6654691e0e53f0c">irrpoly::detail::sync::wait</a></div><div class="ttdeci">void wait() noexcept</div><div class="ttdoc">Ожидание уведомления условной переменной.</div><div class="ttdef"><b>Definition:</b> checker.hpp:92</div></div>
+<div class="ttc" id="aclassirrpoly_1_1checker_html_aa9bc4e4bf9845119012671d9ec7fefcd"><div class="ttname"><a href="classirrpoly_1_1checker.html#aa9bc4e4bf9845119012671d9ec7fefcd">irrpoly::checker::check_func</a></div><div class="ttdeci">::std::function&lt; void(const value_type &amp;, result_type &amp;)&gt; check_func</div><div class="ttdoc">Вид функции, выполняющей проверку и сохраняющей результат.</div><div class="ttdef"><b>Definition:</b> checker.hpp:120</div></div>
+<div class="ttc" id="aclassirrpoly_1_1detail_1_1sync_html"><div class="ttname"><a href="classirrpoly_1_1detail_1_1sync.html">irrpoly::detail::sync</a></div><div class="ttdoc">Класс для управления мьютексом и условной переменной.</div><div class="ttdef"><b>Definition:</b> checker.hpp:32</div></div>
+<div class="ttc" id="aclassirrpoly_1_1detail_1_1sync_html_a08357c3c9e7a1d03dde62364b2e0a60a"><div class="ttname"><a href="classirrpoly_1_1detail_1_1sync.html#a08357c3c9e7a1d03dde62364b2e0a60a">irrpoly::detail::sync::sync</a></div><div class="ttdeci">sync() noexcept(false)</div><div class="ttdoc">Инициализация и блокировка мьютекса.</div><div class="ttdef"><b>Definition:</b> checker.hpp:45</div></div>
+<div class="ttc" id="aclassirrpoly_1_1detail_1_1sync_html_a4eebab782338e3a5c42e644f5716bfcf"><div class="ttname"><a href="classirrpoly_1_1detail_1_1sync.html#a4eebab782338e3a5c42e644f5716bfcf">irrpoly::detail::sync::unlock</a></div><div class="ttdeci">void unlock() noexcept</div><div class="ttdoc">Разблокировка мьютекса.</div><div class="ttdef"><b>Definition:</b> checker.hpp:83</div></div>
+<div class="ttc" id="aclassirrpoly_1_1detail_1_1sync_html_a27155fd8c0b3b3c9d8123fcc3ae28c89"><div class="ttname"><a href="classirrpoly_1_1detail_1_1sync.html#a27155fd8c0b3b3c9d8123fcc3ae28c89">irrpoly::detail::sync::lock</a></div><div class="ttdeci">void lock() noexcept</div><div class="ttdoc">Блокировка мьютекса.</div><div class="ttdef"><b>Definition:</b> checker.hpp:74</div></div>
+<div class="ttc" id="aclassirrpoly_1_1checker_html_a27449cb3e8e5683bb53dfaf94bb763c8"><div class="ttname"><a href="classirrpoly_1_1checker.html#a27449cb3e8e5683bb53dfaf94bb763c8">irrpoly::checker::input_func</a></div><div class="ttdeci">::std::function&lt; value_type()&gt; input_func</div><div class="ttdoc">Вид функции, генерирующей многочлены для проверки.</div><div class="ttdef"><b>Definition:</b> checker.hpp:117</div></div>
+<div class="ttc" id="aclassirrpoly_1_1checker_html"><div class="ttname"><a href="classirrpoly_1_1checker.html">irrpoly::checker</a></div><div class="ttdoc">Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P].</div><div class="ttdef"><b>Definition:</b> checker.hpp:114</div></div>
+<div class="ttc" id="aclassirrpoly_1_1checker_html_a3dd3ac3deddf70873dac44c36d31094c"><div class="ttname"><a href="classirrpoly_1_1checker.html#a3dd3ac3deddf70873dac44c36d31094c">irrpoly::checker::~checker</a></div><div class="ttdeci">~checker() noexcept</div><div class="ttdoc">Завершаем работу всех потоков.</div><div class="ttdef"><b>Definition:</b> checker.hpp:282</div></div>
+<div class="ttc" id="aclassirrpoly_1_1detail_1_1sync_html_a3284ab8518f9a9d6675f1b6401ac0e46"><div class="ttname"><a href="classirrpoly_1_1detail_1_1sync.html#a3284ab8518f9a9d6675f1b6401ac0e46">irrpoly::detail::sync::signal</a></div><div class="ttdeci">void signal() noexcept</div><div class="ttdoc">Уведомление условной переменной.</div><div class="ttdef"><b>Definition:</b> checker.hpp:101</div></div>
+<div class="ttc" id="aclassirrpoly_1_1checker_html_a5dcf452b9cbe93393e153c2212b1f2f5"><div class="ttname"><a href="classirrpoly_1_1checker.html#a5dcf452b9cbe93393e153c2212b1f2f5">irrpoly::checker::check</a></div><div class="ttdeci">void check(uint64_t n, input_func in, check_func cf, callback_func back, const bool strict=true) noexcept</div><div class="ttdoc">Основной цикл разделения работы на потоки.</div><div class="ttdef"><b>Definition:</b> checker.hpp:257</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Чт 14 Ноя 2019 12:58:50. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Чт 14 Ноя 2019 13:10:52. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.16
 </small></address>

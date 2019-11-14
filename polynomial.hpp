@@ -18,15 +18,16 @@
 
 namespace irrpoly {
 
-/**
- * Реализация класса polynomial взыта из библиотеки Boost 1.71.0.
- * За комментариями к реализации обращайтесь к первоисточнику
- * https://www.boost.org/doc/libs/1_71_0/boost/math/tools/polynomial.hpp
- */
+    /**
+     * Реализация класса polynomial взыта из библиотеки Boost 1.71.0.
+     * За комментариями к реализации обращайтесь к первоисточнику
+     * https://www.boost.org/doc/libs/1_71_0/boost/math/tools/polynomial.hpp
+     */
     template<typename T>
     class polynomial;
 
     namespace detail {
+
         template<typename T, typename N>
         void
         division_impl(polynomial<T> &q, polynomial<T> &u, const polynomial<T> &v, N n, N k) {
@@ -101,9 +102,9 @@ namespace irrpoly {
 
     } // namespace detail
 
-/**
-* Returns the zero element for multiplication of polynomials.
-*/
+    /**
+    * Returns the zero element for multiplication of polynomials.
+    */
     template<class T>
     polynomial<T> zero_element(::std::multiplies<polynomial<T> >) {
         return polynomial<T>();
@@ -114,10 +115,10 @@ namespace irrpoly {
         return polynomial<T>(T(1));
     }
 
-/* Calculates a / b and a % b, returning the pair (quotient, remainder) together
-* because the same amount of computation yields both.
-* This function is not defined for division by zero: user beware.
-*/
+    /* Calculates a / b and a % b, returning the pair (quotient, remainder) together
+    * because the same amount of computation yields both.
+    * This function is not defined for division by zero: user beware.
+    */
     template<typename T>
     ::std::pair<polynomial<T>, polynomial<T> >
     quotient_remainder(const polynomial<T> &dividend, const polynomial<T> &divisor) {
@@ -546,6 +547,6 @@ namespace irrpoly {
         return os;
     }
 
-}
+} // namespace irrpoly
 
 #endif //POLYNOMIAL_HPP
