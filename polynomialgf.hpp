@@ -94,14 +94,30 @@ namespace irrpoly {
             // в оперативную память, данный метод решает эту проблему,
             // но он всё ещё адски медленный
             const auto n = mod.degree();
+            polynomialgf<P> xn = polynomialgf<P>{1} << n; // x^n
             polynomialgf<P> res({1});
 
+            uint64_t d = 0;
             typename polynomialgf<P>::size_type tmp;
             for (auto m = res.degree(); pow + m >= n; m = res.degree()) {
                 tmp = n - m;
-                res <<= tmp;
-                res %= mod;
                 pow -= tmp;
+                res <<= tmp;
+                if (res == xn) {
+                    // деление в столбик начинается с деления x^n
+                    if (d == 0) { d = pow; }
+                    // при больших pow деление успевает зациклиться и мы снова придём к x^n
+                    else {
+                        // находим потерю в степени, произошедшую до этого момента
+                        d -= pow;
+                        // можем пропустить кучу бесполезных шагов, повторяющих уже сделанные
+                        pow %= d;
+                        // после этой операции в этот if мы больше не попадём,
+                        // т.к. pow < d и деление в столбик не дойдёт до x^n снова,
+                        // поэтому d можно не обнулять
+                    }
+                }
+                res %= mod;
             }
             return (res << pow) - sub;
         }
@@ -345,7 +361,7 @@ namespace irrpoly {
 
         /// Формируется универсальная функция проверки многочленов.
         template<uint32_t P>
-        typename checker<polynomialgf<P>, result_type>::check_func make_checker(
+        typename checker<polynomialgf<P>, result_type>::check_func make_check_func(
                 irreducible_method irr_meth, primitive_method prim_meth) {
             return [=](const polynomialgf<P> &poly, result_type &res) {
                 // в случае, когда проверка не выполняется устанавливается результат true

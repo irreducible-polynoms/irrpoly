@@ -37,7 +37,7 @@ std::vector<polynomialgf<P>> generate_irreducible(
         return random < P > (degree);
     };
 
-    auto proceed = multithread::make_checker<P>(irr_meth, prim_meth);
+    auto check = multithread::make_check_func<P>(irr_meth, prim_meth);
 
     auto callback = [&](const polynomialgf<P> &poly, const typename multithread::result_type &res) -> bool {
         if (res.irreducible) {
@@ -47,7 +47,7 @@ std::vector<polynomialgf<P>> generate_irreducible(
         return false;
     };
 
-    ch.check(num, input, proceed, callback);
+    ch.check(num, input, check, callback);
 
     return arr;
 }
