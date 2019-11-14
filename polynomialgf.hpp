@@ -223,6 +223,10 @@ namespace irrpoly {
      * 2. x^r = k (mod val), где r = (p^n - 1) / (p - 1)
      * 3. deg[x^(r / q) (mod val)] > 0 для каждого 1 < q < r - простого множителя r
      * Кроме того, многочлен x является примитивным для любого поля GF[P].
+     * Подробную информацию по алгоритму можно найти здесь
+     * https://www.ams.org/journals/mcom/1992-59-200/S0025-5718-1992-1134730-7/S0025-5718-1992-1134730-7.pdf
+     * Возможные пути параллелизации данного алгоритма приведены в статье
+     * https://www.researchgate.net/publication/329358609_Parallelization_of_Algorithm_for_Primitive_Polynomials_Generation_in_Extended_Galois_Field_pm
      * @author Veronika Biryukova <biryukovaveronika@mail.ru>
      */
     template<uint32_t P>

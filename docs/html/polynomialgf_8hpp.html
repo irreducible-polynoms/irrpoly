@@ -254,7 +254,7 @@ template&lt;uint32_t P&gt; </div>
 <p>Алгоритм проверки многочлена на примитивность по определению. Многочлен является примитивным над полем GF[P], если выполнены три условия:</p><ol type="1">
 <li>элемент mp = (-1)^n * val[0] является примитивным элементом поля GF[P^n], т.е. k^((p-1) / q) != 1 для каждого q - простого множителя P-1 данный пункт не применим для P = 2 по объективным причинам</li>
 <li>x^r = k (mod val), где r = (p^n - 1) / (p - 1)</li>
-<li>deg[x^(r / q) (mod val)] &gt; 0 для каждого 1 &lt; q &lt; r - простого множителя r Кроме того, многочлен x является примитивным для любого поля GF[P]. <dl class="section author"><dt>Автор</dt><dd>Veronika Biryukova <a href="#" onclick="location.href='mai'+'lto:'+'bir'+'yu'+'kov'+'av'+'ero'+'ni'+'ka@'+'ma'+'il.'+'ru'; return false;">biryu<span style="display: none;">.nosp@m.</span>kova<span style="display: none;">.nosp@m.</span>veron<span style="display: none;">.nosp@m.</span>ika@<span style="display: none;">.nosp@m.</span>mail.<span style="display: none;">.nosp@m.</span>ru</a> </dd></dl>
+<li>deg[x^(r / q) (mod val)] &gt; 0 для каждого 1 &lt; q &lt; r - простого множителя r Кроме того, многочлен x является примитивным для любого поля GF[P]. Подробную информацию по алгоритму можно найти здесь <a href="https://www.ams.org/journals/mcom/1992-59-200/S0025-5718-1992-1134730-7/S0025-5718-1992-1134730-7.pdf">https://www.ams.org/journals/mcom/1992-59-200/S0025-5718-1992-1134730-7/S0025-5718-1992-1134730-7.pdf</a> Возможные пути параллелизации данного алгоритма приведены в статье <a href="https://www.researchgate.net/publication/329358609_Parallelization_of_Algorithm_for_Primitive_Polynomials_Generation_in_Extended_Galois_Field_pm">https://www.researchgate.net/publication/329358609_Parallelization_of_Algorithm_for_Primitive_Polynomials_Generation_in_Extended_Galois_Field_pm</a> <dl class="section author"><dt>Автор</dt><dd>Veronika Biryukova <a href="#" onclick="location.href='mai'+'lto:'+'bir'+'yu'+'kov'+'av'+'ero'+'ni'+'ka@'+'ma'+'il.'+'ru'; return false;">biryu<span style="display: none;">.nosp@m.</span>kova<span style="display: none;">.nosp@m.</span>veron<span style="display: none;">.nosp@m.</span>ika@<span style="display: none;">.nosp@m.</span>mail.<span style="display: none;">.nosp@m.</span>ru</a> </dd></dl>
 </li>
 </ol>
 
@@ -315,7 +315,7 @@ template&lt;uint32_t P&gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Чт 14 Ноя 2019 13:16:17. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Чт 14 Ноя 2019 14:30:53. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.16
 </small></address>
