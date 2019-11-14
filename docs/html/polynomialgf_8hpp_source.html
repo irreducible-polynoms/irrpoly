@@ -296,105 +296,105 @@ $(function() {
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    }</div>
 <div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160; </div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;    <span class="keyword">template</span>&lt;u<span class="keywordtype">int</span>32_t P&gt;</div>
-<div class="line"><a name="l00304"></a><span class="lineno"><a class="line" href="polynomialgf_8hpp.html#a58f4ff6a7b0e3c2e25b5e38384c2f1b6">  304</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="polynomialgf_8hpp.html#a58f4ff6a7b0e3c2e25b5e38384c2f1b6">is_irreducible_rabin</a>(<span class="keyword">const</span> <a class="code" href="classirrpoly_1_1polynomial.html">polynomialgf&lt;P&gt;</a> &amp;val) {</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        <span class="keywordflow">if</span> (val.is_zero()) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;        <span class="keyword">const</span> <span class="keyword">auto</span> n = val.degree();</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160; </div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        <span class="comment">// проверка вырожденных случаев</span></div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        <span class="keywordflow">if</span> (n == 0 || (val[0].is_zero() &amp;&amp; n &gt; 1)) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        <span class="keywordflow">if</span> (n == 1) { <span class="keywordflow">return</span> <span class="keyword">true</span>; }</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;    <span class="keyword">template</span>&lt;u<span class="keywordtype">int</span>32_t P&gt;</div>
+<div class="line"><a name="l00308"></a><span class="lineno"><a class="line" href="polynomialgf_8hpp.html#a58f4ff6a7b0e3c2e25b5e38384c2f1b6">  308</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="polynomialgf_8hpp.html#a58f4ff6a7b0e3c2e25b5e38384c2f1b6">is_irreducible_rabin</a>(<span class="keyword">const</span> <a class="code" href="classirrpoly_1_1polynomial.html">polynomialgf&lt;P&gt;</a> &amp;val) {</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        <span class="keywordflow">if</span> (val.is_zero()) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        <span class="keyword">const</span> <span class="keyword">auto</span> n = val.degree();</div>
 <div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160; </div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        <span class="comment">// функция разложения числа на множители</span></div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        <span class="keyword">auto</span> get_list = [](uint64_t n) {</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;            ::std::vector&lt;uint64_t&gt; list;</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> begin = n;</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;            <span class="keywordflow">for</span> (uint64_t d = 2; d * d &lt;= n; ++d) {</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;                <span class="keywordflow">if</span> (n % d) { <span class="keywordflow">continue</span>; }</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;                list.emplace_back(begin / d);</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;                <span class="keywordflow">while</span> (n % d == 0) { n /= d; }</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;            }</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;            <span class="keywordflow">if</span> (n != 1) { list.emplace_back(begin / n); }</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;            <span class="keywordflow">return</span> list;</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        };</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160; </div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        <span class="comment">// шаги 1-2</span></div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        <span class="keyword">auto</span> list = get_list(n);</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;        <a class="code" href="classirrpoly_1_1polynomial.html">polynomialgf&lt;P&gt;</a> tmp, x = <a class="code" href="classirrpoly_1_1polynomial.html">polynomialgf&lt;P&gt;</a>({0, 1});</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> i: list) {</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;            tmp = detail::x_pow_mod_sub(detail::integer_power(static_cast&lt;uint64_t&gt;(P), i), val, x);</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;            <span class="keywordflow">if</span> (tmp.is_zero() || <a class="code" href="polynomialgf_8hpp.html#a80b412b43964fdcc3f3adb1f9a9906c0">gcd</a>(val, tmp).degree() &gt; 0) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        }</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160; </div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        <span class="comment">// шаг 3</span></div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;        tmp = detail::x_pow_mod_sub(detail::integer_power(static_cast&lt;uint64_t&gt;(P), n), val, x);</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;        <span class="keywordflow">return</span> tmp.is_zero();</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    }</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160; </div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;    <span class="keyword">namespace </span>multithread {</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160; </div>
-<div class="line"><a name="l00341"></a><span class="lineno"><a class="line" href="structirrpoly_1_1multithread_1_1result__type.html">  341</a></span>&#160;        <span class="keyword">struct </span><a class="code" href="structirrpoly_1_1multithread_1_1result__type.html">result_type</a> {</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;            <span class="keywordtype">bool</span> irreducible;</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;            <span class="keywordtype">bool</span> primitive;</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        };</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160; </div>
-<div class="line"><a name="l00347"></a><span class="lineno"><a class="line" href="polynomialgf_8hpp.html#ae9f36426e236691c6f2df55dac11d75d">  347</a></span>&#160;        <span class="keyword">enum class</span> <a class="code" href="polynomialgf_8hpp.html#ae9f36426e236691c6f2df55dac11d75d">irreducible_method</a> {</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;            nil, </div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;            berlekamp, </div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;            rabin </div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;        };</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160; </div>
-<div class="line"><a name="l00354"></a><span class="lineno"><a class="line" href="polynomialgf_8hpp.html#a7a2be1b504f5fc03961da0f9a9a36d00">  354</a></span>&#160;        <span class="keyword">enum class</span> <a class="code" href="polynomialgf_8hpp.html#a7a2be1b504f5fc03961da0f9a9a36d00">primitive_method</a> {</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;            nil, </div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;            definition </div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;        };</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160; </div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;        <span class="keyword">template</span>&lt;u<span class="keywordtype">int</span>32_t P&gt;</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;        <span class="keyword">using</span> polychecker = <a class="code" href="classirrpoly_1_1checker.html">checker&lt;polynomialgf&lt;P&gt;</a>, result_type&gt;;</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160; </div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        <span class="comment">// проверка вырожденных случаев</span></div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        <span class="keywordflow">if</span> (n == 0 || (val[0].is_zero() &amp;&amp; n &gt; 1)) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        <span class="keywordflow">if</span> (n == 1) { <span class="keywordflow">return</span> <span class="keyword">true</span>; }</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160; </div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        <span class="comment">// функция разложения числа на множители</span></div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        <span class="keyword">auto</span> get_list = [](uint64_t n) {</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;            ::std::vector&lt;uint64_t&gt; list;</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;            <span class="keyword">const</span> <span class="keyword">auto</span> begin = n;</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;            <span class="keywordflow">for</span> (uint64_t d = 2; d * d &lt;= n; ++d) {</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;                <span class="keywordflow">if</span> (n % d) { <span class="keywordflow">continue</span>; }</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;                list.emplace_back(begin / d);</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;                <span class="keywordflow">while</span> (n % d == 0) { n /= d; }</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;            }</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;            <span class="keywordflow">if</span> (n != 1) { list.emplace_back(begin / n); }</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;            <span class="keywordflow">return</span> list;</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;        };</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160; </div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;        <span class="comment">// шаги 1-2</span></div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;        <span class="keyword">auto</span> list = get_list(n);</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        <a class="code" href="classirrpoly_1_1polynomial.html">polynomialgf&lt;P&gt;</a> tmp, x = <a class="code" href="classirrpoly_1_1polynomial.html">polynomialgf&lt;P&gt;</a>({0, 1});</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> i: list) {</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;            tmp = detail::x_pow_mod_sub(detail::integer_power(static_cast&lt;uint64_t&gt;(P), i), val, x);</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;            <span class="keywordflow">if</span> (tmp.is_zero() || <a class="code" href="polynomialgf_8hpp.html#a80b412b43964fdcc3f3adb1f9a9906c0">gcd</a>(val, tmp).degree() &gt; 0) { <span class="keywordflow">return</span> <span class="keyword">false</span>; }</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;        }</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160; </div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;        <span class="comment">// шаг 3</span></div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;        tmp = detail::x_pow_mod_sub(detail::integer_power(static_cast&lt;uint64_t&gt;(P), n), val, x);</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        <span class="keywordflow">return</span> tmp.is_zero();</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;    }</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160; </div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;    <span class="keyword">namespace </span>multithread {</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160; </div>
+<div class="line"><a name="l00345"></a><span class="lineno"><a class="line" href="structirrpoly_1_1multithread_1_1result__type.html">  345</a></span>&#160;        <span class="keyword">struct </span><a class="code" href="structirrpoly_1_1multithread_1_1result__type.html">result_type</a> {</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;            <span class="keywordtype">bool</span> irreducible;</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;            <span class="keywordtype">bool</span> primitive;</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;        };</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160; </div>
+<div class="line"><a name="l00351"></a><span class="lineno"><a class="line" href="polynomialgf_8hpp.html#ae9f36426e236691c6f2df55dac11d75d">  351</a></span>&#160;        <span class="keyword">enum class</span> <a class="code" href="polynomialgf_8hpp.html#ae9f36426e236691c6f2df55dac11d75d">irreducible_method</a> {</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;            nil, </div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;            berlekamp, </div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;            rabin </div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;        };</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160; </div>
+<div class="line"><a name="l00358"></a><span class="lineno"><a class="line" href="polynomialgf_8hpp.html#a7a2be1b504f5fc03961da0f9a9a36d00">  358</a></span>&#160;        <span class="keyword">enum class</span> <a class="code" href="polynomialgf_8hpp.html#a7a2be1b504f5fc03961da0f9a9a36d00">primitive_method</a> {</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;            nil, </div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;            definition </div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;        };</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160; </div>
 <div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;        <span class="keyword">template</span>&lt;u<span class="keywordtype">int</span>32_t P&gt;</div>
-<div class="line"><a name="l00364"></a><span class="lineno"><a class="line" href="polynomialgf_8hpp.html#ada8634e524c49721c6b5d3e262cfc175">  364</a></span>&#160;        <span class="keyword">typename</span> <a class="code" href="classirrpoly_1_1checker.html">checker&lt;polynomialgf&lt;P&gt;</a>, <a class="code" href="structirrpoly_1_1multithread_1_1result__type.html">result_type</a>&gt;::check_func <a class="code" href="polynomialgf_8hpp.html#ada8634e524c49721c6b5d3e262cfc175">make_check_func</a>(</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;                <a class="code" href="polynomialgf_8hpp.html#ae9f36426e236691c6f2df55dac11d75d">irreducible_method</a> irr_meth, <a class="code" href="polynomialgf_8hpp.html#a7a2be1b504f5fc03961da0f9a9a36d00">primitive_method</a> prim_meth) {</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;            <span class="keywordflow">return</span> [=](<span class="keyword">const</span> <a class="code" href="classirrpoly_1_1polynomial.html">polynomialgf&lt;P&gt;</a> &amp;poly, <a class="code" href="structirrpoly_1_1multithread_1_1result__type.html">result_type</a> &amp;res) {</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;                <span class="comment">// в случае, когда проверка не выполняется устанавливается результат true</span></div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;                <span class="keywordflow">switch</span> (irr_meth) {</div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;                    <span class="keywordflow">case</span> irreducible_method::berlekamp:</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;                        res.irreducible = <a class="code" href="polynomialgf_8hpp.html#aa80aa0c65714a76d61a4e373b3dec477">is_irreducible_berlekamp</a>(poly);</div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;                        <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;                    <span class="keywordflow">case</span> irreducible_method::rabin:</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;                        res.irreducible = <a class="code" href="polynomialgf_8hpp.html#a58f4ff6a7b0e3c2e25b5e38384c2f1b6">is_irreducible_rabin</a>(poly);</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;                        <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;                    <span class="keywordflow">default</span>: <span class="comment">// irreducible_method::nil</span></div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;                        res.irreducible = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;                        <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;                }</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;                <span class="keywordflow">switch</span> (prim_meth) {</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;                    <span class="keywordflow">case</span> primitive_method::definition:</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;                        res.primitive = res.irreducible ? <a class="code" href="polynomialgf_8hpp.html#aab478c81d581fc4dbbc0ca4eec097038">is_primitive_definition</a>(poly) : <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;                        <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;                    <span class="keywordflow">default</span>: <span class="comment">// primitive_method::nil</span></div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;                        res.primitive = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;                        <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;                }</div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;            };</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;        }</div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160; </div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;    }</div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;}</div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160; </div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;<span class="preprocessor">#endif //POLYNOMIALGF_HPP</span></div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;        <span class="keyword">using</span> polychecker = <a class="code" href="classirrpoly_1_1checker.html">checker&lt;polynomialgf&lt;P&gt;</a>, result_type&gt;;</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160; </div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;        <span class="keyword">template</span>&lt;u<span class="keywordtype">int</span>32_t P&gt;</div>
+<div class="line"><a name="l00368"></a><span class="lineno"><a class="line" href="polynomialgf_8hpp.html#ada8634e524c49721c6b5d3e262cfc175">  368</a></span>&#160;        <span class="keyword">typename</span> <a class="code" href="classirrpoly_1_1checker.html">checker&lt;polynomialgf&lt;P&gt;</a>, <a class="code" href="structirrpoly_1_1multithread_1_1result__type.html">result_type</a>&gt;::check_func <a class="code" href="polynomialgf_8hpp.html#ada8634e524c49721c6b5d3e262cfc175">make_check_func</a>(</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;                <a class="code" href="polynomialgf_8hpp.html#ae9f36426e236691c6f2df55dac11d75d">irreducible_method</a> irr_meth, <a class="code" href="polynomialgf_8hpp.html#a7a2be1b504f5fc03961da0f9a9a36d00">primitive_method</a> prim_meth) {</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;            <span class="keywordflow">return</span> [=](<span class="keyword">const</span> <a class="code" href="classirrpoly_1_1polynomial.html">polynomialgf&lt;P&gt;</a> &amp;poly, <a class="code" href="structirrpoly_1_1multithread_1_1result__type.html">result_type</a> &amp;res) {</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;                <span class="comment">// в случае, когда проверка не выполняется устанавливается результат true</span></div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;                <span class="keywordflow">switch</span> (irr_meth) {</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;                    <span class="keywordflow">case</span> irreducible_method::berlekamp:</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;                        res.irreducible = <a class="code" href="polynomialgf_8hpp.html#aa80aa0c65714a76d61a4e373b3dec477">is_irreducible_berlekamp</a>(poly);</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;                        <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;                    <span class="keywordflow">case</span> irreducible_method::rabin:</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;                        res.irreducible = <a class="code" href="polynomialgf_8hpp.html#a58f4ff6a7b0e3c2e25b5e38384c2f1b6">is_irreducible_rabin</a>(poly);</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;                        <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;                    <span class="keywordflow">default</span>: <span class="comment">// irreducible_method::nil</span></div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;                        res.irreducible = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;                        <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;                }</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;                <span class="keywordflow">switch</span> (prim_meth) {</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;                    <span class="keywordflow">case</span> primitive_method::definition:</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;                        res.primitive = res.irreducible ? <a class="code" href="polynomialgf_8hpp.html#aab478c81d581fc4dbbc0ca4eec097038">is_primitive_definition</a>(poly) : <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;                        <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;                    <span class="keywordflow">default</span>: <span class="comment">// primitive_method::nil</span></div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;                        res.primitive = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;                        <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;                }</div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;            };</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;        }</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160; </div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;    }</div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;}</div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160; </div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;<span class="preprocessor">#endif //POLYNOMIALGF_HPP</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="apolynomialgf_8hpp_html_aab478c81d581fc4dbbc0ca4eec097038"><div class="ttname"><a href="polynomialgf_8hpp.html#aab478c81d581fc4dbbc0ca4eec097038">irrpoly::is_primitive_definition</a></div><div class="ttdeci">bool is_primitive_definition(const polynomialgf&lt; P &gt; &amp;val)</div><div class="ttdef"><b>Definition:</b> polynomialgf.hpp:227</div></div>
 <div class="ttc" id="aclassirrpoly_1_1gf_html"><div class="ttname"><a href="classirrpoly_1_1gf.html">irrpoly::gf</a></div><div class="ttdef"><b>Definition:</b> gf.hpp:29</div></div>
-<div class="ttc" id="apolynomialgf_8hpp_html_ada8634e524c49721c6b5d3e262cfc175"><div class="ttname"><a href="polynomialgf_8hpp.html#ada8634e524c49721c6b5d3e262cfc175">irrpoly::multithread::make_check_func</a></div><div class="ttdeci">checker&lt; polynomialgf&lt; P &gt;, result_type &gt;::check_func make_check_func(irreducible_method irr_meth, primitive_method prim_meth)</div><div class="ttdoc">Формируется универсальная функция проверки многочленов.</div><div class="ttdef"><b>Definition:</b> polynomialgf.hpp:364</div></div>
+<div class="ttc" id="apolynomialgf_8hpp_html_ada8634e524c49721c6b5d3e262cfc175"><div class="ttname"><a href="polynomialgf_8hpp.html#ada8634e524c49721c6b5d3e262cfc175">irrpoly::multithread::make_check_func</a></div><div class="ttdeci">checker&lt; polynomialgf&lt; P &gt;, result_type &gt;::check_func make_check_func(irreducible_method irr_meth, primitive_method prim_meth)</div><div class="ttdoc">Формируется универсальная функция проверки многочленов.</div><div class="ttdef"><b>Definition:</b> polynomialgf.hpp:368</div></div>
 <div class="ttc" id="apolynomialgf_8hpp_html_ab10709be7ce96e0c582d797e5707637a"><div class="ttname"><a href="polynomialgf_8hpp.html#ab10709be7ce96e0c582d797e5707637a">irrpoly::derivative</a></div><div class="ttdeci">polynomialgf&lt; P &gt; derivative(const polynomialgf&lt; P &gt; &amp;val)</div><div class="ttdoc">Вычисляет производную данного многочлена.</div><div class="ttdef"><b>Definition:</b> polynomialgf.hpp:32</div></div>
 <div class="ttc" id="aclassirrpoly_1_1gf_html_a8f8643eabd6e9e689b248f487ed7b55d"><div class="ttname"><a href="classirrpoly_1_1gf.html#a8f8643eabd6e9e689b248f487ed7b55d">irrpoly::gf::random</a></div><div class="ttdeci">static gf&lt; P &gt; random() noexcept</div><div class="ttdoc">Генерирует случайное число в пределах [0, P-1].</div><div class="ttdef"><b>Definition:</b> gf.hpp:120</div></div>
 <div class="ttc" id="agf_8hpp_html"><div class="ttname"><a href="gf_8hpp.html">gf.hpp</a></div></div>
-<div class="ttc" id="apolynomialgf_8hpp_html_ae9f36426e236691c6f2df55dac11d75d"><div class="ttname"><a href="polynomialgf_8hpp.html#ae9f36426e236691c6f2df55dac11d75d">irrpoly::multithread::irreducible_method</a></div><div class="ttdeci">irreducible_method</div><div class="ttdoc">Доступные методы проверки нанеприводимость.</div><div class="ttdef"><b>Definition:</b> polynomialgf.hpp:347</div></div>
-<div class="ttc" id="apolynomialgf_8hpp_html_a7a2be1b504f5fc03961da0f9a9a36d00"><div class="ttname"><a href="polynomialgf_8hpp.html#a7a2be1b504f5fc03961da0f9a9a36d00">irrpoly::multithread::primitive_method</a></div><div class="ttdeci">primitive_method</div><div class="ttdoc">Доступные методы проверки примитивность.</div><div class="ttdef"><b>Definition:</b> polynomialgf.hpp:354</div></div>
+<div class="ttc" id="apolynomialgf_8hpp_html_ae9f36426e236691c6f2df55dac11d75d"><div class="ttname"><a href="polynomialgf_8hpp.html#ae9f36426e236691c6f2df55dac11d75d">irrpoly::multithread::irreducible_method</a></div><div class="ttdeci">irreducible_method</div><div class="ttdoc">Доступные методы проверки нанеприводимость.</div><div class="ttdef"><b>Definition:</b> polynomialgf.hpp:351</div></div>
+<div class="ttc" id="apolynomialgf_8hpp_html_a7a2be1b504f5fc03961da0f9a9a36d00"><div class="ttname"><a href="polynomialgf_8hpp.html#a7a2be1b504f5fc03961da0f9a9a36d00">irrpoly::multithread::primitive_method</a></div><div class="ttdeci">primitive_method</div><div class="ttdoc">Доступные методы проверки примитивность.</div><div class="ttdef"><b>Definition:</b> polynomialgf.hpp:358</div></div>
 <div class="ttc" id="apolynomialgf_8hpp_html_a80b412b43964fdcc3f3adb1f9a9906c0"><div class="ttname"><a href="polynomialgf_8hpp.html#a80b412b43964fdcc3f3adb1f9a9906c0">irrpoly::gcd</a></div><div class="ttdeci">polynomialgf&lt; P &gt; gcd(polynomialgf&lt; P &gt; m, polynomialgf&lt; P &gt; n)</div><div class="ttdef"><b>Definition:</b> polynomialgf.hpp:48</div></div>
-<div class="ttc" id="astructirrpoly_1_1multithread_1_1result__type_html"><div class="ttname"><a href="structirrpoly_1_1multithread_1_1result__type.html">irrpoly::multithread::result_type</a></div><div class="ttdoc">Структура, представляющая результаты проверки многочлена.</div><div class="ttdef"><b>Definition:</b> polynomialgf.hpp:341</div></div>
-<div class="ttc" id="apolynomialgf_8hpp_html_a58f4ff6a7b0e3c2e25b5e38384c2f1b6"><div class="ttname"><a href="polynomialgf_8hpp.html#a58f4ff6a7b0e3c2e25b5e38384c2f1b6">irrpoly::is_irreducible_rabin</a></div><div class="ttdeci">bool is_irreducible_rabin(const polynomialgf&lt; P &gt; &amp;val)</div><div class="ttdef"><b>Definition:</b> polynomialgf.hpp:304</div></div>
+<div class="ttc" id="astructirrpoly_1_1multithread_1_1result__type_html"><div class="ttname"><a href="structirrpoly_1_1multithread_1_1result__type.html">irrpoly::multithread::result_type</a></div><div class="ttdoc">Структура, представляющая результаты проверки многочлена.</div><div class="ttdef"><b>Definition:</b> polynomialgf.hpp:345</div></div>
+<div class="ttc" id="apolynomialgf_8hpp_html_a58f4ff6a7b0e3c2e25b5e38384c2f1b6"><div class="ttname"><a href="polynomialgf_8hpp.html#a58f4ff6a7b0e3c2e25b5e38384c2f1b6">irrpoly::is_irreducible_rabin</a></div><div class="ttdeci">bool is_irreducible_rabin(const polynomialgf&lt; P &gt; &amp;val)</div><div class="ttdef"><b>Definition:</b> polynomialgf.hpp:308</div></div>
 <div class="ttc" id="apolynomialgf_8hpp_html_aa80aa0c65714a76d61a4e373b3dec477"><div class="ttname"><a href="polynomialgf_8hpp.html#aa80aa0c65714a76d61a4e373b3dec477">irrpoly::is_irreducible_berlekamp</a></div><div class="ttdeci">bool is_irreducible_berlekamp(const polynomialgf&lt; P &gt; &amp;val)</div><div class="ttdef"><b>Definition:</b> polynomialgf.hpp:148</div></div>
 <div class="ttc" id="aclassirrpoly_1_1checker_html"><div class="ttname"><a href="classirrpoly_1_1checker.html">irrpoly::checker</a></div><div class="ttdoc">Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P].</div><div class="ttdef"><b>Definition:</b> checker.hpp:112</div></div>
 <div class="ttc" id="achecker_8hpp_html"><div class="ttname"><a href="checker_8hpp.html">checker.hpp</a></div></div>
@@ -403,7 +403,7 @@ $(function() {
 <div class="ttc" id="aclassirrpoly_1_1polynomial_html"><div class="ttname"><a href="classirrpoly_1_1polynomial.html">irrpoly::polynomial</a></div><div class="ttdef"><b>Definition:</b> polynomial.hpp:27</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Чт 14 Ноя 2019 12:15:26. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Чт 14 Ноя 2019 12:58:50. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.16
 </small></address>
