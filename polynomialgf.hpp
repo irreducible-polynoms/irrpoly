@@ -298,6 +298,10 @@ namespace irrpoly {
  * 3. если условия 1-2 выполнены для всех n_i, проверяем их для n.
  * Если для n получаем результат 0, то val неприводим.
  * Кроме того, все многочлены первой степени неприводимы в любом поле.
+ * Подробную информацию по алгоритму можно найти здесь:
+ * https://www.fing.edu.uy/inco/pedeciba/bibliote/reptec/TR0116.pdf
+ * или на странице Википедии в разделе Rabin's test of irreducibility
+ * https://en.wikipedia.org/wiki/Factorization_of_polynomials_over_finite_fields
  * @author Anastasia Chekhoeva <A89168226876@yandex.ru>
  */
     template<uint32_t P>
