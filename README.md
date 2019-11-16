@@ -25,7 +25,7 @@
 погружено в `namespace multithread`, кроме того, весь код заголовочных файлов помещён в
 `namespace irrpoly`.
 
-В файле [polynomialgf.hpp](polynomialgf.hpp) реализованы следующие алгоритмы:
+В файле [polynomialgf.hpp](include/irrpoly/polynomialgf.hpp) реализованы следующие алгоритмы:
 - `gcd` - поиск наибольшего общего делителя двух многочленов
 - `is_irreducible_berlekamp` - проверка многочлена на неприводимость методом Берлекампа
 - `is_irreducible_rabin` - проверка многочлена на неприводимость методом Рабина
