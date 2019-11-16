@@ -7,5 +7,4 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${PROJECT_SOURCE_DIR}/bin/release")
 add_executable(${PROJECT_NAME} "${SOURCES}")
 # задаём имя исполняемого файла
 get_filename_component(CURRDIR ${CMAKE_CURRENT_SOURCE_DIR} NAME)
-set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_OUTPUT_NAME "${CURRDIR}")
-set_target_properties(${PROJECT_NAME} PROPERTIES RELEASE_OUTPUT_NAME "${CURRDIR}")
+set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "${CURRDIR}")
