@@ -1,0 +1,156 @@
+.TH "/Users/vadimpiven/Development/irrpoly/include/irrpoly/polynomial.hpp" 3 "Сб 16 Ноя 2019" "Version 1.0.0" "irrpoly" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+/Users/vadimpiven/Development/irrpoly/include/irrpoly/polynomial.hpp
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <vector>\fP
+.br
+\fC#include <cassert>\fP
+.br
+\fC#include <ostream>\fP
+.br
+\fC#include <algorithm>\fP
+.br
+\fC#include <initializer_list>\fP
+.br
+
+.SS "Классы"
+
+.in +1c
+.ti -1c
+.RI "class \fBirrpoly::polynomial< T >\fP"
+.br
+.ti -1c
+.RI "struct \fBirrpoly::detail::negate\fP"
+.br
+.ti -1c
+.RI "struct \fBirrpoly::detail::plus\fP"
+.br
+.ti -1c
+.RI "struct \fBirrpoly::detail::minus\fP"
+.br
+.ti -1c
+.RI "class \fBirrpoly::polynomial< T >\fP"
+.br
+.in -1c
+.SS "Функции"
+
+.in +1c
+.ti -1c
+.RI "template<typename T , typename N > void \fBirrpoly::detail::division_impl\fP (polynomial< T > &q, polynomial< T > &u, const polynomial< T > &v, N n, N k)"
+.br
+.ti -1c
+.RI "template<class T , class N > T \fBirrpoly::detail::integer_power\fP (T t, N n)"
+.br
+.ti -1c
+.RI "template<typename T > ::std::pair< polynomial< T >, polynomial< T > > \fBirrpoly::detail::division\fP (polynomial< T > u, const polynomial< T > &v)"
+.br
+.ti -1c
+.RI "template<typename T > ::std::pair< polynomial< T >, polynomial< T > > \fBirrpoly::quotient_remainder\fP (const polynomial< T > &dividend, const polynomial< T > &divisor)"
+.br
+.ti -1c
+.RI "template<class T > polynomial< T > \fBirrpoly::operator+\fP (const polynomial< T > &a, const polynomial< T > &b)"
+.br
+.ti -1c
+.RI "template<class T > polynomial< T > \fBirrpoly::operator+\fP (polynomial< T > &&a, const polynomial< T > &b)"
+.br
+.ti -1c
+.RI "template<class T > polynomial< T > \fBirrpoly::operator+\fP (const polynomial< T > &a, polynomial< T > &&b)"
+.br
+.ti -1c
+.RI "template<class T > polynomial< T > \fBirrpoly::operator+\fP (polynomial< T > &&a, polynomial< T > &&b)"
+.br
+.ti -1c
+.RI "template<class T > polynomial< T > \fBirrpoly::operator\-\fP (const polynomial< T > &a, const polynomial< T > &b)"
+.br
+.ti -1c
+.RI "template<class T > polynomial< T > \fBirrpoly::operator\-\fP (polynomial< T > &&a, const polynomial< T > &b)"
+.br
+.ti -1c
+.RI "template<class T > polynomial< T > \fBirrpoly::operator\-\fP (const polynomial< T > &a, polynomial< T > &&b)"
+.br
+.ti -1c
+.RI "template<class T > polynomial< T > \fBirrpoly::operator\-\fP (polynomial< T > &&a, polynomial< T > &&b)"
+.br
+.ti -1c
+.RI "template<class T > polynomial< T > \fBirrpoly::operator*\fP (const polynomial< T > &a, const polynomial< T > &b)"
+.br
+.ti -1c
+.RI "template<class T > polynomial< T > \fBirrpoly::operator/\fP (const polynomial< T > &a, const polynomial< T > &b)"
+.br
+.ti -1c
+.RI "template<class T > polynomial< T > \fBirrpoly::operator%\fP (const polynomial< T > &a, const polynomial< T > &b)"
+.br
+.ti -1c
+.RI "template<class T , class U > polynomial< T > \fBirrpoly::operator+\fP (polynomial< T > a, const U &b)"
+.br
+.ti -1c
+.RI "template<class T , class U > polynomial< T > \fBirrpoly::operator\-\fP (polynomial< T > a, const U &b)"
+.br
+.ti -1c
+.RI "template<class T , class U > polynomial< T > \fBirrpoly::operator*\fP (polynomial< T > a, const U &b)"
+.br
+.ti -1c
+.RI "template<class T , class U > polynomial< T > \fBirrpoly::operator/\fP (polynomial< T > a, const U &b)"
+.br
+.ti -1c
+.RI "template<class T , class U > polynomial< T > \fBirrpoly::operator%\fP (const polynomial< T > &, const U &)"
+.br
+.ti -1c
+.RI "template<class U , class T > polynomial< T > \fBirrpoly::operator+\fP (const U &a, polynomial< T > b)"
+.br
+.ti -1c
+.RI "template<class U , class T > polynomial< T > \fBirrpoly::operator\-\fP (const U &a, polynomial< T > b)"
+.br
+.ti -1c
+.RI "template<class U , class T > polynomial< T > \fBirrpoly::operator*\fP (const U &a, polynomial< T > b)"
+.br
+.ti -1c
+.RI "template<class T > bool \fBirrpoly::operator==\fP (const polynomial< T > &a, const polynomial< T > &b)"
+.br
+.ti -1c
+.RI "template<class T > bool \fBirrpoly::operator!=\fP (const polynomial< T > &a, const polynomial< T > &b)"
+.br
+.ti -1c
+.RI "template<typename T , typename U > polynomial< T > \fBirrpoly::operator>>\fP (polynomial< T > a, const U &b)"
+.br
+.ti -1c
+.RI "template<typename T , typename U > polynomial< T > \fBirrpoly::operator<<\fP (polynomial< T > a, const U &b)"
+.br
+.ti -1c
+.RI "template<class T > polynomial< T > \fBirrpoly::operator\-\fP (polynomial< T > a)"
+.br
+.ti -1c
+.RI "template<class charT , class traits , class T > ::std::basic_ostream< charT, traits > & \fBirrpoly::operator<<\fP (::std::basic_ostream< charT, traits > &os, const polynomial< T > &poly)"
+.br
+.in -1c
+.SS "Переменные"
+
+.in +1c
+.ti -1c
+.RI "template<class T > polynomial< T > \fBirrpoly::zero_element\fP (::std::multiplies< polynomial< T > >)"
+.br
+.ti -1c
+.RI "template<class T > polynomial< T > \fBirrpoly::identity_element\fP (::std::multiplies< polynomial< T > >)"
+.br
+.in -1c
+.SH "Подробное описание"
+.PP 
+
+.PP
+\fBАвтор\fP
+.RS 4
+John Maddock 2006, Jeremy William Murphy 2015 @license Use, modification and distribution are subject to the Boost Software License, Version 1\&.0\&. (See accompanying file LICENSE_1_0\&.txt or copy at http://www.boost.org/LICENSE_1_0.txt) @url https://www.boost.org/doc/libs/1_71_0/ 
+.RE
+.PP
+
+.SH "Переменные"
+.PP 
+.SS "template<class T > polynomial<T> irrpoly::zero_element(::std::multiplies< polynomial< T > >)"
+Returns the zero element for multiplication of polynomials\&. 
+.SH "Автор"
+.PP 
+Автоматически создано Doxygen для irrpoly из исходного текста\&.

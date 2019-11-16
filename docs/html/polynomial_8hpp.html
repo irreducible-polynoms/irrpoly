@@ -1,0 +1,262 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.16"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>irrpoly: Файл /Users/vadimpiven/Development/irrpoly/include/irrpoly/polynomial.hpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script><script type="text/javascript" async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">irrpoly
+   &#160;<span id="projectnumber">1.0.0</span>
+   </div>
+   <div id="projectbrief">Проверка многочленов на неприводимость и примитивность над заданным полем Галуа</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.8.16 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Поиск');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_a47f288b95001ef386fb9b537ec42d10.html">irrpoly</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Классы</a> &#124;
+<a href="#func-members">Функции</a> &#124;
+<a href="#var-members">Переменные</a>  </div>
+  <div class="headertitle">
+<div class="title">Файл polynomial.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &lt;vector&gt;</code><br />
+<code>#include &lt;cassert&gt;</code><br />
+<code>#include &lt;ostream&gt;</code><br />
+<code>#include &lt;algorithm&gt;</code><br />
+<code>#include &lt;initializer_list&gt;</code><br />
+</div>
+<p><a href="polynomial_8hpp_source.html">См. исходные тексты.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Классы</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1polynomial.html">irrpoly::polynomial&lt; T &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structirrpoly_1_1detail_1_1negate.html">irrpoly::detail::negate</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structirrpoly_1_1detail_1_1plus.html">irrpoly::detail::plus</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structirrpoly_1_1detail_1_1minus.html">irrpoly::detail::minus</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1polynomial.html">irrpoly::polynomial&lt; T &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Функции</h2></td></tr>
+<tr class="memitem:afbd6730a9d8c1c2099b15ff17ffbef51"><td class="memTemplParams" colspan="2"><a id="afbd6730a9d8c1c2099b15ff17ffbef51"></a>
+template&lt;typename T , typename N &gt; </td></tr>
+<tr class="memitem:afbd6730a9d8c1c2099b15ff17ffbef51"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::detail::division_impl</b> (polynomial&lt; T &gt; &amp;q, polynomial&lt; T &gt; &amp;u, const polynomial&lt; T &gt; &amp;v, N n, N k)</td></tr>
+<tr class="separator:afbd6730a9d8c1c2099b15ff17ffbef51"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e3b7520ebf594f242f8f7cce0f7c1c0"><td class="memTemplParams" colspan="2"><a id="a3e3b7520ebf594f242f8f7cce0f7c1c0"></a>
+template&lt;class T , class N &gt; </td></tr>
+<tr class="memitem:a3e3b7520ebf594f242f8f7cce0f7c1c0"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::detail::integer_power</b> (T t, N n)</td></tr>
+<tr class="separator:a3e3b7520ebf594f242f8f7cce0f7c1c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d7b42e6d2d920c46707d288db6ae497"><td class="memTemplParams" colspan="2"><a id="a6d7b42e6d2d920c46707d288db6ae497"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a6d7b42e6d2d920c46707d288db6ae497"><td class="memTemplItemLeft" align="right" valign="top">::std::pair&lt; polynomial&lt; T &gt;, polynomial&lt; T &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::detail::division</b> (polynomial&lt; T &gt; u, const polynomial&lt; T &gt; &amp;v)</td></tr>
+<tr class="separator:a6d7b42e6d2d920c46707d288db6ae497"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a16f914ff1e9172ec2ae6bb369a989d4b"><td class="memTemplParams" colspan="2"><a id="a16f914ff1e9172ec2ae6bb369a989d4b"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a16f914ff1e9172ec2ae6bb369a989d4b"><td class="memTemplItemLeft" align="right" valign="top">::std::pair&lt; polynomial&lt; T &gt;, polynomial&lt; T &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::quotient_remainder</b> (const polynomial&lt; T &gt; &amp;dividend, const polynomial&lt; T &gt; &amp;divisor)</td></tr>
+<tr class="separator:a16f914ff1e9172ec2ae6bb369a989d4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e1e828d5030cee73c7baeedd60bfdcb"><td class="memTemplParams" colspan="2"><a id="a6e1e828d5030cee73c7baeedd60bfdcb"></a>
+template&lt;class T &gt; </td></tr>
+<tr class="memitem:a6e1e828d5030cee73c7baeedd60bfdcb"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator+</b> (const polynomial&lt; T &gt; &amp;a, const polynomial&lt; T &gt; &amp;b)</td></tr>
+<tr class="separator:a6e1e828d5030cee73c7baeedd60bfdcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb26efebf0a2d479d8aede66b2759459"><td class="memTemplParams" colspan="2"><a id="aeb26efebf0a2d479d8aede66b2759459"></a>
+template&lt;class T &gt; </td></tr>
+<tr class="memitem:aeb26efebf0a2d479d8aede66b2759459"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator+</b> (polynomial&lt; T &gt; &amp;&amp;a, const polynomial&lt; T &gt; &amp;b)</td></tr>
+<tr class="separator:aeb26efebf0a2d479d8aede66b2759459"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9268d6deb43ec7634c9d72b84c621e7"><td class="memTemplParams" colspan="2"><a id="ab9268d6deb43ec7634c9d72b84c621e7"></a>
+template&lt;class T &gt; </td></tr>
+<tr class="memitem:ab9268d6deb43ec7634c9d72b84c621e7"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator+</b> (const polynomial&lt; T &gt; &amp;a, polynomial&lt; T &gt; &amp;&amp;b)</td></tr>
+<tr class="separator:ab9268d6deb43ec7634c9d72b84c621e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8e851ad23cc44a8fd2fdd7fa46e6630"><td class="memTemplParams" colspan="2"><a id="ad8e851ad23cc44a8fd2fdd7fa46e6630"></a>
+template&lt;class T &gt; </td></tr>
+<tr class="memitem:ad8e851ad23cc44a8fd2fdd7fa46e6630"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator+</b> (polynomial&lt; T &gt; &amp;&amp;a, polynomial&lt; T &gt; &amp;&amp;b)</td></tr>
+<tr class="separator:ad8e851ad23cc44a8fd2fdd7fa46e6630"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38b9acad478e9c1f11d2894761e039f8"><td class="memTemplParams" colspan="2"><a id="a38b9acad478e9c1f11d2894761e039f8"></a>
+template&lt;class T &gt; </td></tr>
+<tr class="memitem:a38b9acad478e9c1f11d2894761e039f8"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator-</b> (const polynomial&lt; T &gt; &amp;a, const polynomial&lt; T &gt; &amp;b)</td></tr>
+<tr class="separator:a38b9acad478e9c1f11d2894761e039f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a736513daf37f52a09c69c6846c8803a5"><td class="memTemplParams" colspan="2"><a id="a736513daf37f52a09c69c6846c8803a5"></a>
+template&lt;class T &gt; </td></tr>
+<tr class="memitem:a736513daf37f52a09c69c6846c8803a5"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator-</b> (polynomial&lt; T &gt; &amp;&amp;a, const polynomial&lt; T &gt; &amp;b)</td></tr>
+<tr class="separator:a736513daf37f52a09c69c6846c8803a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b284c0a353b7acdaa5ddc41219ea737"><td class="memTemplParams" colspan="2"><a id="a2b284c0a353b7acdaa5ddc41219ea737"></a>
+template&lt;class T &gt; </td></tr>
+<tr class="memitem:a2b284c0a353b7acdaa5ddc41219ea737"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator-</b> (const polynomial&lt; T &gt; &amp;a, polynomial&lt; T &gt; &amp;&amp;b)</td></tr>
+<tr class="separator:a2b284c0a353b7acdaa5ddc41219ea737"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8e9d7549b56492ef8e1fe8a3490ed83"><td class="memTemplParams" colspan="2"><a id="ac8e9d7549b56492ef8e1fe8a3490ed83"></a>
+template&lt;class T &gt; </td></tr>
+<tr class="memitem:ac8e9d7549b56492ef8e1fe8a3490ed83"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator-</b> (polynomial&lt; T &gt; &amp;&amp;a, polynomial&lt; T &gt; &amp;&amp;b)</td></tr>
+<tr class="separator:ac8e9d7549b56492ef8e1fe8a3490ed83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2520e8fdb4a4256df5cd1039a0b970cf"><td class="memTemplParams" colspan="2"><a id="a2520e8fdb4a4256df5cd1039a0b970cf"></a>
+template&lt;class T &gt; </td></tr>
+<tr class="memitem:a2520e8fdb4a4256df5cd1039a0b970cf"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator*</b> (const polynomial&lt; T &gt; &amp;a, const polynomial&lt; T &gt; &amp;b)</td></tr>
+<tr class="separator:a2520e8fdb4a4256df5cd1039a0b970cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8af8f8ef1a4f3a84622d39a0ee07897"><td class="memTemplParams" colspan="2"><a id="ac8af8f8ef1a4f3a84622d39a0ee07897"></a>
+template&lt;class T &gt; </td></tr>
+<tr class="memitem:ac8af8f8ef1a4f3a84622d39a0ee07897"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator/</b> (const polynomial&lt; T &gt; &amp;a, const polynomial&lt; T &gt; &amp;b)</td></tr>
+<tr class="separator:ac8af8f8ef1a4f3a84622d39a0ee07897"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a03524f02ce0dc592021be8cf2d43ea8a"><td class="memTemplParams" colspan="2"><a id="a03524f02ce0dc592021be8cf2d43ea8a"></a>
+template&lt;class T &gt; </td></tr>
+<tr class="memitem:a03524f02ce0dc592021be8cf2d43ea8a"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator%</b> (const polynomial&lt; T &gt; &amp;a, const polynomial&lt; T &gt; &amp;b)</td></tr>
+<tr class="separator:a03524f02ce0dc592021be8cf2d43ea8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b86d7181a7921dd690460e9c740563d"><td class="memTemplParams" colspan="2"><a id="a5b86d7181a7921dd690460e9c740563d"></a>
+template&lt;class T , class U &gt; </td></tr>
+<tr class="memitem:a5b86d7181a7921dd690460e9c740563d"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator+</b> (polynomial&lt; T &gt; a, const U &amp;b)</td></tr>
+<tr class="separator:a5b86d7181a7921dd690460e9c740563d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad30072fe51e7d9c9846bbb240beea5c4"><td class="memTemplParams" colspan="2"><a id="ad30072fe51e7d9c9846bbb240beea5c4"></a>
+template&lt;class T , class U &gt; </td></tr>
+<tr class="memitem:ad30072fe51e7d9c9846bbb240beea5c4"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator-</b> (polynomial&lt; T &gt; a, const U &amp;b)</td></tr>
+<tr class="separator:ad30072fe51e7d9c9846bbb240beea5c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae7a2b07578fd7fc759771540cb433cd0"><td class="memTemplParams" colspan="2"><a id="ae7a2b07578fd7fc759771540cb433cd0"></a>
+template&lt;class T , class U &gt; </td></tr>
+<tr class="memitem:ae7a2b07578fd7fc759771540cb433cd0"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator*</b> (polynomial&lt; T &gt; a, const U &amp;b)</td></tr>
+<tr class="separator:ae7a2b07578fd7fc759771540cb433cd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10d7dc0fc988067e90fbad057ba36cdf"><td class="memTemplParams" colspan="2"><a id="a10d7dc0fc988067e90fbad057ba36cdf"></a>
+template&lt;class T , class U &gt; </td></tr>
+<tr class="memitem:a10d7dc0fc988067e90fbad057ba36cdf"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator/</b> (polynomial&lt; T &gt; a, const U &amp;b)</td></tr>
+<tr class="separator:a10d7dc0fc988067e90fbad057ba36cdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e20afb5b50bc7f6a9046b1424b86959"><td class="memTemplParams" colspan="2"><a id="a6e20afb5b50bc7f6a9046b1424b86959"></a>
+template&lt;class T , class U &gt; </td></tr>
+<tr class="memitem:a6e20afb5b50bc7f6a9046b1424b86959"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator%</b> (const polynomial&lt; T &gt; &amp;, const U &amp;)</td></tr>
+<tr class="separator:a6e20afb5b50bc7f6a9046b1424b86959"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50b3c8f2a663d10a3eff38e1b5f067e0"><td class="memTemplParams" colspan="2"><a id="a50b3c8f2a663d10a3eff38e1b5f067e0"></a>
+template&lt;class U , class T &gt; </td></tr>
+<tr class="memitem:a50b3c8f2a663d10a3eff38e1b5f067e0"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator+</b> (const U &amp;a, polynomial&lt; T &gt; b)</td></tr>
+<tr class="separator:a50b3c8f2a663d10a3eff38e1b5f067e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6331e5dc3c0d78f4a59b03354610c83c"><td class="memTemplParams" colspan="2"><a id="a6331e5dc3c0d78f4a59b03354610c83c"></a>
+template&lt;class U , class T &gt; </td></tr>
+<tr class="memitem:a6331e5dc3c0d78f4a59b03354610c83c"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator-</b> (const U &amp;a, polynomial&lt; T &gt; b)</td></tr>
+<tr class="separator:a6331e5dc3c0d78f4a59b03354610c83c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a799fb61894a860280e0ccdd722778c85"><td class="memTemplParams" colspan="2"><a id="a799fb61894a860280e0ccdd722778c85"></a>
+template&lt;class U , class T &gt; </td></tr>
+<tr class="memitem:a799fb61894a860280e0ccdd722778c85"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator*</b> (const U &amp;a, polynomial&lt; T &gt; b)</td></tr>
+<tr class="separator:a799fb61894a860280e0ccdd722778c85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7db385d807f20c3a1e81657ba7d03d7a"><td class="memTemplParams" colspan="2"><a id="a7db385d807f20c3a1e81657ba7d03d7a"></a>
+template&lt;class T &gt; </td></tr>
+<tr class="memitem:a7db385d807f20c3a1e81657ba7d03d7a"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator==</b> (const polynomial&lt; T &gt; &amp;a, const polynomial&lt; T &gt; &amp;b)</td></tr>
+<tr class="separator:a7db385d807f20c3a1e81657ba7d03d7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6dc15a07079f921322b7cd0a34b6c3dc"><td class="memTemplParams" colspan="2"><a id="a6dc15a07079f921322b7cd0a34b6c3dc"></a>
+template&lt;class T &gt; </td></tr>
+<tr class="memitem:a6dc15a07079f921322b7cd0a34b6c3dc"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator!=</b> (const polynomial&lt; T &gt; &amp;a, const polynomial&lt; T &gt; &amp;b)</td></tr>
+<tr class="separator:a6dc15a07079f921322b7cd0a34b6c3dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc7bb479090f58223b736cbff95ff068"><td class="memTemplParams" colspan="2"><a id="adc7bb479090f58223b736cbff95ff068"></a>
+template&lt;typename T , typename U &gt; </td></tr>
+<tr class="memitem:adc7bb479090f58223b736cbff95ff068"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator&gt;&gt;</b> (polynomial&lt; T &gt; a, const U &amp;b)</td></tr>
+<tr class="separator:adc7bb479090f58223b736cbff95ff068"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6806697322bd3be022df3af0b4f21dce"><td class="memTemplParams" colspan="2"><a id="a6806697322bd3be022df3af0b4f21dce"></a>
+template&lt;typename T , typename U &gt; </td></tr>
+<tr class="memitem:a6806697322bd3be022df3af0b4f21dce"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator&lt;&lt;</b> (polynomial&lt; T &gt; a, const U &amp;b)</td></tr>
+<tr class="separator:a6806697322bd3be022df3af0b4f21dce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a922f160ea9ec76b38e1e930675444432"><td class="memTemplParams" colspan="2"><a id="a922f160ea9ec76b38e1e930675444432"></a>
+template&lt;class T &gt; </td></tr>
+<tr class="memitem:a922f160ea9ec76b38e1e930675444432"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator-</b> (polynomial&lt; T &gt; a)</td></tr>
+<tr class="separator:a922f160ea9ec76b38e1e930675444432"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a28477d6cfed41e394a40689382a71187"><td class="memTemplParams" colspan="2"><a id="a28477d6cfed41e394a40689382a71187"></a>
+template&lt;class charT , class traits , class T &gt; </td></tr>
+<tr class="memitem:a28477d6cfed41e394a40689382a71187"><td class="memTemplItemLeft" align="right" valign="top">::std::basic_ostream&lt; charT, traits &gt; &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::operator&lt;&lt;</b> (::std::basic_ostream&lt; charT, traits &gt; &amp;os, const polynomial&lt; T &gt; &amp;poly)</td></tr>
+<tr class="separator:a28477d6cfed41e394a40689382a71187"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Переменные</h2></td></tr>
+<tr class="memitem:a5fb54cb542ea108648e11b5517a0ef16"><td class="memTemplParams" colspan="2">template&lt;class T &gt; </td></tr>
+<tr class="memitem:a5fb54cb542ea108648e11b5517a0ef16"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="polynomial_8hpp.html#a5fb54cb542ea108648e11b5517a0ef16">irrpoly::zero_element</a> (::std::multiplies&lt; polynomial&lt; T &gt; &gt;)</td></tr>
+<tr class="separator:a5fb54cb542ea108648e11b5517a0ef16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84aceef89fa30a74727a25358e2d0524"><td class="memTemplParams" colspan="2"><a id="a84aceef89fa30a74727a25358e2d0524"></a>
+template&lt;class T &gt; </td></tr>
+<tr class="memitem:a84aceef89fa30a74727a25358e2d0524"><td class="memTemplItemLeft" align="right" valign="top">polynomial&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::identity_element</b> (::std::multiplies&lt; polynomial&lt; T &gt; &gt;)</td></tr>
+<tr class="separator:a84aceef89fa30a74727a25358e2d0524"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
+<div class="textblock"><dl class="section author"><dt>Автор</dt><dd>John Maddock 2006, Jeremy William Murphy 2015 @license Use, modification and distribution are subject to the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>) @url <a href="https://www.boost.org/doc/libs/1_71_0/">https://www.boost.org/doc/libs/1_71_0/</a> </dd></dl>
+</div><h2 class="groupheader">Переменные</h2>
+<a id="file_a5fb54cb542ea108648e11b5517a0ef16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#file_a5fb54cb542ea108648e11b5517a0ef16">&#9670;&nbsp;</a></span>zero_element</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">polynomial&lt;T&gt; irrpoly::zero_element(::std::multiplies&lt; polynomial&lt; T &gt; &gt;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the zero element for multiplication of polynomials. </p>
+
+</div>
+</div>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Документация по irrpoly. Последние изменения: Сб 16 Ноя 2019 21:43:12. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.16
+</small></address>
+</body>
+</html>
