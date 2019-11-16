@@ -1,7 +1,7 @@
 #include <iostream>
 #include <thread>
 
-#include "polynomialgf.hpp"
+#include "irrpoly/polynomialgf.hpp"
 
 using namespace irrpoly;
 
@@ -52,76 +52,6 @@ std::vector<polynomialgf<P>> generate_irreducible(
     return arr;
 }
 
-/// Функция, формирующая данные для тестов. Результаты скопировать в файл test_input.
-void test() {
-    {
-        const uint32_t P = 2;
-        for (size_t i = 4; i < 24; ++i) {
-            for (size_t j = 0; j < i / 2; ++j) {
-                polynomialgf<P> p = random < P > (i);
-                std::cout << (is_irreducible_rabin(p) ? '1' : '0') << " "
-                          << (is_primitive_definition(p) ? '1' : '0') << " " << P << " "
-                          << p << std::endl;
-            }
-        }
-    }
-    {
-        const uint32_t P = 3;
-        for (size_t i = 4; i < 18; ++i) {
-            for (size_t j = 0; j < i / 2; ++j) {
-                polynomialgf<P> p = random < P > (i);
-                std::cout << (is_irreducible_rabin(p) ? '1' : '0') << " "
-                          << (is_primitive_definition(p) ? '1' : '0') << " " << P << " "
-                          << p << std::endl;
-            }
-        }
-    }
-    {
-        const uint32_t P = 5;
-        for (size_t i = 4; i < 14; ++i) {
-            for (size_t j = 0; j < i / 2; ++j) {
-                polynomialgf<P> p = random < P > (i);
-                std::cout << (is_irreducible_berlekamp(p) ? '1' : '0') << " "
-                          << (is_primitive_definition(p) ? '1' : '0') << " " << P << " "
-                          << p << std::endl;
-            }
-        }
-    }
-    {
-        const uint32_t P = 7;
-        for (size_t i = 4; i < 10; ++i) {
-            for (size_t j = 0; j < i / 2; ++j) {
-                polynomialgf<P> p = random < P > (i);
-                std::cout << (is_irreducible_berlekamp(p) ? '1' : '0') << " "
-                          << (is_primitive_definition(p) ? '1' : '0') << " " << P << " "
-                          << p << std::endl;
-            }
-        }
-    }
-    {
-        const uint32_t P = 11;
-        for (size_t i = 4; i < 6; ++i) {
-            for (size_t j = 0; j < i / 2; ++j) {
-                polynomialgf<P> p = random < P > (i);
-                std::cout << (is_irreducible_berlekamp(p) ? '1' : '0') << " "
-                          << (is_primitive_definition(p) ? '1' : '0') << " " << P << " "
-                          << p << std::endl;
-            }
-        }
-    }
-    {
-        const uint32_t P = 13;
-        for (size_t i = 4; i < 4; ++i) {
-            for (size_t j = 0; j < i / 2; ++j) {
-                polynomialgf<P> p = random < P > (i);
-                std::cout << (is_irreducible_berlekamp(p) ? '1' : '0') << " "
-                          << (is_primitive_definition(p) ? '1' : '0') << " " << P << " "
-                          << p << std::endl;
-            }
-        }
-    }
-}
-
 int main() {
     // основание поля Галуа GF[P]
     const uint32_t P = 2;
@@ -144,30 +74,6 @@ int main() {
     for (const auto &p : poly) {
         std::cout << p << std::endl;
     }
-
-//    std::cout << "TEST DATA" << std::endl;
-//    test();
-    // copy output and save to file named "test_input" (WITHOUT EXTENSION!)
-    // use Wolfram Mathematica (program inside test_prog.nb)
-    // define function for validating the result
-    // f[irr_, prim_, m_, p_] :=
-    // irr == Boole[
-    //    IrreduciblePolynomialQ[Dot[Power[x, Range[0, Length[p] - 1]], p],
-    //     Modulus -> m]] &&
-    //  prim == Boole[
-    //    PrimitivePolynomialQ[Dot[Power[x, Range[0, Length[p] - 1]], p],
-    //     Modulus -> m]]
-    // open "input" file for read (CHANGE PATH TO FILE!)
-    // file = OpenRead["/Users/vadimpiven/Downloads/test_input"]
-    // validate results line by line
-    // While[Not[(irr = Read[file, Number]) === EndOfFile],
-    // prim = Read[file, Number]; m = Read[file, Number];
-    // p = Read[StringToStream[#], Number] & /@
-    //   StringSplit[StringTrim[ReadLine[file], ("{" | "}" | " ") ...],
-    //    ", "]; Print[f[irr, prim, m, p]]]
-    // EXPECTED RESULT IS COLUMN OF "True", if there is some False - this program has some errors
-    // close the file
-    // Close[file]
 
     return 0;
 }
