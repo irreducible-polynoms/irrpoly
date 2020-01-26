@@ -117,6 +117,7 @@ namespace irrpoly {
             sync s; ///< Объект синхронизации
             T data; ///< Охраняемые данные
             T def; ///< Значение data по умолчанию, устанавливаемое функцией reset
+            bool n; ///< True, если данные были обновлены но ещё не прочитаны
 
         public:
             /// Вид функции, проверяющей что ожидаемое изменение данных произошло
@@ -124,16 +125,24 @@ namespace irrpoly {
 
             /// Владение объектом data передаётся внутрь cell
             explicit
-            cell(T data, T def = T()) noexcept : s(), data(std::move(data)), def(std::move(def)) {}
+            cell(T data, T def = T()) noexcept : s(), data(std::move(data)), def(std::move(def)), n(false) {}
 
             /// Возвращает замороженный объект
             [[nodiscard]]
-            const T & get() const noexcept {
+            const T & get() noexcept {
+                n = false;
                 return data;
+            }
+
+            /// Сигнализирует, что есть новые непрочитанные данные
+            [[nodiscard]]
+            bool updated() const noexcept {
+                return n;
             }
 
             /// Устанавливает значение по умолчанию
             void reset() noexcept {
+                n = true;
                 data = T(def);
             }
 
@@ -141,13 +150,14 @@ namespace irrpoly {
             void set(T d) noexcept {
                 s.lock();
                 data = std::move(d);
+                n = true;
                 s.signal();
                 s.unlock();
             }
 
             /// Даёт разрешение на изменение объекта и ждёт, пока изменение произойдёт
             const T & wait_change(condition_func cond) noexcept {
-                while (!cond(data)) {
+                while (!(n && cond(data))) {
                     s.wait();
                 }
                 return data;
@@ -289,7 +299,7 @@ namespace irrpoly {
         public:
             explicit
             node(typename detail::grid<bool>::cell &busy) noexcept :
-                input({ .terminate = false, .val = value_type() }), _busy(busy), res(), cf(), thread() {
+                input({ false, value_type() }), _busy(busy), res(), cf(), thread() {
 #ifdef PTHREAD
                 pthread_attr_t thread_attr;
                 assert(!pthread_attr_init(&thread_attr));
@@ -309,7 +319,7 @@ namespace irrpoly {
 
             /// Многочлен, проверка которого выполнялась.
             [[nodiscard]]
-            const value_type &get() const {
+            const value_type &get() {
                 return input.get().val;
             }
 
@@ -319,7 +329,7 @@ namespace irrpoly {
              */
             void set(value_type v) {
                 _busy.reset();
-                input.set({ .terminate = false, .val = std::move(v) });
+                input.set({ false, std::move(v) });
             }
 
             /// Возвращает текущее состояние потока.
@@ -330,7 +340,7 @@ namespace irrpoly {
 
             /// Устанавливает флаг, требующий завершить работу потока по завершении вычислений.
             void terminate() noexcept {
-                input.set({ .terminate = true, .val = value_type() });
+                input.set({ true, value_type() });
             }
 
             /// Возвращает результат проверки текущего многочлена на неприводимость и примитивность.
