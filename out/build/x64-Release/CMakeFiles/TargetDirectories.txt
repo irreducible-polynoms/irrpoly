@@ -1,0 +1,15 @@
+C:/Users/Vadim Piven/Documents/Code/irrpoly/out/build/x64-Release/CMakeFiles/edit_cache.dir
+C:/Users/Vadim Piven/Documents/Code/irrpoly/out/build/x64-Release/CMakeFiles/rebuild_cache.dir
+C:/Users/Vadim Piven/Documents/Code/irrpoly/out/build/x64-Release/examples/CMakeFiles/edit_cache.dir
+C:/Users/Vadim Piven/Documents/Code/irrpoly/out/build/x64-Release/examples/CMakeFiles/rebuild_cache.dir
+C:/Users/Vadim Piven/Documents/Code/irrpoly/out/build/x64-Release/examples/general/CMakeFiles/irrpoly_examples_general.dir
+C:/Users/Vadim Piven/Documents/Code/irrpoly/out/build/x64-Release/examples/general/CMakeFiles/edit_cache.dir
+C:/Users/Vadim Piven/Documents/Code/irrpoly/out/build/x64-Release/examples/general/CMakeFiles/rebuild_cache.dir
+C:/Users/Vadim Piven/Documents/Code/irrpoly/out/build/x64-Release/examples/tms/CMakeFiles/irrpoly_examples_tms.dir
+C:/Users/Vadim Piven/Documents/Code/irrpoly/out/build/x64-Release/examples/tms/CMakeFiles/edit_cache.dir
+C:/Users/Vadim Piven/Documents/Code/irrpoly/out/build/x64-Release/examples/tms/CMakeFiles/rebuild_cache.dir
+C:/Users/Vadim Piven/Documents/Code/irrpoly/out/build/x64-Release/tests/CMakeFiles/edit_cache.dir
+C:/Users/Vadim Piven/Documents/Code/irrpoly/out/build/x64-Release/tests/CMakeFiles/rebuild_cache.dir
+C:/Users/Vadim Piven/Documents/Code/irrpoly/out/build/x64-Release/tests/wolfram/CMakeFiles/irrpoly_tests_wolfram.dir
+C:/Users/Vadim Piven/Documents/Code/irrpoly/out/build/x64-Release/tests/wolfram/CMakeFiles/edit_cache.dir
+C:/Users/Vadim Piven/Documents/Code/irrpoly/out/build/x64-Release/tests/wolfram/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,2 @@
+#pragma code_page(65001)
+1 /* CREATEPROCESS_MANIFEST_RESOURCE_ID */ 24 /* RT_MANIFEST */ "C:/Users/Vadim Piven/Documents/Code/irrpoly/out/build/x64-Debug/examples/tms/CMakeFiles/irrpoly_examples_tms.dir/embed.manifest"

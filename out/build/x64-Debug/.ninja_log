@@ -1,0 +1,17 @@
+# ninja log v5
+1	881	601767871	examples/tms/CMakeFiles/irrpoly_examples_tms.dir/main.cpp.obj	2638063440b62c74
+881	1254	601767872	../../../examples/tms/bin/debug/tms.exe	660a04cda65921c
+0	1188	601769172	examples/tms/CMakeFiles/irrpoly_examples_tms.dir/main.cpp.obj	2638063440b62c74
+1188	1467	601769172	../../../examples/tms/bin/debug/tms.exe	660a04cda65921c
+0	925	601769209	examples/tms/CMakeFiles/irrpoly_examples_tms.dir/main.cpp.obj	2638063440b62c74
+926	1202	601769209	../../../examples/tms/bin/debug/tms.exe	660a04cda65921c
+1	909	601769423	examples/tms/CMakeFiles/irrpoly_examples_tms.dir/main.cpp.obj	2638063440b62c74
+909	1190	601769423	../../../examples/tms/bin/debug/tms.exe	660a04cda65921c
+1	885	601769752	examples/tms/CMakeFiles/irrpoly_examples_tms.dir/main.cpp.obj	2638063440b62c74
+886	1169	601769752	../../../examples/tms/bin/debug/tms.exe	660a04cda65921c
+1	896	601770828	examples/tms/CMakeFiles/irrpoly_examples_tms.dir/main.cpp.obj	2638063440b62c74
+897	1169	601770828	../../../examples/tms/bin/debug/tms.exe	660a04cda65921c
+1	1186	601771949	examples/tms/CMakeFiles/irrpoly_examples_tms.dir/main.cpp.obj	2638063440b62c74
+1187	1456	601771949	../../../examples/tms/bin/debug/tms.exe	660a04cda65921c
+0	996	601772137	examples/tms/CMakeFiles/irrpoly_examples_tms.dir/main.cpp.obj	2638063440b62c74
+996	1281	601772137	../../../examples/tms/bin/debug/tms.exe	660a04cda65921c

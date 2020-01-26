@@ -9,6 +9,8 @@
 #ifndef IRRPOLY_CHECKER_HPP
 #define IRRPOLY_CHECKER_HPP
 
+#include <iostream>
+
 #include <thread>
 #include <cassert>
 #include <functional>
@@ -22,7 +24,7 @@
 
 #else
 
-#include <mutex>
+#include <shared_mutex>
 #include <condition_variable>
 
 #endif
@@ -38,9 +40,9 @@ namespace irrpoly {
             pthread_mutex_t mutex;
             pthread_cond_t cond;
 #else
-            ::std::mutex mutex;
-            ::std::unique_lock<::std::mutex> lk;
-            ::std::condition_variable cond;
+            ::std::shared_mutex mutex;
+            ::std::unique_lock<::std::shared_mutex> lk;
+            ::std::condition_variable_any cond;
 #endif
 
         public:
@@ -55,7 +57,7 @@ namespace irrpoly {
                 assert(!pthread_mutexattr_destroy(&attr));
                 pthread_mutex_lock(&mutex);
 #else
-                lk = ::std::unique_lock<::std::mutex>(mutex);
+                lk = ::std::unique_lock<::std::shared_mutex>(mutex);
 #endif
             }
 
