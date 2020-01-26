@@ -12,6 +12,9 @@
 #include <thread>
 #include <cassert>
 #include <functional>
+#include <memory>
+#include <utility>
+#include <list>
 
 #ifdef PTHREAD
 
@@ -105,7 +108,112 @@ namespace irrpoly {
                 cond.notify_one();
 #endif
             }
-        };
+        }; // class sync
+
+        /// Класс, обеспечивающий многопоточный доступ к данным
+        template<typename T>
+        class cell {
+        private:
+            sync s; ///< Объект синхронизации
+            T data; ///< Охраняемые данные
+            T def; ///< Значение data по умолчанию, устанавливаемое функцией reset
+
+        public:
+            /// Вид функции, проверяющей что ожидаемое изменение данных произошло
+            typedef ::std::function<bool(const T &)> condition_func;
+
+            /// Владение объектом data передаётся внутрь cell
+            explicit
+            cell(T data, T def = T()) noexcept : s(), data(std::move(data)), def(std::move(def)) {}
+
+            /// Возвращает замороженный объект
+            [[nodiscard]]
+            const T & get() const noexcept {
+                return data;
+            }
+
+            /// Устанавливает значение по умолчанию
+            void reset() noexcept {
+                data = T(def);
+            }
+
+            /// Ждёт разрешения на изменение объекта, меняет его и уведомляет ожидающего
+            void set(T d) noexcept {
+                s.lock();
+                data = std::move(d);
+                s.signal();
+                s.unlock();
+            }
+
+            /// Даёт разрешение на изменение объекта и ждёт, пока изменение произойдёт
+            const T & wait_change(condition_func cond) noexcept {
+                while (!cond(data)) {
+                    s.wait();
+                }
+                return data;
+            }
+        }; // class cell
+
+        /// Сетка из ячеек, защищённых общим мьютексом
+        template<typename T>
+        class grid {
+        public:
+            class cell {
+            private:
+                ::std::shared_ptr<sync> s; ///< Объект синхронизации
+                T data; ///< Охраняемые данные
+                T def; ///< Значение data по умолчанию, устанавливаемое функцией reset
+
+            public:
+                /// Владение объектом data передаётся внутрь cell
+                explicit
+                cell(::std::shared_ptr<sync> s, T data, T def) noexcept :
+                    s(std::move(s)), data(std::move(data)), def(std::move(def)) {}
+
+                /// Возвращает замороженный объект
+                [[nodiscard]]
+                const T & get() const noexcept {
+                    return data;
+                }
+
+                /// Устанавливает значение по умолчанию
+                void reset() noexcept {
+                    data = T(def);
+                }
+
+                /// Ждёт разрешения на изменение объекта, меняет его и уведомляет ожидающего
+                void set(T d) noexcept {
+                    s->lock();
+                    data = std::move(d);
+                    s->signal();
+                    s->unlock();
+                }
+            }; // class grid::cell
+
+        private:
+            ::std::shared_ptr<sync> s;
+            ::std::list<grid::cell> data;
+
+        public:
+            /// Вид функции, проверяющей что ожидаемое изменение данных произошло
+            typedef ::std::function<bool(const ::std::list<grid::cell> &)> condition_func;
+
+            grid() noexcept : data() {
+                s = ::std::make_shared<sync>();
+            }
+
+            /// Добавляем в сетку ещё один элемент
+            grid::cell & chain(T d, T def = T()) noexcept {
+                return data.emplace_back(s, std::move(d), std::move(def));
+            }
+
+            /// Даёт разрешение на изменение объекта и ждёт, пока изменение произойдёт
+            void wait_change(condition_func cond) noexcept {
+                while (!cond(data)) {
+                    s->wait();
+                }
+            }
+        }; // class grid
 
     } // namespace detail
 
@@ -125,16 +233,22 @@ namespace irrpoly {
 
     private:
         /// Потоки, непосредственно выполняющие проверку многочленов на неприводимость и примитивность.
-        class node : public detail::sync {
-            detail::sync *m; ///< Основной объект синхронизации
-            check_func cf; ///< Основная функция проверки
+        class node {
+        private:
+            typedef struct {
+                bool terminate; ///< Поток должен быть завершён
+                value_type val; ///< Входные данные
+            } outside_ctrl;
 
-            value_type val; ///< Входные данные
+            // Управляется снаружи
+            detail::cell<outside_ctrl> input;
+
+            // Управляется изнутри
+            typename detail::grid<bool>::cell &_busy; ///< Поток занят полезной работой
             result_type res; ///< Результат проверки
 
-            bool _busy; ///< Поток занят полезной работой
-            bool _terminate; ///< Поток должен быть завершён
-
+            // Инициализируется при конструировании
+            check_func cf; ///< Основная функция проверки
 #ifdef PTHREAD
             pthread_t thread;
 #else
@@ -155,19 +269,17 @@ namespace irrpoly {
             void *check(void *arg) noexcept {
                 auto *sl = static_cast<node *>(arg);
 #else
-                void check() noexcept {
-                    auto *sl = this;
+            void check() noexcept {
+                auto *sl = this;
 #endif
-                while (!sl->_terminate) {
-                    while (!sl->_busy && !sl->_terminate) { sl->wait(); }
-                    if (sl->_terminate) { break; }
+                while (!sl->input.get().terminate) {
+                    sl->input.wait_change([&](const outside_ctrl &data) {
+                       return _busy.get() || data.terminate;
+                    });
+                    if (sl->input.get().terminate) { break; }
 
-                    sl->cf(sl->val, sl->res);
-
-                    sl->m->lock();
-                    sl->_busy = false;
-                    sl->m->signal();
-                    sl->m->unlock();
+                    sl->cf(sl->input.get().val, sl->res);
+                    _busy.set(false);
                 }
 #ifdef PTHREAD
                 pthread_exit(nullptr);
@@ -176,8 +288,8 @@ namespace irrpoly {
 
         public:
             explicit
-            node(detail::sync *m) noexcept :
-                    m(m), cf(), val(), res(), _busy(false), _terminate(false), thread() {
+            node(typename detail::grid<bool>::cell &busy) noexcept :
+                input({ .terminate = false, .val = value_type() }), _busy(busy), res(), cf(), thread() {
 #ifdef PTHREAD
                 pthread_attr_t thread_attr;
                 assert(!pthread_attr_init(&thread_attr));
@@ -198,7 +310,7 @@ namespace irrpoly {
             /// Многочлен, проверка которого выполнялась.
             [[nodiscard]]
             const value_type &get() const {
-                return val;
+                return input.get().val;
             }
 
             /**
@@ -206,25 +318,19 @@ namespace irrpoly {
              * предыдущей проверки и выставляет busy = true.
              */
             void set(value_type v) {
-                lock();
-                val = v;
-                _busy = true;
-                signal();
-                unlock();
+                _busy.reset();
+                input.set({ .terminate = false, .val = std::move(v) });
             }
 
             /// Возвращает текущее состояние потока.
             [[nodiscard]]
             bool busy() const noexcept {
-                return _busy;
+                return _busy.get();
             }
 
             /// Устанавливает флаг, требующий завершить работу потока по завершении вычислений.
             void terminate() noexcept {
-                lock();
-                _terminate = true;
-                signal();
-                unlock();
+                input.set({ .terminate = true, .val = value_type() });
             }
 
             /// Возвращает результат проверки текущего многочлена на неприводимость и примитивность.
@@ -234,13 +340,13 @@ namespace irrpoly {
             }
         }; // class node
 
-        detail::sync m; // master
-        ::std::vector<node *> s; // slave
+        detail::grid<bool> m; // master
+        ::std::vector<::std::unique_ptr<node>> s; // slave
 
         /// Считает, сколько потоков заняты.
         unsigned countBusy() {
             unsigned res = 0;
-            for (const auto *n : s) { res += n->busy(); }
+            for (const auto &n : s) { res += n.busy(); }
             return res;
         }
 
@@ -249,20 +355,24 @@ namespace irrpoly {
         checker(const unsigned n = ::std::thread::hardware_concurrency() - 1) noexcept : m(), s() {
             s.reserve(n);
             for (unsigned i = 0; i < n; ++i) {
-                s.emplace_back(new node(&m));
+                s.push_back(::std::make_unique<node>(m.chain(false, true)));
             }
         }
 
         /// Основной цикл разделения работы на потоки.
         void check(uint64_t n, input_func in, check_func cf, callback_func back, const bool strict = true) noexcept {
             // заряжаем многочлены на проверку
-            for (auto *sl : s) {
+            for (const auto &sl : s) {
                 sl->set_check(cf);
                 sl->set(in());
             }
             while (n) {
                 // ждём свободный поток
-                while (countBusy() == s.size()) { m.wait(); }
+                m.wait_change([&](const ::std::list<detail::grid<bool>::cell> &c) -> bool {
+                    unsigned res = 0;
+                    for (const auto &n : c) { res += n.get(); }
+                    return res < s.size();
+                });
                 // находим свободные потоки и заряжаем новыми входными данными
                 for (unsigned i = 0; i < s.size() && n; ++i) {
                     if (s[i]->busy()) { continue; }
@@ -271,18 +381,27 @@ namespace irrpoly {
                 }
             }
             // ожидаем завершения всех потоков
-            while (countBusy()) { m.wait(); }
+            m.wait_change([](const ::std::list<detail::grid<bool>::cell> &c) -> bool {
+                for (const auto &n : c) {
+                    if (n.get()) return false;
+                }
+                return true;
+            });
             if (!strict) {
                 // обрабатываем все проверенные многочлены, даже если их больше, чем требовалось найти
-                for (auto *sl : s) { back(sl->get(), sl->result()); }
+                for (const auto &sl : s) {
+                    back(sl->get(), sl->result());
+                }
             }
         }
 
         /// Завершаем работу всех потоков.
         ~checker() noexcept {
-            for (auto *sl : s) { sl->terminate(); }
+            for (const auto &sl : s) {
+                sl->terminate();
+            }
         }
-    };
+    }; // class checker
 
 } // namespace irrpoly
 

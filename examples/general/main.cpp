@@ -34,7 +34,7 @@ std::vector<polynomialgf<P>> generate_irreducible(
     multithread::polychecker<P> ch(threads_num);
 
     auto input = [&]() -> polynomialgf<P> {
-        return random < P > (degree);
+        return random<P>(degree);
     };
 
     auto check = multithread::make_check_func<P>(irr_meth, prim_meth);
