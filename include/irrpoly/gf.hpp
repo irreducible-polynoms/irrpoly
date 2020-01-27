@@ -39,65 +39,65 @@ namespace irrpoly {
     private:
         int_fast64_t v;
 
-        void fix() noexcept;
+        void fix();
 
     public:
         static
-        gf<P> random() noexcept;
+        gf<P> random();
 
         constexpr
-        gf() noexcept;
+        gf();
 
-        gf(int_fast64_t) noexcept;
-
-        [[nodiscard]]
-        int_fast64_t data() const noexcept;
-
-        gf<P> operator+() const noexcept;
-
-        gf<P> operator+(const gf<P> &) const noexcept;
-
-        gf<P> &operator+=(const gf<P> &) noexcept;
-
-        gf<P> &operator++() noexcept;
-
-        gf<P> operator++(int) & noexcept;
-
-        gf<P> operator-() const noexcept;
-
-        gf<P> operator-(const gf<P> &) const noexcept;
-
-        gf<P> &operator-=(const gf<P> &) noexcept;
-
-        gf<P> &operator--() noexcept;
-
-        gf<P> operator--(int) & noexcept;
-
-        gf<P> operator*(const gf<P> &) const noexcept;
-
-        gf<P> &operator*=(const gf<P> &) noexcept;
+        gf(int_fast64_t);
 
         [[nodiscard]]
-        gf<P> mul_inv() const noexcept(false);
+        int_fast64_t data() const;
 
-        gf<P> operator/(const gf<P> &) const noexcept(false);
+        gf<P> operator+() const;
 
-        gf<P> &operator/=(const gf<P> &) noexcept(false);
+        gf<P> operator+(const gf<P> &) const;
+
+        gf<P> &operator+=(const gf<P> &);
+
+        gf<P> &operator++();
+
+        gf<P> operator++(int) &;
+
+        gf<P> operator-() const;
+
+        gf<P> operator-(const gf<P> &) const;
+
+        gf<P> &operator-=(const gf<P> &);
+
+        gf<P> &operator--();
+
+        gf<P> operator--(int) &;
+
+        gf<P> operator*(const gf<P> &) const;
+
+        gf<P> &operator*=(const gf<P> &);
 
         [[nodiscard]]
-        bool is_zero() const noexcept;
+        gf<P> mul_inv() const;
 
-        bool operator==(const gf<P> &) const noexcept;
+        gf<P> operator/(const gf<P> &) const;
 
-        bool operator!=(const gf<P> &) const noexcept;
+        gf<P> &operator/=(const gf<P> &);
 
-        bool operator>(const gf<P> &) const noexcept;
+        [[nodiscard]]
+        bool is_zero() const;
 
-        bool operator>=(const gf<P> &) const noexcept;
+        bool operator==(const gf<P> &) const;
 
-        bool operator<(const gf<P> &) const noexcept;
+        bool operator!=(const gf<P> &) const;
 
-        bool operator<=(const gf<P> &) const noexcept;
+        bool operator>(const gf<P> &) const;
+
+        bool operator>=(const gf<P> &) const;
+
+        bool operator<(const gf<P> &) const;
+
+        bool operator<=(const gf<P> &) const;
 
         template<uint32_t Q>
         friend
@@ -110,14 +110,14 @@ namespace irrpoly {
 
     /// Возвращает число над полем GF[P] в пределы [0, P-1].
     template<uint32_t P>
-    void gf<P>::fix() noexcept {
+    void gf<P>::fix() {
         v = v % P;
         v = v >= 0 ? v : P + v;
     }
 
     /// Генерирует случайное число в пределах [0, P-1].
     template<uint32_t P>
-    gf<P> gf<P>::random() noexcept {
+    gf<P> gf<P>::random() {
         static ::std::random_device rd;
         static ::std::mt19937_64 gen(rd());
         static ::std::uniform_int_distribution<uint_fast64_t> dis(0, P - 1);
@@ -127,87 +127,87 @@ namespace irrpoly {
     /// Конструктор по умолчанию, обнуляет переменную.
     template<uint32_t P>
     constexpr
-    gf<P>::gf() noexcept : v(0) {}
+    gf<P>::gf() : v(0) {}
 
     template<uint32_t P>
-    gf<P>::gf(const int_fast64_t val) noexcept : v(val) {
+    gf<P>::gf(const int_fast64_t val) : v(val) {
         fix();
     }
 
     /// Возвращает значение класса в виде целого числа.
     template<uint32_t P>
     [[nodiscard]]
-    int_fast64_t gf<P>::data() const noexcept {
+    int_fast64_t gf<P>::data() const {
         return v;
     }
 
     template<uint32_t P>
-    gf<P> gf<P>::operator+() const noexcept {
+    gf<P> gf<P>::operator+() const {
         return gf<P>(+v);
     }
 
     template<uint32_t P>
-    gf<P> &gf<P>::operator+=(const gf<P> &val) noexcept {
+    gf<P> &gf<P>::operator+=(const gf<P> &val) {
         v += val.v;
         fix();
         return *this;
     }
 
     template<uint32_t P>
-    gf<P> gf<P>::operator+(const gf<P> &val) const noexcept {
+    gf<P> gf<P>::operator+(const gf<P> &val) const {
         return gf<P>(*this) += val;
     }
 
     template<uint32_t P>
-    gf<P> &gf<P>::operator++() noexcept {
+    gf<P> &gf<P>::operator++() {
         return *this += gf<P>(1);
     }
 
     template<uint32_t P>
-    gf<P> gf<P>::operator++(int) & noexcept {
+    gf<P> gf<P>::operator++(int) & {
         gf<P> tmp(*this);
         operator++();
         return tmp;
     }
 
     template<uint32_t P>
-    gf<P> gf<P>::operator-() const noexcept {
+    gf<P> gf<P>::operator-() const {
         return gf<P>(-v);
     }
 
     template<uint32_t P>
-    gf<P> &gf<P>::operator-=(const gf<P> &val) noexcept {
+    gf<P> &gf<P>::operator-=(const gf<P> &val) {
         v -= val.v;
         fix();
         return *this;
     }
 
     template<uint32_t P>
-    gf<P> gf<P>::operator-(const gf<P> &val) const noexcept {
+    gf<P> gf<P>::operator-(const gf<P> &val) const {
         return gf<P>(*this) -= val;
     }
 
     template<uint32_t P>
-    gf<P> &gf<P>::operator--() noexcept {
+    gf<P> &gf<P>::operator--() {
         return *this -= gf<P>(1);
     }
 
     template<uint32_t P>
-    gf<P> gf<P>::operator--(int) & noexcept {
+    gf<P> gf<P>::operator--(int) & {
         gf<P> tmp(*this);
         operator++();
         return tmp;
     }
 
     template<uint32_t P>
-    gf<P> &gf<P>::operator*=(const gf<P> &val) noexcept {
+    gf<P> &gf<P>::operator*=(const gf<P> &val) {
         v *= val.v;
         fix();
         return *this;
     }
 
     template<uint32_t P>
-    gf<P> gf<P>::operator*(const gf<P> &val) const noexcept {
+    gf<P> gf<P>::operator*(const gf<P> &val) const {
         return gf<P>(*this) *= val;
     }
 
@@ -219,7 +219,7 @@ namespace irrpoly {
      */
     template<uint32_t P>
     [[nodiscard]]
-    gf<P> gf<P>::mul_inv() const noexcept(false) {
+    gf<P> gf<P>::mul_inv() const {
         static ::std::array<gf<P>, P> arr{};
         int_fast64_t u0 = P, u1 = 1, u2 = 0, v0 = v, v1 = 0, v2 = 1, w0, w1, w2, q;
         switch (v) {
@@ -255,50 +255,50 @@ namespace irrpoly {
      * Для существование обратного необходимо, чтобы GF[P] было полем (зависит от выбора P).
      */
     template<uint32_t P>
-    gf<P> &gf<P>::operator/=(const gf<P> &val) noexcept(false) {
+    gf<P> &gf<P>::operator/=(const gf<P> &val) {
         if (val.v == 0) { throw ::std::invalid_argument("division by zero"); }
         return *this *= val.mul_inv();
     }
 
     template<uint32_t P>
-    gf<P> gf<P>::operator/(const gf<P> &val) const noexcept(false) {
+    gf<P> gf<P>::operator/(const gf<P> &val) const {
         return gf<P>(*this) /= val;
     }
 
     /// Проверяет равенство данного числа нулю.
     template<uint32_t P>
     [[nodiscard]]
-    bool gf<P>::is_zero() const noexcept {
+    bool gf<P>::is_zero() const {
         return v == 0;
     }
 
     template<uint32_t P>
-    bool gf<P>::operator==(const gf<P> &val) const noexcept {
+    bool gf<P>::operator==(const gf<P> &val) const {
         return v == val.v;
     }
 
     template<uint32_t P>
-    bool gf<P>::operator!=(const gf<P> &val) const noexcept {
+    bool gf<P>::operator!=(const gf<P> &val) const {
         return v != val.v;
     }
 
     template<uint32_t P>
-    bool gf<P>::operator>(const gf<P> &val) const noexcept {
+    bool gf<P>::operator>(const gf<P> &val) const {
         return v > val.v;
     }
 
     template<uint32_t P>
-    bool gf<P>::operator>=(const gf<P> &val) const noexcept {
+    bool gf<P>::operator>=(const gf<P> &val) const {
         return v >= val.v;
     }
 
     template<uint32_t P>
-    bool gf<P>::operator<(const gf<P> &val) const noexcept {
+    bool gf<P>::operator<(const gf<P> &val) const {
         return v < val.v;
     }
 
     template<uint32_t P>
-    bool gf<P>::operator<=(const gf<P> &val) const noexcept {
+    bool gf<P>::operator<=(const gf<P> &val) const {
         return v <= val.v;
     }
 
