@@ -86,7 +86,7 @@ namespace irrpoly {
                 uint64_t pow,
                 const polynomialgf<P> &mod,
                 const polynomialgf<P> &sub = polynomialgf<P>({0})
-        ) noexcept {
+        ) {
             // Эта функция возврадает по сути следующий редультат:
             // return ((polynomialgf<P>({1}) << pow) - sub) % mod;
             // её существование необходимо, т.к. в методе Рабина
