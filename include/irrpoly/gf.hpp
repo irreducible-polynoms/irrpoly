@@ -51,9 +51,6 @@ namespace irrpoly {
 
     }
 
-    template <uintmax_t P>
-    class gfn;
-
     /**
      * Класс gf представляет из себя поле GF[P].
      * @tparam P основание поля Галуа GF[P].
