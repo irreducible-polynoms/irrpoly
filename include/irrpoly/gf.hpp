@@ -106,6 +106,7 @@ namespace irrpoly {
         }
     };
 
+    /// Динамическое универсальное поле, может создаваться в процессе выполнения программы
     template<>
     class gf<0> final {
     public:
@@ -141,6 +142,68 @@ namespace irrpoly {
                     throw std::logic_error("multiplicative inverse don't exist");
                 default:
                     return m_inv[val];
+            }
+        }
+    };
+
+    /// Пустое поле, в котором существует только ноль, используется как заглушка
+    template<>
+    class gf<1> final {
+    public:
+        using gf_type = uint_fast8_t;
+
+    public:
+        explicit constexpr
+        gf(const uintmax_t base = 1) noexcept {
+            assert(base == 1);
+        }
+
+        [[nodiscard]]
+        constexpr
+        gf_type base() const noexcept {
+            return 1;
+        }
+
+        [[nodiscard]]
+        constexpr
+        gf_type mul_inv(const gf_type val) const noexcept(false) {
+            assert(val == 0);
+            switch(val) {
+                case 0:
+                    throw std::logic_error("multiplicative inverse don't exist");
+                default: // impossible
+                    return 1;
+            }
+        }
+    };
+
+    /// В данном случае нам не нужен массив обратных по умножению, поэтому объявлено отдельно
+    template<>
+    class gf<2> final {
+    public:
+        using gf_type = uint8_t;
+
+    public:
+        explicit constexpr
+        gf(const uintmax_t base = 2) noexcept {
+            assert(base == 2);
+        }
+
+        [[nodiscard]]
+        constexpr
+        gf_type base() const noexcept {
+            return 2;
+        }
+
+        [[nodiscard]]
+        constexpr
+        gf_type mul_inv(const gf_type val) const noexcept(false) {
+            assert(val < 2);
+            switch(val) {
+                case 0:
+                    throw std::logic_error("multiplicative inverse don't exist");
+                default:
+                    return 1;
             }
         }
     };
