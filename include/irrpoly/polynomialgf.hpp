@@ -53,6 +53,25 @@ namespace irrpoly {
 
     namespace detail {
 
+        template<class T, class N>
+        T integer_power(T t, N n) {
+            switch (n) {
+                case 0:
+                    return static_cast<T>(1u);
+                case 1:
+                    return t;
+                case 2:
+                    return t * t;
+                case 3:
+                    return t * t * t;
+            }
+            T result = integer_power(t, n / 2);
+            result *= result;
+            if (n & 1)
+                result *= t;
+            return result;
+        }
+
         /// Вычисляет производную данного многочлена.
         template<uint32_t P>
         polynomialgf<P> derivative(const polynomialgf<P> &val) {

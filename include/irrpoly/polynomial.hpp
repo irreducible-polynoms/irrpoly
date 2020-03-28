@@ -38,25 +38,6 @@ namespace irrpoly {
             }
         }
 
-        template<class T, class N>
-        T integer_power(T t, N n) {
-            switch (n) {
-                case 0:
-                    return static_cast<T>(1u);
-                case 1:
-                    return t;
-                case 2:
-                    return t * t;
-                case 3:
-                    return t * t * t;
-            }
-            T result = integer_power(t, n / 2);
-            result *= result;
-            if (n & 1)
-                result *= t;
-            return result;
-        }
-
         template<typename T>
         ::std::pair<polynomial<T>, polynomial<T> >
         division(polynomial<T> u, const polynomial<T> &v) {
@@ -101,19 +82,6 @@ namespace irrpoly {
         };
 
     } // namespace detail
-
-    /**
-    * Returns the zero element for multiplication of polynomials.
-    */
-    template<class T>
-    polynomial<T> zero_element(::std::multiplies<polynomial<T> >) {
-        return polynomial<T>();
-    }
-
-    template<class T>
-    polynomial<T> identity_element(::std::multiplies<polynomial<T> >) {
-        return polynomial<T>(T(1));
-    }
 
     /* Calculates a / b and a % b, returning the pair (quotient, remainder) together
     * because the same amount of computation yields both.
