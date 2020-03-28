@@ -51,6 +51,9 @@ namespace irrpoly {
 
     }
 
+    template <uintmax_t P>
+    class gfn;
+
     /**
      * Класс gf представляет из себя поле GF[P].
      * @tparam P основание поля Галуа GF[P].
@@ -113,12 +116,12 @@ namespace irrpoly {
 
     private:
         std::vector<gf_type> m_inv; /// Обратные элементы по умножению
-        gf_type m_base; /// Основание поля
+        const gf_type m_base; /// Основание поля
 
     public:
         explicit
         gf(const uintmax_t base) noexcept(false) : m_base(base), m_inv(base, 0) {
-            assert(base > 0);
+            assert(m_base > 0);
             for (gf_type i = 1; i < m_base; ++i) {
                 if (m_inv[i]) continue;
                 m_inv[i] = detail::inv_calc<gf_type>(m_base, i);
@@ -189,6 +192,12 @@ namespace irrpoly {
                 m_val = other.m_val;
             }
             return *this;
+        }
+
+        [[nodiscard]]
+        constexpr
+        const gf<P>& field() const noexcept {
+            return m_field;
         }
 
         /// Возвращает значение класса в виде целого числа.
