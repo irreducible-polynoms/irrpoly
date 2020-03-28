@@ -25,7 +25,7 @@ namespace irrpoly {
 
     /// Класс многочленов над полем Галуа.
     template<uint32_t P = 2>
-    using polynomialgf = polynomial<gf<P>>;
+    using polynomialgf = polynomial<gf_old<P>>;
 
     /**
      * Расширенный алгоритм Евклида для поиска наибольшего общего делителя
@@ -59,7 +59,7 @@ namespace irrpoly {
             polynomialgf<P> res = val;
             auto i = val.degree();
             for (res[i] = 0; i > 0; --i) {
-                res[i - 1] = gf<P>(i) * val[i];
+                res[i - 1] = gf_old<P>(i) * val[i];
             }
             res.normalize();
             return res;
@@ -161,9 +161,9 @@ namespace irrpoly {
         auto berlekampMatrixRank = [](const polynomialgf<P> &val) {
             polynomialgf<P> tmp;
             typename polynomialgf<P>::size_type i, j, k, l;
-            const gf<P> zer = 0;
+            const gf_old<P> zer = 0;
             const auto n = val.degree();
-            ::std::vector<::std::vector<gf<P>>> m(n, ::std::vector<gf<P>>(n, zer)); // M = 0
+            ::std::vector<::std::vector<gf_old<P>>> m(n, ::std::vector<gf_old<P>>(n, zer)); // M = 0
             for (i = 0; i < n; ++i) {
                 tmp = detail::x_pow_mod_sub(i * P, val); // M[i,*] = x ^ ip (mod val)
                 for (j = 0, k = tmp.degree(); j <= k; ++j) {
@@ -174,7 +174,7 @@ namespace irrpoly {
 
             // приведение матрицы к ступенчатому виду
             bool f;
-            gf<P> mul;
+            gf_old<P> mul;
             for (i = k = 0; i < n && k < n; ++k) {
                 f = !m[i][k].is_zero();
                 for (j = i + 1; j < n; ++j) {
@@ -207,9 +207,9 @@ namespace irrpoly {
     /// Генерирует случайный многочлен над полем GF[P] заданной степени.
     template<uint32_t P>
     polynomialgf<P> random(typename polynomialgf<P>::size_type degree) {
-        ::std::vector<gf<P>> data(degree + 1);
-        for (auto &d : data) { d = gf<P>::random(); }
-        while (data[0].is_zero()) { data[0] = gf<P>::random(); }
+        ::std::vector<gf_old<P>> data(degree + 1);
+        for (auto &d : data) { d = gf_old<P>::random(); }
+        while (data[0].is_zero()) { data[0] = gf_old<P>::random(); }
         data[degree] = 1;
         return data; // неявное преобразование вектора коэффициентов к классу polynomialgf
     }
