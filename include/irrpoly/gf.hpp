@@ -281,11 +281,27 @@ namespace irrpoly {
             return gfn {m_field, m_val + other.m_val};
         }
 
+        [[nodiscard]]
+        constexpr
+        gfn operator+(const gf_type other) const noexcept {
+            return gfn {m_field, m_val + (other % m_field.base())};
+        }
+
+        friend constexpr
+        gfn operator+(const gf_type, const gfn &) noexcept;
+
         template<uintmax_t Q>
         constexpr
         gfn &operator+=(const gfn<Q> &other) noexcept {
             assert(m_field.base() == other.m_field.base());
             m_val = (m_val + other.m_val) % m_field.base();
+            return *this;
+        }
+
+        [[nodiscard]]
+        constexpr
+        gfn operator+=(const gf_type other) const noexcept {
+            m_val = (m_val + (other % m_field.base())) % m_field.base();
             return *this;
         }
 
@@ -319,11 +335,27 @@ namespace irrpoly {
             return gfn {m_field, m_field.base() + m_val - other.m_val};
         }
 
+        [[nodiscard]]
+        constexpr
+        gfn operator-(const gf_type other) const noexcept {
+            return gfn {m_field, m_field.base() + m_val - (other % m_field.base())};
+        }
+
+        friend constexpr
+        gfn operator-(const gf_type, const gfn &) noexcept;
+
         template<uintmax_t Q>
         constexpr
         gfn &operator-=(const gfn<Q> &other) noexcept {
             assert(m_field.base() == other.m_field.base());
             m_val = (m_field.base() + m_val - other.m_val) % m_field.base();
+            return *this;
+        }
+
+        [[nodiscard]]
+        constexpr
+        gfn operator-=(const gf_type other) const noexcept {
+            m_val = (m_field.base() + m_val - (other % m_field.base())) % m_field.base();
             return *this;
         }
 
@@ -349,11 +381,27 @@ namespace irrpoly {
             return gfn {m_field, m_val * other.m_val};
         }
 
+        [[nodiscard]]
+        constexpr
+        gfn operator*(const gf_type other) const noexcept {
+            return gfn {m_field, m_val * (other % m_field.base())};
+        }
+
+        friend constexpr
+        gfn operator*(const gf_type, const gfn &) noexcept;
+
         template<uintmax_t Q>
         constexpr
         gfn &operator*=(const gfn<Q> &other) noexcept {
             assert(m_field.base() == other.m_field.base());
             m_val = (m_val * other.m_val) % m_field.base();
+            return *this;
+        }
+
+        [[nodiscard]]
+        constexpr
+        gfn operator*=(const gf_type other) const noexcept {
+            m_val = (m_val * (other % m_field.base())) % m_field.base();
             return *this;
         }
 
@@ -366,12 +414,30 @@ namespace irrpoly {
             return gfn {m_field, m_val * m_field.mul_inv(other.m_val)};
         }
 
+        [[nodiscard]]
+        constexpr
+        gfn operator/(const gf_type other) const noexcept(false) {
+            if (other % m_field.base() == 0) { throw ::std::invalid_argument("division by zero"); }
+            return gfn {m_field, m_val * m_field.mul_inv(other % m_field.base())};
+        }
+
+        friend constexpr
+        gfn operator/(const gf_type, const gfn &) noexcept(false);
+
         template<uintmax_t Q>
         constexpr
         gfn &operator/=(const gfn<Q> &other) noexcept(false) {
             assert(m_field.base() == other.m_field.base());
             if (other.m_val == 0) { throw ::std::invalid_argument("division by zero"); }
             m_val = (m_val * m_field.mul_inv(other.m_val)) % m_field.base();
+            return *this;
+        }
+
+        [[nodiscard]]
+        constexpr
+        gfn operator/=(const gf_type other) const noexcept(false) {
+            if (other % m_field.base() == 0) { throw ::std::invalid_argument("division by zero"); }
+            m_val = (m_val * m_field.mul_inv(other % m_field.base())) % m_field.base();
             return *this;
         }
 
@@ -389,11 +455,21 @@ namespace irrpoly {
             return m_val == other.m_val;
         }
 
+        constexpr
+        bool operator==(const gf_type other) const noexcept {
+            return m_val == (other.m_val % m_field.base());
+        }
+
         template<uintmax_t Q>
         constexpr
         bool operator!=(const gfn<Q> &other) const noexcept {
             assert(m_field.base() == other.m_field.base());
             return m_val != other.m_val;
+        }
+
+        constexpr
+        bool operator!=(const gf_type other) const noexcept {
+            return m_val != (other.m_val % m_field.base());
         }
 
         template<uintmax_t Q>
@@ -403,11 +479,21 @@ namespace irrpoly {
             return m_val > other.m_val;
         }
 
+        constexpr
+        bool operator>(const gf_type other) const noexcept {
+            return m_val > (other.m_val % m_field.base());
+        }
+
         template<uintmax_t Q>
         constexpr
         bool operator>=(const gfn<Q> &other) const noexcept {
             assert(m_field.base() == other.m_field.base());
             return m_val >= other.m_val;
+        }
+
+        constexpr
+        bool operator>=(const gf_type other) const noexcept {
+            return m_val >= (other.m_val % m_field.base());
         }
 
         template<uintmax_t Q>
@@ -417,11 +503,21 @@ namespace irrpoly {
             return m_val < other.m_val;
         }
 
+        constexpr
+        bool operator<(const gf_type other) const noexcept {
+            return m_val < (other.m_val % m_field.base());
+        }
+
         template<uintmax_t Q>
         constexpr
         bool operator<=(const gfn<Q> &other) const noexcept {
             assert(m_field.base() == other.m_field.base());
             return m_val <= other.m_val;
+        }
+
+        constexpr
+        bool operator<=(const gf_type other) const noexcept {
+            return m_val <= (other.m_val % m_field.base());
         }
 
         friend
@@ -430,6 +526,35 @@ namespace irrpoly {
         friend
         std::istream &operator>>(std::istream &, gfn &);
     };
+
+    template<uintmax_t P>
+    [[nodiscard]]
+    constexpr
+    gfn<P> operator+(const typename gfn<P>::gf_type other, const gfn<P> &curr) noexcept {
+        return gfn<P> {curr.m_field, (other % curr.m_field.base()) + curr.m_val};
+    }
+
+    template<uintmax_t P>
+    [[nodiscard]]
+    constexpr
+    gfn<P> operator-(const typename gfn<P>::gf_type other, const gfn<P> &curr) noexcept {
+        return gfn<P> {curr.m_field, curr.m_field.base() + (other % curr.m_field.base()) - curr.m_val};
+    }
+
+    template<uintmax_t P>
+    [[nodiscard]]
+    constexpr
+    gfn<P> operator*(const typename gfn<P>::gf_type other, const gfn<P> &curr) noexcept {
+        return gfn<P> {curr.m_field, (other % curr.m_field.base()) * curr.m_val};
+    }
+
+    template<uintmax_t P>
+    [[nodiscard]]
+    constexpr
+    gfn<P> operator/(const typename gfn<P>::gf_type other, const gfn<P> &curr) noexcept {
+        if (curr.m_val == 0) { throw ::std::invalid_argument("division by zero"); }
+        return gfn<P> {curr.m_field, (other % curr.m_field.base()) * curr.m_field.mul_inv(curr.m_val)};
+    }
 
     template<uintmax_t P>
     std::ostream &operator<<(std::ostream &os, const gfn<P> &val) {
