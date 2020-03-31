@@ -52,162 +52,16 @@ namespace irrpoly {
     }
 
     /**
-     * Класс gf представляет из себя поле GF[P].
+     * Класс gf представляет поле GF[P].
      * @tparam P основание поля Галуа GF[P].
      */
     template<uintmax_t P = 0>
-    class gf final {
-    public:
-        using gf_type = typename std::enable_if<UINTMAX_MAX / (P - 1) >= (P - 1),
-            typename std::conditional<UINT_FAST8_MAX / (P - 1) >= (P - 1), uint_fast8_t,
-                    typename std::conditional<UINT_FAST16_MAX / (P - 1) >= (P - 1), uint_fast16_t,
-                            typename std::conditional<UINT_FAST32_MAX / (P - 1) >= (P - 1), uint_fast32_t,
-                                    uintmax_t>::type
-                    >::type
-            >::type
-        >::type;
+    class gf;
 
-    private:
-        std::array<gf_type, P> m_inv; /// Обратные элементы по умножению
-
-        template<gf_type... k>
-        constexpr auto make_inv_helper(std::integer_sequence<gf_type, k...>)
-        -> std::array<gf_type, sizeof...(k)> {
-            return {{ [&]{
-                if constexpr (k > 0)
-                    return detail::inv_calc<gf_type>(sizeof...(k), k);
-                else return 0;
-            }()... }};
-        }
-
-    public:
-        explicit constexpr
-        gf(const uintmax_t base = P) noexcept(false)
-            : m_inv(make_inv_helper(std::make_integer_sequence<gf_type, P>())) {
-            assert(base == P);
-        }
-
-        [[nodiscard]]
-        constexpr
-        gf_type base() const noexcept {
-            return P;
-        }
-
-        [[nodiscard]]
-        constexpr
-        gf_type mul_inv(const gf_type val) const noexcept(false) {
-            assert(val < P);
-            switch(val) {
-                case 0:
-                    throw std::logic_error("multiplicative inverse don't exist");
-                default:
-                    return m_inv[val];
-            }
-        }
-    };
-
-    /// Динамическое универсальное поле, может создаваться в процессе выполнения программы
-    template<>
-    class gf<0> final {
-    public:
-        using gf_type = uintmax_t;
-
-    private:
-        std::vector<gf_type> m_inv; /// Обратные элементы по умножению
-        const gf_type m_base; /// Основание поля
-
-    public:
-        explicit
-        gf(const uintmax_t base) noexcept(false) : m_base(base), m_inv(base, 0) {
-            assert(m_base > 0);
-            for (gf_type i = 1; i < m_base; ++i) {
-                if (m_inv[i]) continue;
-                m_inv[i] = detail::inv_calc<gf_type>(m_base, i);
-                m_inv[m_inv[i]] = i;
-            }
-        }
-
-        [[nodiscard]]
-        constexpr
-        gf_type base() const noexcept {
-            return m_base;
-        }
-
-        [[nodiscard]]
-        constexpr
-        gf_type mul_inv(const gf_type val) const noexcept(false) {
-            assert(val < m_base);
-            switch(val) {
-                case 0:
-                    throw std::logic_error("multiplicative inverse don't exist");
-                default:
-                    return m_inv[val];
-            }
-        }
-    };
-
-    /// Пустое поле, в котором существует только ноль, используется как заглушка
-    template<>
-    class gf<1> final {
-    public:
-        using gf_type = uint_fast8_t;
-
-    public:
-        explicit constexpr
-        gf(const uintmax_t base = 1) noexcept {
-            assert(base == 1);
-        }
-
-        [[nodiscard]]
-        constexpr
-        gf_type base() const noexcept {
-            return 1;
-        }
-
-        [[nodiscard]]
-        constexpr
-        gf_type mul_inv(const gf_type val) const noexcept(false) {
-            assert(val == 0);
-            switch(val) {
-                case 0:
-                    throw std::logic_error("multiplicative inverse don't exist");
-                default: // impossible
-                    return 1;
-            }
-        }
-    };
-
-    /// В данном случае нам не нужен массив обратных по умножению, поэтому объявлено отдельно
-    template<>
-    class gf<2> final {
-    public:
-        using gf_type = uint8_t;
-
-    public:
-        explicit constexpr
-        gf(const uintmax_t base = 2) noexcept {
-            assert(base == 2);
-        }
-
-        [[nodiscard]]
-        constexpr
-        gf_type base() const noexcept {
-            return 2;
-        }
-
-        [[nodiscard]]
-        constexpr
-        gf_type mul_inv(const gf_type val) const noexcept(false) {
-            assert(val < 2);
-            switch(val) {
-                case 0:
-                    throw std::logic_error("multiplicative inverse don't exist");
-                default:
-                    return 1;
-            }
-        }
-    };
-
+    /**
+     * Класс gfn представляет число в поле GF[P]
+     * @tparam P основание поля Галуа GF[P].
+     */
     template <uintmax_t P = 0>
     class gfn final {
     public:
@@ -288,7 +142,7 @@ namespace irrpoly {
         }
 
         friend constexpr
-        gfn operator+(const gf_type, const gfn &) noexcept;
+        gfn operator+(gf_type, const gfn &) noexcept;
 
         template<uintmax_t Q>
         constexpr
@@ -342,7 +196,7 @@ namespace irrpoly {
         }
 
         friend constexpr
-        gfn operator-(const gf_type, const gfn &) noexcept;
+        gfn operator-(gf_type, const gfn &) noexcept;
 
         template<uintmax_t Q>
         constexpr
@@ -388,7 +242,7 @@ namespace irrpoly {
         }
 
         friend constexpr
-        gfn operator*(const gf_type, const gfn &) noexcept;
+        gfn operator*(gf_type, const gfn &) noexcept;
 
         template<uintmax_t Q>
         constexpr
@@ -410,35 +264,51 @@ namespace irrpoly {
         constexpr
         gfn operator/(const gfn<Q> &other) const noexcept(false) {
             assert(m_field.base() == other.m_field.base());
-            if (other.m_val == 0) { throw ::std::invalid_argument("division by zero"); }
-            return gfn {m_field, m_val * m_field.mul_inv(other.m_val)};
+            switch (other.m_val) {
+                case 0:
+                    throw ::std::invalid_argument("division by zero");
+                default:
+                    return gfn {m_field, m_val * m_field.mul_inv(other.m_val)};
+            }
         }
 
         [[nodiscard]]
         constexpr
         gfn operator/(const gf_type other) const noexcept(false) {
-            if (other % m_field.base() == 0) { throw ::std::invalid_argument("division by zero"); }
-            return gfn {m_field, m_val * m_field.mul_inv(other % m_field.base())};
+            switch (other % m_field.base()) {
+                case 0:
+                    throw ::std::invalid_argument("division by zero");
+                default:
+                    return gfn {m_field, m_val * m_field.mul_inv(other % m_field.base())};
+            }
         }
 
         friend constexpr
-        gfn operator/(const gf_type, const gfn &) noexcept(false);
+        gfn operator/(gf_type, const gfn &) noexcept(false);
 
         template<uintmax_t Q>
         constexpr
         gfn &operator/=(const gfn<Q> &other) noexcept(false) {
             assert(m_field.base() == other.m_field.base());
-            if (other.m_val == 0) { throw ::std::invalid_argument("division by zero"); }
-            m_val = (m_val * m_field.mul_inv(other.m_val)) % m_field.base();
-            return *this;
+            switch (other.m_val) {
+                case 0:
+                    throw ::std::invalid_argument("division by zero");
+                default:
+                    m_val = (m_val * m_field.mul_inv(other.m_val)) % m_field.base();
+                    return *this;
+            }
         }
 
         [[nodiscard]]
         constexpr
         gfn operator/=(const gf_type other) const noexcept(false) {
-            if (other % m_field.base() == 0) { throw ::std::invalid_argument("division by zero"); }
-            m_val = (m_val * m_field.mul_inv(other % m_field.base())) % m_field.base();
-            return *this;
+            switch (other % m_field.base()) {
+                case 0:
+                    throw ::std::invalid_argument("division by zero");
+                default:
+                    m_val = (m_val * m_field.mul_inv(other % m_field.base())) % m_field.base();
+                    return *this;
+            }
         }
 
         /// Проверяет равенство данного числа нулю.
@@ -552,8 +422,12 @@ namespace irrpoly {
     [[nodiscard]]
     constexpr
     gfn<P> operator/(const typename gfn<P>::gf_type other, const gfn<P> &curr) noexcept {
-        if (curr.m_val == 0) { throw ::std::invalid_argument("division by zero"); }
-        return gfn<P> {curr.m_field, (other % curr.m_field.base()) * curr.m_field.mul_inv(curr.m_val)};
+        switch (curr.m_val) {
+            case 0:
+                throw ::std::invalid_argument("division by zero");
+            default:
+                return gfn<P> {curr.m_field, (other % curr.m_field.base()) * curr.m_field.mul_inv(curr.m_val)};
+        }
     }
 
     template<uintmax_t P>
@@ -567,6 +441,243 @@ namespace irrpoly {
         val.m_val %= val.m_field.base();
         return is;
     }
+
+    template<uintmax_t P>
+    class gf final {
+    public:
+        using gf_type = typename std::enable_if<UINTMAX_MAX / (P - 1) >= (P - 1),
+                typename std::conditional<UINT_FAST8_MAX / (P - 1) >= (P - 1), uint_fast8_t,
+                        typename std::conditional<UINT_FAST16_MAX / (P - 1) >= (P - 1), uint_fast16_t,
+                                typename std::conditional<UINT_FAST32_MAX / (P - 1) >= (P - 1), uint_fast32_t,
+                                        uintmax_t>::type
+                        >::type
+                >::type
+        >::type;
+
+    private:
+        std::array<gf_type, P> m_inv; /// Обратные элементы по умножению
+
+        template<gf_type... k>
+        constexpr auto make_inv_helper(std::integer_sequence<gf_type, k...>)
+        -> std::array<gf_type, sizeof...(k)> {
+            return {{ [&]{
+                if constexpr (k > 0)
+                    return detail::inv_calc<gf_type>(sizeof...(k), k);
+                else return 0;
+            }()... }};
+        }
+
+    public:
+        explicit constexpr
+        gf(const uintmax_t base = P) noexcept(false)
+                : m_inv(make_inv_helper(std::make_integer_sequence<gf_type, P>())) {
+            assert(base == P);
+        }
+
+        [[nodiscard]]
+        constexpr
+        gf_type base() const noexcept {
+            return P;
+        }
+
+        [[nodiscard]]
+        constexpr
+        gf_type mul_inv(const gf_type val) const noexcept(false) {
+            assert(val < P);
+            switch(val) {
+                case 0:
+                    throw std::logic_error("multiplicative inverse don't exist");
+                default:
+                    return m_inv[val];
+            }
+        }
+
+        [[nodiscard]]
+        constexpr
+        gfn<P> make_num(const gf_type val) const noexcept {
+            return gfn<P> {*this, val};
+        }
+
+        [[nodiscard]]
+        std::vector<gfn<P>> make_num(const std::vector<gf_type>& val) const noexcept {
+            std::vector<gfn<P>> res;
+            res.reserve(val.size());
+            for (gf_type v : val) {
+                res.emplace_back(*this, v);
+            }
+            return res;
+        }
+
+        [[nodiscard]]
+        std::vector<gfn<P>> make_num(const std::initializer_list<gf_type> val) const noexcept {
+            return make_num(std::vector<gf_type>{val});
+        }
+    };
+
+    /// Динамическое универсальное поле, может создаваться в процессе выполнения программы
+    template<>
+    class gf<0> final {
+    public:
+        using gf_type = uintmax_t;
+
+    private:
+        std::vector<gf_type> m_inv; /// Обратные элементы по умножению
+        const gf_type m_base; /// Основание поля
+
+    public:
+        explicit
+        gf(const uintmax_t base) noexcept(false) : m_base(base), m_inv(base, 0) {
+            assert(m_base > 0);
+            for (gf_type i = 1; i < m_base; ++i) {
+                if (m_inv[i]) continue;
+                m_inv[i] = detail::inv_calc<gf_type>(m_base, i);
+                m_inv[m_inv[i]] = i;
+            }
+        }
+
+        [[nodiscard]]
+        constexpr
+        gf_type base() const noexcept {
+            return m_base;
+        }
+
+        [[nodiscard]]
+        constexpr
+        gf_type mul_inv(const gf_type val) const noexcept(false) {
+            assert(val < m_base);
+            switch(val) {
+                case 0:
+                    throw std::logic_error("multiplicative inverse don't exist");
+                default:
+                    return m_inv[val];
+            }
+        }
+
+        [[nodiscard]]
+        constexpr
+        gfn<0> make_num(const gf_type val) const noexcept {
+            return gfn<0> {*this, val};
+        }
+
+        [[nodiscard]]
+        std::vector<gfn<0>> make_num(const std::vector<gf_type>& val) const noexcept {
+            std::vector<gfn<0>> res;
+            res.reserve(val.size());
+            for (gf_type v : val) {
+                res.emplace_back(*this, v);
+            }
+            return res;
+        }
+
+        [[nodiscard]]
+        std::vector<gfn<0>> make_num(const std::initializer_list<gf_type> val) const noexcept {
+            return make_num(std::vector<gf_type>{val});
+        }
+    };
+
+    /// Пустое поле, в котором существует только ноль, используется как заглушка
+    template<>
+    class gf<1> final {
+    public:
+        using gf_type = uint_fast8_t;
+
+    public:
+        explicit constexpr
+        gf(const uintmax_t base = 1) noexcept {
+            assert(base == 1);
+        }
+
+        [[nodiscard]]
+        constexpr
+        gf_type base() const noexcept {
+            return 1;
+        }
+
+        [[nodiscard]]
+        constexpr
+        gf_type mul_inv(const gf_type val) const noexcept(false) {
+            assert(val == 0);
+            switch(val) {
+                case 0:
+                    throw std::logic_error("multiplicative inverse don't exist");
+                default: // impossible
+                    return 1;
+            }
+        }
+
+        [[nodiscard]]
+        constexpr
+        gfn<1> make_num(const gf_type val) const noexcept {
+            return gfn<1> {*this, val};
+        }
+
+        [[nodiscard]]
+        std::vector<gfn<1>> make_num(const std::vector<gf_type>& val) const noexcept {
+            std::vector<gfn<1>> res;
+            res.reserve(val.size());
+            for (gf_type v : val) {
+                res.emplace_back(*this, v);
+            }
+            return res;
+        }
+
+        [[nodiscard]]
+        std::vector<gfn<1>> make_num(const std::initializer_list<gf_type> val) const noexcept {
+            return make_num(std::vector<gf_type>{val});
+        }
+    };
+
+    /// В данном случае нам не нужен массив обратных по умножению, поэтому объявлено отдельно
+    template<>
+    class gf<2> final {
+    public:
+        using gf_type = uint8_t;
+
+    public:
+        explicit constexpr
+        gf(const uintmax_t base = 2) noexcept {
+            assert(base == 2);
+        }
+
+        [[nodiscard]]
+        constexpr
+        gf_type base() const noexcept {
+            return 2;
+        }
+
+        [[nodiscard]]
+        constexpr
+        gf_type mul_inv(const gf_type val) const noexcept(false) {
+            assert(val < 2);
+            switch(val) {
+                case 0:
+                    throw std::logic_error("multiplicative inverse don't exist");
+                default:
+                    return 1;
+            }
+        }
+
+        [[nodiscard]]
+        constexpr
+        gfn<2> make_num(const gf_type val) const noexcept {
+            return gfn<2> {*this, val};
+        }
+
+        [[nodiscard]]
+        std::vector<gfn<2>> make_num(const std::vector<gf_type>& val) const noexcept {
+            std::vector<gfn<2>> res;
+            res.reserve(val.size());
+            for (gf_type v : val) {
+                res.emplace_back(*this, v);
+            }
+            return res;
+        }
+
+        [[nodiscard]]
+        std::vector<gfn<2>> make_num(const std::initializer_list<gf_type> val) const noexcept {
+            return make_num(std::vector<gf_type>{val});
+        }
+    };
 
     /****************************************************************************************/
 
