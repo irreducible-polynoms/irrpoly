@@ -264,7 +264,7 @@ namespace irrpoly {
         
         [[nodiscard]]
         gfn operator/(const gfn &other) const {
-            assert(m_field.base() == other.m_field.base());
+            assert(m_field->base() == other.m_field->base());
             switch (other.m_val) {
                 case 0:
                     throw std::invalid_argument("division by zero");
