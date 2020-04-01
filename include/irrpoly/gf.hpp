@@ -20,11 +20,9 @@
 #include <cassert>
 #include <memory>
 
-#include <array>
-
 namespace irrpoly {
 
-    //Класс gfn представляет число в поле Галуа.
+    /// Класс gfn представляет число в поле Галуа.
     class gfn;
 
     /// Класс gf представляет поле Галуа.
@@ -50,6 +48,14 @@ namespace irrpoly {
     };
 
     using gfp = std::shared_ptr<gf>;
+
+    bool operator==(const gfp &lb, const gfp &rb) {
+        return lb->base() == rb->base();
+    }
+
+    bool operator!=(const gfp &lb, const gfp &rb) {
+        return lb->base() != rb->base();
+    }
 
     namespace detail {
 
@@ -132,6 +138,11 @@ namespace irrpoly {
             return *this;
         }
 
+        gfn &operator=(const value_type other) {
+            m_val = other % m_field->base();
+            return *this;
+        }
+
         [[nodiscard]]
         const gfp &field() const {
             return m_field;
@@ -149,13 +160,18 @@ namespace irrpoly {
         }
 
         [[nodiscard]]
+        value_type &data() {
+            return m_val;
+        }
+
+        [[nodiscard]]
         gfn operator+() const {
             return gfn {*this};
         }
 
         [[nodiscard]]
         gfn operator+(const gfn &other) const {
-            assert(m_field->base() == other.m_field->base());
+            assert(m_field == other.field());
             return gfn {m_field, m_val + other.m_val};
         }
 
@@ -168,12 +184,11 @@ namespace irrpoly {
         gfn operator+(value_type, const gfn &);
 
         gfn &operator+=(const gfn &other) {
-            assert(m_field->base() == other.m_field->base());
+            assert(m_field == other.field());
             m_val = (m_val + other.m_val) % m_field->base();
             return *this;
         }
 
-        [[nodiscard]]
         gfn operator+=(const value_type other) {
             m_val = (m_val + (other % m_field->base())) % m_field->base();
             return *this;
@@ -200,7 +215,7 @@ namespace irrpoly {
 
         [[nodiscard]]
         gfn operator-(const gfn &other) const {
-            assert(m_field->base() == other.m_field->base());
+            assert(m_field == other.field());
             return gfn {m_field, m_field->base() + m_val - other.m_val};
         }
 
@@ -213,12 +228,11 @@ namespace irrpoly {
         gfn operator-(value_type, const gfn &);
 
         gfn &operator-=(const gfn &other) {
-            assert(m_field->base() == other.m_field->base());
+            assert(m_field == other.field());
             m_val = (m_field->base() + m_val - other.m_val) % m_field->base();
             return *this;
         }
 
-        [[nodiscard]]
         gfn operator-=(const value_type other) {
             m_val = (m_field->base() + m_val - (other % m_field->base())) % m_field->base();
             return *this;
@@ -238,7 +252,7 @@ namespace irrpoly {
 
         [[nodiscard]]
         gfn operator*(const gfn &other) const {
-            assert(m_field->base() == other.m_field->base());
+            assert(m_field == other.field());
             return gfn {m_field, m_val * other.m_val};
         }
 
@@ -251,20 +265,24 @@ namespace irrpoly {
         gfn operator*(value_type, const gfn &);
         
         gfn &operator*=(const gfn &other) {
-            assert(m_field->base() == other.m_field->base());
+            assert(m_field == other.field());
             m_val = (m_val * other.m_val) % m_field->base();
             return *this;
         }
 
-        [[nodiscard]]
         gfn operator*=(const value_type other) {
             m_val = (m_val * (other % m_field->base())) % m_field->base();
             return *this;
         }
-        
+
+        [[nodiscard]]
+        gfn mul_inv() {
+            return gfn{m_field, m_field->mul_inv(m_val)};
+        }
+
         [[nodiscard]]
         gfn operator/(const gfn &other) const {
-            assert(m_field->base() == other.m_field->base());
+            assert(m_field == other.field());
             switch (other.m_val) {
                 case 0:
                     throw std::invalid_argument("division by zero");
@@ -287,7 +305,7 @@ namespace irrpoly {
         gfn operator/(value_type, const gfn &);
         
         gfn &operator/=(const gfn &other) {
-            assert(m_field->base() == other.m_field->base());
+            assert(m_field == other.field());
             switch (other.m_val) {
                 case 0:
                     throw std::invalid_argument("division by zero");
@@ -297,7 +315,6 @@ namespace irrpoly {
             }
         }
 
-        [[nodiscard]]
         gfn operator/=(const value_type other) {
             switch (other % m_field->base()) {
                 case 0:
@@ -315,7 +332,7 @@ namespace irrpoly {
         }
         
         bool operator==(const gfn &other) const {
-            assert(m_field->base() == other.m_field->base());
+            assert(m_field == other.field());
             return m_val == other.m_val;
         }
         
@@ -324,7 +341,7 @@ namespace irrpoly {
         }
         
         bool operator!=(const gfn &other) const {
-            assert(m_field->base() == other.m_field->base());
+            assert(m_field == other.field());
             return m_val != other.m_val;
         }
         
@@ -333,7 +350,7 @@ namespace irrpoly {
         }
         
         bool operator>(const gfn &other) const {
-            assert(m_field->base() == other.m_field->base());
+            assert(m_field == other.field());
             return m_val > other.m_val;
         }
         
@@ -342,7 +359,7 @@ namespace irrpoly {
         }
         
         bool operator>=(const gfn &other) const {
-            assert(m_field->base() == other.m_field->base());
+            assert(m_field == other.field());
             return m_val >= other.m_val;
         }
         
@@ -351,7 +368,7 @@ namespace irrpoly {
         }
         
         bool operator<(const gfn &other) const {
-            assert(m_field->base() == other.m_field->base());
+            assert(m_field == other.field());
             return m_val < other.m_val;
         }
         
@@ -360,7 +377,7 @@ namespace irrpoly {
         }
         
         bool operator<=(const gfn &other) const {
-            assert(m_field->base() == other.m_field->base());
+            assert(m_field == other.field());
             return m_val <= other.m_val;
         }
         
@@ -464,362 +481,6 @@ namespace irrpoly {
     inline
     std::vector<gfn> make_gfn(const gfp &field, const std::initializer_list<typename gf::value_type> val) {
         return make_gfn(field, std::vector<typename gf::value_type>{val});
-    }
-
-    /****************************************************************************************/
-
-    /**
-     * Класс gf представляет из себя число над полем GF[P].
-     * @tparam P основание поля Галуа GF[P], по умолчанию рассматривается поле GF[2].
-     * Существование поля Галуа для заданного P не гарантируется, за использование корректного
-     * значения для P несут ответственность пользователи данного класса.
-     */
-    template<uint32_t P = 2>
-    class gf_old {
-    public:
-        using gf_type = uint_fast64_t;
-
-    private:
-        gf_type v;
-
-    public:
-        static
-        gf_old<P> random() noexcept;
-
-        constexpr
-        gf_old() noexcept;
-
-        constexpr
-        gf_old(gf_type) noexcept;
-
-        constexpr
-        gf_old(const gf_old<P> &) noexcept;
-
-        constexpr
-        gf_old<P> &operator=(const gf_old<P> &) noexcept;
-
-        [[nodiscard]]
-        constexpr
-        gf_type data() const noexcept;
-
-        [[nodiscard]]
-        constexpr
-        gf_old<P> operator+() const noexcept;
-
-        [[nodiscard]]
-        constexpr
-        gf_old<P> operator+(const gf_old<P> &) const noexcept;
-
-        constexpr
-        gf_old<P> &operator+=(const gf_old<P> &) noexcept;
-
-        constexpr
-        gf_old<P> &operator++() noexcept;
-
-        [[nodiscard]]
-        constexpr
-        gf_old<P> operator++(int) & noexcept;
-
-        [[nodiscard]]
-        constexpr
-        gf_old<P> operator-() const noexcept;
-
-        [[nodiscard]]
-        constexpr
-        gf_old<P> operator-(const gf_old<P> &) const noexcept;
-
-        constexpr
-        gf_old<P> &operator-=(const gf_old<P> &) noexcept;
-
-        constexpr
-        gf_old<P> &operator--() noexcept;
-
-        [[nodiscard]]
-        constexpr
-        gf_old<P> operator--(int) & noexcept;
-
-        [[nodiscard]]
-        constexpr
-        gf_old<P> operator*(const gf_old<P> &) const noexcept;
-
-        constexpr
-        gf_old<P> &operator*=(const gf_old<P> &) noexcept;
-
-        [[nodiscard]]
-        gf_old<P> mul_inv() const noexcept(false);
-
-        [[nodiscard]]
-        gf_old<P> operator/(const gf_old<P> &) const noexcept(false);
-
-        gf_old<P> &operator/=(const gf_old<P> &) noexcept(false);
-
-        [[nodiscard]]
-        constexpr
-        bool is_zero() const noexcept;
-
-        constexpr
-        bool operator==(const gf_old<P> &) const noexcept;
-
-        constexpr
-        bool operator!=(const gf_old<P> &) const noexcept;
-
-        constexpr
-        bool operator>(const gf_old<P> &) const noexcept;
-
-        constexpr
-        bool operator>=(const gf_old<P> &) const noexcept;
-
-        constexpr
-        bool operator<(const gf_old<P> &) const noexcept;
-
-        constexpr
-        bool operator<=(const gf_old<P> &) const noexcept;
-
-        template<uint32_t Q>
-        friend
-        std::ostream &operator<<(std::ostream &, const gf_old<Q> &);
-
-        template<uint32_t Q>
-        friend
-        std::istream &operator>>(std::istream &, gf_old<Q> &);
-    };
-
-    /// Генерирует случайное число в пределах [0, P-1].
-    template<uint32_t P>
-    gf_old<P> gf_old<P>::random() noexcept {
-        static std::random_device rd;
-        static std::mt19937_64 gen(rd());
-        static std::uniform_int_distribution<uint_fast64_t> dis(0, P - 1);
-        return gf_old<P>(dis(gen));
-    }
-
-    /// Конструктор по умолчанию, обнуляет переменную.
-    template<uint32_t P>
-    constexpr
-    gf_old<P>::gf_old() noexcept : v(0) {}
-
-    template<uint32_t P>
-    constexpr
-    gf_old<P>::gf_old(const gf_type val) noexcept : v(val % P) {}
-
-    template<uint32_t P>
-    constexpr
-    gf_old<P>::gf_old(const gf_old<P> &val) noexcept : v(val.v) {}
-
-    template<uint32_t P>
-    constexpr
-    gf_old<P> &gf_old<P>::operator=(const gf_old<P> &val) noexcept {
-        v = val.v;
-        return *this;
-    }
-
-    /// Возвращает значение класса в виде целого числа.
-    template<uint32_t P>
-    [[nodiscard]]
-    constexpr
-    typename gf_old<P>::gf_type gf_old<P>::data() const noexcept {
-        return v;
-    }
-
-    template<uint32_t P>
-    [[nodiscard]]
-    constexpr
-    gf_old<P> gf_old<P>::operator+() const noexcept {
-        return gf_old<P> {*this};
-    }
-
-    template<uint32_t P>
-    [[nodiscard]]
-    constexpr
-    gf_old<P> gf_old<P>::operator+(const gf_old<P> &val) const noexcept {
-        return gf_old<P> {v + val.v};
-    }
-
-    template<uint32_t P>
-    constexpr
-    gf_old<P> &gf_old<P>::operator+=(const gf_old<P> &val) noexcept {
-        v = (v + val.v) % P;
-        return *this;
-    }
-
-    template<uint32_t P>
-    constexpr
-    gf_old<P> &gf_old<P>::operator++() noexcept {
-        v = (v + 1) % P;
-        return *this;
-    }
-
-    template<uint32_t P>
-    [[nodiscard]]
-    constexpr
-    gf_old<P> gf_old<P>::operator++(int) & noexcept {
-        gf_old<P> tmp {*this};
-        v = (v + 1) % P;
-        return tmp;
-    }
-
-    template<uint32_t P>
-    [[nodiscard]]
-    constexpr
-    gf_old<P> gf_old<P>::operator-() const noexcept {
-        gf_old<P> tmp {*this};
-        tmp.v = P - v;
-        return tmp;
-    }
-
-    template<uint32_t P>
-    [[nodiscard]]
-    constexpr
-    gf_old<P> gf_old<P>::operator-(const gf_old<P> &val) const noexcept {
-        return gf_old<P> {(P + v - val.v) % P};
-    }
-
-    template<uint32_t P>
-    constexpr
-    gf_old<P> &gf_old<P>::operator-=(const gf_old<P> &val) noexcept {
-        v = (P + v - val.v) % P;
-        return *this;
-    }
-
-    template<uint32_t P>
-    constexpr
-    gf_old<P> &gf_old<P>::operator--() noexcept {
-        v = (P + v - 1) % P;
-        return *this;
-    }
-
-    template<uint32_t P>
-    [[nodiscard]]
-    constexpr
-    gf_old<P> gf_old<P>::operator--(int) & noexcept {
-        gf_old<P> tmp {*this };
-        v = (P + v - 1) % P;
-        return tmp;
-    }
-
-    template<uint32_t P>
-    [[nodiscard]]
-    constexpr
-    gf_old<P> gf_old<P>::operator*(const gf_old<P> &val) const noexcept {
-        return gf_old<P> {v * val.v};
-    }
-
-    template<uint32_t P>
-    constexpr
-    gf_old<P> &gf_old<P>::operator*=(const gf_old<P> &val) noexcept {
-        v = (v * val.v) % P;
-        return *this;
-    }
-
-    /**
-     * Находит обратный по умножению (multiplicative inverse) элемент для данного элемента GF[P].
-     * Найденное однажды значение заносится в массив и повторно не вычисляется.
-     * Для поиска используется расширенный алгоритм Евклида, реализация с минимальными
-     * модификациями копирует код из библиотеки Boost 1.71.0.
-     */
-    template<uint32_t P>
-    [[nodiscard]]
-    gf_old<P> gf_old<P>::mul_inv() const noexcept(false) {
-        static std::array<gf_old<P>, P> arr{};
-        int_fast32_t u0 = P, u1 = 1, u2 = 0, v0 = v, v1 = 0, v2 = 1, w0, w1, w2, q;
-        switch (v) {
-            case 1:
-                return gf_old<P> {*this };
-            case 0:
-                throw std::logic_error("multiplicative inverse don't exist");
-            default:
-                switch (arr[v].v) {
-                    case 1: // marked as irreversible
-                        throw std::logic_error("multiplicative inverse don't exist");
-                    case 0: // not calculated
-                        while (v0) {
-                            q = u0 / v0;
-                            w0 = u0 - q * v0, w1 = u1 - q * v1, w2 = u2 - q * v2;
-                            u0 = v0, u1 = v1, u2 = v2, v0 = w0, v1 = w1, v2 = w2;
-                        }
-                        if (u0 > 1) {
-                            arr[v].v = 1; // mark as irreversible
-                            throw std::logic_error("multiplicative inverse don't exist");
-                        }
-                        arr[v].v = u2 < 0 ? P + u2 : u2; // calculated is inverse for this
-                        arr[arr[v].v].v = v; // this is inverse for calculated
-                    default:
-                        return arr[v];
-                }
-        }
-    }
-
-    /**
-     * Деление реализуется как умножение на обратный по умножению.
-     * Если обратный не существует - деление не возможно.
-     * Для существование обратного необходимо, чтобы GF[P] было полем (зависит от выбора P).
-     */
-    template<uint32_t P>
-    [[nodiscard]]
-    gf_old<P> gf_old<P>::operator/(const gf_old<P> &val) const noexcept(false) {
-        if (val.v == 0) { throw std::invalid_argument("division by zero"); }
-        return gf_old<P> {v * val.mul_inv().v};
-    }
-
-    template<uint32_t P>
-    gf_old<P> &gf_old<P>::operator/=(const gf_old<P> &val) noexcept(false) {
-        if (val.v == 0) { throw std::invalid_argument("division by zero"); }
-        v = (v * val.mul_inv().v) % P;
-        return *this;
-    }
-
-    /// Проверяет равенство данного числа нулю.
-    template<uint32_t P>
-    [[nodiscard]]
-    constexpr
-    bool gf_old<P>::is_zero() const noexcept {
-        return !v;
-    }
-
-    template<uint32_t P>
-    constexpr
-    bool gf_old<P>::operator==(const gf_old<P> &val) const noexcept {
-        return v == val.v;
-    }
-
-    template<uint32_t P>
-    constexpr
-    bool gf_old<P>::operator!=(const gf_old<P> &val) const noexcept {
-        return v != val.v;
-    }
-
-    template<uint32_t P>
-    constexpr
-    bool gf_old<P>::operator>(const gf_old<P> &val) const noexcept {
-        return v > val.v;
-    }
-
-    template<uint32_t P>
-    constexpr
-    bool gf_old<P>::operator>=(const gf_old<P> &val) const noexcept {
-        return v >= val.v;
-    }
-
-    template<uint32_t P>
-    constexpr
-    bool gf_old<P>::operator<(const gf_old<P> &val) const noexcept {
-        return v < val.v;
-    }
-
-    template<uint32_t P>
-    constexpr
-    bool gf_old<P>::operator<=(const gf_old<P> &val) const noexcept {
-        return v <= val.v;
-    }
-
-    template<uint32_t P>
-    std::ostream &operator<<(std::ostream &os, const gf_old<P> &val) {
-        return os << val.v;
-    }
-
-    template<uint32_t P>
-    std::istream &operator>>(std::istream &is, gf_old<P> &val) {
-        return is >> val.v;
     }
 
 } // namespace irrpoly

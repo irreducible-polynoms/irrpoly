@@ -13,36 +13,32 @@
 #define POLYNOMIALGF_HPP
 
 #include <algorithm>
+#include <utility>
 #include <cmath>
 #include <stdexcept>
 #include <vector>
 
-#include "gf.hpp"
-#include "polynomial.hpp"
+#include "gfpoly.hpp"
 #include "checker.hpp"
 
 namespace irrpoly {
-
-    /// Класс многочленов над полем Галуа.
-    template<uint32_t P = 2>
-    using polynomialgf = polynomial<gf_old<P>>;
 
     /**
      * Расширенный алгоритм Евклида для поиска наибольшего общего делителя
      * (greatest common divisor) двух многочленов. Реализация сделана на основе
      * кода из библиотеки Boost 1.71.0.
      */
-    template<uint32_t P>
-    polynomialgf<P> gcd(polynomialgf<P> m, polynomialgf<P> n) {
+    gfpoly gcd(gfpoly m, gfpoly n) {
+        assert(m.field() == n.field());
         if (m.is_zero() || n.is_zero()) {
-            throw ::std::domain_error("arguments must be strictly positive");
+            throw std::domain_error("arguments must be strictly positive");
         }
         if (m.degree() < n.degree()) {
-            ::std::swap(m, n);
+            std::swap(m, n);
         }
-        polynomialgf<P> u0 = m, u1 = polynomialgf<P>({1}), u2 = polynomialgf<P>({0}),
-                v0 = n, v1 = polynomialgf<P>({0}), v2 = polynomialgf<P>({1}),
-                w0, w1, w2, q;
+        gfpoly u0 = m, u1 = gfpoly(m.field(), 1), u2 = gfpoly(m.field(), 0),
+               v0 = n, v1 = gfpoly(m.field(), 0), v2 = gfpoly(m.field(), 1),
+               w0 = gfpoly(m.field()), w1 = gfpoly(m.field()), w2 = gfpoly(m.field()), q = gfpoly(m.field());
         while (!v0.is_zero()) {
             q = u0 / v0;
             w0 = u0 - q * v0, w1 = u1 - q * v1, w2 = u2 - q * v2;
@@ -73,12 +69,11 @@ namespace irrpoly {
         }
 
         /// Вычисляет производную данного многочлена.
-        template<uint32_t P>
-        polynomialgf<P> derivative(const polynomialgf<P> &val) {
-            polynomialgf<P> res = val;
+        gfpoly derivative(const gfpoly &val) {
+            gfpoly res = val;
             auto i = val.degree();
-            for (res[i] = 0; i > 0; --i) {
-                res[i - 1] = gf_old<P>(i) * val[i];
+            for (res[i] = gfn(val.field(), 0); i > 0; --i) {
+                res[i - 1] = gfn(val.field(), i) * val[i];
             }
             res.normalize();
             return res;
@@ -99,26 +94,22 @@ namespace irrpoly {
          * т.к. все многочлены первой степени неприводимы, что обеспечивает
          * возврат не доходя до вызова данной функции
          */
-        template<uint32_t P>
         [[nodiscard]]
-        polynomialgf<P> x_pow_mod_sub(
-                uint64_t pow,
-                const polynomialgf<P> &mod,
-                const polynomialgf<P> &sub = polynomialgf<P>({0})
-        ) {
+        gfpoly x_pow_mod_sub(uintmax_t pow, const gfpoly &mod, const gfpoly &sub) {
             // Эта функция возврадает по сути следующий редультат:
-            // return ((polynomialgf<P>({1}) << pow) - sub) % mod;
+            // return ((gfpoly({1}) << pow) - sub) % mod;
             // её существование необходимо, т.к. в методе Рабина
             // и в методе проверки на примитивность требуется вычислить
             // её результат для столь больших pow, что x^pow не влезает
             // в оперативную память, данный метод решает эту проблему,
             // но он всё ещё адски медленный
+            assert(mod.field() == sub.field());
             const auto n = mod.degree();
-            polynomialgf<P> xn = polynomialgf<P>{1} << n; // x^n
-            polynomialgf<P> res({1});
+            gfpoly xn = gfpoly(mod.field(), 1) << n; // x^n
+            gfpoly res(mod.field(), 1);
 
-            uint64_t d = 0;
-            typename polynomialgf<P>::size_type tmp;
+            uintmax_t d = 0;
+            typename gfpoly::size_type tmp;
             for (auto m = res.degree(); pow + m >= n; m = res.degree()) {
                 tmp = n - m;
                 pow -= tmp;
@@ -165,8 +156,7 @@ namespace irrpoly {
      * Кроме того, все многочлены первой степени неприводимы в любом поле.
      * @author Vadim Piven <vadim@piven.tech>
      */
-    template<uint32_t P>
-    bool is_irreducible_berlekamp(const polynomialgf<P> &val) {
+    bool is_irreducible_berlekamp(const gfpoly &val) {
         if (val.is_zero()) {
             return false;
         }
@@ -177,14 +167,15 @@ namespace irrpoly {
         if (n == 1) { return true; }
 
         // функция для построения матрицы берлекампа и вычисления её ранга
-        auto berlekampMatrixRank = [](const polynomialgf<P> &val) {
-            polynomialgf<P> tmp;
-            typename polynomialgf<P>::size_type i, j, k, l;
-            const gf_old<P> zer = 0;
+        auto berlekampMatrixRank = [](const gfpoly &val) {
+            gfpoly tmp(val.field());
+            typename gfpoly::size_type i, j, k, l;
+            const gfn zer(val.field());
             const auto n = val.degree();
-            ::std::vector<::std::vector<gf_old<P>>> m(n, ::std::vector<gf_old<P>>(n, zer)); // M = 0
+            std::vector<std::vector<gfn>> m(n, std::vector<gfn>(n, zer)); // M = 0
             for (i = 0; i < n; ++i) {
-                tmp = detail::x_pow_mod_sub(i * P, val); // M[i,*] = x ^ ip (mod val)
+                // M[i,*] = x ^ ip (mod val)
+                tmp = detail::x_pow_mod_sub(i * val.field()->base(), val, gfpoly(val.field(), 0));
                 for (j = 0, k = tmp.degree(); j <= k; ++j) {
                     m[i][j] += tmp[j];
                 }
@@ -193,7 +184,7 @@ namespace irrpoly {
 
             // приведение матрицы к ступенчатому виду
             bool f;
-            gf_old<P> mul;
+            gfn mul(val.field());
             for (i = k = 0; i < n && k < n; ++k) {
                 f = !m[i][k].is_zero();
                 for (j = i + 1; j < n; ++j) {
@@ -206,7 +197,7 @@ namespace irrpoly {
                             }
                         } else {
                             for (l = k; l < n; ++l) {
-                                ::std::swap(m[i][l], m[j][l]);
+                                std::swap(m[i][l], m[j][l]);
                             }
                             f = true;
                         }
@@ -221,16 +212,6 @@ namespace irrpoly {
         auto d = detail::derivative(val);
         return !d.is_zero() && gcd(val, d).degree() == 0 &&
                berlekampMatrixRank(val) == val.degree() - 1;
-    }
-
-    /// Генерирует случайный многочлен над полем GF[P] заданной степени.
-    template<uint32_t P>
-    polynomialgf<P> random(typename polynomialgf<P>::size_type degree) {
-        ::std::vector<gf_old<P>> data(degree + 1);
-        for (auto &d : data) { d = gf_old<P>::random(); }
-        while (data[0].is_zero()) { data[0] = gf_old<P>::random(); }
-        data[degree] = 1;
-        return data; // неявное преобразование вектора коэффициентов к классу polynomialgf
     }
 
     /**
@@ -248,8 +229,7 @@ namespace irrpoly {
      * https://www.researchgate.net/publication/329358609_Parallelization_of_Algorithm_for_Primitive_Polynomials_Generation_in_Extended_Galois_Field_pm
      * @author Veronika Biryukova <biryukovaveronika@mail.ru>
      */
-    template<uint32_t P>
-    bool is_primitive_definition(const polynomialgf<P> &val) {
+    bool is_primitive_definition(const gfpoly &val) {
         if (val.is_zero()) { return false; }
         const auto n = val.degree();
 
@@ -263,16 +243,17 @@ namespace irrpoly {
         const auto poly = val / val[n];
 
         // ещё один вырожденный случай, на работу с которым алгоритм не рассчитан
-        if (P == 2 && poly == polynomialgf<P>({1, 1})) { return false; }
+        auto P = poly.field()->base();
+        if (P == 2 && poly == gfpoly(poly.field(), {1, 1})) { return false; }
 
-        auto mp = (n % 2) ? -poly[0] : poly[0];
+        uintmax_t mp = (n % 2) ? -(poly[0].data()) : (poly[0].data());
 
         // функция для разложения (факторизации) числа на множители
         // единица и само число (в случае его простоты) в разложение не входят
-        auto factorize = [](uint64_t n) {
-            ::std::vector<uint64_t> list;
+        auto factorize = [](uintmax_t n) {
+            std::vector<uintmax_t> list;
             const auto begin = n;
-            for (uint64_t d = 2; d * d <= n; ++d) {
+            for (uintmax_t d = 2; d * d <= n; ++d) {
                 if (n % d) { continue; }
                 list.emplace_back(d);
                 while (n % d == 0) { n /= d; }
@@ -284,26 +265,26 @@ namespace irrpoly {
         // проверяется выполнение первого условия
         if (P > 2) {
             const auto p = P - 1;
-            auto list = (p == 2) ? ::std::vector<uint64_t>{2} : factorize(p);
+            auto list = (p == 2) ? std::vector<uintmax_t>{2} : factorize(p);
             auto m = list.size() - 1;
             auto tmp = mp;
             for (uint32_t i = 1; i <= p; ++i, tmp *= mp) {
                 if (i != p / list[m]) { continue; }
-                if (tmp.data() == 1) { return false; }
+                if (tmp == 1) { return false; }
                 if (m == 0) { break; } else { m -= 1; }
             }
         }
 
         // проверяется выполнение второго условия
-        uint64_t r = (detail::integer_power(static_cast<uint64_t>(P), n) - 1) / (P - 1);
-        auto tmp = detail::x_pow_mod_sub(r, val, polynomialgf<P>({mp}));
+        uintmax_t r = (detail::integer_power(P, n) - 1) / (P - 1);
+        auto tmp = detail::x_pow_mod_sub(r, val, gfpoly(poly.field(), mp));
         if (!tmp.is_zero()) { return false; }
 
         // проверяется выполнение третьего условия
         auto list3 = factorize(r);
         const auto m = list3.size();
         for (size_t i = 0; i < m; ++i) {
-            tmp = detail::x_pow_mod_sub(r / list3[i], poly);
+            tmp = detail::x_pow_mod_sub(r / list3[i], poly, gfpoly(poly.field(), 0));
             if (tmp.is_zero() || tmp.degree() == 0) { return false; }
         }
 
@@ -329,8 +310,7 @@ namespace irrpoly {
      * https://en.wikipedia.org/wiki/Factorization_of_polynomials_over_finite_fields
      * @author Anastasia Chekhoeva <A89168226876@yandex.ru>
      */
-    template<uint32_t P>
-    bool is_irreducible_rabin(const polynomialgf<P> &val) {
+    bool is_irreducible_rabin(const gfpoly &val) {
         if (val.is_zero()) { return false; }
         const auto n = val.degree();
 
@@ -339,10 +319,10 @@ namespace irrpoly {
         if (n == 1) { return true; }
 
         // функция разложения числа на множители
-        auto get_list = [](uint64_t n) {
-            ::std::vector<uint64_t> list;
+        auto get_list = [](uintmax_t n) {
+            std::vector<uintmax_t> list;
             const auto begin = n;
-            for (uint64_t d = 2; d * d <= n; ++d) {
+            for (uintmax_t d = 2; d * d <= n; ++d) {
                 if (n % d) { continue; }
                 list.emplace_back(begin / d);
                 while (n % d == 0) { n /= d; }
@@ -352,15 +332,16 @@ namespace irrpoly {
         };
 
         // шаги 1-2
+        auto P = val.field()->base();
         auto list = get_list(n);
-        polynomialgf<P> tmp, x = polynomialgf<P>({0, 1});
+        gfpoly tmp(val.field()), x = gfpoly(val.field(), {0, 1});
         for (auto i: list) {
-            tmp = detail::x_pow_mod_sub(detail::integer_power(static_cast<uint64_t>(P), i), val, x);
+            tmp = detail::x_pow_mod_sub(detail::integer_power(P, i), val, x);
             if (tmp.is_zero() || gcd(val, tmp).degree() > 0) { return false; }
         }
 
         // шаг 3
-        tmp = detail::x_pow_mod_sub(detail::integer_power(static_cast<uint64_t>(P), n), val, x);
+        tmp = detail::x_pow_mod_sub(detail::integer_power(P, n), val, x);
         return tmp.is_zero();
     }
 
@@ -385,33 +366,28 @@ namespace irrpoly {
             definition ///< проверка по определению
         };
 
-        template<uint32_t P>
-        using polychecker = checker<polynomialgf<P>, result_type>;
+        using polychecker = checker<gfpoly, result_type>;
 
         /// Формируется универсальная функция проверки многочленов.
-        template<uint32_t P>
-        typename checker<polynomialgf<P>, result_type>::check_func make_check_func(
+        typename checker<gfpoly, result_type>::check_func make_check_func(
                 irreducible_method irr_meth, primitive_method prim_meth) {
-            return [=](const polynomialgf<P> &poly, result_type &res) {
+            return [=](const gfpoly &poly, std::optional<result_type> &res) {
                 // в случае, когда проверка не выполняется устанавливается результат true
+                res.emplace(result_type{true, true});
                 switch (irr_meth) {
                     case irreducible_method::berlekamp:
-                        res.irreducible = is_irreducible_berlekamp(poly);
+                        res.value().irreducible = is_irreducible_berlekamp(poly);
                         break;
                     case irreducible_method::rabin:
-                        res.irreducible = is_irreducible_rabin(poly);
+                        res.value().irreducible = is_irreducible_rabin(poly);
                         break;
-                    default: // irreducible_method::nil
-                        res.irreducible = true;
-                        break;
+                    default: ; // irreducible_method::nil
                 }
                 switch (prim_meth) {
                     case primitive_method::definition:
-                        res.primitive = res.irreducible ? is_primitive_definition(poly) : false;
+                        res.value().primitive = res.value().irreducible ? is_primitive_definition(poly) : false;
                         break;
-                    default: // primitive_method::nil
-                        res.primitive = true;
-                        break;
+                    default: ; // primitive_method::nil
                 }
             };
         }

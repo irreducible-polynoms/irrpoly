@@ -1,7 +1,7 @@
 #include <iostream>
 #include <thread>
 
-#include "irrpoly/polynomialgf.hpp"
+#include <irrpoly/gfcheck.hpp>
 
 using namespace irrpoly;
 
@@ -17,29 +17,30 @@ using namespace irrpoly;
  * @param threads_num число потоков, выполняющих проверку (число физических ядер минус один)
  * @return вектор сгенерированных многочленов с требуемыми характеристиками
  */
-template<uint32_t P>
 [[nodiscard]]
-std::vector<polynomialgf<P>> generate_irreducible(
-        const typename std::vector<polynomialgf<P>>::size_type num,
-        const typename polynomialgf<P>::size_type degree,
+std::vector<gfpoly> generate_irreducible(
+        const uintmax_t base,
+        const typename std::vector<gfpoly>::size_type num,
+        const typename gfpoly::size_type degree,
         const typename multithread::irreducible_method irr_meth,
         const typename multithread::primitive_method prim_meth,
         const unsigned threads_num
 ) {
     // возвращаемое значение
-    std::vector<polynomialgf<P>> arr;
+    std::vector<gfpoly> arr;
     arr.reserve(num);
 
     // создаём всё необходимое для многопоточности
-    multithread::polychecker<P> ch(threads_num);
+    multithread::polychecker ch(threads_num);
 
-    auto input = [&]() -> polynomialgf<P> {
-        return random<P>(degree);
+    auto field = make_gf(base);
+    auto input = [&]() -> gfpoly {
+        return gfpoly::random(field, degree);
     };
 
-    auto check = multithread::make_check_func<P>(irr_meth, prim_meth);
+    auto check = multithread::make_check_func(irr_meth, prim_meth);
 
-    auto callback = [&](const polynomialgf<P> &poly, const typename multithread::result_type &res) -> bool {
+    auto callback = [&](const gfpoly &poly, const typename multithread::result_type &res) -> bool {
         if (res.irreducible) {
             arr.emplace_back(poly);
             return true;
@@ -53,12 +54,12 @@ std::vector<polynomialgf<P>> generate_irreducible(
 }
 
 int main() {
-    // основание поля Галуа GF[P]
-    const uint32_t P = 2;
+    // основание поля Галуа
+    const uint32_t base = 2;
     // число многочленов, которые требуется найти
-    const typename std::vector<polynomialgf<P>>::size_type num = 3;
+    const typename std::vector<gfpoly>::size_type num = 3;
     // степень искомых многочленов
-    const typename polynomialgf<P>::size_type degree = 5;
+    const typename gfpoly::size_type degree = 5;
     // какой из методов проверки на неприводимость хотим использовать
     // возможные варианты - отсутствие приверки (nil), Берлекампа (berlekamp) и Рабин (rabin)
     const typename multithread::irreducible_method irr_meth = multithread::irreducible_method::berlekamp;
@@ -70,7 +71,7 @@ int main() {
     const unsigned threads_num = std::thread::hardware_concurrency() - 1;
 
     // генерируем многочлены и выводим результат
-    auto poly = generate_irreducible<P>(num, degree, irr_meth, prim_meth, threads_num);
+    auto poly = generate_irreducible(base, num, degree, irr_meth, prim_meth, threads_num);
     for (const auto &p : poly) {
         std::cout << p << std::endl;
     }

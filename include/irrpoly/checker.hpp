@@ -17,6 +17,7 @@
 #include <utility>
 #include <vector>
 #include <memory>
+#include <optional>
 
 namespace irrpoly {
 
@@ -25,32 +26,32 @@ namespace irrpoly {
     class checker {
     public:
         /// Вид функции, генерирующей многочлены для проверки.
-        typedef ::std::function<value_type()> input_func;
+        typedef std::function<value_type()> input_func;
 
         /// Вид функции, выполняющей проверку и сохраняющей результат.
-        typedef ::std::function<void(const value_type &, result_type &)> check_func;
+        typedef std::function<void(const value_type &, std::optional<result_type> &)> check_func;
 
         /// Вид функции, обрабатывающей результат проверки (если многочлен удовлетворяет
         /// требуемым условиям возвращает true, иначе - false).
-        typedef ::std::function<bool(const value_type &, const result_type &)> callback_func;
+        typedef std::function<bool(const value_type &, const result_type &)> callback_func;
 
     private:
         /// Потоки, непосредственно выполняющие проверку многочленов на неприводимость и примитивность.
         class node {
-            ::std::shared_ptr<::std::mutex> s_mutex;
-            ::std::shared_ptr<::std::condition_variable> s_cond;
+            std::shared_ptr<std::mutex> s_mutex;
+            std::shared_ptr<std::condition_variable> s_cond;
 
             check_func cf; ///< Основная функция проверки
 
             bool _terminate; ///< Поток должен быть завершён
-            value_type val; ///< Входные данные
+            std::optional<value_type> val; ///< Входные данные
 
             bool _busy; ///< Поток занят полезной работой
-            result_type res; ///< Результат проверки
+            std::optional<result_type> res; ///< Результат проверки
 
-            ::std::thread thread;
-            ::std::mutex mutex;
-            ::std::condition_variable cond;
+            std::thread thread;
+            std::mutex mutex;
+            std::condition_variable cond;
 
             /**
              * Собственно функция, выполняющая проверку многочлена на неприводимость и примитивность.
@@ -61,24 +62,24 @@ namespace irrpoly {
              * В случае с pthread для этого требуется выполнить pthread_exit.
              */
             void check() {
-                ::std::unique_lock<::std::mutex> lk(mutex);
+                std::unique_lock<std::mutex> lk(mutex);
 
                 while (!_terminate) {
                     while (!(_busy || _terminate)) { cond.wait(lk); }
                     if (_terminate) { break; }
 
-                    cf(val, res);
+                    cf(val.value(), res);
 
-                    ::std::lock_guard<::std::mutex> lg(*s_mutex);
+                    std::lock_guard<std::mutex> lg(*s_mutex);
                     _busy = false;
                     s_cond->notify_one();
                 }
             }
 
         public:
-            node(::std::shared_ptr<::std::mutex> s_mutex, ::std::shared_ptr<::std::condition_variable> s_cond) :
+            node(std::shared_ptr<std::mutex> s_mutex, std::shared_ptr<std::condition_variable> s_cond) :
                     s_mutex(std::move(s_mutex)), s_cond(std::move(s_cond)), _busy(false), _terminate(false) {
-                thread = ::std::thread(&node::check, this);
+                thread = std::thread(&node::check, this);
                 thread.detach();
             }
 
@@ -93,7 +94,7 @@ namespace irrpoly {
 
             /// Многочлен, проверка которого выполнялась.
             [[nodiscard]]
-            const value_type &get() const {
+            const std::optional<value_type> &get() const {
                 return val;
             }
 
@@ -102,8 +103,9 @@ namespace irrpoly {
              * предыдущей проверки и выставляет busy = true.
              */
             void set(value_type v) {
-                ::std::lock_guard<::std::mutex> lg(mutex);
-                val = v;
+                std::lock_guard<std::mutex> lg(mutex);
+                val.emplace(v);
+                res.reset();
                 _busy = true;
                 cond.notify_one();
             }
@@ -116,22 +118,22 @@ namespace irrpoly {
 
             /// Устанавливает флаг, требующий завершить работу потока по завершении вычислений.
             void terminate() {
-                ::std::lock_guard<::std::mutex> lg(mutex);
+                std::lock_guard<std::mutex> lg(mutex);
                 _terminate = true;
                 cond.notify_one();
             }
 
             /// Возвращает результат проверки текущего многочлена на неприводимость и примитивность.
             [[nodiscard]]
-            const result_type &result() const {
+            const std::optional<result_type> &result() const {
                 return res;
             }
         }; // class node
 
-        ::std::shared_ptr<::std::mutex> s_mutex;
-        ::std::shared_ptr<::std::condition_variable> s_cond;
+        std::shared_ptr<std::mutex> s_mutex;
+        std::shared_ptr<std::condition_variable> s_cond;
 
-        ::std::vector<::std::unique_ptr<node>> s; // slave
+        std::vector<std::unique_ptr<node>> s; // slave
 
         /// Считает, сколько потоков заняты.
         unsigned countBusy() {
@@ -142,19 +144,19 @@ namespace irrpoly {
 
     public:
         explicit
-        checker(const unsigned n = ::std::thread::hardware_concurrency() - 1) {
-            s_mutex = ::std::make_shared<::std::mutex>();
-            s_cond = ::std::make_shared<::std::condition_variable>();
+        checker(const unsigned n = std::thread::hardware_concurrency() - 1) {
+            s_mutex = std::make_shared<std::mutex>();
+            s_cond = std::make_shared<std::condition_variable>();
 
             s.reserve(n);
             for (unsigned i = 0; i < n; ++i) {
-                s.push_back(::std::make_unique<node>(s_mutex, s_cond));
+                s.push_back(std::make_unique<node>(s_mutex, s_cond));
             }
         }
 
         /// Основной цикл разделения работы на потоки.
         void check(uint64_t n, input_func in, check_func cf, callback_func back, const bool strict = true) {
-            ::std::unique_lock<::std::mutex> lk(*s_mutex);
+            std::unique_lock<std::mutex> lk(*s_mutex);
             // заряжаем многочлены на проверку
             for (const auto &sl : s) {
                 sl->set_check(cf);
@@ -166,7 +168,7 @@ namespace irrpoly {
                 // находим свободные потоки и заряжаем новыми входными данными
                 for (unsigned i = 0; i < s.size() && n; ++i) {
                     if (s[i]->busy()) { continue; }
-                    if (back(s[i]->get(), s[i]->result())) { --n; }
+                    if (back(s[i]->get().value(), s[i]->result().value())) { --n; }
                     s[i]->set(in());
                 }
             }
@@ -174,7 +176,7 @@ namespace irrpoly {
             while (countBusy()) { s_cond->wait(lk); }
             if (!strict) {
                 // обрабатываем все проверенные многочлены, даже если их больше, чем требовалось найти
-                for (const auto &sl : s) { back(sl->get(), sl->result()); }
+                for (const auto &sl : s) { back(sl->get().value(), sl->result().value()); }
             }
         }
 
