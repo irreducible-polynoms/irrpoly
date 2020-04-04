@@ -282,7 +282,7 @@ namespace irrpoly {
 
         auto P = val.field()->base();
         gfpoly tmp(val.field()), x = gfpoly(val.field(), {0, 1});
-        for (auto m = n / 2, i = 1ul; i <= m; ++i) {
+        for (uintmax_t m = n / 2, i = 1; i <= m; ++i) {
             tmp = detail::x_pow_mod_sub(detail::integer_power(P, i), val, x);
             if (tmp.is_zero() || gcd(val, tmp).degree() > 0) { return false; }
         }
