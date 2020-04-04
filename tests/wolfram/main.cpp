@@ -1,5 +1,4 @@
 #include <iostream>
-#include <thread>
 
 #include <irrpoly/gfcheck.hpp>
 
@@ -12,7 +11,7 @@ int main() {
         for (size_t i = 4; i < 10; ++i) {
             for (size_t j = 0; j < i / 2; ++j) {
                 gfpoly poly = gfpoly::random(gf, i);
-                std::cout << (is_irreducible_berlekamp(poly) ? '1' : '0') << " "
+                std::cout << (is_irreducible_rabin(poly) ? '1' : '0') << " "
                           << (is_primitive_definition(poly) ? '1' : '0') << " " << base << " "
                           << poly << std::endl;
             }

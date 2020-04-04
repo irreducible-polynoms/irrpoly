@@ -246,7 +246,7 @@ namespace irrpoly {
         auto P = poly.field()->base();
         if (P == 2 && poly == gfpoly(poly.field(), {1, 1})) { return false; }
 
-        uintmax_t mp = (n % 2) ? -(poly[0].data()) : (poly[0].data());
+        gfn mp = (n % 2) ? -poly[0] : poly[0];
 
         // функция для разложения (факторизации) числа на множители
         // единица и само число (в случае его простоты) в разложение не входят
@@ -277,7 +277,7 @@ namespace irrpoly {
 
         // проверяется выполнение второго условия
         uintmax_t r = (detail::integer_power(P, n) - 1) / (P - 1);
-        auto tmp = detail::x_pow_mod_sub(r, val, gfpoly(poly.field(), mp));
+        auto tmp = detail::x_pow_mod_sub(r, val, gfpoly(mp));
         if (!tmp.is_zero()) { return false; }
 
         // проверяется выполнение третьего условия
