@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['lock_57',['lock',['../classirrpoly_1_1detail_1_1sync.html#a27155fd8c0b3b3c9d8123fcc3ae28c89',1,'irrpoly::detail::sync']]]
+  ['quotient_5fremainder_37',['quotient_remainder',['../gfpoly_8hpp.html#ab0b76eba3974c7d842db7f8a5345dfb5',1,'irrpoly::detail']]]
 ];

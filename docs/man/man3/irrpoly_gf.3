@@ -1,8 +1,9 @@
-.TH "irrpoly::gf< P >" 3 "Сб 16 Ноя 2019" "Version 1.0.0" "irrpoly" \" -*- nroff -*-
+.TH "irrpoly::gf" 3 "Сб 4 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-irrpoly::gf< P >
+irrpoly::gf \- Класс gf представляет поле Галуа\&.  
+
 .SH SYNOPSIS
 .br
 .PP
@@ -12,130 +13,29 @@ irrpoly::gf< P >
 
 .in +1c
 .ti -1c
-.RI "typedef ::std::conditional<((P \- 1) *(P \- 1) > INT32_MAX), int64_t, typename ::std::conditional<((P \- 1) *(P \- 1) > INT16_MAX), int32_t, typename ::std::conditional<((P \- 1) *(P \- 1) > INT8_MAX), int16_t, int8_t >::type >::type >::type \fBgf_type\fP"
+.RI "using \fBvalue_type\fP = uintmax_t"
 .br
-.RI "Выбираем тип внутреннего хранилища как минимально возможный для экономии памяти "
 .in -1c
 .SS "Открытые члены"
 
 .in +1c
 .ti -1c
-.RI "constexpr \fBgf\fP () noexcept"
-.br
-.RI "Конструктор по умолчанию, обнуляет переменную\&. "
-.ti -1c
-.RI "\fBgf\fP (int_fast64_t) noexcept"
+.RI "value_type \fBbase\fP () const"
 .br
 .ti -1c
-.RI "int_fast64_t \fBdata\fP () const noexcept"
+.RI "value_type \fBmul_inv\fP (value_type) const"
 .br
-.RI "Возвращает значение класса в виде целого числа\&. "
-.ti -1c
-.RI "\fBgf\fP< P > \fBoperator+\fP () const noexcept"
-.br
-.ti -1c
-.RI "\fBgf\fP< P > \fBoperator+\fP (const \fBgf\fP< P > &) const noexcept"
-.br
-.ti -1c
-.RI "\fBgf\fP< P > & \fBoperator+=\fP (const \fBgf\fP< P > &) noexcept"
-.br
-.ti -1c
-.RI "\fBgf\fP< P > & \fBoperator++\fP () noexcept"
-.br
-.ti -1c
-.RI "\fBgf\fP< P > \fBoperator++\fP (int) &noexcept"
-.br
-.ti -1c
-.RI "\fBgf\fP< P > \fBoperator\-\fP () const noexcept"
-.br
-.ti -1c
-.RI "\fBgf\fP< P > \fBoperator\-\fP (const \fBgf\fP< P > &) const noexcept"
-.br
-.ti -1c
-.RI "\fBgf\fP< P > & \fBoperator\-=\fP (const \fBgf\fP< P > &) noexcept"
-.br
-.ti -1c
-.RI "\fBgf\fP< P > & \fBoperator\-\-\fP () noexcept"
-.br
-.ti -1c
-.RI "\fBgf\fP< P > \fBoperator\-\-\fP (int) &noexcept"
-.br
-.ti -1c
-.RI "\fBgf\fP< P > \fBoperator*\fP (const \fBgf\fP< P > &) const noexcept"
-.br
-.ti -1c
-.RI "\fBgf\fP< P > & \fBoperator*=\fP (const \fBgf\fP< P > &) noexcept"
-.br
-.ti -1c
-.RI "\fBgf\fP< P > \fBmul_inv\fP () const noexcept(false)"
-.br
-.ti -1c
-.RI "\fBgf\fP< P > \fBoperator/\fP (const \fBgf\fP< P > &) const noexcept(false)"
-.br
-.ti -1c
-.RI "\fBgf\fP< P > & \fBoperator/=\fP (const \fBgf\fP< P > &) noexcept(false)"
-.br
-.ti -1c
-.RI "bool \fBis_zero\fP () const noexcept"
-.br
-.RI "Проверяет равенство данного числа нулю\&. "
-.ti -1c
-.RI "bool \fBoperator==\fP (const \fBgf\fP< P > &) const noexcept"
-.br
-.ti -1c
-.RI "bool \fBoperator!=\fP (const \fBgf\fP< P > &) const noexcept"
-.br
-.ti -1c
-.RI "bool \fBoperator>\fP (const \fBgf\fP< P > &) const noexcept"
-.br
-.ti -1c
-.RI "bool \fBoperator>=\fP (const \fBgf\fP< P > &) const noexcept"
-.br
-.ti -1c
-.RI "bool \fBoperator<\fP (const \fBgf\fP< P > &) const noexcept"
-.br
-.ti -1c
-.RI "bool \fBoperator<=\fP (const \fBgf\fP< P > &) const noexcept"
-.br
-.in -1c
-.SS "Открытые статические члены"
-
-.in +1c
-.ti -1c
-.RI "static \fBgf\fP< P > \fBrandom\fP () noexcept"
-.br
-.RI "Генерирует случайное число в пределах [0, P-1]\&. "
 .in -1c
 .SS "Друзья"
 
 .in +1c
 .ti -1c
-.RI "template<uint32_t Q> ::std::ostream & \fBoperator<<\fP (::std::ostream &, const \fBgf\fP< Q > &)"
-.br
-.ti -1c
-.RI "template<uint32_t Q> ::std::istream & \fBoperator>>\fP (::std::istream &, \fBgf\fP< Q > &)"
+.RI "std::shared_ptr< \fBgf\fP > \fBmake_gf\fP (uintmax_t)"
 .br
 .in -1c
 .SH "Подробное описание"
 .PP 
-
-.SS "template<uint32_t P = 2>
-.br
-class irrpoly::gf< P >"
-Класс gf представляет из себя число над полем GF[P]\&. 
-.PP
-\fBПараметры шаблона\fP
-.RS 4
-\fIP\fP основание поля Галуа GF[P], по умолчанию рассматривается поле GF[2]\&. Существование поля Галуа для заданного P не гарантируется, за использование корректного значения для P несут ответственность пользователи данного класса\&. 
-.RE
-.PP
-
-.SH "Методы"
-.PP 
-.SS "template<uint32_t P> \fBgf\fP< P > \fBirrpoly::gf\fP< P >::mul_inv () const\fC [noexcept]\fP"
-Находит обратный по умножению (multiplicative inverse) элемент для данного элемента GF[P]\&. Найденное однажды значение заносится в массив и повторно не вычисляется\&. Для поиска используется расширенный алгоритм Евклида, реализация с минимальными модификациями копирует код из библиотеки Boost 1\&.71\&.0\&. 
-.SS "template<uint32_t P> \fBgf\fP< P > & \fBirrpoly::gf\fP< P >::operator/= (const \fBgf\fP< P > & val)\fC [noexcept]\fP"
-Деление реализуется как умножение на обратный по умножению\&. Если обратный не существует - деление не возможно\&. Для существование обратного необходимо, чтобы GF[P] было полем (зависит от выбора P)\&. 
+Класс gf представляет поле Галуа\&. 
 
 .SH "Автор"
 .PP 

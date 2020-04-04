@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>irrpoly: Класс irrpoly::gfpoly</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">irrpoly
+   &#160;<span id="projectnumber">2.0.0</span>
+   </div>
+   <div id="projectbrief">Проверка многочленов на неприводимость и примитивность над заданным полем Галуа</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.8.17 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Поиск');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><b>irrpoly</b></li><li class="navelem"><a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">Открытые типы</a> &#124;
+<a href="#pub-methods">Открытые члены</a> &#124;
+<a href="#pub-static-methods">Открытые статические члены</a> &#124;
+<a href="classirrpoly_1_1gfpoly-members.html">Полный список членов класса</a>  </div>
+  <div class="headertitle">
+<div class="title">Класс irrpoly::gfpoly</div>  </div>
+</div><!--header-->
+<div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Открытые типы</h2></td></tr>
+<tr class="memitem:a4ee535dd49b94a343d075f586c5d9e38"><td class="memItemLeft" align="right" valign="top"><a id="a4ee535dd49b94a343d075f586c5d9e38"></a>
+typedef std::vector&lt; <a class="el" href="classirrpoly_1_1gfn.html">gfn</a> &gt;::value_type&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b></td></tr>
+<tr class="separator:a4ee535dd49b94a343d075f586c5d9e38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35a0e6dedd40b5d574612a660e287d96"><td class="memItemLeft" align="right" valign="top"><a id="a35a0e6dedd40b5d574612a660e287d96"></a>
+typedef std::vector&lt; <a class="el" href="classirrpoly_1_1gfn.html">gfn</a> &gt;::size_type&#160;</td><td class="memItemRight" valign="bottom"><b>size_type</b></td></tr>
+<tr class="separator:a35a0e6dedd40b5d574612a660e287d96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Открытые члены</h2></td></tr>
+<tr class="memitem:a457884a94a69a2670f5c8c52b6a59b18"><td class="memItemLeft" align="right" valign="top"><a id="a457884a94a69a2670f5c8c52b6a59b18"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>gfpoly</b> (gfp field)</td></tr>
+<tr class="separator:a457884a94a69a2670f5c8c52b6a59b18"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49bada27681654280a4a743711620b5b"><td class="memItemLeft" align="right" valign="top"><a id="a49bada27681654280a4a743711620b5b"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>gfpoly</b> (gfp field, std::vector&lt; <a class="el" href="classirrpoly_1_1gfn.html">gfn</a> &gt; &amp;&amp;p)</td></tr>
+<tr class="separator:a49bada27681654280a4a743711620b5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78d634505993f804e0568b49d1ad9fce"><td class="memItemLeft" align="right" valign="top"><a id="a78d634505993f804e0568b49d1ad9fce"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>gfpoly</b> (<a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&amp;p) noexcept</td></tr>
+<tr class="separator:a78d634505993f804e0568b49d1ad9fce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca36133da5ea3fd34d928f1bd6eda556"><td class="memItemLeft" align="right" valign="top"><a id="aca36133da5ea3fd34d928f1bd6eda556"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>gfpoly</b> (const <a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;p)=default</td></tr>
+<tr class="separator:aca36133da5ea3fd34d928f1bd6eda556"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a079df3d0cb23452890b2683cc3d2312e"><td class="memItemLeft" align="right" valign="top"><a id="a079df3d0cb23452890b2683cc3d2312e"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>gfpoly</b> (const gfp &amp;field, std::initializer_list&lt; typename gfn::value_type &gt; l)</td></tr>
+<tr class="separator:a079df3d0cb23452890b2683cc3d2312e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9fa7521c512e54155891615424bf2cc5"><td class="memItemLeft" align="right" valign="top"><a id="a9fa7521c512e54155891615424bf2cc5"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>gfpoly</b> (<a class="el" href="classirrpoly_1_1gfn.html">gfn</a> value)</td></tr>
+<tr class="separator:a9fa7521c512e54155891615424bf2cc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e1aaafbb075d684fb1810c66a3daef8"><td class="memItemLeft" align="right" valign="top"><a id="a1e1aaafbb075d684fb1810c66a3daef8"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>gfpoly</b> (const gfp &amp;field, typename gfn::value_type value)</td></tr>
+<tr class="separator:a1e1aaafbb075d684fb1810c66a3daef8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaae1bee89530e137b146f7c3fb210602"><td class="memItemLeft" align="right" valign="top"><a id="aaae1bee89530e137b146f7c3fb210602"></a>
+gfp&#160;</td><td class="memItemRight" valign="bottom"><b>field</b> ()</td></tr>
+<tr class="separator:aaae1bee89530e137b146f7c3fb210602"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8dbbfb27c57bd5312617717de2960485"><td class="memItemLeft" align="right" valign="top"><a id="a8dbbfb27c57bd5312617717de2960485"></a>
+const gfp &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>field</b> () const</td></tr>
+<tr class="separator:a8dbbfb27c57bd5312617717de2960485"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af29d08bf44482d23d4cd545ae134e247"><td class="memItemLeft" align="right" valign="top"><a id="af29d08bf44482d23d4cd545ae134e247"></a>
+size_type&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const</td></tr>
+<tr class="separator:af29d08bf44482d23d4cd545ae134e247"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa16690ca4e8aa796336e172f9045c2e4"><td class="memItemLeft" align="right" valign="top"><a id="aa16690ca4e8aa796336e172f9045c2e4"></a>
+size_type&#160;</td><td class="memItemRight" valign="bottom"><b>degree</b> () const</td></tr>
+<tr class="separator:aa16690ca4e8aa796336e172f9045c2e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a91b974aef82ba87e11576f27d5ef20"><td class="memItemLeft" align="right" valign="top"><a id="a7a91b974aef82ba87e11576f27d5ef20"></a>
+value_type &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (size_type i)</td></tr>
+<tr class="separator:a7a91b974aef82ba87e11576f27d5ef20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af893d4d7b5a9bc0e974fc3f4c8da7d38"><td class="memItemLeft" align="right" valign="top"><a id="af893d4d7b5a9bc0e974fc3f4c8da7d38"></a>
+const value_type &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (size_type i) const</td></tr>
+<tr class="separator:af893d4d7b5a9bc0e974fc3f4c8da7d38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a172ca9f8e1e141714bb3d406eaea12"><td class="memItemLeft" align="right" valign="top"><a id="a2a172ca9f8e1e141714bb3d406eaea12"></a>
+const std::vector&lt; <a class="el" href="classirrpoly_1_1gfn.html">gfn</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>data</b> () const</td></tr>
+<tr class="separator:a2a172ca9f8e1e141714bb3d406eaea12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e297150be30d06507f6766ff9e8d12d"><td class="memItemLeft" align="right" valign="top"><a id="a8e297150be30d06507f6766ff9e8d12d"></a>
+std::vector&lt; <a class="el" href="classirrpoly_1_1gfn.html">gfn</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>data</b> ()</td></tr>
+<tr class="separator:a8e297150be30d06507f6766ff9e8d12d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e0a33a5d2a2f6314c4dbed68a96f0d0"><td class="memItemLeft" align="right" valign="top"><a id="a0e0a33a5d2a2f6314c4dbed68a96f0d0"></a>
+<a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&amp;p) noexcept</td></tr>
+<tr class="separator:a0e0a33a5d2a2f6314c4dbed68a96f0d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a117bd42f7270f1d6022acd39a4a6825c"><td class="memItemLeft" align="right" valign="top"><a id="a117bd42f7270f1d6022acd39a4a6825c"></a>
+<a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;p)</td></tr>
+<tr class="separator:a117bd42f7270f1d6022acd39a4a6825c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4558ac0d2951038daa787f2d78f8ef8"><td class="memTemplParams" colspan="2"><a id="ab4558ac0d2951038daa787f2d78f8ef8"></a>
+template&lt;class U &gt; </td></tr>
+<tr class="memitem:ab4558ac0d2951038daa787f2d78f8ef8"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator+=</b> (const U &amp;value)</td></tr>
+<tr class="separator:ab4558ac0d2951038daa787f2d78f8ef8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6939687103067380443994752544b38"><td class="memTemplParams" colspan="2"><a id="aa6939687103067380443994752544b38"></a>
+template&lt;class U &gt; </td></tr>
+<tr class="memitem:aa6939687103067380443994752544b38"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator-=</b> (const U &amp;value)</td></tr>
+<tr class="separator:aa6939687103067380443994752544b38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a811217b12290e037490528a147050e6c"><td class="memTemplParams" colspan="2"><a id="a811217b12290e037490528a147050e6c"></a>
+template&lt;class U &gt; </td></tr>
+<tr class="memitem:a811217b12290e037490528a147050e6c"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator*=</b> (const U &amp;value)</td></tr>
+<tr class="separator:a811217b12290e037490528a147050e6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9065767cc9a4ae2086b4a1a849514e8c"><td class="memTemplParams" colspan="2"><a id="a9065767cc9a4ae2086b4a1a849514e8c"></a>
+template&lt;class U &gt; </td></tr>
+<tr class="memitem:a9065767cc9a4ae2086b4a1a849514e8c"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator/=</b> (const U &amp;value)</td></tr>
+<tr class="separator:a9065767cc9a4ae2086b4a1a849514e8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2367bc1ef53e119443e4367cc65933b"><td class="memTemplParams" colspan="2"><a id="af2367bc1ef53e119443e4367cc65933b"></a>
+template&lt;class U &gt; </td></tr>
+<tr class="memitem:af2367bc1ef53e119443e4367cc65933b"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator%=</b> (const U &amp;)</td></tr>
+<tr class="separator:af2367bc1ef53e119443e4367cc65933b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50a36c36db29e1a25a03dd05ac9e8014"><td class="memItemLeft" align="right" valign="top"><a id="a50a36c36db29e1a25a03dd05ac9e8014"></a>
+<a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator+=</b> (const <a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;value)</td></tr>
+<tr class="separator:a50a36c36db29e1a25a03dd05ac9e8014"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a507c84492110edc837f363d6884219d9"><td class="memItemLeft" align="right" valign="top"><a id="a507c84492110edc837f363d6884219d9"></a>
+<a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator-=</b> (const <a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;value)</td></tr>
+<tr class="separator:a507c84492110edc837f363d6884219d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38490a4e8ab1a21f9628973b42068a87"><td class="memItemLeft" align="right" valign="top"><a id="a38490a4e8ab1a21f9628973b42068a87"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>multiply</b> (const <a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;a, const <a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;b)</td></tr>
+<tr class="separator:a38490a4e8ab1a21f9628973b42068a87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab56c82802ea425c0217ebc864c9946a3"><td class="memItemLeft" align="right" valign="top"><a id="ab56c82802ea425c0217ebc864c9946a3"></a>
+<a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator*=</b> (const <a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;value)</td></tr>
+<tr class="separator:ab56c82802ea425c0217ebc864c9946a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d483d60271851869674ae12f6956668"><td class="memItemLeft" align="right" valign="top"><a id="a3d483d60271851869674ae12f6956668"></a>
+<a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator/=</b> (const <a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;value)</td></tr>
+<tr class="separator:a3d483d60271851869674ae12f6956668"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e60a617778a46bda16e0943782d02a4"><td class="memItemLeft" align="right" valign="top"><a id="a0e60a617778a46bda16e0943782d02a4"></a>
+<a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator%=</b> (const <a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;value)</td></tr>
+<tr class="separator:a0e60a617778a46bda16e0943782d02a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e53af2f57a40ebb9b133850b046e24e"><td class="memTemplParams" colspan="2"><a id="a7e53af2f57a40ebb9b133850b046e24e"></a>
+template&lt;typename U &gt; </td></tr>
+<tr class="memitem:a7e53af2f57a40ebb9b133850b046e24e"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&gt;&gt;=</b> (U const &amp;n)</td></tr>
+<tr class="separator:a7e53af2f57a40ebb9b133850b046e24e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57d1fc49cac11efd61e851215e738422"><td class="memTemplParams" colspan="2"><a id="a57d1fc49cac11efd61e851215e738422"></a>
+template&lt;typename U &gt; </td></tr>
+<tr class="memitem:a57d1fc49cac11efd61e851215e738422"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;=</b> (U const &amp;n)</td></tr>
+<tr class="separator:a57d1fc49cac11efd61e851215e738422"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69a94b6bdca1cd59fe10a1758134e990"><td class="memItemLeft" align="right" valign="top"><a id="a69a94b6bdca1cd59fe10a1758134e990"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_zero</b> () const</td></tr>
+<tr class="separator:a69a94b6bdca1cd59fe10a1758134e990"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af83933371822ec730abf9c69ee22fa85"><td class="memItemLeft" align="right" valign="top"><a id="af83933371822ec730abf9c69ee22fa85"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>operator bool</b> () const</td></tr>
+<tr class="separator:af83933371822ec730abf9c69ee22fa85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2cfbeb94ad0be88c0f2a599c6d37bd0"><td class="memItemLeft" align="right" valign="top"><a id="af2cfbeb94ad0be88c0f2a599c6d37bd0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>set_zero</b> ()</td></tr>
+<tr class="separator:af2cfbeb94ad0be88c0f2a599c6d37bd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37ed83097e8fbbd15149a0ded58b3813"><td class="memItemLeft" align="right" valign="top"><a id="a37ed83097e8fbbd15149a0ded58b3813"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>normalize</b> ()</td></tr>
+<tr class="separator:a37ed83097e8fbbd15149a0ded58b3813"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Открытые статические члены</h2></td></tr>
+<tr class="memitem:a0f09953b87b98b582f4c953d95373505"><td class="memItemLeft" align="right" valign="top"><a id="a0f09953b87b98b582f4c953d95373505"></a>
+static <a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1gfpoly.html#a0f09953b87b98b582f4c953d95373505">random</a> (const gfp &amp;field, typename gfpoly::size_type degree)</td></tr>
+<tr class="memdesc:a0f09953b87b98b582f4c953d95373505"><td class="mdescLeft">&#160;</td><td class="mdescRight">Генерирует случайный многочлен над полем GF[P] заданной степени. <br /></td></tr>
+<tr class="separator:a0f09953b87b98b582f4c953d95373505"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<hr/>Объявления и описания членов класса находятся в файле:<ul>
+<li>include/irrpoly/<a class="el" href="gfpoly_8hpp_source.html">gfpoly.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Документация по irrpoly. Последние изменения: Сб 4 Апр 2020 18:50:46. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

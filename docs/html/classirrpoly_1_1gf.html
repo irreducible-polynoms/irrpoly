@@ -3,9 +3,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.16"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>irrpoly: Шаблон класса irrpoly::gf&lt; P &gt;</title>
+<title>irrpoly: Класс irrpoly::gf</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -17,7 +17,8 @@
     extensions: ["tex2jax.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js"></script>
+</script>
+<script type="text/javascript" async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -28,7 +29,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">irrpoly
-   &#160;<span id="projectnumber">1.0.0</span>
+   &#160;<span id="projectnumber">2.0.0</span>
    </div>
    <div id="projectbrief">Проверка многочленов на неприводимость и примитивность над заданным полем Галуа</div>
   </td>
@@ -37,7 +38,7 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- Создано системой Doxygen 1.8.16 -->
+<!-- Создано системой Doxygen 1.8.17 -->
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
 var searchBox = new SearchBox("searchBox", "search",false,'Поиск');
@@ -76,197 +77,50 @@ $(function() {
   <div class="summary">
 <a href="#pub-types">Открытые типы</a> &#124;
 <a href="#pub-methods">Открытые члены</a> &#124;
-<a href="#pub-static-methods">Открытые статические члены</a> &#124;
 <a href="#friends">Друзья</a> &#124;
 <a href="classirrpoly_1_1gf-members.html">Полный список членов класса</a>  </div>
   <div class="headertitle">
-<div class="title">Шаблон класса irrpoly::gf&lt; P &gt;</div>  </div>
+<div class="title">Класс irrpoly::gf<span class="mlabels"><span class="mlabel">final</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Класс gf представляет поле Галуа.  
+ <a href="classirrpoly_1_1gf.html#details">Подробнее...</a></p>
 
 <p><code>#include &lt;<a class="el" href="gf_8hpp_source.html">gf.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Открытые типы</h2></td></tr>
-<tr class="memitem:ab778f2c06916b001227ea047928f8927"><td class="memItemLeft" align="right" valign="top"><a id="ab778f2c06916b001227ea047928f8927"></a>
-typedef ::std::conditional&lt;((P - 1) *(P - 1) &gt; INT32_MAX), int64_t, typename ::std::conditional&lt;((P - 1) *(P - 1) &gt; INT16_MAX), int32_t, typename ::std::conditional&lt;((P - 1) *(P - 1) &gt; INT8_MAX), int16_t, int8_t &gt;::type &gt;::type &gt;::type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1gf.html#ab778f2c06916b001227ea047928f8927">gf_type</a></td></tr>
-<tr class="memdesc:ab778f2c06916b001227ea047928f8927"><td class="mdescLeft">&#160;</td><td class="mdescRight">Выбираем тип внутреннего хранилища как минимально возможный для экономии памяти <br /></td></tr>
-<tr class="separator:ab778f2c06916b001227ea047928f8927"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9c07374e435fa61472026ca5f088d02"><td class="memItemLeft" align="right" valign="top"><a id="aa9c07374e435fa61472026ca5f088d02"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = uintmax_t</td></tr>
+<tr class="separator:aa9c07374e435fa61472026ca5f088d02"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Открытые члены</h2></td></tr>
-<tr class="memitem:a41e88745fb1c59699ed159c52f6d8d3e"><td class="memItemLeft" align="right" valign="top"><a id="a41e88745fb1c59699ed159c52f6d8d3e"></a>
-constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1gf.html#a41e88745fb1c59699ed159c52f6d8d3e">gf</a> () noexcept</td></tr>
-<tr class="memdesc:a41e88745fb1c59699ed159c52f6d8d3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Конструктор по умолчанию, обнуляет переменную. <br /></td></tr>
-<tr class="separator:a41e88745fb1c59699ed159c52f6d8d3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4d0dcbb97c4313faf9d6ea7f536da509"><td class="memItemLeft" align="right" valign="top"><a id="a4d0dcbb97c4313faf9d6ea7f536da509"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>gf</b> (int_fast64_t) noexcept</td></tr>
-<tr class="separator:a4d0dcbb97c4313faf9d6ea7f536da509"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1268fd65897541776d51345152db4564"><td class="memItemLeft" align="right" valign="top"><a id="a1268fd65897541776d51345152db4564"></a>
-int_fast64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1gf.html#a1268fd65897541776d51345152db4564">data</a> () const noexcept</td></tr>
-<tr class="memdesc:a1268fd65897541776d51345152db4564"><td class="mdescLeft">&#160;</td><td class="mdescRight">Возвращает значение класса в виде целого числа. <br /></td></tr>
-<tr class="separator:a1268fd65897541776d51345152db4564"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac2ef680e15dc5ac30456a655936f0e04"><td class="memItemLeft" align="right" valign="top"><a id="ac2ef680e15dc5ac30456a655936f0e04"></a>
-<a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>operator+</b> () const noexcept</td></tr>
-<tr class="separator:ac2ef680e15dc5ac30456a655936f0e04"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d7904b1d781f49101c661cb53758230"><td class="memItemLeft" align="right" valign="top"><a id="a2d7904b1d781f49101c661cb53758230"></a>
-<a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>operator+</b> (const <a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt; &amp;) const noexcept</td></tr>
-<tr class="separator:a2d7904b1d781f49101c661cb53758230"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5eb522e2abb1b511e62eb403ff11c2fe"><td class="memItemLeft" align="right" valign="top"><a id="a5eb522e2abb1b511e62eb403ff11c2fe"></a>
-<a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator+=</b> (const <a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt; &amp;) noexcept</td></tr>
-<tr class="separator:a5eb522e2abb1b511e62eb403ff11c2fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0729a9cd992d1e07f94787c8c2877282"><td class="memItemLeft" align="right" valign="top"><a id="a0729a9cd992d1e07f94787c8c2877282"></a>
-<a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator++</b> () noexcept</td></tr>
-<tr class="separator:a0729a9cd992d1e07f94787c8c2877282"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8f8c712e0af03a63f3803a7aae9224ba"><td class="memItemLeft" align="right" valign="top"><a id="a8f8c712e0af03a63f3803a7aae9224ba"></a>
-<a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>operator++</b> (int) &amp;noexcept</td></tr>
-<tr class="separator:a8f8c712e0af03a63f3803a7aae9224ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad33742214451d54eb3a6cb121eb9394"><td class="memItemLeft" align="right" valign="top"><a id="aad33742214451d54eb3a6cb121eb9394"></a>
-<a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>operator-</b> () const noexcept</td></tr>
-<tr class="separator:aad33742214451d54eb3a6cb121eb9394"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a83ac7f1940fda98e4310e64f21895116"><td class="memItemLeft" align="right" valign="top"><a id="a83ac7f1940fda98e4310e64f21895116"></a>
-<a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>operator-</b> (const <a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt; &amp;) const noexcept</td></tr>
-<tr class="separator:a83ac7f1940fda98e4310e64f21895116"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3986b0db53bba4faa7379bd17216c31"><td class="memItemLeft" align="right" valign="top"><a id="af3986b0db53bba4faa7379bd17216c31"></a>
-<a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator-=</b> (const <a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt; &amp;) noexcept</td></tr>
-<tr class="separator:af3986b0db53bba4faa7379bd17216c31"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43b975d7f9f69734226fc10e27951284"><td class="memItemLeft" align="right" valign="top"><a id="a43b975d7f9f69734226fc10e27951284"></a>
-<a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator--</b> () noexcept</td></tr>
-<tr class="separator:a43b975d7f9f69734226fc10e27951284"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0427249342d9e44537c94b0b48aca27c"><td class="memItemLeft" align="right" valign="top"><a id="a0427249342d9e44537c94b0b48aca27c"></a>
-<a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>operator--</b> (int) &amp;noexcept</td></tr>
-<tr class="separator:a0427249342d9e44537c94b0b48aca27c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3fea520f6133e139c401cf2b7600e565"><td class="memItemLeft" align="right" valign="top"><a id="a3fea520f6133e139c401cf2b7600e565"></a>
-<a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>operator*</b> (const <a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt; &amp;) const noexcept</td></tr>
-<tr class="separator:a3fea520f6133e139c401cf2b7600e565"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab092d553cffa8ead4ef7193f1ff03a09"><td class="memItemLeft" align="right" valign="top"><a id="ab092d553cffa8ead4ef7193f1ff03a09"></a>
-<a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator*=</b> (const <a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt; &amp;) noexcept</td></tr>
-<tr class="separator:ab092d553cffa8ead4ef7193f1ff03a09"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0078df3fd4775365e3812f6a00cca9c4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1gf.html#a0078df3fd4775365e3812f6a00cca9c4">mul_inv</a> () const noexcept(false)</td></tr>
-<tr class="separator:a0078df3fd4775365e3812f6a00cca9c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac14900f3467ebec2b1c66cfca9c8797f"><td class="memItemLeft" align="right" valign="top"><a id="ac14900f3467ebec2b1c66cfca9c8797f"></a>
-<a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>operator/</b> (const <a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt; &amp;) const noexcept(false)</td></tr>
-<tr class="separator:ac14900f3467ebec2b1c66cfca9c8797f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b1d2b6abb82c691236dfba19c8029b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1gf.html#a2b1d2b6abb82c691236dfba19c8029b8">operator/=</a> (const <a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt; &amp;) noexcept(false)</td></tr>
-<tr class="separator:a2b1d2b6abb82c691236dfba19c8029b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68dd176aabb32f004818dfbf7c189756"><td class="memItemLeft" align="right" valign="top"><a id="a68dd176aabb32f004818dfbf7c189756"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1gf.html#a68dd176aabb32f004818dfbf7c189756">is_zero</a> () const noexcept</td></tr>
-<tr class="memdesc:a68dd176aabb32f004818dfbf7c189756"><td class="mdescLeft">&#160;</td><td class="mdescRight">Проверяет равенство данного числа нулю. <br /></td></tr>
-<tr class="separator:a68dd176aabb32f004818dfbf7c189756"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27855155994d3c676c7140e66d5296b3"><td class="memItemLeft" align="right" valign="top"><a id="a27855155994d3c676c7140e66d5296b3"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator==</b> (const <a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt; &amp;) const noexcept</td></tr>
-<tr class="separator:a27855155994d3c676c7140e66d5296b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d65257bbbd9a1646d705b085f40ba20"><td class="memItemLeft" align="right" valign="top"><a id="a2d65257bbbd9a1646d705b085f40ba20"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const <a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt; &amp;) const noexcept</td></tr>
-<tr class="separator:a2d65257bbbd9a1646d705b085f40ba20"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad80c7d5ca48c4cda00c2105771d33335"><td class="memItemLeft" align="right" valign="top"><a id="ad80c7d5ca48c4cda00c2105771d33335"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;</b> (const <a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt; &amp;) const noexcept</td></tr>
-<tr class="separator:ad80c7d5ca48c4cda00c2105771d33335"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3706e7b8bc18d61c87f5bb6710c39e87"><td class="memItemLeft" align="right" valign="top"><a id="a3706e7b8bc18d61c87f5bb6710c39e87"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;=</b> (const <a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt; &amp;) const noexcept</td></tr>
-<tr class="separator:a3706e7b8bc18d61c87f5bb6710c39e87"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c9d390f954e452b8bf763f42b0c7051"><td class="memItemLeft" align="right" valign="top"><a id="a8c9d390f954e452b8bf763f42b0c7051"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;</b> (const <a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt; &amp;) const noexcept</td></tr>
-<tr class="separator:a8c9d390f954e452b8bf763f42b0c7051"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9553f9e0e842c544951b0c7da7c3ce77"><td class="memItemLeft" align="right" valign="top"><a id="a9553f9e0e842c544951b0c7da7c3ce77"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;=</b> (const <a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt; &amp;) const noexcept</td></tr>
-<tr class="separator:a9553f9e0e842c544951b0c7da7c3ce77"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
-Открытые статические члены</h2></td></tr>
-<tr class="memitem:a8f8643eabd6e9e689b248f487ed7b55d"><td class="memItemLeft" align="right" valign="top"><a id="a8f8643eabd6e9e689b248f487ed7b55d"></a>
-static <a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1gf.html#a8f8643eabd6e9e689b248f487ed7b55d">random</a> () noexcept</td></tr>
-<tr class="memdesc:a8f8643eabd6e9e689b248f487ed7b55d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Генерирует случайное число в пределах [0, P-1]. <br /></td></tr>
-<tr class="separator:a8f8643eabd6e9e689b248f487ed7b55d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7007415ac5b25c1bbcf674eeedf7942"><td class="memItemLeft" align="right" valign="top"><a id="ad7007415ac5b25c1bbcf674eeedf7942"></a>
+value_type&#160;</td><td class="memItemRight" valign="bottom"><b>base</b> () const</td></tr>
+<tr class="separator:ad7007415ac5b25c1bbcf674eeedf7942"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6dc1a51ec52c4e3b39fc04e94c4c4618"><td class="memItemLeft" align="right" valign="top"><a id="a6dc1a51ec52c4e3b39fc04e94c4c4618"></a>
+value_type&#160;</td><td class="memItemRight" valign="bottom"><b>mul_inv</b> (value_type) const</td></tr>
+<tr class="separator:a6dc1a51ec52c4e3b39fc04e94c4c4618"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Друзья</h2></td></tr>
-<tr class="memitem:a2e98373d6d03e1681d399893a461047a"><td class="memTemplParams" colspan="2"><a id="a2e98373d6d03e1681d399893a461047a"></a>
-template&lt;uint32_t Q&gt; </td></tr>
-<tr class="memitem:a2e98373d6d03e1681d399893a461047a"><td class="memTemplItemLeft" align="right" valign="top">::std::ostream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;</b> (::std::ostream &amp;, const <a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; Q &gt; &amp;)</td></tr>
-<tr class="separator:a2e98373d6d03e1681d399893a461047a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64c145383a0611f2da92783a48cc69e0"><td class="memTemplParams" colspan="2"><a id="a64c145383a0611f2da92783a48cc69e0"></a>
-template&lt;uint32_t Q&gt; </td></tr>
-<tr class="memitem:a64c145383a0611f2da92783a48cc69e0"><td class="memTemplItemLeft" align="right" valign="top">::std::istream &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&gt;&gt;</b> (::std::istream &amp;, <a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; Q &gt; &amp;)</td></tr>
-<tr class="separator:a64c145383a0611f2da92783a48cc69e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aebade5cea46872bbe9962d779629ee39"><td class="memItemLeft" align="right" valign="top"><a id="aebade5cea46872bbe9962d779629ee39"></a>
+std::shared_ptr&lt; <a class="el" href="classirrpoly_1_1gf.html">gf</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>make_gf</b> (uintmax_t)</td></tr>
+<tr class="separator:aebade5cea46872bbe9962d779629ee39"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
-<div class="textblock"><h3>template&lt;uint32_t P = 2&gt;<br />
-class irrpoly::gf&lt; P &gt;</h3>
-
-<p>Класс gf представляет из себя число над полем GF[P]. </p><dl class="tparams"><dt>Параметры шаблона</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">P</td><td>основание поля Галуа GF[P], по умолчанию рассматривается поле GF[2]. Существование поля Галуа для заданного P не гарантируется, за использование корректного значения для P несут ответственность пользователи данного класса. </td></tr>
-  </table>
-  </dd>
-</dl>
-</div><h2 class="groupheader">Методы</h2>
-<a id="a0078df3fd4775365e3812f6a00cca9c4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0078df3fd4775365e3812f6a00cca9c4">&#9670;&nbsp;</a></span>mul_inv()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;uint32_t P&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt; <a class="el" href="classirrpoly_1_1gf.html">irrpoly::gf</a>&lt; P &gt;::mul_inv </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Находит обратный по умножению (multiplicative inverse) элемент для данного элемента GF[P]. Найденное однажды значение заносится в массив и повторно не вычисляется. Для поиска используется расширенный алгоритм Евклида, реализация с минимальными модификациями копирует код из библиотеки Boost 1.71.0. </p>
-
-</div>
-</div>
-<a id="a2b1d2b6abb82c691236dfba19c8029b8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2b1d2b6abb82c691236dfba19c8029b8">&#9670;&nbsp;</a></span>operator/=()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;uint32_t P&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt; &amp; <a class="el" href="classirrpoly_1_1gf.html">irrpoly::gf</a>&lt; P &gt;::operator/= </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classirrpoly_1_1gf.html">gf</a>&lt; P &gt; &amp;&#160;</td>
-          <td class="paramname"><em>val</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Деление реализуется как умножение на обратный по умножению. Если обратный не существует - деление не возможно. Для существование обратного необходимо, чтобы GF[P] было полем (зависит от выбора P). </p>
-
-</div>
-</div>
-<hr/>Объявления и описания членов класса находятся в файле:<ul>
-<li>/Users/vadimpiven/Development/irrpoly/include/irrpoly/<a class="el" href="gf_8hpp_source.html">gf.hpp</a></li>
+<div class="textblock"><p>Класс gf представляет поле Галуа. </p>
+</div><hr/>Объявления и описания членов класса находятся в файле:<ul>
+<li>include/irrpoly/<a class="el" href="gf_8hpp_source.html">gf.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Сб 16 Ноя 2019 22:14:54. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Сб 4 Апр 2020 18:50:46. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.16
+</a> 1.8.17
 </small></address>
 </body>
 </html>

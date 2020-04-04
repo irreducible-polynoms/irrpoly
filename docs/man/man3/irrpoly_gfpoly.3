@@ -1,0 +1,136 @@
+.TH "irrpoly::gfpoly" 3 "Сб 4 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+irrpoly::gfpoly
+.SH SYNOPSIS
+.br
+.PP
+.SS "Открытые типы"
+
+.in +1c
+.ti -1c
+.RI "typedef std::vector< \fBgfn\fP >::value_type \fBvalue_type\fP"
+.br
+.ti -1c
+.RI "typedef std::vector< \fBgfn\fP >::size_type \fBsize_type\fP"
+.br
+.in -1c
+.SS "Открытые члены"
+
+.in +1c
+.ti -1c
+.RI "\fBgfpoly\fP (gfp field)"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP (gfp field, std::vector< \fBgfn\fP > &&p)"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP (\fBgfpoly\fP &&p) noexcept"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP (const \fBgfpoly\fP &p)=default"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP (const gfp &field, std::initializer_list< typename gfn::value_type > l)"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP (\fBgfn\fP value)"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP (const gfp &field, typename gfn::value_type value)"
+.br
+.ti -1c
+.RI "gfp \fBfield\fP ()"
+.br
+.ti -1c
+.RI "const gfp & \fBfield\fP () const"
+.br
+.ti -1c
+.RI "size_type \fBsize\fP () const"
+.br
+.ti -1c
+.RI "size_type \fBdegree\fP () const"
+.br
+.ti -1c
+.RI "value_type & \fBoperator[]\fP (size_type i)"
+.br
+.ti -1c
+.RI "const value_type & \fBoperator[]\fP (size_type i) const"
+.br
+.ti -1c
+.RI "const std::vector< \fBgfn\fP > & \fBdata\fP () const"
+.br
+.ti -1c
+.RI "std::vector< \fBgfn\fP > & \fBdata\fP ()"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP & \fBoperator=\fP (\fBgfpoly\fP &&p) noexcept"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP & \fBoperator=\fP (const \fBgfpoly\fP &p)"
+.br
+.ti -1c
+.RI "template<class U > \fBgfpoly\fP & \fBoperator+=\fP (const U &value)"
+.br
+.ti -1c
+.RI "template<class U > \fBgfpoly\fP & \fBoperator\-=\fP (const U &value)"
+.br
+.ti -1c
+.RI "template<class U > \fBgfpoly\fP & \fBoperator*=\fP (const U &value)"
+.br
+.ti -1c
+.RI "template<class U > \fBgfpoly\fP & \fBoperator/=\fP (const U &value)"
+.br
+.ti -1c
+.RI "template<class U > \fBgfpoly\fP & \fBoperator%=\fP (const U &)"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP & \fBoperator+=\fP (const \fBgfpoly\fP &value)"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP & \fBoperator\-=\fP (const \fBgfpoly\fP &value)"
+.br
+.ti -1c
+.RI "void \fBmultiply\fP (const \fBgfpoly\fP &a, const \fBgfpoly\fP &b)"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP & \fBoperator*=\fP (const \fBgfpoly\fP &value)"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP & \fBoperator/=\fP (const \fBgfpoly\fP &value)"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP & \fBoperator%=\fP (const \fBgfpoly\fP &value)"
+.br
+.ti -1c
+.RI "template<typename U > \fBgfpoly\fP & \fBoperator>>=\fP (U const &n)"
+.br
+.ti -1c
+.RI "template<typename U > \fBgfpoly\fP & \fBoperator<<=\fP (U const &n)"
+.br
+.ti -1c
+.RI "bool \fBis_zero\fP () const"
+.br
+.ti -1c
+.RI "\fBoperator bool\fP () const"
+.br
+.ti -1c
+.RI "void \fBset_zero\fP ()"
+.br
+.ti -1c
+.RI "void \fBnormalize\fP ()"
+.br
+.in -1c
+.SS "Открытые статические члены"
+
+.in +1c
+.ti -1c
+.RI "static \fBgfpoly\fP \fBrandom\fP (const gfp &field, typename gfpoly::size_type degree)"
+.br
+.RI "Генерирует случайный многочлен над полем GF[P] заданной степени\&. "
+.in -1c
+
+.SH "Автор"
+.PP 
+Автоматически создано Doxygen для irrpoly из исходного текста\&.

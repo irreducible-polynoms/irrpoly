@@ -1,0 +1,142 @@
+.TH "include/irrpoly/gfpoly.hpp" 3 "Сб 4 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+include/irrpoly/gfpoly.hpp
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'gf\&.hpp'\fP
+.br
+\fC#include <vector>\fP
+.br
+\fC#include <cassert>\fP
+.br
+\fC#include <ostream>\fP
+.br
+\fC#include <algorithm>\fP
+.br
+\fC#include <initializer_list>\fP
+.br
+
+.SS "Классы"
+
+.in +1c
+.ti -1c
+.RI "struct \fBirrpoly::detail::negate\fP"
+.br
+.ti -1c
+.RI "struct \fBirrpoly::detail::plus\fP"
+.br
+.ti -1c
+.RI "struct \fBirrpoly::detail::minus\fP"
+.br
+.ti -1c
+.RI "class \fBirrpoly::gfpoly\fP"
+.br
+.in -1c
+.SS "Функции"
+
+.in +1c
+.ti -1c
+.RI "template<typename N > void \fBirrpoly::detail::division_impl\fP (gfpoly &, gfpoly &, const gfpoly &, N, N)"
+.br
+.ti -1c
+.RI "std::pair< gfpoly, gfpoly > \fBirrpoly::detail::division\fP (gfpoly, const gfpoly &)"
+.br
+.ti -1c
+.RI "std::pair< gfpoly, gfpoly > \fBirrpoly::detail::quotient_remainder\fP (const gfpoly &, const gfpoly &)"
+.br
+.ti -1c
+.RI "gfpoly \fBirrpoly::operator\-\fP (gfpoly a)"
+.br
+.ti -1c
+.RI "gfpoly \fBirrpoly::operator+\fP (const gfpoly &a, const gfpoly &b)"
+.br
+.ti -1c
+.RI "gfpoly \fBirrpoly::operator+\fP (gfpoly &&a, const gfpoly &b)"
+.br
+.ti -1c
+.RI "gfpoly \fBirrpoly::operator+\fP (const gfpoly &a, gfpoly &&b)"
+.br
+.ti -1c
+.RI "gfpoly \fBirrpoly::operator+\fP (gfpoly &&a, gfpoly &&b)"
+.br
+.ti -1c
+.RI "gfpoly \fBirrpoly::operator\-\fP (const gfpoly &a, const gfpoly &b)"
+.br
+.ti -1c
+.RI "gfpoly \fBirrpoly::operator\-\fP (gfpoly &&a, const gfpoly &b)"
+.br
+.ti -1c
+.RI "gfpoly \fBirrpoly::operator\-\fP (const gfpoly &a, gfpoly &&b)"
+.br
+.ti -1c
+.RI "gfpoly \fBirrpoly::operator\-\fP (gfpoly &&a, gfpoly &&b)"
+.br
+.ti -1c
+.RI "gfpoly \fBirrpoly::operator*\fP (const gfpoly &a, const gfpoly &b)"
+.br
+.ti -1c
+.RI "gfpoly \fBirrpoly::operator/\fP (const gfpoly &a, const gfpoly &b)"
+.br
+.ti -1c
+.RI "gfpoly \fBirrpoly::operator%\fP (const gfpoly &a, const gfpoly &b)"
+.br
+.ti -1c
+.RI "template<class U > gfpoly \fBirrpoly::operator+\fP (gfpoly a, const U &b)"
+.br
+.ti -1c
+.RI "template<class U > gfpoly \fBirrpoly::operator\-\fP (gfpoly a, const U &b)"
+.br
+.ti -1c
+.RI "template<class U > gfpoly \fBirrpoly::operator*\fP (gfpoly a, const U &b)"
+.br
+.ti -1c
+.RI "template<class U > gfpoly \fBirrpoly::operator/\fP (gfpoly a, const U &b)"
+.br
+.ti -1c
+.RI "template<class U > gfpoly \fBirrpoly::operator%\fP (const gfpoly &a, const U &)"
+.br
+.ti -1c
+.RI "template<class U > gfpoly \fBirrpoly::operator+\fP (const U &a, gfpoly b)"
+.br
+.ti -1c
+.RI "template<class U > gfpoly \fBirrpoly::operator\-\fP (const U &a, gfpoly b)"
+.br
+.ti -1c
+.RI "template<class U > gfpoly \fBirrpoly::operator*\fP (const U &a, gfpoly b)"
+.br
+.ti -1c
+.RI "bool \fBirrpoly::operator==\fP (const gfpoly &a, const gfpoly &b)"
+.br
+.ti -1c
+.RI "bool \fBirrpoly::operator!=\fP (const gfpoly &a, const gfpoly &b)"
+.br
+.ti -1c
+.RI "template<typename U > gfpoly \fBirrpoly::operator>>\fP (gfpoly a, const U &b)"
+.br
+.ti -1c
+.RI "template<typename U > gfpoly \fBirrpoly::operator<<\fP (gfpoly a, const U &b)"
+.br
+.ti -1c
+.RI "template<class charT , class traits > std::basic_ostream< charT, traits > & \fBirrpoly::operator<<\fP (std::basic_ostream< charT, traits > &os, const gfpoly &poly)"
+.br
+.in -1c
+.SH "Подробное описание"
+.PP 
+
+.PP
+\fBАвтор\fP
+.RS 4
+Vadim Piven vadim@piven.tech @license Free use of this library is permitted under the guidelines and in accordance with the MIT License (MIT)\&. @url https://github.com/irreducible-polynoms/irrpoly 
+.RE
+.PP
+
+.SH "Функции"
+.PP 
+.SS "std::pair< gfpoly, gfpoly > irrpoly::detail::quotient_remainder (const \fBgfpoly\fP & dividend, const \fBgfpoly\fP & divisor)"
+Calculates a / b and a % b, returning the pair (quotient, remainder) together because the same amount of computation yields both\&. This function is not defined for division by zero: user beware\&. 
+.SH "Автор"
+.PP 
+Автоматически создано Doxygen для irrpoly из исходного текста\&.

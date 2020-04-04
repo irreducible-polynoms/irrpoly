@@ -1,0 +1,209 @@
+.TH "irrpoly::gfn" 3 "Сб 4 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+irrpoly::gfn
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <gf\&.hpp>\fP
+.SS "Открытые типы"
+
+.in +1c
+.ti -1c
+.RI "using \fBvalue_type\fP = gf::value_type"
+.br
+.in -1c
+.SS "Открытые члены"
+
+.in +1c
+.ti -1c
+.RI "\fBgfn\fP (gfp field)"
+.br
+.RI "Конструктор по умолчанию, обнуляет переменную\&. "
+.ti -1c
+.RI "\fBgfn\fP (gfp field, const value_type val)"
+.br
+.ti -1c
+.RI "\fBgfn\fP (const \fBgfn\fP &other)=default"
+.br
+.ti -1c
+.RI "\fBgfn\fP (\fBgfn\fP &&other)=default"
+.br
+.ti -1c
+.RI "\fBgfn\fP & \fBoperator=\fP (const \fBgfn\fP &other)"
+.br
+.ti -1c
+.RI "\fBgfn\fP & \fBoperator=\fP (\fBgfn\fP &&other) noexcept"
+.br
+.ti -1c
+.RI "\fBgfn\fP & \fBoperator=\fP (const value_type other)"
+.br
+.ti -1c
+.RI "const gfp & \fBfield\fP () const"
+.br
+.ti -1c
+.RI "gfp \fBfield\fP ()"
+.br
+.ti -1c
+.RI "value_type \fBdata\fP () const"
+.br
+.RI "Возвращает значение класса в виде целого числа\&. "
+.ti -1c
+.RI "value_type & \fBdata\fP ()"
+.br
+.ti -1c
+.RI "\fBgfn\fP \fBoperator+\fP () const"
+.br
+.ti -1c
+.RI "\fBgfn\fP \fBoperator+\fP (const \fBgfn\fP &other) const"
+.br
+.ti -1c
+.RI "\fBgfn\fP \fBoperator+\fP (const value_type other) const"
+.br
+.ti -1c
+.RI "\fBgfn\fP & \fBoperator+=\fP (const \fBgfn\fP &other)"
+.br
+.ti -1c
+.RI "\fBgfn\fP \fBoperator+=\fP (const value_type other)"
+.br
+.ti -1c
+.RI "\fBgfn\fP & \fBoperator++\fP ()"
+.br
+.ti -1c
+.RI "\fBgfn\fP \fBoperator++\fP (int) &"
+.br
+.ti -1c
+.RI "\fBgfn\fP \fBoperator\-\fP () const"
+.br
+.ti -1c
+.RI "\fBgfn\fP \fBoperator\-\fP (const \fBgfn\fP &other) const"
+.br
+.ti -1c
+.RI "\fBgfn\fP \fBoperator\-\fP (const value_type other) const"
+.br
+.ti -1c
+.RI "\fBgfn\fP & \fBoperator\-=\fP (const \fBgfn\fP &other)"
+.br
+.ti -1c
+.RI "\fBgfn\fP \fBoperator\-=\fP (const value_type other)"
+.br
+.ti -1c
+.RI "\fBgfn\fP & \fBoperator\-\-\fP ()"
+.br
+.ti -1c
+.RI "\fBgfn\fP \fBoperator\-\-\fP (int) &"
+.br
+.ti -1c
+.RI "\fBgfn\fP \fBoperator*\fP (const \fBgfn\fP &other) const"
+.br
+.ti -1c
+.RI "\fBgfn\fP \fBoperator*\fP (const value_type other) const"
+.br
+.ti -1c
+.RI "\fBgfn\fP & \fBoperator*=\fP (const \fBgfn\fP &other)"
+.br
+.ti -1c
+.RI "\fBgfn\fP \fBoperator*=\fP (const value_type other)"
+.br
+.ti -1c
+.RI "\fBgfn\fP \fBmul_inv\fP ()"
+.br
+.ti -1c
+.RI "\fBgfn\fP \fBoperator/\fP (const \fBgfn\fP &other) const"
+.br
+.ti -1c
+.RI "\fBgfn\fP \fBoperator/\fP (const value_type other) const"
+.br
+.ti -1c
+.RI "\fBgfn\fP & \fBoperator/=\fP (const \fBgfn\fP &other)"
+.br
+.ti -1c
+.RI "\fBgfn\fP \fBoperator/=\fP (const value_type other)"
+.br
+.ti -1c
+.RI "bool \fBis_zero\fP () const"
+.br
+.RI "Проверяет равенство данного числа нулю\&. "
+.ti -1c
+.RI "bool \fBoperator==\fP (const \fBgfn\fP &other) const"
+.br
+.ti -1c
+.RI "bool \fBoperator==\fP (const value_type other) const"
+.br
+.ti -1c
+.RI "bool \fBoperator!=\fP (const \fBgfn\fP &other) const"
+.br
+.ti -1c
+.RI "bool \fBoperator!=\fP (const value_type other) const"
+.br
+.ti -1c
+.RI "bool \fBoperator>\fP (const \fBgfn\fP &other) const"
+.br
+.ti -1c
+.RI "bool \fBoperator>\fP (const value_type other) const"
+.br
+.ti -1c
+.RI "bool \fBoperator>=\fP (const \fBgfn\fP &other) const"
+.br
+.ti -1c
+.RI "bool \fBoperator>=\fP (const value_type other) const"
+.br
+.ti -1c
+.RI "bool \fBoperator<\fP (const \fBgfn\fP &other) const"
+.br
+.ti -1c
+.RI "bool \fBoperator<\fP (const value_type other) const"
+.br
+.ti -1c
+.RI "bool \fBoperator<=\fP (const \fBgfn\fP &other) const"
+.br
+.ti -1c
+.RI "bool \fBoperator<=\fP (const value_type other) const"
+.br
+.in -1c
+.SS "Открытые статические члены"
+
+.in +1c
+.ti -1c
+.RI "static \fBgfn\fP \fBrandom\fP (gfp field)"
+.br
+.RI "Генерирует случайное число в пределах [0, P-1]\&. "
+.in -1c
+.SS "Друзья"
+
+.in +1c
+.ti -1c
+.RI "\fBgfn\fP \fBoperator+\fP (value_type, const \fBgfn\fP &)"
+.br
+.ti -1c
+.RI "\fBgfn\fP \fBoperator\-\fP (value_type, const \fBgfn\fP &)"
+.br
+.ti -1c
+.RI "\fBgfn\fP \fBoperator*\fP (value_type, const \fBgfn\fP &)"
+.br
+.ti -1c
+.RI "\fBgfn\fP \fBoperator/\fP (value_type, const \fBgfn\fP &)"
+.br
+.ti -1c
+.RI "std::ostream & \fBoperator<<\fP (std::ostream &, const \fBgfn\fP &)"
+.br
+.ti -1c
+.RI "std::istream & \fBoperator>>\fP (std::istream &, \fBgfn\fP &)"
+.br
+.in -1c
+.SH "Подробное описание"
+.PP 
+Класс gfn представляет число в поле GF[P] 
+.PP
+\fBПараметры шаблона\fP
+.RS 4
+\fIP\fP основание поля Галуа GF[P]\&. 
+.RE
+.PP
+
+
+.SH "Автор"
+.PP 
+Автоматически создано Doxygen для irrpoly из исходного текста\&.

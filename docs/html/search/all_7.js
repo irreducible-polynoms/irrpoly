@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['operator_2f_3d_22',['operator/=',['../classirrpoly_1_1gf.html#a2b1d2b6abb82c691236dfba19c8029b8',1,'irrpoly::gf']]]
+  ['quotient_5fremainder_17',['quotient_remainder',['../gfpoly_8hpp.html#ab0b76eba3974c7d842db7f8a5345dfb5',1,'irrpoly::detail']]]
 ];

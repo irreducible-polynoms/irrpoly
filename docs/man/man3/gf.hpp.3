@@ -1,14 +1,16 @@
-.TH "/Users/vadimpiven/Development/irrpoly/include/irrpoly/gf.hpp" 3 "Сб 16 Ноя 2019" "Version 1.0.0" "irrpoly" \" -*- nroff -*-
+.TH "include/irrpoly/gf.hpp" 3 "Сб 4 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-/Users/vadimpiven/Development/irrpoly/include/irrpoly/gf.hpp
+include/irrpoly/gf.hpp
 .SH SYNOPSIS
 .br
 .PP
 \fC#include <algorithm>\fP
 .br
-\fC#include <array>\fP
+\fC#include <utility>\fP
+.br
+\fC#include <vector>\fP
 .br
 \fC#include <cstdint>\fP
 .br
@@ -20,22 +22,70 @@
 .br
 \fC#include <type_traits>\fP
 .br
+\fC#include <cassert>\fP
+.br
+\fC#include <memory>\fP
+.br
 
 .SS "Классы"
 
 .in +1c
 .ti -1c
-.RI "class \fBirrpoly::gf< P >\fP"
+.RI "class \fBirrpoly::gf\fP"
+.br
+.RI "Класс gf представляет поле Галуа\&. "
+.ti -1c
+.RI "class \fBirrpoly::gfn\fP"
+.br
+.in -1c
+.SS "Определения типов"
+
+.in +1c
+.ti -1c
+.RI "using \fBirrpoly::gfp\fP = std::shared_ptr< gf >"
 .br
 .in -1c
 .SS "Функции"
 
 .in +1c
 .ti -1c
-.RI "template<uint32_t P> ::std::ostream & \fBirrpoly::operator<<\fP (::std::ostream &os, const gf< P > &val)"
+.RI "bool \fBirrpoly::operator==\fP (const gfp &lb, const gfp &rb)"
 .br
 .ti -1c
-.RI "template<uint32_t P> ::std::istream & \fBirrpoly::operator>>\fP (::std::istream &is, gf< P > &val)"
+.RI "bool \fBirrpoly::operator!=\fP (const gfp &lb, const gfp &rb)"
+.br
+.ti -1c
+.RI "gf::value_type \fBirrpoly::detail::inv_calc\fP (const uintmax_t base, const typename gf::value_type val)"
+.br
+.ti -1c
+.RI "gfn \fBirrpoly::operator+\fP (const typename gfn::value_type other, const gfn &curr)"
+.br
+.ti -1c
+.RI "gfn \fBirrpoly::operator\-\fP (const typename gfn::value_type other, const gfn &curr)"
+.br
+.ti -1c
+.RI "gfn \fBirrpoly::operator*\fP (const typename gfn::value_type other, const gfn &curr)"
+.br
+.ti -1c
+.RI "gfn \fBirrpoly::operator/\fP (const typename gfn::value_type other, const gfn &curr)"
+.br
+.ti -1c
+.RI "std::ostream & \fBirrpoly::operator<<\fP (std::ostream &os, const gfn &val)"
+.br
+.ti -1c
+.RI "std::istream & \fBirrpoly::operator>>\fP (std::istream &is, gfn &val)"
+.br
+.ti -1c
+.RI "gfp \fBirrpoly::make_gf\fP (const uintmax_t base)"
+.br
+.ti -1c
+.RI "gfn \fBirrpoly::make_gfn\fP (gfp field, const typename gf::value_type val)"
+.br
+.ti -1c
+.RI "std::vector< gfn > \fBirrpoly::make_gfn\fP (const gfp &field, const std::vector< typename gf::value_type > &val)"
+.br
+.ti -1c
+.RI "std::vector< gfn > \fBirrpoly::make_gfn\fP (const gfp &field, const std::initializer_list< typename gf::value_type > val)"
 .br
 .in -1c
 .SH "Подробное описание"
@@ -44,7 +94,25 @@
 .PP
 \fBАвтор\fP
 .RS 4
-Vadim Piven vadim@piven.tech, Zimin Fedor zimfv@yandex.ru @license Free use of this library is permitted under the guidelines and in accordance with the MIT License (MIT)\&. @url https://github.com/irreducible-polynoms/irrpoly 
+Vadim Piven vadim@piven.tech @license Free use of this library is permitted under the guidelines and in accordance with the MIT License (MIT)\&. @url https://github.com/irreducible-polynoms/irrpoly 
+.RE
+.PP
+
+.SH "Функции"
+.PP 
+.SS "gf::value_type irrpoly::detail::inv_calc (const uintmax_t base, const typename gf::value_type val)"
+
+.PP
+\fBАргументы\fP
+.RS 4
+\fIbase\fP основание поля Галуа GF[base] 
+.br
+\fIval\fP элемент поля GF[base], для которого требуется найти обратный 
+.RE
+.PP
+\fBВозвращает\fP
+.RS 4
+обратный элемент по умножению в поле GF[base] 
 .RE
 .PP
 

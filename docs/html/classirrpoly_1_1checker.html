@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
-<meta name="generator" content="Doxygen 1.8.16"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>irrpoly: Шаблон класса irrpoly::checker&lt; value_type, result_type &gt;</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
@@ -17,7 +17,8 @@
     extensions: ["tex2jax.js"],
     jax: ["input/TeX","output/HTML-CSS"],
 });
-</script><script type="text/javascript" async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js"></script>
+</script>
+<script type="text/javascript" async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js"></script>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
@@ -28,7 +29,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">irrpoly
-   &#160;<span id="projectnumber">1.0.0</span>
+   &#160;<span id="projectnumber">2.0.0</span>
    </div>
    <div id="projectbrief">Проверка многочленов на неприводимость и примитивность над заданным полем Галуа</div>
   </td>
@@ -37,7 +38,7 @@
 </table>
 </div>
 <!-- end header part -->
-<!-- Создано системой Doxygen 1.8.16 -->
+<!-- Создано системой Doxygen 1.8.17 -->
 <script type="text/javascript">
 /* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
 var searchBox = new SearchBox("searchBox", "search",false,'Поиск');
@@ -90,30 +91,30 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Открытые типы</h2></td></tr>
-<tr class="memitem:a27449cb3e8e5683bb53dfaf94bb763c8"><td class="memItemLeft" align="right" valign="top"><a id="a27449cb3e8e5683bb53dfaf94bb763c8"></a>
-typedef ::std::function&lt; value_type()&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1checker.html#a27449cb3e8e5683bb53dfaf94bb763c8">input_func</a></td></tr>
-<tr class="memdesc:a27449cb3e8e5683bb53dfaf94bb763c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Вид функции, генерирующей многочлены для проверки. <br /></td></tr>
-<tr class="separator:a27449cb3e8e5683bb53dfaf94bb763c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9bc4e4bf9845119012671d9ec7fefcd"><td class="memItemLeft" align="right" valign="top"><a id="aa9bc4e4bf9845119012671d9ec7fefcd"></a>
-typedef ::std::function&lt; void(const value_type &amp;, result_type &amp;)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1checker.html#aa9bc4e4bf9845119012671d9ec7fefcd">check_func</a></td></tr>
-<tr class="memdesc:aa9bc4e4bf9845119012671d9ec7fefcd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Вид функции, выполняющей проверку и сохраняющей результат. <br /></td></tr>
-<tr class="separator:aa9bc4e4bf9845119012671d9ec7fefcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2ef44c3281fb12d236704e32c7e19c53"><td class="memItemLeft" align="right" valign="top">typedef ::std::function&lt; bool(const value_type &amp;, const result_type &amp;)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1checker.html#a2ef44c3281fb12d236704e32c7e19c53">callback_func</a></td></tr>
-<tr class="separator:a2ef44c3281fb12d236704e32c7e19c53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace3e41ec5ac2330de70e2701e22d3718"><td class="memItemLeft" align="right" valign="top"><a id="ace3e41ec5ac2330de70e2701e22d3718"></a>
+typedef std::function&lt; value_type()&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1checker.html#ace3e41ec5ac2330de70e2701e22d3718">input_func</a></td></tr>
+<tr class="memdesc:ace3e41ec5ac2330de70e2701e22d3718"><td class="mdescLeft">&#160;</td><td class="mdescRight">Вид функции, генерирующей многочлены для проверки. <br /></td></tr>
+<tr class="separator:ace3e41ec5ac2330de70e2701e22d3718"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc14cbe3e0142208ad238398b48813c8"><td class="memItemLeft" align="right" valign="top"><a id="adc14cbe3e0142208ad238398b48813c8"></a>
+typedef std::function&lt; void(const value_type &amp;, std::optional&lt; result_type &gt; &amp;)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1checker.html#adc14cbe3e0142208ad238398b48813c8">check_func</a></td></tr>
+<tr class="memdesc:adc14cbe3e0142208ad238398b48813c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Вид функции, выполняющей проверку и сохраняющей результат. <br /></td></tr>
+<tr class="separator:adc14cbe3e0142208ad238398b48813c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7402495c1c123976b1f4cf714c33a61"><td class="memItemLeft" align="right" valign="top">typedef std::function&lt; bool(const value_type &amp;, const result_type &amp;)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1checker.html#af7402495c1c123976b1f4cf714c33a61">callback_func</a></td></tr>
+<tr class="separator:af7402495c1c123976b1f4cf714c33a61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Открытые члены</h2></td></tr>
-<tr class="memitem:a6c32eaee4320f4f9af6bedeb528b1eeb"><td class="memItemLeft" align="right" valign="top"><a id="a6c32eaee4320f4f9af6bedeb528b1eeb"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>checker</b> (const unsigned n=::std::thread::hardware_concurrency() - 1) noexcept</td></tr>
-<tr class="separator:a6c32eaee4320f4f9af6bedeb528b1eeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5dcf452b9cbe93393e153c2212b1f2f5"><td class="memItemLeft" align="right" valign="top"><a id="a5dcf452b9cbe93393e153c2212b1f2f5"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1checker.html#a5dcf452b9cbe93393e153c2212b1f2f5">check</a> (uint64_t n, <a class="el" href="classirrpoly_1_1checker.html#a27449cb3e8e5683bb53dfaf94bb763c8">input_func</a> in, <a class="el" href="classirrpoly_1_1checker.html#aa9bc4e4bf9845119012671d9ec7fefcd">check_func</a> cf, <a class="el" href="classirrpoly_1_1checker.html#a2ef44c3281fb12d236704e32c7e19c53">callback_func</a> back, const bool strict=true) noexcept</td></tr>
-<tr class="memdesc:a5dcf452b9cbe93393e153c2212b1f2f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Основной цикл разделения работы на потоки. <br /></td></tr>
-<tr class="separator:a5dcf452b9cbe93393e153c2212b1f2f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3dd3ac3deddf70873dac44c36d31094c"><td class="memItemLeft" align="right" valign="top"><a id="a3dd3ac3deddf70873dac44c36d31094c"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1checker.html#a3dd3ac3deddf70873dac44c36d31094c">~checker</a> () noexcept</td></tr>
-<tr class="memdesc:a3dd3ac3deddf70873dac44c36d31094c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Завершаем работу всех потоков. <br /></td></tr>
-<tr class="separator:a3dd3ac3deddf70873dac44c36d31094c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc04a3348404544f21d35af24144e71e"><td class="memItemLeft" align="right" valign="top"><a id="afc04a3348404544f21d35af24144e71e"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>checker</b> (const unsigned n=std::thread::hardware_concurrency() - 1)</td></tr>
+<tr class="separator:afc04a3348404544f21d35af24144e71e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acc20c7913c9f213e3d10be0b393856d2"><td class="memItemLeft" align="right" valign="top"><a id="acc20c7913c9f213e3d10be0b393856d2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1checker.html#acc20c7913c9f213e3d10be0b393856d2">check</a> (uint64_t n, <a class="el" href="classirrpoly_1_1checker.html#ace3e41ec5ac2330de70e2701e22d3718">input_func</a> in, <a class="el" href="classirrpoly_1_1checker.html#adc14cbe3e0142208ad238398b48813c8">check_func</a> cf, <a class="el" href="classirrpoly_1_1checker.html#af7402495c1c123976b1f4cf714c33a61">callback_func</a> back, const bool strict=true)</td></tr>
+<tr class="memdesc:acc20c7913c9f213e3d10be0b393856d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Основной цикл разделения работы на потоки. <br /></td></tr>
+<tr class="separator:acc20c7913c9f213e3d10be0b393856d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2f767186d9060c993c0255d9cec527b"><td class="memItemLeft" align="right" valign="top"><a id="ae2f767186d9060c993c0255d9cec527b"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1checker.html#ae2f767186d9060c993c0255d9cec527b">~checker</a> ()</td></tr>
+<tr class="memdesc:ae2f767186d9060c993c0255d9cec527b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Завершаем работу всех потоков. <br /></td></tr>
+<tr class="separator:ae2f767186d9060c993c0255d9cec527b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
 <div class="textblock"><h3>template&lt;typename value_type, typename result_type&gt;<br />
@@ -121,16 +122,16 @@ class irrpoly::checker&lt; value_type, result_type &gt;</h3>
 
 <p>Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P]. </p>
 </div><h2 class="groupheader">Определения типов</h2>
-<a id="a2ef44c3281fb12d236704e32c7e19c53"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2ef44c3281fb12d236704e32c7e19c53">&#9670;&nbsp;</a></span>callback_func</h2>
+<a id="af7402495c1c123976b1f4cf714c33a61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7402495c1c123976b1f4cf714c33a61">&#9670;&nbsp;</a></span>callback_func</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename value_type, typename result_type&gt; </div>
+template&lt;typename value_type , typename result_type &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">typedef ::std::function&lt;bool(const value_type &amp;, const result_type &amp;)&gt; <a class="el" href="classirrpoly_1_1checker.html">irrpoly::checker</a>&lt; value_type, result_type &gt;::<a class="el" href="classirrpoly_1_1checker.html#a2ef44c3281fb12d236704e32c7e19c53">callback_func</a></td>
+          <td class="memname">typedef std::function&lt;bool(const value_type &amp;, const result_type &amp;)&gt; <a class="el" href="classirrpoly_1_1checker.html">irrpoly::checker</a>&lt; value_type, result_type &gt;::<a class="el" href="classirrpoly_1_1checker.html#af7402495c1c123976b1f4cf714c33a61">callback_func</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -139,14 +140,14 @@ template&lt;typename value_type, typename result_type&gt; </div>
 </div>
 </div>
 <hr/>Объявления и описания членов класса находятся в файле:<ul>
-<li>/Users/vadimpiven/Development/irrpoly/include/irrpoly/<a class="el" href="checker_8hpp_source.html">checker.hpp</a></li>
+<li>include/irrpoly/<a class="el" href="checker_8hpp_source.html">checker.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Сб 16 Ноя 2019 22:14:54. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Сб 4 Апр 2020 18:50:46. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
-</a> 1.8.16
+</a> 1.8.17
 </small></address>
 </body>
 </html>

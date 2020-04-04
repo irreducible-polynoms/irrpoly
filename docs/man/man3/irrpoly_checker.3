@@ -1,4 +1,4 @@
-.TH "irrpoly::checker< value_type, result_type >" 3 "Сб 16 Ноя 2019" "Version 1.0.0" "irrpoly" \" -*- nroff -*-
+.TH "irrpoly::checker< value_type, result_type >" 3 "Сб 4 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -13,29 +13,29 @@ irrpoly::checker< value_type, result_type > \- Выполняет проверк
 
 .in +1c
 .ti -1c
-.RI "typedef ::std::function< value_type()> \fBinput_func\fP"
+.RI "typedef std::function< value_type()> \fBinput_func\fP"
 .br
 .RI "Вид функции, генерирующей многочлены для проверки\&. "
 .ti -1c
-.RI "typedef ::std::function< void(const value_type &, result_type &)> \fBcheck_func\fP"
+.RI "typedef std::function< void(const value_type &, std::optional< result_type > &)> \fBcheck_func\fP"
 .br
 .RI "Вид функции, выполняющей проверку и сохраняющей результат\&. "
 .ti -1c
-.RI "typedef ::std::function< bool(const value_type &, const result_type &)> \fBcallback_func\fP"
+.RI "typedef std::function< bool(const value_type &, const result_type &)> \fBcallback_func\fP"
 .br
 .in -1c
 .SS "Открытые члены"
 
 .in +1c
 .ti -1c
-.RI "\fBchecker\fP (const unsigned n=::std::thread::hardware_concurrency() \- 1) noexcept"
+.RI "\fBchecker\fP (const unsigned n=std::thread::hardware_concurrency() \- 1)"
 .br
 .ti -1c
-.RI "void \fBcheck\fP (uint64_t n, \fBinput_func\fP in, \fBcheck_func\fP cf, \fBcallback_func\fP back, const bool strict=true) noexcept"
+.RI "void \fBcheck\fP (uint64_t n, \fBinput_func\fP in, \fBcheck_func\fP cf, \fBcallback_func\fP back, const bool strict=true)"
 .br
 .RI "Основной цикл разделения работы на потоки\&. "
 .ti -1c
-.RI "\fB~checker\fP () noexcept"
+.RI "\fB~checker\fP ()"
 .br
 .RI "Завершаем работу всех потоков\&. "
 .in -1c
@@ -48,7 +48,7 @@ class irrpoly::checker< value_type, result_type >"
 Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P]\&. 
 .SH "Определения типов"
 .PP 
-.SS "template<typename value_type, typename result_type> typedef ::std::function<bool(const value_type &, const result_type &)> \fBirrpoly::checker\fP< value_type, result_type >::\fBcallback_func\fP"
+.SS "template<typename value_type , typename result_type > typedef std::function<bool(const value_type &, const result_type &)> \fBirrpoly::checker\fP< value_type, result_type >::\fBcallback_func\fP"
 Вид функции, обрабатывающей результат проверки (если многочлен удовлетворяет требуемым условиям возвращает true, иначе - false)\&. 
 
 .SH "Автор"

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['operator_2f_3d_60',['operator/=',['../classirrpoly_1_1gf.html#a2b1d2b6abb82c691236dfba19c8029b8',1,'irrpoly::gf']]]
+  ['_7echecker_39',['~checker',['../classirrpoly_1_1checker.html#ae2f767186d9060c993c0255d9cec527b',1,'irrpoly::checker']]]
 ];
