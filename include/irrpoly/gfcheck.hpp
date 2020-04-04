@@ -1,9 +1,6 @@
 /**
  * @file    polynomialgf.hpp
- * @author  Vadim Piven <vadim@piven.tech>, Anastasia Chekhoeva <A89168226876@yandex.ru>,
- * Veronika Biryukova <biryukovaveronika@mail.ru>, Igor Bogdanov <bogdanov.igor.98@mail.ru>,
- * Vadim Volkov <volk.vad.p@gmail.com>, Zimin Fedor <zimfv@yandex.ru>,
- * Cheshkova Anna <cheshkoann@gmail.com>
+ * @author  Vadim Piven <vadim@piven.tech>
  * @license Free use of this library is permitted under the
  * guidelines and in accordance with the MIT License (MIT).
  * @url     https://github.com/irreducible-polynoms/irrpoly
@@ -49,6 +46,7 @@ namespace irrpoly {
 
     namespace detail {
 
+        /// Быстрое возведение в степень, взято из библиотеки Boost.
         template<class T, class N>
         T integer_power(T t, N n) {
             switch (n) {
@@ -154,7 +152,6 @@ namespace irrpoly {
      * то многочлен неприводим. Для вычисления ранга используется приведение
      * матрицы к ступенчатому виду и подсчёт числа ступеней в ней.
      * Кроме того, все многочлены первой степени неприводимы в любом поле.
-     * @author Vadim Piven <vadim@piven.tech>
      */
     bool is_irreducible_berlekamp(const gfpoly &val) {
         if (val.is_zero()) {
@@ -215,6 +212,84 @@ namespace irrpoly {
     }
 
     /**
+     * Алгоритм Рабина проверки многочлена на неприводимость в поле GF[P].
+     * Для использования алгоритма предварительно строится список простых множителей
+     * для числа n - степени многочлена. Вместо множителей в список добавляется отношение
+     * n_i = n / d_i, где d_i - простой делитель (divisor) n. Если n - простое, то
+     * список состоит из одной единицы. Далее выполняется несколько шагов:
+     * 1. строится многочлен temp =  x^(P ^ n_i) - x (mod val)
+     * 2. находится наиболиший общий дилитель temp и val, если НОД не равен константе,
+     * отличной от нуля, то это многочлен, и val, очевидно, делится на него, а значит приводим.
+     * 3. если условия 1-2 выполнены для всех n_i, проверяем их для n.
+     * Если для n получаем результат 0, то val неприводим.
+     * Кроме того, все многочлены первой степени неприводимы в любом поле.
+     * Подробную информацию по алгоритму можно найти здесь:
+     * https://www.fing.edu.uy/inco/pedeciba/bibliote/reptec/TR0116.pdf
+     * или на странице Википедии в разделе Rabin's test of irreducibility
+     * https://en.wikipedia.org/wiki/Factorization_of_polynomials_over_finite_fields
+     */
+    bool is_irreducible_rabin(const gfpoly &val) {
+        if (val.is_zero()) { return false; }
+        const auto n = val.degree();
+
+        // проверка вырожденных случаев
+        if (n == 0 || (val[0].is_zero() && n > 1)) { return false; }
+        if (n == 1) { return true; }
+
+        // функция разложения числа на множители
+        auto get_list = [](uintmax_t n) {
+            std::vector<uintmax_t> list;
+            const auto begin = n;
+            for (uintmax_t d = 2; d * d <= n; ++d) {
+                if (n % d) { continue; }
+                list.emplace_back(begin / d);
+                while (n % d == 0) { n /= d; }
+            }
+            if (n != 1) { list.emplace_back(begin / n); }
+            return list;
+        };
+
+        // шаги 1-2
+        auto P = val.field()->base();
+        auto list = get_list(n);
+        gfpoly tmp(val.field()), x = gfpoly(val.field(), {0, 1});
+        for (auto i: list) {
+            tmp = detail::x_pow_mod_sub(detail::integer_power(P, i), val, x);
+            if (tmp.is_zero() || gcd(val, tmp).degree() > 0) { return false; }
+        }
+
+        // шаг 3
+        tmp = detail::x_pow_mod_sub(detail::integer_power(P, n), val, x);
+        return tmp.is_zero();
+    }
+
+    /**
+     * Алгоритм Бен-Ора проверки многочлена на неприводимость в поле GF[P].
+     * Для всех i от 1 до m/2 включительно, где m - степень проверяемого многочлена:
+     * 1. строится многочлен temp =  x^(P ^ i) - x (mod val)
+     * 2. находится наиболиший общий дилитель temp и val, если НОД не равен константе,
+     * отличной от нуля, то это многочлен, и val, очевидно, делится на него, а значит приводим.
+     * После завершения шагов 1-2 для всех i получаем, что многочлен неприводим.
+     * Кроме того, все многочлены первой степени неприводимы в любом поле.
+     */
+    bool is_irreducible_benor(const gfpoly &val) {
+        if (val.is_zero()) { return false; }
+        const auto n = val.degree();
+
+        // проверка вырожденных случаев
+        if (n == 0 || (val[0].is_zero() && n > 1)) { return false; }
+        if (n == 1) { return true; }
+
+        auto P = val.field()->base();
+        gfpoly tmp(val.field()), x = gfpoly(val.field(), {0, 1});
+        for (auto m = n / 2, i = 1ul; i <= m; ++i) {
+            tmp = detail::x_pow_mod_sub(detail::integer_power(P, i), val, x);
+            if (tmp.is_zero() || gcd(val, tmp).degree() > 0) { return false; }
+        }
+        return true;
+    }
+
+    /**
      * Алгоритм проверки многочлена на примитивность по определению. Многочлен является
      * примитивным над полем GF[P], если выполнены три условия:
      * 1. элемент mp = (-1)^n * val[0] является примитивным элементом поля GF[P^n], т.е.
@@ -227,7 +302,6 @@ namespace irrpoly {
      * https://www.ams.org/journals/mcom/1992-59-200/S0025-5718-1992-1134730-7/S0025-5718-1992-1134730-7.pdf
      * Возможные пути параллелизации данного алгоритма приведены в статье
      * https://www.researchgate.net/publication/329358609_Parallelization_of_Algorithm_for_Primitive_Polynomials_Generation_in_Extended_Galois_Field_pm
-     * @author Veronika Biryukova <biryukovaveronika@mail.ru>
      */
     bool is_primitive_definition(const gfpoly &val) {
         if (val.is_zero()) { return false; }
@@ -292,59 +366,6 @@ namespace irrpoly {
         return true;
     }
 
-    /**
-     * Алгоритм Рабина проверки многочлена на неприводимость в поле GF[P].
-     * Для использования алгоритма предварительно строится список простых множителей
-     * для числа n - степени многочлена. Вместо множителей в список добавляется отношение
-     * n_i = n / d_i, где d_i - простой делитель (divisor) n. Если n - простое, то
-     * список состоит из одной единицы. Далее выполняется несколько шагов:
-     * 1. строится многочлен temp =  x^(P ^ n_i) - x (mod val)
-     * 2. находится наиболиший общий дилитель temp и val, если НОД не константе,
-     * отличной от нуля, то это многочлен, и val, очевидно, делится на него, а значит приводим.
-     * 3. если условия 1-2 выполнены для всех n_i, проверяем их для n.
-     * Если для n получаем результат 0, то val неприводим.
-     * Кроме того, все многочлены первой степени неприводимы в любом поле.
-     * Подробную информацию по алгоритму можно найти здесь:
-     * https://www.fing.edu.uy/inco/pedeciba/bibliote/reptec/TR0116.pdf
-     * или на странице Википедии в разделе Rabin's test of irreducibility
-     * https://en.wikipedia.org/wiki/Factorization_of_polynomials_over_finite_fields
-     * @author Anastasia Chekhoeva <A89168226876@yandex.ru>
-     */
-    bool is_irreducible_rabin(const gfpoly &val) {
-        if (val.is_zero()) { return false; }
-        const auto n = val.degree();
-
-        // проверка вырожденных случаев
-        if (n == 0 || (val[0].is_zero() && n > 1)) { return false; }
-        if (n == 1) { return true; }
-
-        // функция разложения числа на множители
-        auto get_list = [](uintmax_t n) {
-            std::vector<uintmax_t> list;
-            const auto begin = n;
-            for (uintmax_t d = 2; d * d <= n; ++d) {
-                if (n % d) { continue; }
-                list.emplace_back(begin / d);
-                while (n % d == 0) { n /= d; }
-            }
-            if (n != 1) { list.emplace_back(begin / n); }
-            return list;
-        };
-
-        // шаги 1-2
-        auto P = val.field()->base();
-        auto list = get_list(n);
-        gfpoly tmp(val.field()), x = gfpoly(val.field(), {0, 1});
-        for (auto i: list) {
-            tmp = detail::x_pow_mod_sub(detail::integer_power(P, i), val, x);
-            if (tmp.is_zero() || gcd(val, tmp).degree() > 0) { return false; }
-        }
-
-        // шаг 3
-        tmp = detail::x_pow_mod_sub(detail::integer_power(P, n), val, x);
-        return tmp.is_zero();
-    }
-
     namespace multithread {
 
         /// Структура, представляющая результаты проверки многочлена.
@@ -357,13 +378,14 @@ namespace irrpoly {
         enum class irreducible_method {
             nil, ///< не проверять
             berlekamp, ///< алгоритм Берлекампа
-            rabin ///< алгоритм Рабина
+            rabin, ///< алгоритм Рабина
+            benor, ///< алгоритм Бен-Ора
         };
 
         /// Доступные методы проверки примитивность.
         enum class primitive_method {
             nil, ///< не проверять
-            definition ///< проверка по определению
+            definition, ///< проверка по определению
         };
 
         using polychecker = checker<gfpoly, result_type>;
@@ -380,6 +402,9 @@ namespace irrpoly {
                         break;
                     case irreducible_method::rabin:
                         res.value().irreducible = is_irreducible_rabin(poly);
+                        break;
+                    case irreducible_method::benor:
+                        res.value().irreducible = is_irreducible_benor(poly);
                         break;
                     default: ; // irreducible_method::nil
                 }

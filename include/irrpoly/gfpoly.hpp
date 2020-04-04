@@ -1,5 +1,5 @@
 /**
- * @file    gfpoly.hpp (boost/math/tools/gfpoly.hpp)
+ * @file    gfpoly.hpp
  * @author  Vadim Piven <vadim@piven.tech>
  * @license Free use of this library is permitted under the
  * guidelines and in accordance with the MIT License (MIT).
@@ -19,7 +19,10 @@
 
 namespace irrpoly {
 
-    /// Класс gfpoly представляет многочлены над полем Галуа.
+    /**
+     * Класс gfpoly представляет многочлены над полем Галуа.
+     * Основан на классе polynomial из библиотеки Boost.
+     */
     class gfpoly;
 
     namespace detail {

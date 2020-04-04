@@ -61,8 +61,8 @@ int main() {
     // степень искомых многочленов
     const typename gfpoly::size_type degree = 5;
     // какой из методов проверки на неприводимость хотим использовать
-    // возможные варианты - отсутствие приверки (nil), Берлекампа (berlekamp) и Рабин (rabin)
-    const typename multithread::irreducible_method irr_meth = multithread::irreducible_method::berlekamp;
+    // возможные варианты - отсутствие приверки (nil), Берлекампа (berlekamp), Рабина (rabin) и Бенора (benor)
+    const typename multithread::irreducible_method irr_meth = multithread::irreducible_method::benor;
     // какой из методов проверки на примитивность хотим использовать
     // возможные варианты - отсутствие приверки (nil) и проверка по определению (definition)
     const typename multithread::primitive_method prim_meth = multithread::primitive_method::nil;

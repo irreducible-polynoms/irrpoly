@@ -35,7 +35,7 @@ std::vector<gfpoly> generate_irreducible(uint64_t num) {
     };
 
     auto check = multithread::make_check_func(
-            multithread::irreducible_method::berlekamp,
+            multithread::irreducible_method::benor,
             multithread::primitive_method::nil);
 
     // функция, вызываемая по окончании проверки, если результат нам подходит - сохраняем и возвращаем true, иначе false
@@ -73,6 +73,5 @@ int main() {
     for (const auto &p : poly) {
         std::cout << p << std::endl;
     }
-
     return 0;
 }
