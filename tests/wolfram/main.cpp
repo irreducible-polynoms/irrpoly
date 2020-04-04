@@ -1,6 +1,6 @@
-#include <iostream>
-
 #include <irrpoly/gfcheck.hpp>
+
+#include <iostream>
 
 using namespace irrpoly;
 

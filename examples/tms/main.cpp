@@ -1,8 +1,7 @@
-#include <iostream>
-#include <thread>
-#include <algorithm>
-
 #include <irrpoly/gfcheck.hpp>
+
+#include <iostream>
+#include <algorithm>
 
 using namespace irrpoly;
 
@@ -11,10 +10,14 @@ std::vector<gfpoly> generate_irreducible(uint64_t num) {
     auto gf2 = make_gf(2);
     // возвращаемое значение
     std::vector<gfpoly> res;
-    if (num == 0) { return res; }
+    if (num == 0) {
+        return res;
+    }
     res.reserve(num);
     res.emplace_back(gfpoly(gf2, {0, 1}));
-    if (num == 1) { return res; }
+    if (num == 1) {
+        return res;
+    }
 
     // создаём всё необходимое для многопоточности
     multithread::polychecker ch;
@@ -35,12 +38,14 @@ std::vector<gfpoly> generate_irreducible(uint64_t num) {
     };
 
     auto check = multithread::make_check_func(
-            multithread::irreducible_method::benor,
-            multithread::primitive_method::nil);
+        multithread::irreducible_method::benor,
+        multithread::primitive_method::nil);
 
     // функция, вызываемая по окончании проверки, если результат нам подходит - сохраняем и возвращаем true, иначе false
     auto callback = [&](const gfpoly &poly, const typename multithread::result_type &result) -> bool {
-        if (!result.irreducible) { return false; }
+        if (!result.irreducible) {
+            return false;
+        }
         res.emplace_back(poly);
         return true;
     };
@@ -56,13 +61,19 @@ std::vector<gfpoly> generate_irreducible(uint64_t num) {
     std::sort(res.begin(), res.end(), [](const gfpoly &a, const gfpoly &b) {
         if (a.degree() == b.degree()) {
             for (uint64_t i = a.degree(); i > 0; --i) {
-                if (a[i] != b[i]) { return a[i] < b[i]; }
+                if (a[i] != b[i]) {
+                    return a[i] < b[i];
+                }
             }
             return a[0] < b[0];
-        } else { return a.degree() < b.degree(); }
+        } else {
+            return a.degree() < b.degree();
+        }
     });
     // выкидываем лишние с конца, чтобы осталось только требуемое число
-    while (res.size() > num) { res.pop_back(); }
+    while (res.size() > num) {
+        res.pop_back();
+    }
 
     return res;
 }

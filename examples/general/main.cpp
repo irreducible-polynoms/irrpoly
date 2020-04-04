@@ -1,7 +1,7 @@
+#include <irrpoly/gfcheck.hpp>
+
 #include <iostream>
 #include <thread>
-
-#include <irrpoly/gfcheck.hpp>
 
 using namespace irrpoly;
 
@@ -19,12 +19,12 @@ using namespace irrpoly;
  */
 [[nodiscard]]
 std::vector<gfpoly> generate_irreducible(
-        const uintmax_t base,
-        const typename std::vector<gfpoly>::size_type num,
-        const typename gfpoly::size_type degree,
-        const typename multithread::irreducible_method irr_meth,
-        const typename multithread::primitive_method prim_meth,
-        const unsigned threads_num
+    const uintmax_t base,
+    const typename std::vector<gfpoly>::size_type num,
+    const typename gfpoly::size_type degree,
+    const typename multithread::irreducible_method irr_meth,
+    const typename multithread::primitive_method prim_meth,
+    const unsigned threads_num
 ) {
     // возвращаемое значение
     std::vector<gfpoly> arr;
@@ -55,7 +55,7 @@ std::vector<gfpoly> generate_irreducible(
 
 int main() {
     // основание поля Галуа
-    const uint32_t base = 2;
+    const uintmax_t base = 2;
     // число многочленов, которые требуется найти
     const typename std::vector<gfpoly>::size_type num = 3;
     // степень искомых многочленов
