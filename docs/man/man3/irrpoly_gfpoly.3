@@ -1,4 +1,4 @@
-.TH "irrpoly::gfpoly" 3 "Сб 4 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
+.TH "irrpoly::gfpoly" 3 "Сб 11 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -20,10 +20,10 @@ irrpoly::gfpoly
 
 .in +1c
 .ti -1c
-.RI "\fBgfpoly\fP (gfp field)"
+.RI "\fBgfpoly\fP (gf field)"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP (gfp field, std::vector< \fBgfn\fP > &&p)"
+.RI "\fBgfpoly\fP (gf field, std::vector< \fBgfn\fP > &&p)"
 .br
 .ti -1c
 .RI "\fBgfpoly\fP (\fBgfpoly\fP &&p) noexcept"
@@ -32,19 +32,19 @@ irrpoly::gfpoly
 .RI "\fBgfpoly\fP (const \fBgfpoly\fP &p)=default"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP (const gfp &field, std::initializer_list< typename gfn::value_type > l)"
+.RI "\fBgfpoly\fP (const gf &field, std::initializer_list< uintmax_t > l)"
 .br
 .ti -1c
 .RI "\fBgfpoly\fP (\fBgfn\fP value)"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP (const gfp &field, typename gfn::value_type value)"
+.RI "\fBgfpoly\fP (const gf &field, uintmax_t value)"
 .br
 .ti -1c
-.RI "gfp \fBfield\fP ()"
+.RI "gf \fBfield\fP ()"
 .br
 .ti -1c
-.RI "const gfp & \fBfield\fP () const"
+.RI "const gf & \fBfield\fP () const"
 .br
 .ti -1c
 .RI "size_type \fBsize\fP () const"
@@ -126,7 +126,7 @@ irrpoly::gfpoly
 
 .in +1c
 .ti -1c
-.RI "static \fBgfpoly\fP \fBrandom\fP (const gfp &field, typename gfpoly::size_type degree)"
+.RI "static \fBgfpoly\fP \fBrandom\fP (const gf &field, typename gfpoly::size_type degree)"
 .br
 .RI "Генерирует случайный многочлен над полем GF[P] заданной степени\&. "
 .in -1c

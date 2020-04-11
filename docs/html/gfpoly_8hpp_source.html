@@ -128,7 +128,7 @@ $(function() {
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
 <div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="classirrpoly_1_1gfpoly.html">   64</a></span>&#160;<span class="keyword">class </span><a class="code" href="classirrpoly_1_1gfpoly.html">gfpoly</a> {</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    gfp m_field;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    gf m_field;</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    std::vector&lt;gfn&gt; m_data;</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="keyword">public</span>:</div>
@@ -136,24 +136,24 @@ $(function() {
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">typedef</span> <span class="keyword">typename</span> std::vector&lt;gfn&gt;::size_type size_type;</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keyword">static</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="classirrpoly_1_1gfpoly.html#a0f09953b87b98b582f4c953d95373505">   75</a></span>&#160;    <a class="code" href="classirrpoly_1_1gfpoly.html">gfpoly</a> <a class="code" href="classirrpoly_1_1gfpoly.html#a0f09953b87b98b582f4c953d95373505">random</a>(<span class="keyword">const</span> gfp &amp;field, <span class="keyword">typename</span> gfpoly::size_type degree) {</div>
+<div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="classirrpoly_1_1gfpoly.html#a43a4a0a18fd311b0c067846b27ace1ac">   75</a></span>&#160;    <a class="code" href="classirrpoly_1_1gfpoly.html">gfpoly</a> <a class="code" href="classirrpoly_1_1gfpoly.html#a43a4a0a18fd311b0c067846b27ace1ac">random</a>(<span class="keyword">const</span> gf &amp;field, <span class="keyword">typename</span> gfpoly::size_type degree) {</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        std::vector&lt;gfn&gt; data;</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        data.reserve(degree + 1);</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> i = 0; i &lt; degree; ++i) {</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            data.emplace_back(<a class="code" href="classirrpoly_1_1gfn.html#a030ea01eba96156994d0cece0d3cb292">gfn::random</a>(field));</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            data.emplace_back(<a class="code" href="classirrpoly_1_1gfn.html#ac477ecc927b624a55c5f3eb515c9ef22">gfn::random</a>(field));</div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        }</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        data.emplace_back(field, 1);</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keywordflow">while</span> (data[0].is_zero()) {</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            data[0] = <a class="code" href="classirrpoly_1_1gfn.html#a030ea01eba96156994d0cece0d3cb292">gfn::random</a>(field);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            data[0] = <a class="code" href="classirrpoly_1_1gfn.html#ac477ecc927b624a55c5f3eb515c9ef22">gfn::random</a>(field);</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        }</div>
 <div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classirrpoly_1_1gfpoly.html">gfpoly</a>(field, std::move(data));</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    }</div>
 <div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
 <div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keyword">explicit</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <a class="code" href="classirrpoly_1_1gfpoly.html">gfpoly</a>(gfp field) :</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <a class="code" href="classirrpoly_1_1gfpoly.html">gfpoly</a>(gf field) :</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        m_field(std::move(field)), m_data() {}</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    gfpoly(gfp field, std::vector&lt;gfn&gt; &amp;&amp;p) :</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    gfpoly(gf field, std::vector&lt;gfn&gt; &amp;&amp;p) :</div>
 <div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        m_field(std::move(field)), m_data(std::move(p)) {</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        normalize();</div>
 <div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    }</div>
@@ -163,7 +163,7 @@ $(function() {
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    gfpoly(<span class="keyword">const</span> gfpoly &amp;p) = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    gfpoly(<span class="keyword">const</span> gfp &amp;field, std::initializer_list&lt;typename gfn::value_type&gt; l) :</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    gfpoly(<span class="keyword">const</span> gf &amp;field, std::initializer_list&lt;uintmax_t&gt; l) :</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        m_field(field), m_data(make_gfn(field, l)) {}</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="keyword">explicit</span></div>
@@ -172,18 +172,18 @@ $(function() {
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        m_data.push_back(std::move(value));</div>
 <div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    }</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    gfpoly(<span class="keyword">const</span> gfp &amp;field, <span class="keyword">typename</span> gfn::value_type value) :</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    gfpoly(<span class="keyword">const</span> gf &amp;field, uintmax_t value) :</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        m_field(field), m_data() {</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        m_data.emplace_back(field, value);</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    }</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    [[nodiscard]]</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    gfp field() {</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    gf field() {</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        <span class="keywordflow">return</span> m_field;</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    }</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    [[nodiscard]]</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keyword">const</span> gfp &amp;field()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keyword">const</span> gf &amp;field()<span class="keyword"> const </span>{</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keywordflow">return</span> m_field;</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    }</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
@@ -601,12 +601,12 @@ $(function() {
 <div class="ttc" id="agfpoly_8hpp_html_ab0b76eba3974c7d842db7f8a5345dfb5"><div class="ttname"><a href="gfpoly_8hpp.html#ab0b76eba3974c7d842db7f8a5345dfb5">irrpoly::detail::quotient_remainder</a></div><div class="ttdeci">std::pair&lt; gfpoly, gfpoly &gt; quotient_remainder(const gfpoly &amp;, const gfpoly &amp;)</div><div class="ttdef"><b>Definition:</b> gfpoly.hpp:522</div></div>
 <div class="ttc" id="astructirrpoly_1_1detail_1_1negate_html"><div class="ttname"><a href="structirrpoly_1_1detail_1_1negate.html">irrpoly::detail::negate</a></div><div class="ttdef"><b>Definition:</b> gfpoly.hpp:41</div></div>
 <div class="ttc" id="agf_8hpp_html"><div class="ttname"><a href="gf_8hpp.html">gf.hpp</a></div></div>
+<div class="ttc" id="aclassirrpoly_1_1gfn_html_ac477ecc927b624a55c5f3eb515c9ef22"><div class="ttname"><a href="classirrpoly_1_1gfn.html#ac477ecc927b624a55c5f3eb515c9ef22">irrpoly::gfn::random</a></div><div class="ttdeci">static gfn random(gf field)</div><div class="ttdoc">Генерирует случайное число в пределах [0, P-1].</div><div class="ttdef"><b>Definition:</b> gf.hpp:68</div></div>
 <div class="ttc" id="aclassirrpoly_1_1gfpoly_html"><div class="ttname"><a href="classirrpoly_1_1gfpoly.html">irrpoly::gfpoly</a></div><div class="ttdef"><b>Definition:</b> gfpoly.hpp:64</div></div>
-<div class="ttc" id="aclassirrpoly_1_1gfpoly_html_a0f09953b87b98b582f4c953d95373505"><div class="ttname"><a href="classirrpoly_1_1gfpoly.html#a0f09953b87b98b582f4c953d95373505">irrpoly::gfpoly::random</a></div><div class="ttdeci">static gfpoly random(const gfp &amp;field, typename gfpoly::size_type degree)</div><div class="ttdoc">Генерирует случайный многочлен над полем GF[P] заданной степени.</div><div class="ttdef"><b>Definition:</b> gfpoly.hpp:75</div></div>
-<div class="ttc" id="aclassirrpoly_1_1gfn_html_a030ea01eba96156994d0cece0d3cb292"><div class="ttname"><a href="classirrpoly_1_1gfn.html#a030ea01eba96156994d0cece0d3cb292">irrpoly::gfn::random</a></div><div class="ttdeci">static gfn random(gfp field)</div><div class="ttdoc">Генерирует случайное число в пределах [0, P-1].</div><div class="ttdef"><b>Definition:</b> gf.hpp:104</div></div>
+<div class="ttc" id="aclassirrpoly_1_1gfpoly_html_a43a4a0a18fd311b0c067846b27ace1ac"><div class="ttname"><a href="classirrpoly_1_1gfpoly.html#a43a4a0a18fd311b0c067846b27ace1ac">irrpoly::gfpoly::random</a></div><div class="ttdeci">static gfpoly random(const gf &amp;field, typename gfpoly::size_type degree)</div><div class="ttdoc">Генерирует случайный многочлен над полем GF[P] заданной степени.</div><div class="ttdef"><b>Definition:</b> gfpoly.hpp:75</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Сб 4 Апр 2020 18:50:46. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Сб 11 Апр 2020 21:39:11. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.17
 </small></address>

@@ -1,4 +1,4 @@
-.TH "irrpoly::gfn" 3 "Сб 4 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
+.TH "irrpoly::gfn" 3 "Сб 11 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -8,22 +8,15 @@ irrpoly::gfn
 .PP
 .PP
 \fC#include <gf\&.hpp>\fP
-.SS "Открытые типы"
-
-.in +1c
-.ti -1c
-.RI "using \fBvalue_type\fP = gf::value_type"
-.br
-.in -1c
 .SS "Открытые члены"
 
 .in +1c
 .ti -1c
-.RI "\fBgfn\fP (gfp field)"
+.RI "\fBgfn\fP (gf field)"
 .br
 .RI "Конструктор по умолчанию, обнуляет переменную\&. "
 .ti -1c
-.RI "\fBgfn\fP (gfp field, const value_type val)"
+.RI "\fBgfn\fP (gf field, const uintmax_t val)"
 .br
 .ti -1c
 .RI "\fBgfn\fP (const \fBgfn\fP &other)=default"
@@ -38,20 +31,20 @@ irrpoly::gfn
 .RI "\fBgfn\fP & \fBoperator=\fP (\fBgfn\fP &&other) noexcept"
 .br
 .ti -1c
-.RI "\fBgfn\fP & \fBoperator=\fP (const value_type other)"
+.RI "\fBgfn\fP & \fBoperator=\fP (const uintmax_t other)"
 .br
 .ti -1c
-.RI "const gfp & \fBfield\fP () const"
+.RI "const gf & \fBfield\fP () const"
 .br
 .ti -1c
-.RI "gfp \fBfield\fP ()"
+.RI "gf \fBfield\fP ()"
 .br
 .ti -1c
-.RI "value_type \fBdata\fP () const"
+.RI "uintmax_t \fBdata\fP () const"
 .br
 .RI "Возвращает значение класса в виде целого числа\&. "
 .ti -1c
-.RI "value_type & \fBdata\fP ()"
+.RI "uintmax_t & \fBdata\fP ()"
 .br
 .ti -1c
 .RI "\fBgfn\fP \fBoperator+\fP () const"
@@ -60,13 +53,13 @@ irrpoly::gfn
 .RI "\fBgfn\fP \fBoperator+\fP (const \fBgfn\fP &other) const"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator+\fP (const value_type other) const"
+.RI "\fBgfn\fP \fBoperator+\fP (const uintmax_t other) const"
 .br
 .ti -1c
 .RI "\fBgfn\fP & \fBoperator+=\fP (const \fBgfn\fP &other)"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator+=\fP (const value_type other)"
+.RI "\fBgfn\fP \fBoperator+=\fP (const uintmax_t other)"
 .br
 .ti -1c
 .RI "\fBgfn\fP & \fBoperator++\fP ()"
@@ -81,13 +74,13 @@ irrpoly::gfn
 .RI "\fBgfn\fP \fBoperator\-\fP (const \fBgfn\fP &other) const"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator\-\fP (const value_type other) const"
+.RI "\fBgfn\fP \fBoperator\-\fP (const uintmax_t other) const"
 .br
 .ti -1c
 .RI "\fBgfn\fP & \fBoperator\-=\fP (const \fBgfn\fP &other)"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator\-=\fP (const value_type other)"
+.RI "\fBgfn\fP \fBoperator\-=\fP (const uintmax_t other)"
 .br
 .ti -1c
 .RI "\fBgfn\fP & \fBoperator\-\-\fP ()"
@@ -99,13 +92,13 @@ irrpoly::gfn
 .RI "\fBgfn\fP \fBoperator*\fP (const \fBgfn\fP &other) const"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator*\fP (const value_type other) const"
+.RI "\fBgfn\fP \fBoperator*\fP (const uintmax_t other) const"
 .br
 .ti -1c
 .RI "\fBgfn\fP & \fBoperator*=\fP (const \fBgfn\fP &other)"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator*=\fP (const value_type other)"
+.RI "\fBgfn\fP \fBoperator*=\fP (const uintmax_t other)"
 .br
 .ti -1c
 .RI "\fBgfn\fP \fBmul_inv\fP ()"
@@ -114,13 +107,13 @@ irrpoly::gfn
 .RI "\fBgfn\fP \fBoperator/\fP (const \fBgfn\fP &other) const"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator/\fP (const value_type other) const"
+.RI "\fBgfn\fP \fBoperator/\fP (const uintmax_t other) const"
 .br
 .ti -1c
 .RI "\fBgfn\fP & \fBoperator/=\fP (const \fBgfn\fP &other)"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator/=\fP (const value_type other)"
+.RI "\fBgfn\fP \fBoperator/=\fP (const uintmax_t other)"
 .br
 .ti -1c
 .RI "bool \fBis_zero\fP () const"
@@ -130,44 +123,44 @@ irrpoly::gfn
 .RI "bool \fBoperator==\fP (const \fBgfn\fP &other) const"
 .br
 .ti -1c
-.RI "bool \fBoperator==\fP (const value_type other) const"
+.RI "bool \fBoperator==\fP (const uintmax_t other) const"
 .br
 .ti -1c
 .RI "bool \fBoperator!=\fP (const \fBgfn\fP &other) const"
 .br
 .ti -1c
-.RI "bool \fBoperator!=\fP (const value_type other) const"
+.RI "bool \fBoperator!=\fP (const uintmax_t other) const"
 .br
 .ti -1c
 .RI "bool \fBoperator>\fP (const \fBgfn\fP &other) const"
 .br
 .ti -1c
-.RI "bool \fBoperator>\fP (const value_type other) const"
+.RI "bool \fBoperator>\fP (const uintmax_t other) const"
 .br
 .ti -1c
 .RI "bool \fBoperator>=\fP (const \fBgfn\fP &other) const"
 .br
 .ti -1c
-.RI "bool \fBoperator>=\fP (const value_type other) const"
+.RI "bool \fBoperator>=\fP (const uintmax_t other) const"
 .br
 .ti -1c
 .RI "bool \fBoperator<\fP (const \fBgfn\fP &other) const"
 .br
 .ti -1c
-.RI "bool \fBoperator<\fP (const value_type other) const"
+.RI "bool \fBoperator<\fP (const uintmax_t other) const"
 .br
 .ti -1c
 .RI "bool \fBoperator<=\fP (const \fBgfn\fP &other) const"
 .br
 .ti -1c
-.RI "bool \fBoperator<=\fP (const value_type other) const"
+.RI "bool \fBoperator<=\fP (const uintmax_t other) const"
 .br
 .in -1c
 .SS "Открытые статические члены"
 
 .in +1c
 .ti -1c
-.RI "static \fBgfn\fP \fBrandom\fP (gfp field)"
+.RI "static \fBgfn\fP \fBrandom\fP (gf field)"
 .br
 .RI "Генерирует случайное число в пределах [0, P-1]\&. "
 .in -1c
@@ -175,16 +168,16 @@ irrpoly::gfn
 
 .in +1c
 .ti -1c
-.RI "\fBgfn\fP \fBoperator+\fP (value_type, const \fBgfn\fP &)"
+.RI "\fBgfn\fP \fBoperator+\fP (uintmax_t, const \fBgfn\fP &)"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator\-\fP (value_type, const \fBgfn\fP &)"
+.RI "\fBgfn\fP \fBoperator\-\fP (uintmax_t, const \fBgfn\fP &)"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator*\fP (value_type, const \fBgfn\fP &)"
+.RI "\fBgfn\fP \fBoperator*\fP (uintmax_t, const \fBgfn\fP &)"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator/\fP (value_type, const \fBgfn\fP &)"
+.RI "\fBgfn\fP \fBoperator/\fP (uintmax_t, const \fBgfn\fP &)"
 .br
 .ti -1c
 .RI "std::ostream & \fBoperator<<\fP (std::ostream &, const \fBgfn\fP &)"

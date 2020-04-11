@@ -63,7 +63,7 @@ struct minus {
 
 class gfpoly {
 private:
-    gfp m_field;
+    gf m_field;
     std::vector<gfn> m_data;
 
 public:
@@ -72,7 +72,7 @@ public:
 
     /// Генерирует случайный многочлен над полем GF[P] заданной степени.
     static
-    gfpoly random(const gfp &field, typename gfpoly::size_type degree) {
+    gfpoly random(const gf &field, typename gfpoly::size_type degree) {
         std::vector<gfn> data;
         data.reserve(degree + 1);
         for (auto i = 0; i < degree; ++i) {
@@ -86,10 +86,10 @@ public:
     }
 
     explicit
-    gfpoly(gfp field) :
+    gfpoly(gf field) :
         m_field(std::move(field)), m_data() {}
 
-    gfpoly(gfp field, std::vector<gfn> &&p) :
+    gfpoly(gf field, std::vector<gfn> &&p) :
         m_field(std::move(field)), m_data(std::move(p)) {
         normalize();
     }
@@ -99,7 +99,7 @@ public:
 
     gfpoly(const gfpoly &p) = default;
 
-    gfpoly(const gfp &field, std::initializer_list<typename gfn::value_type> l) :
+    gfpoly(const gf &field, std::initializer_list<uintmax_t> l) :
         m_field(field), m_data(make_gfn(field, l)) {}
 
     explicit
@@ -108,18 +108,18 @@ public:
         m_data.push_back(std::move(value));
     }
 
-    gfpoly(const gfp &field, typename gfn::value_type value) :
+    gfpoly(const gf &field, uintmax_t value) :
         m_field(field), m_data() {
         m_data.emplace_back(field, value);
     }
 
     [[nodiscard]]
-    gfp field() {
+    gf field() {
         return m_field;
     }
 
     [[nodiscard]]
-    const gfp &field() const {
+    const gf &field() const {
         return m_field;
     }
 

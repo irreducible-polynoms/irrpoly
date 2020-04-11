@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>irrpoly: Структура irrpoly::detail::negate</title>
+<title>irrpoly: Класс irrpoly::gfbase</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -70,27 +70,43 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><b>irrpoly</b></li><li class="navelem"><b>detail</b></li><li class="navelem"><a class="el" href="structirrpoly_1_1detail_1_1negate.html">negate</a></li>  </ul>
+<li class="navelem"><b>irrpoly</b></li><li class="navelem"><a class="el" href="classirrpoly_1_1gfbase.html">gfbase</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Открытые члены</a> &#124;
-<a href="structirrpoly_1_1detail_1_1negate-members.html">Полный список членов класса</a>  </div>
+<a href="#friends">Друзья</a> &#124;
+<a href="classirrpoly_1_1gfbase-members.html">Полный список членов класса</a>  </div>
   <div class="headertitle">
-<div class="title">Структура irrpoly::detail::negate</div>  </div>
+<div class="title">Класс irrpoly::gfbase<span class="mlabels"><span class="mlabel">final</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Класс gf представляет поле Галуа.  
+ <a href="classirrpoly_1_1gfbase.html#details">Подробнее...</a></p>
+
+<p><code>#include &lt;<a class="el" href="gf_8hpp_source.html">gf.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Открытые члены</h2></td></tr>
-<tr class="memitem:a0f102fbd9937f932c6d21d945f99dca7"><td class="memTemplParams" colspan="2"><a id="a0f102fbd9937f932c6d21d945f99dca7"></a>
-template&lt;class T &gt; </td></tr>
-<tr class="memitem:a0f102fbd9937f932c6d21d945f99dca7"><td class="memTemplItemLeft" align="right" valign="top">T&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator()</b> (T const &amp;x) const</td></tr>
-<tr class="separator:a0f102fbd9937f932c6d21d945f99dca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c3caa54a66d61e909d53013b5d2624e"><td class="memItemLeft" align="right" valign="top"><a id="a8c3caa54a66d61e909d53013b5d2624e"></a>
+uintmax_t&#160;</td><td class="memItemRight" valign="bottom"><b>base</b> () const</td></tr>
+<tr class="separator:a8c3caa54a66d61e909d53013b5d2624e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6fbf059dacd554fea5d86b11150dd781"><td class="memItemLeft" align="right" valign="top"><a id="a6fbf059dacd554fea5d86b11150dd781"></a>
+uintmax_t&#160;</td><td class="memItemRight" valign="bottom"><b>mul_inv</b> (uintmax_t) const</td></tr>
+<tr class="separator:a6fbf059dacd554fea5d86b11150dd781"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Друзья</h2></td></tr>
+<tr class="memitem:a39664980d56bb6b2c80bcb21919dc8e4"><td class="memItemLeft" align="right" valign="top"><a id="a39664980d56bb6b2c80bcb21919dc8e4"></a>
+std::shared_ptr&lt; <a class="el" href="classirrpoly_1_1gfbase.html">gfbase</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>make_gf</b> (uintmax_t)</td></tr>
+<tr class="separator:a39664980d56bb6b2c80bcb21919dc8e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>Объявления и описания членов структуры находятся в файле:<ul>
-<li>include/irrpoly/<a class="el" href="gfpoly_8hpp_source.html">gfpoly.hpp</a></li>
+<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
+<div class="textblock"><p>Класс gf представляет поле Галуа. </p>
+</div><hr/>Объявления и описания членов класса находятся в файле:<ul>
+<li>include/irrpoly/<a class="el" href="gf_8hpp_source.html">gf.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
