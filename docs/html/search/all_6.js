@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['plus_15',['plus',['../structirrpoly_1_1detail_1_1plus.html',1,'irrpoly::detail']]]
+  ['_7echecker_16',['~checker',['../classirrpoly_1_1checker.html#ae2f767186d9060c993c0255d9cec527b',1,'irrpoly::checker']]]
 ];

@@ -38,27 +38,6 @@ std::pair<gfpoly, gfpoly> division(gfpoly, const gfpoly &);
   */
 std::pair<gfpoly, gfpoly> quotient_remainder(const gfpoly &, const gfpoly &);
 
-struct negate {
-    template<class T>
-    T operator()(T const &x) const {
-        return -x;
-    }
-};
-
-struct plus {
-    template<class T, class U>
-    T operator()(T const &x, U const &y) const {
-        return x + y;
-    }
-};
-
-struct minus {
-    template<class T, class U>
-    T operator()(T const &x, U const &y) const {
-        return x - y;
-    }
-};
-
 } // namespace detail
 
 class gfpoly {
@@ -89,11 +68,13 @@ public:
     gfpoly(gf field) :
         m_field(std::move(field)), m_data() {}
 
+private:
     gfpoly(gf field, std::vector<gfn> &&p) :
         m_field(std::move(field)), m_data(std::move(p)) {
         normalize();
     }
 
+public:
     gfpoly(gfpoly &&p) noexcept :
         m_field(std::move(p.m_field)), m_data(std::move(p.m_data)) {}
 
@@ -291,13 +272,13 @@ private:
     template<class U>
     gfpoly &addition(const U &value) {
         assert(field() == value.field());
-        return addition(value, detail::plus());
+        return addition(value, [](const auto &x, const auto &y) { return x + y; });
     }
 
     template<class U>
     gfpoly &subtraction(const U &value) {
         assert(field() == value.field());
-        return addition(value, detail::minus());
+        return addition(value, [](const auto &x, const auto &y) { return x - y; });
     }
 
     template<class R>
@@ -312,12 +293,12 @@ private:
 
     gfpoly &addition(const gfpoly &value) {
         assert(field() == value.field());
-        return addition(value, detail::plus());
+        return addition(value, [](const auto &x, const auto &y) { return x + y; });
     }
 
     gfpoly &subtraction(const gfpoly &value) {
         assert(field() == value.field());
-        return addition(value, detail::minus());
+        return addition(value, [](const auto &x, const auto &y) { return x - y; });
     }
 
     template<class U>
@@ -334,7 +315,7 @@ private:
 };
 
 gfpoly operator-(gfpoly a) {
-    std::transform(a.data().begin(), a.data().end(), a.data().begin(), detail::negate());
+    std::transform(a.data().begin(), a.data().end(), a.data().begin(), [](const auto &x) { return -x; });
     return a;
 }
 

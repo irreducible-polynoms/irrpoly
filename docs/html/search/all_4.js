@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['minus_13',['minus',['../structirrpoly_1_1detail_1_1minus.html',1,'irrpoly::detail']]]
+  ['quotient_5fremainder_13',['quotient_remainder',['../gfpoly_8hpp.html#ab0b76eba3974c7d842db7f8a5345dfb5',1,'irrpoly::detail']]]
 ];
