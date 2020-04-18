@@ -88,15 +88,9 @@ public:
 
     gfn &operator=(const gfn &other) {
         if (this != &other) {
-            gfn tmp{other.m_field, other.m_val};
-            std::swap(*this, tmp);
+            assert(m_field == other.field());
+            m_val = other.m_val;
         }
-        return *this;
-    }
-
-    gfn &operator=(gfn &&other) noexcept {
-        m_field = std::move(other.m_field);
-        m_val = other.m_val;
         return *this;
     }
 
