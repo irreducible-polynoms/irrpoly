@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['quotient_5fremainder_29',['quotient_remainder',['../gfpoly_8hpp.html#ab0b76eba3974c7d842db7f8a5345dfb5',1,'irrpoly::detail']]]
+  ['random_28',['random',['../classirrpoly_1_1gfn.html#ac477ecc927b624a55c5f3eb515c9ef22',1,'irrpoly::gfn::random()'],['../classirrpoly_1_1gfpoly.html#a43a4a0a18fd311b0c067846b27ace1ac',1,'irrpoly::gfpoly::random()']]]
 ];

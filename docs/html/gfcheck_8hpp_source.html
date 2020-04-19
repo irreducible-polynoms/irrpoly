@@ -111,7 +111,7 @@ $(function() {
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordflow">return</span> u0;</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;}</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keyword">namespace </span>detail {</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keyword">namespace </span>{</div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">class</span> T, <span class="keyword">class</span> N&gt;</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;T integer_power(T t, N n) {</div>
@@ -179,7 +179,7 @@ $(function() {
 <div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    <span class="keywordflow">return</span> (res &lt;&lt; pow) - sub;</div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;}</div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;} <span class="comment">// namespace detail</span></div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;} <span class="comment">// namespace</span></div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;<span class="keywordtype">bool</span> is_irreducible_berlekamp(<span class="keyword">const</span> gfpoly &amp;val) {</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    <span class="keywordflow">if</span> (val.is_zero()) {</div>
@@ -204,7 +204,7 @@ $(function() {
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        std::vector&lt;std::vector&lt;gfn&gt;&gt; m(n, std::vector&lt;gfn&gt;(n, zer)); <span class="comment">// M = 0</span></div>
 <div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        <span class="keywordflow">for</span> (i = 0; i &lt; n; ++i) {</div>
 <div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;            <span class="comment">// M[i,*] = x ^ ip (mod val)</span></div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;            tmp = detail::x_pow_mod_sub(i * val.field()-&gt;base(), val, gfpoly(val.field(), 0));</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;            tmp = x_pow_mod_sub(i * val.field()-&gt;base(), val, gfpoly(val.field(), 0));</div>
 <div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;            <span class="keywordflow">for</span> (j = 0, k = tmp.degree(); j &lt;= k; ++j) {</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;                m[i][j] += tmp[j];</div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;            }</div>
@@ -238,7 +238,7 @@ $(function() {
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    };</div>
 <div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160; </div>
 <div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    <span class="comment">// алгоритм Берлекампа</span></div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    <span class="keyword">auto</span> d = detail::derivative(val);</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    <span class="keyword">auto</span> d = derivative(val);</div>
 <div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    <span class="keywordflow">return</span> !d.is_zero() &amp;&amp; gcd(val, d).degree() == 0 &amp;&amp;</div>
 <div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        berlekampMatrixRank(val) == val.degree() - 1;</div>
 <div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;}</div>
@@ -281,14 +281,14 @@ $(function() {
 <div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;    <span class="keyword">auto</span> list = get_list(n);</div>
 <div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    gfpoly tmp(val.field()), x = gfpoly(val.field(), {0, 1});</div>
 <div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    <span class="keywordflow">for</span> (<span class="keyword">auto</span> i: list) {</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        tmp = detail::x_pow_mod_sub(detail::integer_power(P, i), val, x);</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        tmp = x_pow_mod_sub(integer_power(P, i), val, x);</div>
 <div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        <span class="keywordflow">if</span> (tmp.is_zero() || gcd(val, tmp).degree() &gt; 0) {</div>
 <div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        }</div>
 <div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    }</div>
 <div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160; </div>
 <div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;    <span class="comment">// шаг 3</span></div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    tmp = detail::x_pow_mod_sub(detail::integer_power(P, n), val, x);</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    tmp = x_pow_mod_sub(integer_power(P, n), val, x);</div>
 <div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;    <span class="keywordflow">return</span> tmp.is_zero();</div>
 <div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;}</div>
 <div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160; </div>
@@ -309,7 +309,7 @@ $(function() {
 <div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    <span class="keyword">auto</span> P = val.field()-&gt;base();</div>
 <div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;    gfpoly tmp(val.field()), x = gfpoly(val.field(), {0, 1});</div>
 <div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    <span class="keywordflow">for</span> (uintmax_t m = n / 2, i = 1; i &lt;= m; ++i) {</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        tmp = detail::x_pow_mod_sub(detail::integer_power(P, i), val, x);</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        tmp = x_pow_mod_sub(integer_power(P, i), val, x);</div>
 <div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        <span class="keywordflow">if</span> (tmp.is_zero() || gcd(val, tmp).degree() &gt; 0) {</div>
 <div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        }</div>
@@ -386,8 +386,8 @@ $(function() {
 <div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;    }</div>
 <div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160; </div>
 <div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;    <span class="comment">// проверяется выполнение второго условия</span></div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;    uintmax_t r = (detail::integer_power(P, n) - 1) / (P - 1);</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;    <span class="keyword">auto</span> tmp = detail::x_pow_mod_sub(r, val, gfpoly(mp));</div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;    uintmax_t r = (integer_power(P, n) - 1) / (P - 1);</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;    <span class="keyword">auto</span> tmp = x_pow_mod_sub(r, val, gfpoly(mp));</div>
 <div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;    <span class="keywordflow">if</span> (!tmp.is_zero()) {</div>
 <div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;    }</div>
@@ -396,7 +396,7 @@ $(function() {
 <div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;    <span class="keyword">auto</span> list3 = factorize(r);</div>
 <div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;    <span class="keyword">const</span> <span class="keyword">auto</span> m = list3.size();</div>
 <div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; m; ++i) {</div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;        tmp = detail::x_pow_mod_sub(r / list3[i], poly, gfpoly(poly.field(), 0));</div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;        tmp = x_pow_mod_sub(r / list3[i], poly, gfpoly(poly.field(), 0));</div>
 <div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;        <span class="keywordflow">if</span> (tmp.is_zero() || tmp.degree() == 0) {</div>
 <div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;        }</div>
@@ -460,7 +460,7 @@ $(function() {
 <div class="ttc" id="achecker_8hpp_html"><div class="ttname"><a href="checker_8hpp.html">checker.hpp</a></div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Вс 19 Апр 2020 20:46:43. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Вс 19 Апр 2020 22:09:42. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.18
 </small></address>

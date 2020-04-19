@@ -16,6 +16,8 @@ include/irrpoly/gfpoly.hpp
 .br
 \fC#include <algorithm>\fP
 .br
+\fC#include <functional>\fP
+.br
 \fC#include <initializer_list>\fP
 .br
 
@@ -29,15 +31,6 @@ include/irrpoly/gfpoly.hpp
 .SS "Функции"
 
 .in +1c
-.ti -1c
-.RI "template<typename N > void \fBirrpoly::detail::division_impl\fP (gfpoly &, gfpoly &, const gfpoly &, N, N)"
-.br
-.ti -1c
-.RI "std::pair< gfpoly, gfpoly > \fBirrpoly::detail::division\fP (gfpoly, const gfpoly &)"
-.br
-.ti -1c
-.RI "std::pair< gfpoly, gfpoly > \fBirrpoly::detail::quotient_remainder\fP (const gfpoly &, const gfpoly &)"
-.br
 .ti -1c
 .RI "gfpoly \fBirrpoly::operator\-\fP (gfpoly a)"
 .br
@@ -124,10 +117,6 @@ Vadim Piven vadim@piven.tech @license Free use of this library is permitted unde
 .RE
 .PP
 
-.SH "Функции"
-.PP 
-.SS "std::pair< gfpoly, gfpoly > irrpoly::detail::quotient_remainder (const \fBgfpoly\fP & dividend, const \fBgfpoly\fP & divisor)"
-Calculates a / b and a % b, returning the pair (quotient, remainder) together because the same amount of computation yields both\&. This function is not defined for division by zero: user beware\&. 
 .SH "Автор"
 .PP 
 Автоматически создано Doxygen для irrpoly из исходного текста\&.

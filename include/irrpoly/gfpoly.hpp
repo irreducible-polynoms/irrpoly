@@ -15,6 +15,7 @@
 #include <cassert>
 #include <ostream>
 #include <algorithm>
+#include <functional>
 #include <initializer_list>
 
 namespace irrpoly {
@@ -25,7 +26,7 @@ namespace irrpoly {
  */
 class gfpoly;
 
-namespace detail {
+namespace {
 
 template<typename N>
 void division_impl(gfpoly &, gfpoly &, const gfpoly &, N, N);
@@ -38,7 +39,7 @@ std::pair<gfpoly, gfpoly> division(gfpoly, const gfpoly &);
   */
 std::pair<gfpoly, gfpoly> quotient_remainder(const gfpoly &, const gfpoly &);
 
-} // namespace detail
+} // namespace
 
 class gfpoly {
 private:
@@ -75,7 +76,7 @@ private:
     }
 
 public:
-    gfpoly(gfpoly &&p) noexcept :
+    gfpoly(gfpoly &&p) noexcept:
         m_field(std::move(p.m_field)), m_data(std::move(p.m_data)) {}
 
     gfpoly(const gfpoly &p) = default;
@@ -149,28 +150,30 @@ public:
 
     template<class U>
     gfpoly &operator+=(const U &value) {
-        addition(value);
+        return transform(value, std::plus());
         normalize();
         return *this;
     }
 
     template<class U>
     gfpoly &operator-=(const U &value) {
-        subtraction(value);
+        transform(value, std::minus());
         normalize();
         return *this;
     }
 
     template<class U>
     gfpoly &operator*=(const U &value) {
-        multiplication(value);
+        std::transform(m_data.begin(), m_data.end(), m_data.begin(),
+                       [&](const gfn &x) -> gfn { return x * value; });
         normalize();
         return *this;
     }
 
     template<class U>
     gfpoly &operator/=(const U &value) {
-        division(value);
+        std::transform(m_data.begin(), m_data.end(), m_data.begin(),
+                       [&](const gfn &x) -> gfn { return x / value; });
         normalize();
         return *this;
     }
@@ -184,14 +187,14 @@ public:
 
     gfpoly &operator+=(const gfpoly &value) {
         assert(field() == value.field());
-        addition(value);
+        return transform(value, std::plus());
         normalize();
         return *this;
     }
 
     gfpoly &operator-=(const gfpoly &value) {
         assert(field() == value.field());
-        subtraction(value);
+        transform(value, std::minus());
         normalize();
         return *this;
     }
@@ -217,13 +220,13 @@ public:
 
     gfpoly &operator/=(const gfpoly &value) {
         assert(field() == value.field());
-        *this = detail::quotient_remainder(*this, value).first;
+        *this = quotient_remainder(*this, value).first;
         return *this;
     }
 
     gfpoly &operator%=(const gfpoly &value) {
         assert(field() == value.field());
-        *this = detail::quotient_remainder(*this, value).second;
+        *this = quotient_remainder(*this, value).second;
         return *this;
     }
 
@@ -255,13 +258,15 @@ public:
     }
 
     void normalize() {
-        m_data.erase(std::find_if(m_data.rbegin(), m_data.rend(),
-                                  [](const gfn &x) -> bool { return !x.is_zero(); }).base(), m_data.end());
+        m_data.erase(std::find_if(
+            m_data.rbegin(), m_data.rend(),
+            std::not_fn(std::mem_fn(&gfn::is_zero))
+        ).base(), m_data.end());
     }
 
 private:
     template<class U, class R>
-    gfpoly &addition(const U &value, R op) {
+    gfpoly &transform(const U &value, R op) {
         assert(field() == value.field());
         if (m_data.empty())
             m_data.resize(1, gfn(m_field, 0));
@@ -269,20 +274,8 @@ private:
         return *this;
     }
 
-    template<class U>
-    gfpoly &addition(const U &value) {
-        assert(field() == value.field());
-        return addition(value, [](const auto &x, const auto &y) { return x + y; });
-    }
-
-    template<class U>
-    gfpoly &subtraction(const U &value) {
-        assert(field() == value.field());
-        return addition(value, [](const auto &x, const auto &y) { return x - y; });
-    }
-
     template<class R>
-    gfpoly &addition(const gfpoly &value, R op) {
+    gfpoly &transform(const gfpoly &value, R op) {
         assert(field() == value.field());
         if (m_data.size() < value.size())
             m_data.resize(value.size(), gfn(m_field, 0));
@@ -290,32 +283,10 @@ private:
             m_data[i] = op(m_data[i], value[i]);
         return *this;
     }
-
-    gfpoly &addition(const gfpoly &value) {
-        assert(field() == value.field());
-        return addition(value, [](const auto &x, const auto &y) { return x + y; });
-    }
-
-    gfpoly &subtraction(const gfpoly &value) {
-        assert(field() == value.field());
-        return addition(value, [](const auto &x, const auto &y) { return x - y; });
-    }
-
-    template<class U>
-    gfpoly &multiplication(const U &value) {
-        std::transform(m_data.begin(), m_data.end(), m_data.begin(), [&](const gfn &x) -> gfn { return x * value; });
-        return *this;
-    }
-
-    template<class U>
-    gfpoly &division(const U &value) {
-        std::transform(m_data.begin(), m_data.end(), m_data.begin(), [&](const gfn &x) -> gfn { return x / value; });
-        return *this;
-    }
 };
 
 gfpoly operator-(gfpoly a) {
-    std::transform(a.data().begin(), a.data().end(), a.data().begin(), [](const auto &x) { return -x; });
+    std::transform(a.data().begin(), a.data().end(), a.data().begin(), std::negate());
     return a;
 }
 
@@ -378,12 +349,12 @@ gfpoly operator*(const gfpoly &a, const gfpoly &b) {
 
 gfpoly operator/(const gfpoly &a, const gfpoly &b) {
     assert(a.field() == b.field());
-    return detail::quotient_remainder(a, b).first;
+    return quotient_remainder(a, b).first;
 }
 
 gfpoly operator%(const gfpoly &a, const gfpoly &b) {
     assert(a.field() == b.field());
-    return detail::quotient_remainder(a, b).second;
+    return quotient_remainder(a, b).second;
 }
 
 template<class U>
@@ -468,7 +439,7 @@ operator<<(std::basic_ostream<charT, traits> &os, const gfpoly &poly) {
     return os;
 }
 
-namespace detail {
+namespace {
 template<typename N>
 void division_impl(gfpoly &q, gfpoly &u, const gfpoly &v, N n, N k) {
     assert(q.field() == u.field() && u.field() == v.field());
@@ -505,7 +476,7 @@ std::pair<gfpoly, gfpoly> quotient_remainder(const gfpoly &dividend, const gfpol
     assert(divisor);
     if (dividend.size() < divisor.size())
         return std::make_pair(gfpoly(dividend.field()), dividend);
-    return detail::division(dividend, divisor);
+    return division(dividend, divisor);
 }
 }
 

@@ -86,6 +86,7 @@ $(function() {
 <code>#include &lt;cassert&gt;</code><br />
 <code>#include &lt;ostream&gt;</code><br />
 <code>#include &lt;algorithm&gt;</code><br />
+<code>#include &lt;functional&gt;</code><br />
 <code>#include &lt;initializer_list&gt;</code><br />
 </div>
 <p><a href="gfpoly_8hpp_source.html">См. исходные тексты.</a></p>
@@ -97,15 +98,6 @@ $(function() {
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Функции</h2></td></tr>
-<tr class="memitem:a79743fd05756b7a580c33661e78b27d7"><td class="memTemplParams" colspan="2"><a id="a79743fd05756b7a580c33661e78b27d7"></a>
-template&lt;typename N &gt; </td></tr>
-<tr class="memitem:a79743fd05756b7a580c33661e78b27d7"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>irrpoly::detail::division_impl</b> (gfpoly &amp;, gfpoly &amp;, const gfpoly &amp;, N, N)</td></tr>
-<tr class="separator:a79743fd05756b7a580c33661e78b27d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae925cb00e8d6b052914c4f8d7b88f098"><td class="memItemLeft" align="right" valign="top"><a id="ae925cb00e8d6b052914c4f8d7b88f098"></a>
-std::pair&lt; gfpoly, gfpoly &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>irrpoly::detail::division</b> (gfpoly, const gfpoly &amp;)</td></tr>
-<tr class="separator:ae925cb00e8d6b052914c4f8d7b88f098"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab0b76eba3974c7d842db7f8a5345dfb5"><td class="memItemLeft" align="right" valign="top">std::pair&lt; gfpoly, gfpoly &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gfpoly_8hpp.html#ab0b76eba3974c7d842db7f8a5345dfb5">irrpoly::detail::quotient_remainder</a> (const gfpoly &amp;, const gfpoly &amp;)</td></tr>
-<tr class="separator:ab0b76eba3974c7d842db7f8a5345dfb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1c7e0089f7b0de5e8023d5eec5e4ee86"><td class="memItemLeft" align="right" valign="top"><a id="a1c7e0089f7b0de5e8023d5eec5e4ee86"></a>
 gfpoly&#160;</td><td class="memItemRight" valign="bottom"><b>irrpoly::operator-</b> (gfpoly a)</td></tr>
 <tr class="separator:a1c7e0089f7b0de5e8023d5eec5e4ee86"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -195,40 +187,10 @@ template&lt;class charT , class traits &gt; </td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
 <div class="textblock"><dl class="section author"><dt>Автор</dt><dd>Vadim Piven <a href="#" onclick="location.href='mai'+'lto:'+'vad'+'im'+'@pi'+'ve'+'n.t'+'ec'+'h'; return false;">vadim<span style="display: none;">.nosp@m.</span>@piv<span style="display: none;">.nosp@m.</span>en.te<span style="display: none;">.nosp@m.</span>ch</a> @license Free use of this library is permitted under the guidelines and in accordance with the MIT License (MIT). @url <a href="https://github.com/irreducible-polynoms/irrpoly">https://github.com/irreducible-polynoms/irrpoly</a> </dd></dl>
-</div><h2 class="groupheader">Функции</h2>
-<a id="ab0b76eba3974c7d842db7f8a5345dfb5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab0b76eba3974c7d842db7f8a5345dfb5">&#9670;&nbsp;</a></span>quotient_remainder()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::pair&lt; gfpoly, gfpoly &gt; irrpoly::detail::quotient_remainder </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td>
-          <td class="paramname"><em>dividend</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td>
-          <td class="paramname"><em>divisor</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Calculates a / b and a % b, returning the pair (quotient, remainder) together because the same amount of computation yields both. This function is not defined for division by zero: user beware. </p>
-
-</div>
-</div>
-</div><!-- contents -->
+</div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Вс 19 Апр 2020 20:46:43. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Вс 19 Апр 2020 22:09:42. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.18
 </small></address>

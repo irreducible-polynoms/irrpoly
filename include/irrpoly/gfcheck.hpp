@@ -43,7 +43,7 @@ gfpoly gcd(gfpoly m, gfpoly n) {
     return u0;
 }
 
-namespace detail {
+namespace {
 
 /// Быстрое возведение в степень, взято из библиотеки Boost.
 template<class T, class N>
@@ -128,7 +128,7 @@ gfpoly x_pow_mod_sub(uintmax_t pow, const gfpoly &mod, const gfpoly &sub) {
     return (res << pow) - sub;
 }
 
-} // namespace detail
+} // namespace
 
 /**
  * Алгоритм Берлекампа проверки многочлена на неприводимость в поле GF[P].
@@ -173,7 +173,7 @@ bool is_irreducible_berlekamp(const gfpoly &val) {
         std::vector<std::vector<gfn>> m(n, std::vector<gfn>(n, zer)); // M = 0
         for (i = 0; i < n; ++i) {
             // M[i,*] = x ^ ip (mod val)
-            tmp = detail::x_pow_mod_sub(i * val.field()->base(), val, gfpoly(val.field(), 0));
+            tmp = x_pow_mod_sub(i * val.field()->base(), val, gfpoly(val.field(), 0));
             for (j = 0, k = tmp.degree(); j <= k; ++j) {
                 m[i][j] += tmp[j];
             }
@@ -207,7 +207,7 @@ bool is_irreducible_berlekamp(const gfpoly &val) {
     };
 
     // алгоритм Берлекампа
-    auto d = detail::derivative(val);
+    auto d = derivative(val);
     return !d.is_zero() && gcd(val, d).degree() == 0 &&
         berlekampMatrixRank(val) == val.degree() - 1;
 }
@@ -267,14 +267,14 @@ bool is_irreducible_rabin(const gfpoly &val) {
     auto list = get_list(n);
     gfpoly tmp(val.field()), x = gfpoly(val.field(), {0, 1});
     for (auto i: list) {
-        tmp = detail::x_pow_mod_sub(detail::integer_power(P, i), val, x);
+        tmp = x_pow_mod_sub(integer_power(P, i), val, x);
         if (tmp.is_zero() || gcd(val, tmp).degree() > 0) {
             return false;
         }
     }
 
     // шаг 3
-    tmp = detail::x_pow_mod_sub(detail::integer_power(P, n), val, x);
+    tmp = x_pow_mod_sub(integer_power(P, n), val, x);
     return tmp.is_zero();
 }
 
@@ -304,7 +304,7 @@ bool is_irreducible_benor(const gfpoly &val) {
     auto P = val.field()->base();
     gfpoly tmp(val.field()), x = gfpoly(val.field(), {0, 1});
     for (uintmax_t m = n / 2, i = 1; i <= m; ++i) {
-        tmp = detail::x_pow_mod_sub(detail::integer_power(P, i), val, x);
+        tmp = x_pow_mod_sub(integer_power(P, i), val, x);
         if (tmp.is_zero() || gcd(val, tmp).degree() > 0) {
             return false;
         }
@@ -395,8 +395,8 @@ bool is_primitive_definition(const gfpoly &val) {
     }
 
     // проверяется выполнение второго условия
-    uintmax_t r = (detail::integer_power(P, n) - 1) / (P - 1);
-    auto tmp = detail::x_pow_mod_sub(r, val, gfpoly(mp));
+    uintmax_t r = (integer_power(P, n) - 1) / (P - 1);
+    auto tmp = x_pow_mod_sub(r, val, gfpoly(mp));
     if (!tmp.is_zero()) {
         return false;
     }
@@ -405,7 +405,7 @@ bool is_primitive_definition(const gfpoly &val) {
     auto list3 = factorize(r);
     const auto m = list3.size();
     for (size_t i = 0; i < m; ++i) {
-        tmp = detail::x_pow_mod_sub(r / list3[i], poly, gfpoly(poly.field(), 0));
+        tmp = x_pow_mod_sub(r / list3[i], poly, gfpoly(poly.field(), 0));
         if (tmp.is_zero() || tmp.degree() == 0) {
             return false;
         }
