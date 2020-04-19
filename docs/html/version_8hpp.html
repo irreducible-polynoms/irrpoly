@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.18"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>irrpoly: Файл include/irrpoly/checker.hpp</title>
+<title>irrpoly: Файл include/irrpoly/version.hpp</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -75,28 +75,32 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Классы</a>  </div>
+<a href="#define-members">Макросы</a>  </div>
   <div class="headertitle">
-<div class="title">Файл checker.hpp</div>  </div>
+<div class="title">Файл version.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;thread&gt;</code><br />
-<code>#include &lt;cassert&gt;</code><br />
-<code>#include &lt;functional&gt;</code><br />
-<code>#include &lt;mutex&gt;</code><br />
-<code>#include &lt;condition_variable&gt;</code><br />
-<code>#include &lt;utility&gt;</code><br />
-<code>#include &lt;vector&gt;</code><br />
-<code>#include &lt;memory&gt;</code><br />
-<code>#include &lt;optional&gt;</code><br />
-</div>
-<p><a href="checker_8hpp_source.html">См. исходные тексты.</a></p>
+
+<p><a href="version_8hpp_source.html">См. исходные тексты.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Классы</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1checker.html">irrpoly::checker&lt; value_type, result_type &gt;</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P].  <a href="classirrpoly_1_1checker.html#details">Подробнее...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Макросы</h2></td></tr>
+<tr class="memitem:a2d9d0177f506df3a80de952634ba5e72"><td class="memItemLeft" align="right" valign="top"><a id="a2d9d0177f506df3a80de952634ba5e72"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="version_8hpp.html#a2d9d0177f506df3a80de952634ba5e72">IRRPOLY_VERSION_MAJOR</a>&#160;&#160;&#160;3</td></tr>
+<tr class="memdesc:a2d9d0177f506df3a80de952634ba5e72"><td class="mdescLeft">&#160;</td><td class="mdescRight">The major version number. <br /></td></tr>
+<tr class="separator:a2d9d0177f506df3a80de952634ba5e72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bd75c487cc2b79b7df292305c5b5407"><td class="memItemLeft" align="right" valign="top"><a id="a9bd75c487cc2b79b7df292305c5b5407"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="version_8hpp.html#a9bd75c487cc2b79b7df292305c5b5407">IRRPOLY_VERSION_MINOR</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:a9bd75c487cc2b79b7df292305c5b5407"><td class="mdescLeft">&#160;</td><td class="mdescRight">The minor version number. <br /></td></tr>
+<tr class="separator:a9bd75c487cc2b79b7df292305c5b5407"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbb599eb04f7539e843916be5e7a5255"><td class="memItemLeft" align="right" valign="top"><a id="adbb599eb04f7539e843916be5e7a5255"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="version_8hpp.html#adbb599eb04f7539e843916be5e7a5255">IRRPOLY_VERSION_PATCH</a>&#160;&#160;&#160;0</td></tr>
+<tr class="memdesc:adbb599eb04f7539e843916be5e7a5255"><td class="mdescLeft">&#160;</td><td class="mdescRight">The patch number. <br /></td></tr>
+<tr class="separator:adbb599eb04f7539e843916be5e7a5255"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a81466c8a2184f67d151ee24a316ed7"><td class="memItemLeft" align="right" valign="top"><a id="a6a81466c8a2184f67d151ee24a316ed7"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="version_8hpp.html#a6a81466c8a2184f67d151ee24a316ed7">IRRPOLY_VERSION_CODE</a>&#160;&#160;&#160;(<a class="el" href="version_8hpp.html#a2d9d0177f506df3a80de952634ba5e72">IRRPOLY_VERSION_MAJOR</a> * 10000 + <a class="el" href="version_8hpp.html#a9bd75c487cc2b79b7df292305c5b5407">IRRPOLY_VERSION_MINOR</a> * 100 + <a class="el" href="version_8hpp.html#adbb599eb04f7539e843916be5e7a5255">IRRPOLY_VERSION_PATCH</a>)</td></tr>
+<tr class="memdesc:a6a81466c8a2184f67d151ee24a316ed7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The complete version number. <br /></td></tr>
+<tr class="separator:a6a81466c8a2184f67d151ee24a316ed7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
 <div class="textblock"><dl class="section author"><dt>Автор</dt><dd>Vadim Piven <a href="#" onclick="location.href='mai'+'lto:'+'vad'+'im'+'@pi'+'ve'+'n.t'+'ec'+'h'; return false;">vadim<span style="display: none;">.nosp@m.</span>@piv<span style="display: none;">.nosp@m.</span>en.te<span style="display: none;">.nosp@m.</span>ch</a> @license Free use of this library is permitted under the guidelines and in accordance with the MIT License (MIT). @url <a href="https://github.com/irreducible-polynoms/irrpoly">https://github.com/irreducible-polynoms/irrpoly</a> </dd></dl>

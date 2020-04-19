@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.18"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>irrpoly: Класс irrpoly::gfbase</title>
+<title>irrpoly: Исходный файл include/irrpoly/version.hpp</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -70,45 +70,27 @@ $(function() {
 
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><b>irrpoly</b></li><li class="navelem"><a class="el" href="classirrpoly_1_1gfbase.html">gfbase</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_a47f288b95001ef386fb9b537ec42d10.html">irrpoly</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
-  <div class="summary">
-<a href="#pub-methods">Открытые члены</a> &#124;
-<a href="#friends">Друзья</a> &#124;
-<a href="classirrpoly_1_1gfbase-members.html">Полный список членов класса</a>  </div>
   <div class="headertitle">
-<div class="title">Класс irrpoly::gfbase<span class="mlabels"><span class="mlabel">final</span></span></div>  </div>
+<div class="title">version.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>Класс gf представляет поле Галуа.  
- <a href="classirrpoly_1_1gfbase.html#details">Подробнее...</a></p>
-
-<p><code>#include &lt;<a class="el" href="gf_8hpp_source.html">gf.hpp</a>&gt;</code></p>
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-Открытые члены</h2></td></tr>
-<tr class="memitem:a8c3caa54a66d61e909d53013b5d2624e"><td class="memItemLeft" align="right" valign="top"><a id="a8c3caa54a66d61e909d53013b5d2624e"></a>
-uintmax_t&#160;</td><td class="memItemRight" valign="bottom"><b>base</b> () const</td></tr>
-<tr class="separator:a8c3caa54a66d61e909d53013b5d2624e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6fbf059dacd554fea5d86b11150dd781"><td class="memItemLeft" align="right" valign="top"><a id="a6fbf059dacd554fea5d86b11150dd781"></a>
-uintmax_t&#160;</td><td class="memItemRight" valign="bottom"><b>mul_inv</b> (uintmax_t) const</td></tr>
-<tr class="separator:a6fbf059dacd554fea5d86b11150dd781"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
-Друзья</h2></td></tr>
-<tr class="memitem:a39664980d56bb6b2c80bcb21919dc8e4"><td class="memItemLeft" align="right" valign="top"><a id="a39664980d56bb6b2c80bcb21919dc8e4"></a>
-std::shared_ptr&lt; <a class="el" href="classirrpoly_1_1gfbase.html">gfbase</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>make_gf</b> (uintmax_t)</td></tr>
-<tr class="separator:a39664980d56bb6b2c80bcb21919dc8e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
-<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
-<div class="textblock"><p>Класс gf представляет поле Галуа. </p>
-</div><hr/>Объявления и описания членов класса находятся в файле:<ul>
-<li>include/irrpoly/<a class="el" href="gf_8hpp_source.html">gf.hpp</a></li>
-</ul>
-</div><!-- contents -->
+<a href="version_8hpp.html">См. документацию.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#define IRRPOLY_VERSION_MAJOR 3</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="version_8hpp.html#a2d9d0177f506df3a80de952634ba5e72">   13</a></span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#define IRRPOLY_VERSION_MINOR 0</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="version_8hpp.html#a9bd75c487cc2b79b7df292305c5b5407">   16</a></span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#define IRRPOLY_VERSION_PATCH 0</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="version_8hpp.html#adbb599eb04f7539e843916be5e7a5255">   19</a></span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#define IRRPOLY_VERSION_CODE (IRRPOLY_VERSION_MAJOR * 10000 + IRRPOLY_VERSION_MINOR * 100 + IRRPOLY_VERSION_PATCH)</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="version_8hpp.html#a6a81466c8a2184f67d151ee24a316ed7">   22</a></span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#define IRRPOLY_VERSION_STRING &quot;3.0.0&quot;</span></div>
+</div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Документация по irrpoly. Последние изменения: Вс 19 Апр 2020 22:32:44. Создано системой &#160;<a href="http://www.doxygen.org/index.html">

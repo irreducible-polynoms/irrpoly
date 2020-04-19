@@ -1,4 +1,4 @@
-#include <irrpoly/gfcheck.hpp>
+#include <irrpoly.hpp>
 
 #include <iostream>
 

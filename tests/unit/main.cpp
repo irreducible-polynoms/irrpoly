@@ -1,4 +1,4 @@
-#include <irrpoly/gfcheck.hpp>
+#include <irrpoly.hpp>
 
 #define CATCH_CONFIG_MAIN
 #include "catch.hpp"

@@ -55,7 +55,7 @@
 ([документация тут](https://git-scm.com/book/en/v2/Git-Tools-Submodules)).
 
 Единственный заголовочный файл, который потребуется подключить для использования данного кода - 
-`#include <irrpoly/gfcheck.hpp>` (предполагается, что ваш код расположен в корневой папке
+`#include <irrpoly.hpp>` (предполагается, что ваш код расположен в корневой папке
 репозитория, данный проект помещён в виде Git Submodule в папку `irrpoly` и добавлена
 команда Cmake `include_directories("${CMAKE_SOURCE_DIR}/irrpoly/include")`).
 

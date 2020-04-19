@@ -1,10 +1,11 @@
 var indexSectionsWithContent =
 {
-  0: "cdgir~",
+  0: "cdgirv~",
   1: "cgr",
-  2: "cg",
+  2: "cgv",
   3: "cdgir~",
-  4: "ci"
+  4: "ci",
+  5: "i"
 };
 
 var indexSectionNames =
@@ -13,7 +14,8 @@ var indexSectionNames =
   1: "classes",
   2: "files",
   3: "functions",
-  4: "typedefs"
+  4: "typedefs",
+  5: "defines"
 };
 
 var indexSectionLabels =
@@ -22,6 +24,7 @@ var indexSectionLabels =
   1: "Классы",
   2: "Файлы",
   3: "Функции",
-  4: "Определения типов"
+  4: "Определения типов",
+  5: "Макросы"
 };
 
