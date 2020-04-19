@@ -10,3 +10,5 @@ project(${PROJECT_NAME}_${CURRDIR})
 # и добавляющий исполняемый файл с именем текущего проекта
 include(sources)
 
+# подсключает статический нализатор PVS-Studio
+include(analyze)

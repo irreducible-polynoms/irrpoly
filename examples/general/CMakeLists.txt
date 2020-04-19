@@ -9,3 +9,6 @@ project(${PROJECT_NAME}_${CURRDIR})
 # подключаем модуль sources.cmake, находящий все исходники в текущей папке
 # и добавляющий исполняемый файл с именем текущего проекта
 include(sources)
+
+# подсключает статический нализатор PVS-Studio
+include(analyze)
