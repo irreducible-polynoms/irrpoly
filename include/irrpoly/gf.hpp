@@ -400,7 +400,7 @@ gfbase::gfbase(const uintmax_t base) : m_base(base), m_inv(base, 0) {
     for (uintmax_t i = 2; i < m_base; ++i) {
         if (m_inv[i])
             continue;
-        m_inv[i] = inv_calc(m_base, i);
+        m_inv[i] = inv_calc(i_base, i);
         m_inv[m_inv[i]] = i;
     }
 }
