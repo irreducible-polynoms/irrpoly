@@ -12,8 +12,8 @@ int main() {
             for (size_t j = 0; j < i / 2; ++j) {
                 gfpoly poly = gfpoly::random(gf, i);
                 std::cout << (is_irreducible_benor(poly) ? '1' : '0') << " "
-                          << (is_primitive_definition(poly) ? '1' : '0') << " " << base << " "
-                          << poly << std::endl;
+                          << (is_primitive_definition(poly) ? '1' : '0') << " "
+                          << base << " " << poly << std::endl;
             }
         }
     }

@@ -53,79 +53,44 @@ T integer_power(T t, N n) {
     case 1:return t;
     case 2:return t * t;
     case 3:return t * t * t;
+    default:T result = integer_power(t, n / 2);
+        return (n & 1u) ? result * result * t : result * result;
     }
-    T result = integer_power(t, n / 2);
-    result *= result;
-    if (n & 1)
-        result *= t;
-    return result;
 }
 
 /// Вычисляет производную данного многочлена.
 gfpoly derivative(const gfpoly &val) {
-    gfpoly res = val;
-    auto i = val.degree();
-    for (res[i] = gfn(val.field(), 0); i > 0; --i) {
-        res[i - 1] = gfn(val.field(), i) * val[i];
+    assert(val && val.degree());
+    gfpoly res(val.field(), std::vector<uintmax_t>(val.size() - 1, 0));
+    for (uintmax_t i = 1; i < val.size(); ++i) {
+        res[i - 1] = i * val[i];
     }
     res.normalize();
     return res;
 }
 
 /**
- * Вычисляет значение (x^pow - sub) % mod.
+ * Вычисляет значение (x^pow) % mod.
+ * Позволяет экономить память за счёт потери в скорости.
+ * Принцип работы: деление в столбик начинается с деления x^n,
+ * при больших pow деление успевает зациклиться и мы снова придём к x^n.
  * @param pow степень, в которую требуется возвести x
  * @param mod многочлен, остаток деления на который необходимо найти
- * @param sub вычитаемое, в случае, когда степень многочлена sub меньше
- * степени многочлена mod, можно заменить (x^pow - sub) % mod на
- * (x^pow % mod) - sub без изменения результата, таким образом использование
- * данной функции возможно только в подобной ситуации; это и происходит,
- * поскольку в методе Берлекампа она вызывается всегда с sub = 0,
- * в проверке на примитивность всегда с sub равным константе, при этом
- * mod - как минимум первой степени, поэтому условие выполнено,
- * в методе Рабина sub = x, но при этом mod как минимум второй степени,
- * т.к. все многочлены первой степени неприводимы, что обеспечивает
- * возврат не доходя до вызова данной функции
  */
 [[nodiscard]]
-gfpoly x_pow_mod_sub(uintmax_t pow, const gfpoly &mod, const gfpoly &sub) {
-    // Эта функция возврадает по сути следующий редультат:
-    // return ((gfpoly({1}) << pow) - sub) % mod;
-    // её существование необходимо, т.к. в методе Рабина
-    // и в методе проверки на примитивность требуется вычислить
-    // её результат для столь больших pow, что x^pow не влезает
-    // в оперативную память, данный метод решает эту проблему,
-    // но он всё ещё адски медленный
-    assert(mod.field() == sub.field());
+gfpoly x_pow_mod(uintmax_t pow, const gfpoly &mod) {
     const auto n = mod.degree();
     gfpoly xn = gfpoly(mod.field(), 1) << n; // x^n
     gfpoly res(mod.field(), 1);
 
     uintmax_t d = 0;
-    typename gfpoly::size_type tmp;
+    uintmax_t tmp;
     for (auto m = res.degree(); pow + m >= n; m = res.degree()) {
-        tmp = n - m;
-        pow -= tmp;
-        res <<= tmp;
-        if (res == xn) {
-            // деление в столбик начинается с деления x^n
-            if (d == 0) {
-                d = pow;
-            }
-                // при больших pow деление успевает зациклиться и мы снова придём к x^n
-            else {
-                // находим потерю в степени, произошедшую до этого момента
-                d -= pow;
-                // можем пропустить кучу бесполезных шагов, повторяющих уже сделанные
-                pow %= d;
-                // после этой операции в этот if мы больше не попадём,
-                // т.к. pow < d и деление в столбик не дойдёт до x^n снова,
-                // поэтому d можно не обнулять
-            }
-        }
+        tmp = n - m, pow -= tmp, res <<= tmp;
+        d = (res == xn) ? (d) ? (d -= pow, pow %= d, 0) : pow : d;
         res %= mod;
     }
-    return (res << pow) - sub;
+    return res << pow;
 }
 
 } // namespace
@@ -166,32 +131,31 @@ bool is_irreducible_berlekamp(const gfpoly &val) {
 
     // функция для построения матрицы берлекампа и вычисления её ранга
     auto berlekampMatrixRank = [](const gfpoly &val) {
-        gfpoly tmp(val.field());
-        typename gfpoly::size_type i, j, k, l;
-        const gfn zer(val.field());
+        gfpoly poly(val.field());
+        uintmax_t i, j, k, l;
         const auto n = val.degree();
-        std::vector<std::vector<gfn>> m(n, std::vector<gfn>(n, zer)); // M = 0
+        std::vector<std::vector<gfn>> m(n, std::vector<gfn>(n, gfn(val.field()))); // M = 0
         for (i = 0; i < n; ++i) {
             // M[i,*] = x ^ ip (mod val)
-            tmp = x_pow_mod_sub(i * val.field()->base(), val, gfpoly(val.field(), 0));
-            for (j = 0, k = tmp.degree(); j <= k; ++j) {
-                m[i][j] += tmp[j];
+            poly = x_pow_mod(i * val.base(), val);
+            for (j = 0, k = poly.degree(); j <= k; ++j) {
+                m[i][j] += poly[j];
             }
             m[i][i] -= 1; // M - E
         }
 
         // приведение матрицы к ступенчатому виду
         bool f;
-        gfn mul(val.field());
+        gfn num(val.field());
         for (i = k = 0; i < n && k < n; ++k) {
             f = !m[i][k].is_zero();
             for (j = i + 1; j < n; ++j) {
                 if (!m[j][k].is_zero()) {
                     if (f) {
-                        mul = m[i][k].mul_inv() * m[j][k];
-                        m[j][k] = zer;
+                        num = m[j][k] / m[i][k];
+                        m[j][k].set_zero();
                         for (l = k + 1; l < n; ++l) {
-                            m[j][l] -= m[i][l] * mul;
+                            m[j][l] -= m[i][l] * num;
                         }
                     } else {
                         for (l = k; l < n; ++l) {
@@ -263,18 +227,18 @@ bool is_irreducible_rabin(const gfpoly &val) {
     };
 
     // шаги 1-2
-    auto P = val.field()->base();
+    auto P = val.base();
     auto list = get_list(n);
     gfpoly tmp(val.field()), x = gfpoly(val.field(), {0, 1});
     for (auto i: list) {
-        tmp = x_pow_mod_sub(integer_power(P, i), val, x);
+        tmp = x_pow_mod(integer_power(P, i), val) - x;
         if (tmp.is_zero() || gcd(val, tmp).degree() > 0) {
             return false;
         }
     }
 
     // шаг 3
-    tmp = x_pow_mod_sub(integer_power(P, n), val, x);
+    tmp = x_pow_mod(integer_power(P, n), val) - x;
     return tmp.is_zero();
 }
 
@@ -301,10 +265,10 @@ bool is_irreducible_benor(const gfpoly &val) {
         return true;
     }
 
-    auto P = val.field()->base();
+    auto P = val.base();
     gfpoly tmp(val.field()), x = gfpoly(val.field(), {0, 1});
     for (uintmax_t m = n / 2, i = 1; i <= m; ++i) {
-        tmp = x_pow_mod_sub(integer_power(P, i), val, x);
+        tmp = x_pow_mod(integer_power(P, i), val) - x;
         if (tmp.is_zero() || gcd(val, tmp).degree() > 0) {
             return false;
         }
@@ -346,7 +310,7 @@ bool is_primitive_definition(const gfpoly &val) {
     const auto poly = val / val[n];
 
     // ещё один вырожденный случай, на работу с которым алгоритм не рассчитан
-    auto P = poly.field()->base();
+    auto P = poly.base();
     if (P == 2 && poly == gfpoly(poly.field(), {1, 1})) {
         return false;
     }
@@ -396,7 +360,7 @@ bool is_primitive_definition(const gfpoly &val) {
 
     // проверяется выполнение второго условия
     uintmax_t r = (integer_power(P, n) - 1) / (P - 1);
-    auto tmp = x_pow_mod_sub(r, val, gfpoly(mp));
+    auto tmp = x_pow_mod(r, val) - mp;
     if (!tmp.is_zero()) {
         return false;
     }
@@ -405,7 +369,7 @@ bool is_primitive_definition(const gfpoly &val) {
     auto list3 = factorize(r);
     const auto m = list3.size();
     for (size_t i = 0; i < m; ++i) {
-        tmp = x_pow_mod_sub(r / list3[i], poly, gfpoly(poly.field(), 0));
+        tmp = x_pow_mod(r / list3[i], poly);
         if (tmp.is_zero() || tmp.degree() == 0) {
             return false;
         }

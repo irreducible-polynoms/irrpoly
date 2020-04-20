@@ -33,10 +33,6 @@ void division_impl(gfpoly &, gfpoly &, const gfpoly &, N, N);
 
 std::pair<gfpoly, gfpoly> division(gfpoly, const gfpoly &);
 
-/** Calculates a / b and a % b, returning the pair (quotient, remainder) together
-  * because the same amount of computation yields both.
-  * This function is not defined for division by zero: user beware.
-  */
 std::pair<gfpoly, gfpoly> quotient_remainder(const gfpoly &, const gfpoly &);
 
 } // namespace
@@ -47,15 +43,12 @@ private:
     std::vector<gfn> m_data;
 
 public:
-    typedef typename std::vector<gfn>::value_type value_type;
-    typedef typename std::vector<gfn>::size_type size_type;
-
     /// Генерирует случайный многочлен над полем GF[P] заданной степени.
     static
-    gfpoly random(const gf &field, typename gfpoly::size_type degree) {
+    gfpoly random(const gf &field, uintmax_t degree) {
         std::vector<gfn> data;
         data.reserve(degree + 1);
-        for (auto i = 0; i < degree; ++i) {
+        for (uintmax_t i = 0; i < degree; ++i) {
             data.emplace_back(gfn::random(field));
         }
         data.emplace_back(field, 1);
@@ -65,9 +58,15 @@ public:
         return gfpoly(field, std::move(data));
     }
 
-    explicit
-    gfpoly(gf field) :
-        m_field(std::move(field)), m_data() {}
+    static
+    std::vector<uintmax_t> into_vec(gfpoly &&poly) {
+        std::vector<uintmax_t> res;
+        res.reserve(poly.size());
+        for (gfn &val : poly.m_data) {
+            res.emplace_back(gfn::into_num(std::move(val)));
+        }
+        return res;
+    }
 
 private:
     gfpoly(gf field, std::vector<gfn> &&p) :
@@ -76,13 +75,24 @@ private:
     }
 
 public:
-    gfpoly(gfpoly &&p) noexcept:
-        m_field(std::move(p.m_field)), m_data(std::move(p.m_data)) {}
+    explicit
+    gfpoly(gf field) :
+        m_field(std::move(field)), m_data() {}
+
+    gfpoly(const gf &field, const std::vector<uintmax_t> &l) :
+        m_field(field), m_data() {
+        m_data.reserve(l.size());
+        for (uintmax_t v : l) {
+            m_data.emplace_back(field, v);
+        }
+    }
+
+    gfpoly(const gf &field, std::initializer_list<uintmax_t> l) :
+        gfpoly(field, std::vector<uintmax_t>{l}) {}
 
     gfpoly(const gfpoly &p) = default;
 
-    gfpoly(const gf &field, std::initializer_list<uintmax_t> l) :
-        m_field(field), m_data(make_gfn(field, l)) {}
+    gfpoly(gfpoly &&p) = default;
 
     explicit
     gfpoly(gfn value) :
@@ -96,32 +106,32 @@ public:
     }
 
     [[nodiscard]]
-    gf field() {
-        return m_field;
-    }
-
-    [[nodiscard]]
     const gf &field() const {
         return m_field;
     }
 
     [[nodiscard]]
-    size_type size() const {
+    uintmax_t base() const {
+        return m_field->base();
+    }
+
+    [[nodiscard]]
+    uintmax_t size() const {
         return m_data.size();
     }
 
     [[nodiscard]]
-    size_type degree() const {
+    uintmax_t degree() const {
         if (size() == 0)
             throw std::logic_error("degree() is undefined for the zero polynomial");
         return m_data.size() - 1;
     }
 
-    value_type &operator[](size_type i) {
+    gfn &operator[](uintmax_t i) {
         return m_data[i];
     }
 
-    const value_type &operator[](size_type i) const {
+    const gfn &operator[](uintmax_t i) const {
         return m_data[i];
     }
 
@@ -134,14 +144,9 @@ public:
         return m_data;
     }
 
-    gfpoly &operator=(gfpoly &&p) noexcept {
-        m_field = std::move(p.m_field);
-        m_data = std::move(p.m_data);
-        return *this;
-    }
-
     gfpoly &operator=(const gfpoly &p) {
         if (this != &p) {
+            assert(m_field == nullptr || m_field == p.m_field);
             m_field = p.m_field;
             m_data = p.m_data;
         }
@@ -150,7 +155,7 @@ public:
 
     template<class U>
     gfpoly &operator+=(const U &value) {
-        return transform(value, std::plus());
+        transform(value, std::plus());
         normalize();
         return *this;
     }
@@ -187,7 +192,7 @@ public:
 
     gfpoly &operator+=(const gfpoly &value) {
         assert(field() == value.field());
-        return transform(value, std::plus());
+        transform(value, std::plus());
         normalize();
         return *this;
     }
@@ -205,7 +210,7 @@ public:
             this->set_zero();
             return;
         }
-        std::vector<gfn> prod(a.size() + b.size() - 1, gfn(m_field, 0));
+        std::vector<gfn> prod(a.size() + b.size() - 1, gfn(m_field));
         for (typename std::vector<gfn>::size_type i = 0; i < a.size(); ++i)
             for (typename std::vector<gfn>::size_type j = 0; j < b.size(); ++j)
                 prod[i + j] += a.m_data[i] * b.m_data[j];
@@ -239,7 +244,7 @@ public:
 
     template<typename U>
     gfpoly &operator<<=(U const &n) {
-        m_data.insert(m_data.begin(), n, gfn(m_field, 0));
+        m_data.insert(m_data.begin(), n, gfn(m_field));
         normalize();
         return *this;
     }
@@ -253,15 +258,17 @@ public:
         return !m_data.empty();
     }
 
-    void set_zero() {
+    gfpoly &set_zero() {
         m_data.clear();
+        return *this;
     }
 
-    void normalize() {
+    gfpoly &normalize() {
         m_data.erase(std::find_if(
             m_data.rbegin(), m_data.rend(),
             std::not_fn(std::mem_fn(&gfn::is_zero))
         ).base(), m_data.end());
+        return *this;
     }
 
 private:
@@ -269,7 +276,7 @@ private:
     gfpoly &transform(const U &value, R op) {
         assert(field() == value.field());
         if (m_data.empty())
-            m_data.resize(1, gfn(m_field, 0));
+            m_data.resize(1, gfn(m_field));
         m_data[0] = op(m_data[0], value);
         return *this;
     }
@@ -278,8 +285,8 @@ private:
     gfpoly &transform(const gfpoly &value, R op) {
         assert(field() == value.field());
         if (m_data.size() < value.size())
-            m_data.resize(value.size(), gfn(m_field, 0));
-        for (size_type i = 0; i < value.size(); ++i)
+            m_data.resize(value.size(), gfn(m_field));
+        for (uintmax_t i = 0; i < value.size(); ++i)
             m_data[i] = op(m_data[i], value[i]);
         return *this;
     }
@@ -451,29 +458,26 @@ void division_impl(gfpoly &q, gfpoly &u, const gfpoly &v, N n, N k) {
 }
 
 std::pair<gfpoly, gfpoly> division(gfpoly u, const gfpoly &v) {
-    assert(u.field() == v.field());
-    assert(v.size() <= u.size());
-    assert(v);
-    assert(u);
-
-    typedef typename gfpoly::size_type N;
-
-    N const m = u.size() - 1, n = v.size() - 1;
-    N k = m - n;
+    assert(u.field() == v.field() && v.size() <= u.size() && v && u);
+    uintmax_t const m = u.size() - 1, n = v.size() - 1;
+    uintmax_t k = m - n;
     gfpoly q(u.field());
-    q.data().resize(m - n + 1, gfn(q.field(), 0));
+    q.data().resize(m - n + 1, gfn(q.field()));
 
     do {
         division_impl(q, u, v, n, k);
     } while (k-- != 0);
-    u.data().resize(n, gfn(q.field(), 0)), gfn(q.field(), 0);
+    u.data().resize(n, gfn(q.field())), gfn(q.field());
     u.normalize();
     return std::make_pair(q, u);
 }
 
+/** Calculates a / b and a % b, returning the pair (quotient, remainder) together
+  * because the same amount of computation yields both.
+  * This function is not defined for division by zero: user beware.
+  */
 std::pair<gfpoly, gfpoly> quotient_remainder(const gfpoly &dividend, const gfpoly &divisor) {
-    assert(dividend.field() == divisor.field());
-    assert(divisor);
+    assert(dividend.field() == divisor.field() && divisor);
     if (dividend.size() < divisor.size())
         return std::make_pair(gfpoly(dividend.field()), dividend);
     return division(dividend, divisor);

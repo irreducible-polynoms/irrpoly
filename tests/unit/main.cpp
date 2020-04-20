@@ -52,57 +52,31 @@ TEST_CASE("gf methods work", "[gf]") {
 
 TEST_CASE("gfn could be created correctly", "[gfn]") {
     auto gf5 = make_gf(5);
-    SECTION("field remains the same") {
-        SECTION("for direct constructed") {
+    SECTION("for direct constructed") {
+        SECTION("field remains the same") {
             REQUIRE(gfn(gf5).field() == gf5);
             REQUIRE(gfn(gf5, 3).field() == gf5);
-        }SECTION("for copy constructed") {
-            auto num = gfn(gf5);
-            REQUIRE(gfn(num).field() == gf5);
-            REQUIRE(gfn(gfn(gf5)).field() == gf5);
-        }SECTION("for randomly picked") {
-            REQUIRE(gfn::random(gf5).field() == gf5);
-        }SECTION("for single value") {
-            REQUIRE(make_gfn(gf5, 3).field() == gf5);
-        }SECTION("for initializer list") {
-            auto vec = make_gfn(gf5, {3, 4, 5});
-            REQUIRE(vec.size() == 3);
-            REQUIRE(vec[0].field() == gf5);
-            REQUIRE(vec[1].field() == gf5);
-            REQUIRE(vec[2].field() == gf5);
-        }SECTION("for vector") {
-            auto vec = make_gfn(gf5, std::vector<uintmax_t>({3, 4, 5}));
-            REQUIRE(vec.size() == 3);
-            REQUIRE(vec[0].field() == gf5);
-            REQUIRE(vec[1].field() == gf5);
-            REQUIRE(vec[2].field() == gf5);
-        }
-    }SECTION("value is normalized") {
-        SECTION("for direct constructed") {
+        }SECTION("value is normalized") {
             REQUIRE(gfn(gf5).data() == 0);
             REQUIRE(gfn(gf5, 7).data() == 2);
-        }SECTION("for copy constructed") {
-            auto num = gfn(gf5, 8);
-            REQUIRE(gfn(num).data() == 3);
-            REQUIRE(gfn(gfn(gf5, 9)).data() == 4);
-        }SECTION("for randomly picked") {
-            for (auto i : {0,1,2,3,4}) {
+        }
+    }SECTION("for randomly picked") {
+        SECTION("field remains the same") {
+            REQUIRE(gfn::random(gf5).field() == gf5);
+        }SECTION("value is normalized") {
+            for (auto i : {0, 1, 2, 3, 4}) {
                 REQUIRE(gfn::random(gf5).data() < 5);
             }
-        }SECTION("for single value") {
-            REQUIRE(make_gfn(gf5, 6).data() == 1);
-        }SECTION("for initializer list") {
-            auto vec = make_gfn(gf5, {6, 7, 8});
-            REQUIRE(vec.size() == 3);
-            REQUIRE(vec[0].data() == 1);
-            REQUIRE(vec[1].data() == 2);
-            REQUIRE(vec[2].data() == 3);
-        }SECTION("for vector") {
-            auto vec = make_gfn(gf5, std::vector<uintmax_t>({6, 7, 8}));
-            REQUIRE(vec.size() == 3);
-            REQUIRE(vec[0].data() == 1);
-            REQUIRE(vec[1].data() == 2);
-            REQUIRE(vec[2].data() == 3);
+        }
+    }SECTION("for copied") {
+        auto num = gfn(gf5, 2);
+        SECTION("field remains the same") {
+            auto field_before = num.field();
+            num = gfn(gf5, 3);
+            REQUIRE(field_before == num.field());
+        }SECTION("value is normalized") {
+            num = 10;
+            REQUIRE(num.data() < 5);
         }
     }
 }

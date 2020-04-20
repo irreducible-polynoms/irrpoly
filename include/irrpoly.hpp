@@ -9,4 +9,3 @@
 #pragma once
 
 #include "irrpoly/gfcheck.hpp"
-#include "irrpoly/version.hpp"

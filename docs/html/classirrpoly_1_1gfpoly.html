@@ -29,7 +29,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">irrpoly
-   &#160;<span id="projectnumber">3.0.0</span>
+   &#160;<span id="projectnumber">2.0.0</span>
    </div>
    <div id="projectbrief">Проверка многочленов на неприводимость и примитивность над заданным полем Галуа</div>
   </td>
@@ -75,7 +75,6 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-types">Открытые типы</a> &#124;
 <a href="#pub-methods">Открытые члены</a> &#124;
 <a href="#pub-static-methods">Открытые статические члены</a> &#124;
 <a href="classirrpoly_1_1gfpoly-members.html">Полный список членов класса</a>  </div>
@@ -84,62 +83,53 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
-Открытые типы</h2></td></tr>
-<tr class="memitem:a4ee535dd49b94a343d075f586c5d9e38"><td class="memItemLeft" align="right" valign="top"><a id="a4ee535dd49b94a343d075f586c5d9e38"></a>
-typedef std::vector&lt; <a class="el" href="classirrpoly_1_1gfn.html">gfn</a> &gt;::value_type&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b></td></tr>
-<tr class="separator:a4ee535dd49b94a343d075f586c5d9e38"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35a0e6dedd40b5d574612a660e287d96"><td class="memItemLeft" align="right" valign="top"><a id="a35a0e6dedd40b5d574612a660e287d96"></a>
-typedef std::vector&lt; <a class="el" href="classirrpoly_1_1gfn.html">gfn</a> &gt;::size_type&#160;</td><td class="memItemRight" valign="bottom"><b>size_type</b></td></tr>
-<tr class="separator:a35a0e6dedd40b5d574612a660e287d96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Открытые члены</h2></td></tr>
 <tr class="memitem:ac3258cc940570ea2fd9715fbc86dcdaf"><td class="memItemLeft" align="right" valign="top"><a id="ac3258cc940570ea2fd9715fbc86dcdaf"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>gfpoly</b> (gf field)</td></tr>
 <tr class="separator:ac3258cc940570ea2fd9715fbc86dcdaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a78d634505993f804e0568b49d1ad9fce"><td class="memItemLeft" align="right" valign="top"><a id="a78d634505993f804e0568b49d1ad9fce"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>gfpoly</b> (<a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&amp;p) noexcept</td></tr>
-<tr class="separator:a78d634505993f804e0568b49d1ad9fce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca36133da5ea3fd34d928f1bd6eda556"><td class="memItemLeft" align="right" valign="top"><a id="aca36133da5ea3fd34d928f1bd6eda556"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>gfpoly</b> (const <a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;p)=default</td></tr>
-<tr class="separator:aca36133da5ea3fd34d928f1bd6eda556"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9146258391ceeb04bcf112b0d895ede1"><td class="memItemLeft" align="right" valign="top"><a id="a9146258391ceeb04bcf112b0d895ede1"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>gfpoly</b> (const gf &amp;field, const std::vector&lt; uintmax_t &gt; &amp;l)</td></tr>
+<tr class="separator:a9146258391ceeb04bcf112b0d895ede1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a207a8b54e87286f8e22656b63e272e2d"><td class="memItemLeft" align="right" valign="top"><a id="a207a8b54e87286f8e22656b63e272e2d"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>gfpoly</b> (const gf &amp;field, std::initializer_list&lt; uintmax_t &gt; l)</td></tr>
 <tr class="separator:a207a8b54e87286f8e22656b63e272e2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca36133da5ea3fd34d928f1bd6eda556"><td class="memItemLeft" align="right" valign="top"><a id="aca36133da5ea3fd34d928f1bd6eda556"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>gfpoly</b> (const <a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;p)=default</td></tr>
+<tr class="separator:aca36133da5ea3fd34d928f1bd6eda556"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8bfc5f11d319c03d7fa2240fa0309f3a"><td class="memItemLeft" align="right" valign="top"><a id="a8bfc5f11d319c03d7fa2240fa0309f3a"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>gfpoly</b> (<a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&amp;p)=default</td></tr>
+<tr class="separator:a8bfc5f11d319c03d7fa2240fa0309f3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9fa7521c512e54155891615424bf2cc5"><td class="memItemLeft" align="right" valign="top"><a id="a9fa7521c512e54155891615424bf2cc5"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>gfpoly</b> (<a class="el" href="classirrpoly_1_1gfn.html">gfn</a> value)</td></tr>
 <tr class="separator:a9fa7521c512e54155891615424bf2cc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb8e0692b98c382f3b1580c21a65fbaf"><td class="memItemLeft" align="right" valign="top"><a id="abb8e0692b98c382f3b1580c21a65fbaf"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>gfpoly</b> (const gf &amp;field, uintmax_t value)</td></tr>
 <tr class="separator:abb8e0692b98c382f3b1580c21a65fbaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac37c1f504994f4a11d8a59f0c00e4168"><td class="memItemLeft" align="right" valign="top"><a id="ac37c1f504994f4a11d8a59f0c00e4168"></a>
-gf&#160;</td><td class="memItemRight" valign="bottom"><b>field</b> ()</td></tr>
-<tr class="separator:ac37c1f504994f4a11d8a59f0c00e4168"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4429ef30634e555aa9ba7ef46b150a5"><td class="memItemLeft" align="right" valign="top"><a id="ab4429ef30634e555aa9ba7ef46b150a5"></a>
 const gf &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>field</b> () const</td></tr>
 <tr class="separator:ab4429ef30634e555aa9ba7ef46b150a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af29d08bf44482d23d4cd545ae134e247"><td class="memItemLeft" align="right" valign="top"><a id="af29d08bf44482d23d4cd545ae134e247"></a>
-size_type&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const</td></tr>
-<tr class="separator:af29d08bf44482d23d4cd545ae134e247"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa16690ca4e8aa796336e172f9045c2e4"><td class="memItemLeft" align="right" valign="top"><a id="aa16690ca4e8aa796336e172f9045c2e4"></a>
-size_type&#160;</td><td class="memItemRight" valign="bottom"><b>degree</b> () const</td></tr>
-<tr class="separator:aa16690ca4e8aa796336e172f9045c2e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a91b974aef82ba87e11576f27d5ef20"><td class="memItemLeft" align="right" valign="top"><a id="a7a91b974aef82ba87e11576f27d5ef20"></a>
-value_type &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (size_type i)</td></tr>
-<tr class="separator:a7a91b974aef82ba87e11576f27d5ef20"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af893d4d7b5a9bc0e974fc3f4c8da7d38"><td class="memItemLeft" align="right" valign="top"><a id="af893d4d7b5a9bc0e974fc3f4c8da7d38"></a>
-const value_type &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (size_type i) const</td></tr>
-<tr class="separator:af893d4d7b5a9bc0e974fc3f4c8da7d38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a352db44e4f4830ee2e7cfb195e58ae"><td class="memItemLeft" align="right" valign="top"><a id="a0a352db44e4f4830ee2e7cfb195e58ae"></a>
+uintmax_t&#160;</td><td class="memItemRight" valign="bottom"><b>base</b> () const</td></tr>
+<tr class="separator:a0a352db44e4f4830ee2e7cfb195e58ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e068334a716bcb80fb9b0471c7fd6ab"><td class="memItemLeft" align="right" valign="top"><a id="a8e068334a716bcb80fb9b0471c7fd6ab"></a>
+uintmax_t&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const</td></tr>
+<tr class="separator:a8e068334a716bcb80fb9b0471c7fd6ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b2f946886777fc4178da366534e76f2"><td class="memItemLeft" align="right" valign="top"><a id="a1b2f946886777fc4178da366534e76f2"></a>
+uintmax_t&#160;</td><td class="memItemRight" valign="bottom"><b>degree</b> () const</td></tr>
+<tr class="separator:a1b2f946886777fc4178da366534e76f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76d15b2d1468c52ea67068ff2cc70af5"><td class="memItemLeft" align="right" valign="top"><a id="a76d15b2d1468c52ea67068ff2cc70af5"></a>
+<a class="el" href="classirrpoly_1_1gfn.html">gfn</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (uintmax_t i)</td></tr>
+<tr class="separator:a76d15b2d1468c52ea67068ff2cc70af5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24b1b647cca23771a879b1fcf5f9ce81"><td class="memItemLeft" align="right" valign="top"><a id="a24b1b647cca23771a879b1fcf5f9ce81"></a>
+const <a class="el" href="classirrpoly_1_1gfn.html">gfn</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator[]</b> (uintmax_t i) const</td></tr>
+<tr class="separator:a24b1b647cca23771a879b1fcf5f9ce81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a172ca9f8e1e141714bb3d406eaea12"><td class="memItemLeft" align="right" valign="top"><a id="a2a172ca9f8e1e141714bb3d406eaea12"></a>
 const std::vector&lt; <a class="el" href="classirrpoly_1_1gfn.html">gfn</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>data</b> () const</td></tr>
 <tr class="separator:a2a172ca9f8e1e141714bb3d406eaea12"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8e297150be30d06507f6766ff9e8d12d"><td class="memItemLeft" align="right" valign="top"><a id="a8e297150be30d06507f6766ff9e8d12d"></a>
 std::vector&lt; <a class="el" href="classirrpoly_1_1gfn.html">gfn</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>data</b> ()</td></tr>
 <tr class="separator:a8e297150be30d06507f6766ff9e8d12d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e0a33a5d2a2f6314c4dbed68a96f0d0"><td class="memItemLeft" align="right" valign="top"><a id="a0e0a33a5d2a2f6314c4dbed68a96f0d0"></a>
-<a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&amp;p) noexcept</td></tr>
-<tr class="separator:a0e0a33a5d2a2f6314c4dbed68a96f0d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a117bd42f7270f1d6022acd39a4a6825c"><td class="memItemLeft" align="right" valign="top"><a id="a117bd42f7270f1d6022acd39a4a6825c"></a>
 <a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;p)</td></tr>
 <tr class="separator:a117bd42f7270f1d6022acd39a4a6825c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -195,19 +185,22 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_zero</b> () const<
 <tr class="memitem:af83933371822ec730abf9c69ee22fa85"><td class="memItemLeft" align="right" valign="top"><a id="af83933371822ec730abf9c69ee22fa85"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>operator bool</b> () const</td></tr>
 <tr class="separator:af83933371822ec730abf9c69ee22fa85"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2cfbeb94ad0be88c0f2a599c6d37bd0"><td class="memItemLeft" align="right" valign="top"><a id="af2cfbeb94ad0be88c0f2a599c6d37bd0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>set_zero</b> ()</td></tr>
-<tr class="separator:af2cfbeb94ad0be88c0f2a599c6d37bd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a37ed83097e8fbbd15149a0ded58b3813"><td class="memItemLeft" align="right" valign="top"><a id="a37ed83097e8fbbd15149a0ded58b3813"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>normalize</b> ()</td></tr>
-<tr class="separator:a37ed83097e8fbbd15149a0ded58b3813"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a269c8d63781a80108479904c801f5471"><td class="memItemLeft" align="right" valign="top"><a id="a269c8d63781a80108479904c801f5471"></a>
+<a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>set_zero</b> ()</td></tr>
+<tr class="separator:a269c8d63781a80108479904c801f5471"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0830a8d20e1fd9ac33bfcbfc85eb5cf8"><td class="memItemLeft" align="right" valign="top"><a id="a0830a8d20e1fd9ac33bfcbfc85eb5cf8"></a>
+<a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>normalize</b> ()</td></tr>
+<tr class="separator:a0830a8d20e1fd9ac33bfcbfc85eb5cf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Открытые статические члены</h2></td></tr>
-<tr class="memitem:a43a4a0a18fd311b0c067846b27ace1ac"><td class="memItemLeft" align="right" valign="top"><a id="a43a4a0a18fd311b0c067846b27ace1ac"></a>
-static <a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1gfpoly.html#a43a4a0a18fd311b0c067846b27ace1ac">random</a> (const gf &amp;field, typename gfpoly::size_type degree)</td></tr>
-<tr class="memdesc:a43a4a0a18fd311b0c067846b27ace1ac"><td class="mdescLeft">&#160;</td><td class="mdescRight">Генерирует случайный многочлен над полем GF[P] заданной степени. <br /></td></tr>
-<tr class="separator:a43a4a0a18fd311b0c067846b27ace1ac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a307042ed69b0b08c491b88633d2a1d"><td class="memItemLeft" align="right" valign="top"><a id="a8a307042ed69b0b08c491b88633d2a1d"></a>
+static <a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1gfpoly.html#a8a307042ed69b0b08c491b88633d2a1d">random</a> (const gf &amp;field, uintmax_t degree)</td></tr>
+<tr class="memdesc:a8a307042ed69b0b08c491b88633d2a1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Генерирует случайный многочлен над полем GF[P] заданной степени. <br /></td></tr>
+<tr class="separator:a8a307042ed69b0b08c491b88633d2a1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5df801d31f391d2a141c8f69b37b5369"><td class="memItemLeft" align="right" valign="top"><a id="a5df801d31f391d2a141c8f69b37b5369"></a>
+static std::vector&lt; uintmax_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>into_vec</b> (<a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&amp;poly)</td></tr>
+<tr class="separator:a5df801d31f391d2a141c8f69b37b5369"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>Объявления и описания членов класса находятся в файле:<ul>
 <li>include/irrpoly/<a class="el" href="gfpoly_8hpp_source.html">gfpoly.hpp</a></li>
@@ -215,7 +208,7 @@ static <a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a>&#160;</td><td
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Вс 19 Апр 2020 22:32:44. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Вт 21 Апр 2020 01:16:33. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.18
 </small></address>

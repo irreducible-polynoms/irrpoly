@@ -1,4 +1,4 @@
-.TH "irrpoly::gfpoly" 3 "Вс 19 Апр 2020" "Version 3.0.0" "irrpoly" \" -*- nroff -*-
+.TH "irrpoly::gfpoly" 3 "Вт 21 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -6,16 +6,6 @@ irrpoly::gfpoly
 .SH SYNOPSIS
 .br
 .PP
-.SS "Открытые типы"
-
-.in +1c
-.ti -1c
-.RI "typedef std::vector< \fBgfn\fP >::value_type \fBvalue_type\fP"
-.br
-.ti -1c
-.RI "typedef std::vector< \fBgfn\fP >::size_type \fBsize_type\fP"
-.br
-.in -1c
 .SS "Открытые члены"
 
 .in +1c
@@ -23,13 +13,16 @@ irrpoly::gfpoly
 .RI "\fBgfpoly\fP (gf field)"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP (\fBgfpoly\fP &&p) noexcept"
+.RI "\fBgfpoly\fP (const gf &field, const std::vector< uintmax_t > &l)"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP (const gf &field, std::initializer_list< uintmax_t > l)"
 .br
 .ti -1c
 .RI "\fBgfpoly\fP (const \fBgfpoly\fP &p)=default"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP (const gf &field, std::initializer_list< uintmax_t > l)"
+.RI "\fBgfpoly\fP (\fBgfpoly\fP &&p)=default"
 .br
 .ti -1c
 .RI "\fBgfpoly\fP (\fBgfn\fP value)"
@@ -38,31 +31,28 @@ irrpoly::gfpoly
 .RI "\fBgfpoly\fP (const gf &field, uintmax_t value)"
 .br
 .ti -1c
-.RI "gf \fBfield\fP ()"
-.br
-.ti -1c
 .RI "const gf & \fBfield\fP () const"
 .br
 .ti -1c
-.RI "size_type \fBsize\fP () const"
+.RI "uintmax_t \fBbase\fP () const"
 .br
 .ti -1c
-.RI "size_type \fBdegree\fP () const"
+.RI "uintmax_t \fBsize\fP () const"
 .br
 .ti -1c
-.RI "value_type & \fBoperator[]\fP (size_type i)"
+.RI "uintmax_t \fBdegree\fP () const"
 .br
 .ti -1c
-.RI "const value_type & \fBoperator[]\fP (size_type i) const"
+.RI "\fBgfn\fP & \fBoperator[]\fP (uintmax_t i)"
+.br
+.ti -1c
+.RI "const \fBgfn\fP & \fBoperator[]\fP (uintmax_t i) const"
 .br
 .ti -1c
 .RI "const std::vector< \fBgfn\fP > & \fBdata\fP () const"
 .br
 .ti -1c
 .RI "std::vector< \fBgfn\fP > & \fBdata\fP ()"
-.br
-.ti -1c
-.RI "\fBgfpoly\fP & \fBoperator=\fP (\fBgfpoly\fP &&p) noexcept"
 .br
 .ti -1c
 .RI "\fBgfpoly\fP & \fBoperator=\fP (const \fBgfpoly\fP &p)"
@@ -113,19 +103,22 @@ irrpoly::gfpoly
 .RI "\fBoperator bool\fP () const"
 .br
 .ti -1c
-.RI "void \fBset_zero\fP ()"
+.RI "\fBgfpoly\fP & \fBset_zero\fP ()"
 .br
 .ti -1c
-.RI "void \fBnormalize\fP ()"
+.RI "\fBgfpoly\fP & \fBnormalize\fP ()"
 .br
 .in -1c
 .SS "Открытые статические члены"
 
 .in +1c
 .ti -1c
-.RI "static \fBgfpoly\fP \fBrandom\fP (const gf &field, typename gfpoly::size_type degree)"
+.RI "static \fBgfpoly\fP \fBrandom\fP (const gf &field, uintmax_t degree)"
 .br
 .RI "Генерирует случайный многочлен над полем GF[P] заданной степени\&. "
+.ti -1c
+.RI "static std::vector< uintmax_t > \fBinto_vec\fP (\fBgfpoly\fP &&poly)"
+.br
 .in -1c
 
 .SH "Автор"

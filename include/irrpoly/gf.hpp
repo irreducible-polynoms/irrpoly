@@ -65,7 +65,7 @@ private:
 public:
     /// Генерирует случайное число в пределах [0, P-1].
     static
-    gfn random(gf field) {
+    gfn random(const gf &field) {
         static std::random_device rd;
 #ifdef __LP64__
         static std::mt19937_64 gen(rd());
@@ -73,14 +73,19 @@ public:
         static std::mt19937 gen(rd());
 #endif
         std::uniform_int_distribution<uint_fast64_t> dis(0, field->base() - 1);
-        return gfn(std::move(field), dis(gen));
+        return gfn(field, dis(gen));
+    }
+
+    static
+    uintmax_t into_num(gfn &&val) {
+        return val.m_val;
     }
 
     /// Конструктор по умолчанию, обнуляет переменную.
     explicit
-    gfn(gf field) : m_field(std::move(field)), m_val(0) {}
+    gfn(const gf &field) : m_field(field), m_val(0) {}
 
-    gfn(gf field, const uintmax_t val) : m_field(std::move(field)), m_val(val % m_field->base()) {}
+    gfn(const gf &field, const uintmax_t val) : m_field(field), m_val(val % m_field->base()) {}
 
     gfn(const gfn &other) = default;
 
@@ -88,14 +93,20 @@ public:
 
     gfn &operator=(const gfn &other) {
         if (this != &other) {
-            assert(m_field == other.field());
+            assert(m_field == nullptr || m_field == other.m_field);
+            m_field = other.m_field;
             m_val = other.m_val;
         }
         return *this;
     }
 
+    [[nodiscard]]
+    uintmax_t base() const {
+        return m_field->base();
+    }
+
     gfn &operator=(const uintmax_t other) {
-        m_val = other % m_field->base();
+        m_val = other % base();
         return *this;
     }
 
@@ -104,19 +115,9 @@ public:
         return m_field;
     }
 
-    [[nodiscard]]
-    gf field() {
-        return m_field;
-    }
-
     /// Возвращает значение класса в виде целого числа.
     [[nodiscard]]
     uintmax_t data() const {
-        return m_val;
-    }
-
-    [[nodiscard]]
-    uintmax_t &data() {
         return m_val;
     }
 
@@ -141,43 +142,43 @@ public:
 
     gfn &operator+=(const gfn &other) {
         assert(m_field == other.field());
-        m_val = (m_val + other.m_val) % m_field->base();
+        m_val = (m_val + other.m_val) % base();
         return *this;
     }
 
     gfn operator+=(const uintmax_t other) {
-        m_val = (m_val + (other % m_field->base())) % m_field->base();
+        m_val = (m_val + (other % base())) % base();
         return *this;
     }
 
     gfn &operator++() {
-        m_val = (m_val + 1) % m_field->base();
+        m_val = (m_val + 1) % base();
         return *this;
     }
 
     [[nodiscard]]
     gfn operator++(int) &{
         gfn tmp{*this};
-        m_val = (m_val + 1) % m_field->base();
+        m_val = (m_val + 1) % base();
         return tmp;
     }
 
     [[nodiscard]]
     gfn operator-() const {
         gfn tmp{*this};
-        tmp.m_val = m_field->base() - m_val;
+        tmp.m_val = base() - m_val;
         return tmp;
     }
 
     [[nodiscard]]
     gfn operator-(const gfn &other) const {
         assert(m_field == other.field());
-        return gfn{m_field, m_field->base() + m_val - other.m_val};
+        return gfn{m_field, base() + m_val - other.m_val};
     }
 
     [[nodiscard]]
     gfn operator-(const uintmax_t other) const {
-        return gfn{m_field, m_field->base() + m_val - (other % m_field->base())};
+        return gfn{m_field, base() + m_val - (other % base())};
     }
 
     friend
@@ -185,24 +186,24 @@ public:
 
     gfn &operator-=(const gfn &other) {
         assert(m_field == other.field());
-        m_val = (m_field->base() + m_val - other.m_val) % m_field->base();
+        m_val = (base() + m_val - other.m_val) % base();
         return *this;
     }
 
     gfn operator-=(const uintmax_t other) {
-        m_val = (m_field->base() + m_val - (other % m_field->base())) % m_field->base();
+        m_val = (base() + m_val - (other % base())) % base();
         return *this;
     }
 
     gfn &operator--() {
-        m_val = (m_field->base() + m_val - 1) % m_field->base();
+        m_val = (base() + m_val - 1) % base();
         return *this;
     }
 
     [[nodiscard]]
     gfn operator--(int) &{
         gfn tmp{*this};
-        m_val = (m_field->base() + m_val - 1) % m_field->base();
+        m_val = (base() + m_val - 1) % base();
         return tmp;
     }
 
@@ -222,12 +223,12 @@ public:
 
     gfn &operator*=(const gfn &other) {
         assert(m_field == other.field());
-        m_val = (m_val * other.m_val) % m_field->base();
+        m_val = (m_val * other.m_val) % base();
         return *this;
     }
 
     gfn operator*=(const uintmax_t other) {
-        m_val = (m_val * (other % m_field->base())) % m_field->base();
+        m_val = (m_val * (other % m_field->base())) % base();
         return *this;
     }
 
@@ -249,7 +250,9 @@ public:
     gfn operator/(const uintmax_t other) const {
         switch (other % m_field->base()) {
         case 0:throw std::invalid_argument("division by zero");
-        default:return gfn{m_field, m_val * m_field->mul_inv(other % m_field->base())};
+        default:
+            return gfn{m_field,
+                       m_val * m_field->mul_inv(other % base())};
         }
     }
 
@@ -260,7 +263,7 @@ public:
         assert(m_field == other.field());
         switch (other.m_val) {
         case 0:throw std::invalid_argument("division by zero");
-        default:m_val = (m_val * m_field->mul_inv(other.m_val)) % m_field->base();
+        default:m_val = (m_val * m_field->mul_inv(other.m_val)) % base();
             return *this;
         }
     }
@@ -268,7 +271,7 @@ public:
     gfn operator/=(const uintmax_t other) {
         switch (other % m_field->base()) {
         case 0:throw std::invalid_argument("division by zero");
-        default:m_val = (m_val * m_field->mul_inv(other % m_field->base())) % m_field->base();
+        default:m_val = (m_val * m_field->mul_inv(other % base())) % base();
             return *this;
         }
     }
@@ -277,6 +280,15 @@ public:
     [[nodiscard]]
     bool is_zero() const {
         return 0 == m_val;
+    }
+
+    explicit operator bool() const {
+        return !m_val;
+    }
+
+    gfn &set_zero() {
+        m_val = 0;
+        return *this;
     }
 
     bool operator==(const gfn &other) const {
@@ -347,7 +359,7 @@ gfn operator+(const uintmax_t other, const gfn &curr) {
 
 [[nodiscard]]
 gfn operator-(const uintmax_t other, const gfn &curr) {
-    return gfn{curr.m_field, curr.m_field->base() + (other % curr.m_field->base()) - curr.m_val};
+    return gfn{curr.m_field, curr.base() + (other % curr.base()) - curr.m_val};
 }
 
 [[nodiscard]]
@@ -369,7 +381,7 @@ std::ostream &operator<<(std::ostream &os, const gfn &val) {
 
 std::istream &operator>>(std::istream &is, gfn &val) {
     is >> val.m_val;
-    val.m_val %= val.m_field->base();
+    val.m_val %= val.base();
     return is;
 }
 
@@ -393,7 +405,7 @@ gfbase::gfbase(const uintmax_t base) : m_base(base), m_inv(base, 0) {
         }
         if (u0 > 1)
             throw std::logic_error("multiplicative inverse don't exist");
-        return (uintmax_t)(u2 < 0 ? (base + u2) : (u2));
+        return (uintmax_t) (u2 < 0 ? (base + u2) : (u2));
     };
 
     m_inv[1] = 1;
@@ -424,29 +436,6 @@ uintmax_t gfbase::mul_inv(const uintmax_t val) const {
 inline
 gf make_gf(const uintmax_t base) {
     return std::shared_ptr<gfbase>(new gfbase(base));
-}
-
-[[nodiscard]]
-inline
-gfn make_gfn(gf field, const uintmax_t val) {
-    return gfn{std::move(field), val};
-}
-
-[[nodiscard]]
-inline
-std::vector<gfn> make_gfn(const gf &field, const std::vector<uintmax_t> &val) {
-    std::vector<gfn> res;
-    res.reserve(val.size());
-    for (auto v : val) {
-        res.emplace_back(field, v);
-    }
-    return res;
-}
-
-[[nodiscard]]
-inline
-std::vector<gfn> make_gfn(const gf &field, const std::initializer_list<uintmax_t> val) {
-    return make_gfn(field, std::vector<uintmax_t>{val});
 }
 
 } // namespace irrpoly

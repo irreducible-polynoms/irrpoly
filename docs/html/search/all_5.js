@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['version_2ehpp_19',['version.hpp',['../version_8hpp.html',1,'']]]
+  ['_7echecker_15',['~checker',['../classirrpoly_1_1checker.html#ae2f767186d9060c993c0255d9cec527b',1,'irrpoly::checker']]]
 ];
