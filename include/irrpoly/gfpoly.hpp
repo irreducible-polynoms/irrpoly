@@ -24,19 +24,6 @@ namespace irrpoly {
  * Класс gfpoly представляет многочлены над полем Галуа.
  * Основан на классе polynomial из библиотеки Boost.
  */
-class gfpoly;
-
-namespace {
-
-template<typename N>
-void division_impl(gfpoly &, gfpoly &, const gfpoly &, N, N);
-
-std::pair<gfpoly, gfpoly> division(gfpoly, const gfpoly &);
-
-std::pair<gfpoly, gfpoly> quotient_remainder(const gfpoly &, const gfpoly &);
-
-} // namespace
-
 class gfpoly {
 private:
     gf m_field;
@@ -140,10 +127,12 @@ public:
         return m_data;
     }
 
+private:
     std::vector<gfn> &data() {
         return m_data;
     }
 
+public:
     gfpoly &operator=(const gfpoly &p) {
         if (this != &p) {
             assert(m_field == nullptr || m_field == p.m_field);
@@ -223,6 +212,44 @@ public:
         return *this;
     }
 
+private:
+    template<typename N>
+    static void division_impl(gfpoly &q, gfpoly &u, const gfpoly &v, N n, N k) {
+        assert(q.field() == u.field() && u.field() == v.field());
+        q[k] = u[n + k] / v[n];
+        for (N j = n + k; j > k;) {
+            j--;
+            u[j] -= q[k] * v[j - k];
+        }
+    }
+
+    static std::pair<gfpoly, gfpoly> division(gfpoly u, const gfpoly &v) {
+        assert(u.field() == v.field() && v.size() <= u.size() && v && u);
+        uintmax_t const m = u.size() - 1, n = v.size() - 1;
+        uintmax_t k = m - n;
+        gfpoly q(u.field());
+        q.data().resize(m - n + 1, gfn(q.field()));
+
+        do {
+            division_impl(q, u, v, n, k);
+        } while (k-- != 0);
+        u.data().resize(n, gfn(q.field())), gfn(q.field());
+        u.normalize();
+        return std::make_pair(q, u);
+    }
+
+    /** Calculates a / b and a % b, returning the pair (quotient, remainder) together
+      * because the same amount of computation yields both.
+      * This function is not defined for division by zero: user beware.
+      */
+    static std::pair<gfpoly, gfpoly> quotient_remainder(const gfpoly &dividend, const gfpoly &divisor) {
+        assert(dividend.field() == divisor.field() && divisor);
+        if (dividend.size() < divisor.size())
+            return std::make_pair(gfpoly(dividend.field()), dividend);
+        return division(dividend, divisor);
+    }
+
+public:
     gfpoly &operator/=(const gfpoly &value) {
         assert(field() == value.field());
         *this = quotient_remainder(*this, value).first;
@@ -290,6 +317,13 @@ private:
             m_data[i] = op(m_data[i], value[i]);
         return *this;
     }
+
+public:
+    friend gfpoly operator-(gfpoly);
+
+    friend gfpoly operator/(const gfpoly &, const gfpoly &);
+
+    friend gfpoly operator%(const gfpoly &, const gfpoly &);
 };
 
 gfpoly operator-(gfpoly a) {
@@ -356,12 +390,12 @@ gfpoly operator*(const gfpoly &a, const gfpoly &b) {
 
 gfpoly operator/(const gfpoly &a, const gfpoly &b) {
     assert(a.field() == b.field());
-    return quotient_remainder(a, b).first;
+    return gfpoly::quotient_remainder(a, b).first;
 }
 
 gfpoly operator%(const gfpoly &a, const gfpoly &b) {
     assert(a.field() == b.field());
-    return quotient_remainder(a, b).second;
+    return gfpoly::quotient_remainder(a, b).second;
 }
 
 template<class U>
@@ -444,44 +478,6 @@ operator<<(std::basic_ostream<charT, traits> &os, const gfpoly &poly) {
     }
     os << " }";
     return os;
-}
-
-namespace {
-template<typename N>
-void division_impl(gfpoly &q, gfpoly &u, const gfpoly &v, N n, N k) {
-    assert(q.field() == u.field() && u.field() == v.field());
-    q[k] = u[n + k] / v[n];
-    for (N j = n + k; j > k;) {
-        j--;
-        u[j] -= q[k] * v[j - k];
-    }
-}
-
-std::pair<gfpoly, gfpoly> division(gfpoly u, const gfpoly &v) {
-    assert(u.field() == v.field() && v.size() <= u.size() && v && u);
-    uintmax_t const m = u.size() - 1, n = v.size() - 1;
-    uintmax_t k = m - n;
-    gfpoly q(u.field());
-    q.data().resize(m - n + 1, gfn(q.field()));
-
-    do {
-        division_impl(q, u, v, n, k);
-    } while (k-- != 0);
-    u.data().resize(n, gfn(q.field())), gfn(q.field());
-    u.normalize();
-    return std::make_pair(q, u);
-}
-
-/** Calculates a / b and a % b, returning the pair (quotient, remainder) together
-  * because the same amount of computation yields both.
-  * This function is not defined for division by zero: user beware.
-  */
-std::pair<gfpoly, gfpoly> quotient_remainder(const gfpoly &dividend, const gfpoly &divisor) {
-    assert(dividend.field() == divisor.field() && divisor);
-    if (dividend.size() < divisor.size())
-        return std::make_pair(gfpoly(dividend.field()), dividend);
-    return division(dividend, divisor);
-}
 }
 
 } // namespace irrpoly

@@ -28,16 +28,16 @@ std::vector<gfpoly> generate_irreducible(uint64_t num) {
     // функция, генерирующая многочлены для проверки
     auto input = [&]() -> gfpoly {
         static uint64_t index = 1;
-        gfpoly res(gf2);
         uint8_t degree = 0;
         for (uint8_t i = 1; index >> i; ++i, ++degree);
-        res.data().reserve(degree + 2);
-        res.data().emplace_back(gf2, 1);
+        std::vector<uintmax_t> res;
+        res.reserve(degree + 2);
+        res.emplace_back(1);
         for (uint8_t i = 0; i <= degree; ++i) {
-            res.data().emplace_back(gf2, (index & (1ull << i)) ? 1 : 0);
+            res.emplace_back((index & (1ull << i)) ? 1 : 0);
         }
         ++index;
-        return res;
+        return gfpoly(gf2, res);
     };
 
     auto check = multithread::make_check_func(
