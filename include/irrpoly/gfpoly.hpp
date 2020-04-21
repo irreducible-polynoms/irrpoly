@@ -6,8 +6,7 @@
  * @url     https://github.com/irreducible-polynoms/irrpoly
  */
 
-#ifndef GFPOLY_HPP
-#define GFPOLY_HPP
+#pragma once
 
 #include "gf.hpp"
 
@@ -24,7 +23,7 @@ namespace irrpoly {
  * Класс gfpoly представляет многочлены над полем Галуа.
  * Основан на классе polynomial из библиотеки Boost.
  */
-class gfpoly {
+class gfpoly final {
 private:
     gf m_field;
     std::vector<gfn> m_data;
@@ -55,16 +54,23 @@ public:
         return res;
     }
 
+    gfpoly &normalize() {
+        m_data.erase(std::find_if(
+            m_data.rbegin(), m_data.rend(),
+            std::not_fn(std::mem_fn(&gfn::is_zero))
+        ).base(), m_data.end());
+        return *this;
+    }
+
 private:
-    gfpoly(gf field, std::vector<gfn> &&p) :
-        m_field(std::move(field)), m_data(std::move(p)) {
+    gfpoly(const gf &field, std::vector<gfn> &&p) :
+        m_field(field), m_data(std::move(p)) {
         normalize();
     }
 
 public:
     explicit
-    gfpoly(gf field) :
-        m_field(std::move(field)), m_data() {}
+    gfpoly(const gf &field) : m_field(field), m_data() {}
 
     gfpoly(const gf &field, const std::vector<uintmax_t> &l) :
         m_field(field), m_data() {
@@ -87,8 +93,7 @@ public:
         m_data.push_back(std::move(value));
     }
 
-    gfpoly(const gf &field, uintmax_t value) :
-        m_field(field), m_data() {
+    gfpoly(const gf &field, uintmax_t value) : m_field(field), m_data() {
         m_data.emplace_back(field, value);
     }
 
@@ -145,58 +150,52 @@ public:
     template<class U>
     gfpoly &operator+=(const U &value) {
         transform(value, std::plus());
-        normalize();
-        return *this;
+        return normalize();
     }
 
     template<class U>
     gfpoly &operator-=(const U &value) {
         transform(value, std::minus());
-        normalize();
-        return *this;
+        return normalize();
     }
 
     template<class U>
     gfpoly &operator*=(const U &value) {
         std::transform(m_data.begin(), m_data.end(), m_data.begin(),
                        [&](const gfn &x) -> gfn { return x * value; });
-        normalize();
-        return *this;
+        return normalize();
     }
 
     template<class U>
     gfpoly &operator/=(const U &value) {
         std::transform(m_data.begin(), m_data.end(), m_data.begin(),
                        [&](const gfn &x) -> gfn { return x / value; });
-        normalize();
-        return *this;
+        return normalize();
     }
 
     template<class U>
     gfpoly &operator%=(const U & /*value_type*/) {
         // We can always divide by a scalar, so there is no remainder:
-        this->set_zero();
-        return *this;
+        return set_zero();
     }
 
     gfpoly &operator+=(const gfpoly &value) {
         assert(field() == value.field());
         transform(value, std::plus());
-        normalize();
-        return *this;
+        return normalize();
     }
 
     gfpoly &operator-=(const gfpoly &value) {
         assert(field() == value.field());
         transform(value, std::minus());
-        normalize();
-        return *this;
+        return normalize();
     }
 
+private:
     void multiply(const gfpoly &a, const gfpoly &b) {
         assert(a.field() == b.field());
         if (!a || !b) {
-            this->set_zero();
+            set_zero();
             return;
         }
         std::vector<gfn> prod(a.size() + b.size() - 1, gfn(m_field));
@@ -206,6 +205,7 @@ public:
         m_data.swap(prod);
     }
 
+public:
     gfpoly &operator*=(const gfpoly &value) {
         assert(field() == value.field());
         this->multiply(*this, value);
@@ -272,7 +272,6 @@ public:
     template<typename U>
     gfpoly &operator<<=(U const &n) {
         m_data.insert(m_data.begin(), n, gfn(m_field));
-        normalize();
         return *this;
     }
 
@@ -287,14 +286,6 @@ public:
 
     gfpoly &set_zero() {
         m_data.clear();
-        return *this;
-    }
-
-    gfpoly &normalize() {
-        m_data.erase(std::find_if(
-            m_data.rbegin(), m_data.rend(),
-            std::not_fn(std::mem_fn(&gfn::is_zero))
-        ).base(), m_data.end());
         return *this;
     }
 
@@ -320,6 +311,8 @@ private:
 
 public:
     friend gfpoly operator-(gfpoly);
+
+    friend gfpoly operator*(const gfpoly &, const gfpoly &);
 
     friend gfpoly operator/(const gfpoly &, const gfpoly &);
 
@@ -481,5 +474,3 @@ operator<<(std::basic_ostream<charT, traits> &os, const gfpoly &poly) {
 }
 
 } // namespace irrpoly
-
-#endif //GFPOLY_HPP

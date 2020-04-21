@@ -100,39 +100,39 @@ $(function() {
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keywordflow">if</span> (m.degree() &lt; n.degree()) {</div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        std::swap(m, n);</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    }</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    gfpoly u0 = m, u1 = gfpoly(m.field(), 1), u2 = gfpoly(m.field(), 0),</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        v0 = n, v1 = gfpoly(m.field(), 0), v2 = gfpoly(m.field(), 1),</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        w0 = gfpoly(m.field()), w1 = gfpoly(m.field()), w2 = gfpoly(m.field()), q = gfpoly(m.field());</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="keywordflow">while</span> (!v0.is_zero()) {</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        q = u0 / v0;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        w0 = u0 - q * v0, w1 = u1 - q * v1, w2 = u2 - q * v2;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        u0 = v0, u1 = v1, u2 = v2, v0 = w0, v1 = w1, v2 = w2;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    }</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keywordflow">return</span> u0;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;}</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keyword">namespace </span>{</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">class</span> T, <span class="keyword">class</span> N&gt;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;T integer_power(T t, N n) {</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keywordflow">switch</span> (n) {</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keywordflow">case</span> 0:<span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>T<span class="keyword">&gt;</span>(1u);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordflow">case</span> 1:<span class="keywordflow">return</span> t;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordflow">case</span> 2:<span class="keywordflow">return</span> t * t;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordflow">case</span> 3:<span class="keywordflow">return</span> t * t * t;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordflow">default</span>:T result = integer_power(t, n / 2);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordflow">return</span> (n &amp; 1u) ? result * result * t : result * result;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    }</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;}</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;gfpoly derivative(<span class="keyword">const</span> gfpoly &amp;val) {</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    assert(val &amp;&amp; val.degree());</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    gfpoly res(val.field(), std::vector&lt;uintmax_t&gt;(val.size() - 1, 0));</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordflow">for</span> (uintmax_t i = 1; i &lt; val.size(); ++i) {</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        res[i - 1] = i * val[i];</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    }</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    res.normalize();</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordflow">return</span> res;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    gfpoly u0 = m, u1 = gfpoly(m.field(), 1), u2 = gfpoly(m.field()),</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        v0 = n, v1 = gfpoly(m.field()), v2 = gfpoly(m.field(), 1),</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        w0 = gfpoly(m.field()), w1 = gfpoly(m.field()), w2 = gfpoly(m.field()),</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        q = gfpoly(m.field());</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keywordflow">while</span> (!v0.is_zero()) {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        q = u0 / v0;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        w0 = u0 - q * v0, w1 = u1 - q * v1, w2 = u2 - q * v2;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        u0 = v0, u1 = v1, u2 = v2, v0 = w0, v1 = w1, v2 = w2;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    }</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keywordflow">return</span> u0;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;}</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="keyword">namespace </span>{</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">class</span> T, <span class="keyword">class</span> N&gt;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;T integer_power(T t, N n) {</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keywordflow">switch</span> (n) {</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordflow">case</span> 0:<span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>T<span class="keyword">&gt;</span>(1u);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordflow">case</span> 1:<span class="keywordflow">return</span> t;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordflow">case</span> 2:<span class="keywordflow">return</span> t * t;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordflow">case</span> 3:<span class="keywordflow">return</span> t * t * t;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keywordflow">default</span>:T result = integer_power(t, n / 2);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordflow">return</span> (n &amp; 1u) ? result * result * t : result * result;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    }</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;}</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;gfpoly derivative(<span class="keyword">const</span> gfpoly &amp;val) {</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    assert(val &amp;&amp; val.degree());</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    gfpoly res(val.field(), std::vector&lt;uintmax_t&gt;(val.size() - 1, 0));</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordflow">for</span> (uintmax_t i = 1; i &lt; val.size(); ++i) {</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        res[i - 1] = i * val[i];</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    }</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordflow">return</span> res.normalize();</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;}</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;[[nodiscard]]</div>
@@ -431,7 +431,7 @@ $(function() {
 <div class="ttc" id="achecker_8hpp_html"><div class="ttname"><a href="checker_8hpp.html">checker.hpp</a></div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Вт 21 Апр 2020 01:16:33. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Вт 21 Апр 2020 14:23:13. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.18
 </small></address>

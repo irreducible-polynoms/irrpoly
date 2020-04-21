@@ -6,6 +6,8 @@ include/irrpoly/gf.hpp
 .SH SYNOPSIS
 .br
 .PP
+\fC#include 'nn\&.hpp'\fP
+.br
 \fC#include <algorithm>\fP
 .br
 \fC#include <utility>\fP
@@ -38,11 +40,18 @@ include/irrpoly/gf.hpp
 .RI "class \fBirrpoly::gfn\fP"
 .br
 .in -1c
+.SS "Макросы"
+
+.in +1c
+.ti -1c
+.RI "#define \fBNN_CHECK_THROW\fP(_e)"
+.br
+.in -1c
 .SS "Определения типов"
 
 .in +1c
 .ti -1c
-.RI "using \fBirrpoly::gf\fP = std::shared_ptr< gfbase >"
+.RI "using \fBirrpoly::gf\fP = \fBdropbox::oxygen::nn_shared_ptr\fP< gfbase >"
 .br
 .in -1c
 .SS "Функции"
@@ -86,6 +95,18 @@ Vadim Piven vadim@piven.tech @license Free use of this library is permitted unde
 .RE
 .PP
 
+.SH "Макросы"
+.PP 
+.SS "#define NN_CHECK_THROW(_e)"
+\fBМакроопределение:\fP
+.PP
+.nf
+        (([&] (typename std::remove_reference<decltype(_e)>::type p) { \
+        if (!p) throw std::runtime_error(#_e " must not be null"); \
+        return dropbox::oxygen::nn<typename std::remove_reference<decltype(p)>::type>( \
+            dropbox::oxygen::i_promise_i_checked_for_null, std::move(p)); \
+    })(_e))
+.fi
 .SH "Автор"
 .PP 
 Автоматически создано Doxygen для irrpoly из исходного текста\&.

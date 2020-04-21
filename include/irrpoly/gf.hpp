@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "nn.hpp"
+
 #include <algorithm>
 #include <utility>
 #include <vector>
@@ -33,7 +35,7 @@ private:
     explicit
     gfbase(uintmax_t);
 
-    friend std::shared_ptr<gfbase> make_gf(uintmax_t);
+    friend dropbox::oxygen::nn_shared_ptr<gfbase> make_gf(uintmax_t);
 
 public:
     [[nodiscard]]
@@ -43,7 +45,7 @@ public:
     uintmax_t mul_inv(uintmax_t) const;
 };
 
-using gf = std::shared_ptr<gfbase>;
+using gf = dropbox::oxygen::nn_shared_ptr<gfbase>;
 
 bool operator==(const gf &lb, const gf &rb) {
     return lb->base() == rb->base();
@@ -85,7 +87,8 @@ public:
     explicit
     gfn(const gf &field) : m_field(field), m_val(0) {}
 
-    gfn(const gf &field, const uintmax_t val) : m_field(field), m_val(val % m_field->base()) {}
+    gfn(const gf &field, const uintmax_t val) :
+        m_field(field), m_val(val % m_field->base()) {}
 
     gfn(const gfn &other) = default;
 
@@ -215,7 +218,7 @@ public:
 
     [[nodiscard]]
     gfn operator*(const uintmax_t other) const {
-        return gfn{m_field, m_val * (other % m_field->base())};
+        return gfn{m_field, m_val * (other % base())};
     }
 
     friend
@@ -228,7 +231,7 @@ public:
     }
 
     gfn operator*=(const uintmax_t other) {
-        m_val = (m_val * (other % m_field->base())) % base();
+        m_val = (m_val * (other % base())) % base();
         return *this;
     }
 
@@ -248,7 +251,7 @@ public:
 
     [[nodiscard]]
     gfn operator/(const uintmax_t other) const {
-        switch (other % m_field->base()) {
+        switch (other % base()) {
         case 0:throw std::invalid_argument("division by zero");
         default:
             return gfn{m_field,
@@ -269,7 +272,7 @@ public:
     }
 
     gfn operator/=(const uintmax_t other) {
-        switch (other % m_field->base()) {
+        switch (other % base()) {
         case 0:throw std::invalid_argument("division by zero");
         default:m_val = (m_val * m_field->mul_inv(other % base())) % base();
             return *this;
@@ -297,7 +300,7 @@ public:
     }
 
     bool operator==(const uintmax_t other) const {
-        return m_val == (other % m_field->base());
+        return m_val == (other % base());
     }
 
     bool operator!=(const gfn &other) const {
@@ -306,7 +309,7 @@ public:
     }
 
     bool operator!=(const uintmax_t other) const {
-        return m_val != (other % m_field->base());
+        return m_val != (other % base());
     }
 
     bool operator>(const gfn &other) const {
@@ -315,7 +318,7 @@ public:
     }
 
     bool operator>(const uintmax_t other) const {
-        return m_val > (other % m_field->base());
+        return m_val > (other % base());
     }
 
     bool operator>=(const gfn &other) const {
@@ -324,7 +327,7 @@ public:
     }
 
     bool operator>=(const uintmax_t other) const {
-        return m_val >= (other % m_field->base());
+        return m_val >= (other % base());
     }
 
     bool operator<(const gfn &other) const {
@@ -333,7 +336,7 @@ public:
     }
 
     bool operator<(const uintmax_t other) const {
-        return m_val < (other % m_field->base());
+        return m_val < (other % base());
     }
 
     bool operator<=(const gfn &other) const {
@@ -342,7 +345,7 @@ public:
     }
 
     bool operator<=(const uintmax_t other) const {
-        return m_val <= (other % m_field->base());
+        return m_val <= (other % base());
     }
 
     friend
@@ -354,7 +357,7 @@ public:
 
 [[nodiscard]]
 gfn operator+(const uintmax_t other, const gfn &curr) {
-    return gfn{curr.m_field, (other % curr.m_field->base()) + curr.m_val};
+    return gfn{curr.m_field, (other % curr.base()) + curr.m_val};
 }
 
 [[nodiscard]]
@@ -364,14 +367,16 @@ gfn operator-(const uintmax_t other, const gfn &curr) {
 
 [[nodiscard]]
 gfn operator*(const uintmax_t other, const gfn &curr) {
-    return gfn{curr.m_field, (other % curr.m_field->base()) * curr.m_val};
+    return gfn{curr.m_field, (other % curr.base()) * curr.m_val};
 }
 
 [[nodiscard]]
 gfn operator/(const uintmax_t other, const gfn &curr) {
     switch (curr.m_val) {
     case 0:throw std::invalid_argument("division by zero");
-    default:return gfn{curr.m_field, (other % curr.m_field->base()) * curr.m_field->mul_inv(curr.m_val)};
+    default:
+        return gfn{curr.m_field,
+                   (other % curr.base()) * curr.m_field->mul_inv(curr.m_val)};
     }
 }
 
@@ -435,7 +440,8 @@ uintmax_t gfbase::mul_inv(const uintmax_t val) const {
 [[nodiscard]]
 inline
 gf make_gf(const uintmax_t base) {
-    return std::shared_ptr<gfbase>(new gfbase(base));
+    return dropbox::oxygen::nn_shared_ptr<gfbase>(dropbox::oxygen::nn(
+        dropbox::oxygen::i_promise_i_checked_for_null_t{}, new gfbase(base)));
 }
 
 } // namespace irrpoly

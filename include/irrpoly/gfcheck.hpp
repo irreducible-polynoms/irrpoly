@@ -32,9 +32,10 @@ gfpoly gcd(gfpoly m, gfpoly n) {
     if (m.degree() < n.degree()) {
         std::swap(m, n);
     }
-    gfpoly u0 = m, u1 = gfpoly(m.field(), 1), u2 = gfpoly(m.field(), 0),
-        v0 = n, v1 = gfpoly(m.field(), 0), v2 = gfpoly(m.field(), 1),
-        w0 = gfpoly(m.field()), w1 = gfpoly(m.field()), w2 = gfpoly(m.field()), q = gfpoly(m.field());
+    gfpoly u0 = m, u1 = gfpoly(m.field(), 1), u2 = gfpoly(m.field()),
+        v0 = n, v1 = gfpoly(m.field()), v2 = gfpoly(m.field(), 1),
+        w0 = gfpoly(m.field()), w1 = gfpoly(m.field()), w2 = gfpoly(m.field()),
+        q = gfpoly(m.field());
     while (!v0.is_zero()) {
         q = u0 / v0;
         w0 = u0 - q * v0, w1 = u1 - q * v1, w2 = u2 - q * v2;
@@ -65,8 +66,7 @@ gfpoly derivative(const gfpoly &val) {
     for (uintmax_t i = 1; i < val.size(); ++i) {
         res[i - 1] = i * val[i];
     }
-    res.normalize();
-    return res;
+    return res.normalize();
 }
 
 /**

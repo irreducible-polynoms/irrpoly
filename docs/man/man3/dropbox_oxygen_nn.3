@@ -1,0 +1,105 @@
+.TH "dropbox::oxygen::nn< PtrType >" 3 "Вт 21 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+dropbox::oxygen::nn< PtrType >
+.SH SYNOPSIS
+.br
+.PP
+.SS "Открытые типы"
+
+.in +1c
+.ti -1c
+.RI "using \fBelement_type\fP = typename \fBnn_detail::element_type\fP< PtrType >::type"
+.br
+.in -1c
+.SS "Открытые члены"
+
+.in +1c
+.ti -1c
+.RI "element_type & \fBoperator*\fP () const"
+.br
+.ti -1c
+.RI "element_type * \fBoperator\->\fP () const"
+.br
+.ti -1c
+.RI "\fBoperator const PtrType &\fP () const &"
+.br
+.ti -1c
+.RI "\fBoperator PtrType &&\fP () &&"
+.br
+.ti -1c
+.RI "const PtrType & \fBas_nullable\fP () const &"
+.br
+.ti -1c
+.RI "PtrType && \fBas_nullable\fP () &&"
+.br
+.ti -1c
+.RI "\fBoperator bool\fP () const =delete"
+.br
+.ti -1c
+.RI "\fBnn\fP (std::nullptr_t)=delete"
+.br
+.ti -1c
+.RI "\fBnn\fP & \fBoperator=\fP (std::nullptr_t)=delete"
+.br
+.ti -1c
+.RI "\fBnn\fP (PtrType)=delete"
+.br
+.ti -1c
+.RI "\fBnn\fP & \fBoperator=\fP (PtrType)=delete"
+.br
+.ti -1c
+.RI "\fBnn\fP (\fBi_promise_i_checked_for_null_t\fP, const PtrType &arg)"
+.br
+.ti -1c
+.RI "\fBnn\fP (\fBi_promise_i_checked_for_null_t\fP, PtrType &&arg)"
+.br
+.ti -1c
+.RI "template<typename OtherType , typename std::enable_if< std::is_constructible< PtrType, OtherType >::value &&!std::is_convertible< OtherType, PtrType >::value, int >::type  = 0> \fBnn\fP (const \fBnn\fP< OtherType > &other)"
+.br
+.ti -1c
+.RI "template<typename OtherType , typename std::enable_if< std::is_constructible< PtrType, OtherType >::value &&!std::is_convertible< OtherType, PtrType >::value &&!std::is_pointer< OtherType >::value, int >::type  = 0> \fBnn\fP (\fBnn\fP< OtherType > &&other)"
+.br
+.ti -1c
+.RI "template<typename OtherType , typename std::enable_if< std::is_convertible< OtherType, PtrType >::value, int >::type  = 0> \fBnn\fP (const \fBnn\fP< OtherType > &other)"
+.br
+.ti -1c
+.RI "template<typename OtherType , typename std::enable_if< std::is_convertible< OtherType, PtrType >::value &&!std::is_pointer< OtherType >::value, int >::type  = 0> \fBnn\fP (\fBnn\fP< OtherType > &&other)"
+.br
+.ti -1c
+.RI "template<typename OtherType , typename std::enable_if< std::is_constructible< PtrType, OtherType, element_type * >::value, int >::type  = 0> \fBnn\fP (const \fBnn\fP< OtherType > &ownership_ptr, \fBnn\fP< element_type * > target_ptr)"
+.br
+.ti -1c
+.RI "template<typename T  = PtrType> element_type * \fBget\fP () const"
+.br
+.in -1c
+.SS "Друзья"
+
+.in +1c
+.ti -1c
+.RI "template<typename L , typename R > bool \fBoperator==\fP (const \fBnn\fP< L > &, const R &)"
+.br
+.ti -1c
+.RI "template<typename L , typename R > bool \fBoperator==\fP (const L &, const \fBnn\fP< R > &)"
+.br
+.ti -1c
+.RI "template<typename L , typename R > bool \fBoperator==\fP (const \fBnn\fP< L > &, const \fBnn\fP< R > &)"
+.br
+.ti -1c
+.RI "template<typename L , typename R > bool \fBoperator<\fP (const \fBnn\fP< L > &, const R &)"
+.br
+.ti -1c
+.RI "template<typename L , typename R > bool \fBoperator<\fP (const L &, const \fBnn\fP< R > &)"
+.br
+.ti -1c
+.RI "template<typename L , typename R > bool \fBoperator<\fP (const \fBnn\fP< L > &, const \fBnn\fP< R > &)"
+.br
+.ti -1c
+.RI "template<typename T > std::ostream & \fBoperator<<\fP (std::ostream &, const \fBnn\fP< T > &)"
+.br
+.in -1c
+
+.SH "Автор"
+.PP 
+Автоматически создано Doxygen для irrpoly из исходного текста\&.

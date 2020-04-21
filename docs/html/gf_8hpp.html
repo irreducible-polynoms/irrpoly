@@ -76,13 +76,15 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Классы</a> &#124;
+<a href="#define-members">Макросы</a> &#124;
 <a href="#typedef-members">Определения типов</a> &#124;
 <a href="#func-members">Функции</a>  </div>
   <div class="headertitle">
 <div class="title">Файл gf.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><code>#include &lt;algorithm&gt;</code><br />
+<div class="textblock"><code>#include &quot;nn.hpp&quot;</code><br />
+<code>#include &lt;algorithm&gt;</code><br />
 <code>#include &lt;utility&gt;</code><br />
 <code>#include &lt;vector&gt;</code><br />
 <code>#include &lt;cstdint&gt;</code><br />
@@ -103,11 +105,16 @@ $(function() {
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1gfn.html">irrpoly::gfn</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Макросы</h2></td></tr>
+<tr class="memitem:a35fc05e35139b6c5d46933a6a8c18c5e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>NN_CHECK_THROW</b>(_e)</td></tr>
+<tr class="separator:a35fc05e35139b6c5d46933a6a8c18c5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Определения типов</h2></td></tr>
-<tr class="memitem:a468e15bd15deab29cea4f3b5941fcf91"><td class="memItemLeft" align="right" valign="top"><a id="a468e15bd15deab29cea4f3b5941fcf91"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>irrpoly::gf</b> = std::shared_ptr&lt; gfbase &gt;</td></tr>
-<tr class="separator:a468e15bd15deab29cea4f3b5941fcf91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a49b6832f1afa3581768e57301d355575"><td class="memItemLeft" align="right" valign="top"><a id="a49b6832f1afa3581768e57301d355575"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>irrpoly::gf</b> = <a class="el" href="classdropbox_1_1oxygen_1_1nn.html">dropbox::oxygen::nn_shared_ptr</a>&lt; gfbase &gt;</td></tr>
+<tr class="separator:a49b6832f1afa3581768e57301d355575"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Функции</h2></td></tr>
@@ -141,10 +148,35 @@ gf&#160;</td><td class="memItemRight" valign="bottom"><b>irrpoly::make_gf</b> (c
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
 <div class="textblock"><dl class="section author"><dt>Автор</dt><dd>Vadim Piven <a href="#" onclick="location.href='mai'+'lto:'+'vad'+'im'+'@pi'+'ve'+'n.t'+'ec'+'h'; return false;">vadim<span style="display: none;">.nosp@m.</span>@piv<span style="display: none;">.nosp@m.</span>en.te<span style="display: none;">.nosp@m.</span>ch</a> @license Free use of this library is permitted under the guidelines and in accordance with the MIT License (MIT). @url <a href="https://github.com/irreducible-polynoms/irrpoly">https://github.com/irreducible-polynoms/irrpoly</a> </dd></dl>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Макросы</h2>
+<a id="a35fc05e35139b6c5d46933a6a8c18c5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35fc05e35139b6c5d46933a6a8c18c5e">&#9670;&nbsp;</a></span>NN_CHECK_THROW</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define NN_CHECK_THROW</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">_e</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Макроопределение:</b><div class="fragment"><div class="line">        (([&amp;] (<span class="keyword">typename</span> std::remove_reference&lt;decltype(_e)&gt;::type p) { \</div>
+<div class="line">        if (!p) <span class="keywordflow">throw</span> std::runtime_error(#_e <span class="stringliteral">&quot; must not be null&quot;</span>); \</div>
+<div class="line">        return <a class="code" href="classdropbox_1_1oxygen_1_1nn.html">dropbox::oxygen::nn</a>&lt;<span class="keyword">typename</span> std::remove_reference&lt;decltype(p)&gt;::type&gt;( \</div>
+<div class="line">            dropbox::oxygen::i_promise_i_checked_for_null, std::move(p)); \</div>
+<div class="line">    })(_e))</div>
+</div><!-- fragment -->
+</div>
+</div>
+</div><!-- contents -->
+<div class="ttc" id="aclassdropbox_1_1oxygen_1_1nn_html"><div class="ttname"><a href="classdropbox_1_1oxygen_1_1nn.html">dropbox::oxygen::nn</a></div><div class="ttdef"><b>Definition:</b> nn.hpp:38</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Вт 21 Апр 2020 01:16:33. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Вт 21 Апр 2020 14:23:13. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.18
 </small></address>

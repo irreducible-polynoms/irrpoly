@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['sync_44',['sync',['../classirrpoly_1_1detail_1_1sync.html',1,'irrpoly::detail']]]
+  ['result_5ftype_38',['result_type',['../structirrpoly_1_1multithread_1_1result__type.html',1,'irrpoly::multithread']]]
 ];

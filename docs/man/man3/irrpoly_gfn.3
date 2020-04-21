@@ -12,11 +12,11 @@ irrpoly::gfn
 
 .in +1c
 .ti -1c
-.RI "\fBgfn\fP (const gf &field)"
+.RI "\fBgfn\fP (const \fBgf\fP &field)"
 .br
 .RI "Конструктор по умолчанию, обнуляет переменную\&. "
 .ti -1c
-.RI "\fBgfn\fP (const gf &field, const uintmax_t val)"
+.RI "\fBgfn\fP (const \fBgf\fP &field, const uintmax_t val)"
 .br
 .ti -1c
 .RI "\fBgfn\fP (const \fBgfn\fP &other)=default"
@@ -34,7 +34,7 @@ irrpoly::gfn
 .RI "\fBgfn\fP & \fBoperator=\fP (const uintmax_t other)"
 .br
 .ti -1c
-.RI "const gf & \fBfield\fP () const"
+.RI "const \fBgf\fP & \fBfield\fP () const"
 .br
 .ti -1c
 .RI "uintmax_t \fBdata\fP () const"
@@ -160,7 +160,7 @@ irrpoly::gfn
 
 .in +1c
 .ti -1c
-.RI "static \fBgfn\fP \fBrandom\fP (const gf &field)"
+.RI "static \fBgfn\fP \fBrandom\fP (const \fBgf\fP &field)"
 .br
 .RI "Генерирует случайное число в пределах [0, P-1]\&. "
 .ti -1c

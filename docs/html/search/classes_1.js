@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['gfbase_17',['gfbase',['../classirrpoly_1_1gfbase.html',1,'irrpoly']]],
-  ['gfn_18',['gfn',['../classirrpoly_1_1gfn.html',1,'irrpoly']]],
-  ['gfpoly_19',['gfpoly',['../classirrpoly_1_1gfpoly.html',1,'irrpoly']]]
+  ['element_5ftype_26',['element_type',['../structdropbox_1_1oxygen_1_1nn__detail_1_1element__type.html',1,'dropbox::oxygen::nn_detail']]],
+  ['element_5ftype_3c_20pointee_20_2a_20_3e_27',['element_type&lt; Pointee * &gt;',['../structdropbox_1_1oxygen_1_1nn__detail_1_1element__type_3_01_pointee_01_5_01_4.html',1,'dropbox::oxygen::nn_detail']]]
 ];

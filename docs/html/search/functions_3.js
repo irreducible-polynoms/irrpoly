@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['is_5fzero_27',['is_zero',['../classirrpoly_1_1gfn.html#adacab535a8671445a3837a4ced696e7c',1,'irrpoly::gfn']]]
+  ['is_5fzero_45',['is_zero',['../classirrpoly_1_1gfn.html#adacab535a8671445a3837a4ced696e7c',1,'irrpoly::gfn']]]
 ];

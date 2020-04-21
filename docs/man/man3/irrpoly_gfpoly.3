@@ -6,17 +6,22 @@ irrpoly::gfpoly
 .SH SYNOPSIS
 .br
 .PP
+.PP
+\fC#include <gfpoly\&.hpp>\fP
 .SS "Открытые члены"
 
 .in +1c
 .ti -1c
-.RI "\fBgfpoly\fP (gf field)"
+.RI "\fBgfpoly\fP & \fBnormalize\fP ()"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP (const gf &field, const std::vector< uintmax_t > &l)"
+.RI "\fBgfpoly\fP (const \fBgf\fP &field)"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP (const gf &field, std::initializer_list< uintmax_t > l)"
+.RI "\fBgfpoly\fP (const \fBgf\fP &field, const std::vector< uintmax_t > &l)"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP (const \fBgf\fP &field, std::initializer_list< uintmax_t > l)"
 .br
 .ti -1c
 .RI "\fBgfpoly\fP (const \fBgfpoly\fP &p)=default"
@@ -28,10 +33,10 @@ irrpoly::gfpoly
 .RI "\fBgfpoly\fP (\fBgfn\fP value)"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP (const gf &field, uintmax_t value)"
+.RI "\fBgfpoly\fP (const \fBgf\fP &field, uintmax_t value)"
 .br
 .ti -1c
-.RI "const gf & \fBfield\fP () const"
+.RI "const \fBgf\fP & \fBfield\fP () const"
 .br
 .ti -1c
 .RI "uintmax_t \fBbase\fP () const"
@@ -50,9 +55,6 @@ irrpoly::gfpoly
 .br
 .ti -1c
 .RI "const std::vector< \fBgfn\fP > & \fBdata\fP () const"
-.br
-.ti -1c
-.RI "std::vector< \fBgfn\fP > & \fBdata\fP ()"
 .br
 .ti -1c
 .RI "\fBgfpoly\fP & \fBoperator=\fP (const \fBgfpoly\fP &p)"
@@ -79,9 +81,6 @@ irrpoly::gfpoly
 .RI "\fBgfpoly\fP & \fBoperator\-=\fP (const \fBgfpoly\fP &value)"
 .br
 .ti -1c
-.RI "void \fBmultiply\fP (const \fBgfpoly\fP &a, const \fBgfpoly\fP &b)"
-.br
-.ti -1c
 .RI "\fBgfpoly\fP & \fBoperator*=\fP (const \fBgfpoly\fP &value)"
 .br
 .ti -1c
@@ -105,21 +104,37 @@ irrpoly::gfpoly
 .ti -1c
 .RI "\fBgfpoly\fP & \fBset_zero\fP ()"
 .br
-.ti -1c
-.RI "\fBgfpoly\fP & \fBnormalize\fP ()"
-.br
 .in -1c
 .SS "Открытые статические члены"
 
 .in +1c
 .ti -1c
-.RI "static \fBgfpoly\fP \fBrandom\fP (const gf &field, uintmax_t degree)"
+.RI "static \fBgfpoly\fP \fBrandom\fP (const \fBgf\fP &field, uintmax_t degree)"
 .br
 .RI "Генерирует случайный многочлен над полем GF[P] заданной степени\&. "
 .ti -1c
 .RI "static std::vector< uintmax_t > \fBinto_vec\fP (\fBgfpoly\fP &&poly)"
 .br
 .in -1c
+.SS "Друзья"
+
+.in +1c
+.ti -1c
+.RI "\fBgfpoly\fP \fBoperator\-\fP (\fBgfpoly\fP)"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP \fBoperator*\fP (const \fBgfpoly\fP &, const \fBgfpoly\fP &)"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP \fBoperator/\fP (const \fBgfpoly\fP &, const \fBgfpoly\fP &)"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP \fBoperator%\fP (const \fBgfpoly\fP &, const \fBgfpoly\fP &)"
+.br
+.in -1c
+.SH "Подробное описание"
+.PP 
+Класс gfpoly представляет многочлены над полем Галуа\&. Основан на классе polynomial из библиотеки Boost\&. 
 
 .SH "Автор"
 .PP 
