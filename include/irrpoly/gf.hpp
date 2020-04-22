@@ -23,8 +23,9 @@
 
 namespace irrpoly {
 
-/// Класс gfn представляет число в поле Галуа.
-class gfn;
+class gfbase;
+
+using gf = dropbox::oxygen::nn_shared_ptr<gfbase>;
 
 /// Класс gf представляет поле Галуа.
 class gfbase final {
@@ -35,7 +36,7 @@ private:
     explicit
     gfbase(uintmax_t);
 
-    friend dropbox::oxygen::nn_shared_ptr<gfbase> make_gf(uintmax_t);
+    friend gf make_gf(uintmax_t);
 
 public:
     [[nodiscard]]
@@ -44,8 +45,6 @@ public:
     [[nodiscard]]
     uintmax_t mul_inv(uintmax_t) const;
 };
-
-using gf = dropbox::oxygen::nn_shared_ptr<gfbase>;
 
 bool operator==(const gf &lb, const gf &rb) {
     return lb->base() == rb->base();

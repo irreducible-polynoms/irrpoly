@@ -23,8 +23,8 @@ using namespace irrpoly;
 [[nodiscard]]
 std::vector<gfpoly> generate_irreducible(
     const uintmax_t base,
-    const typename std::vector<gfpoly>::size_type num,
-    const typename gfpoly::size_type degree,
+    const uintmax_t num,
+    const uintmax_t degree,
     const typename multithread::irreducible_method irr_meth,
     const typename multithread::primitive_method prim_meth,
     const unsigned threads_num
@@ -60,9 +60,9 @@ int main() {
     // основание поля Галуа
     const uintmax_t base = 2;
     // число многочленов, которые требуется найти
-    const typename std::vector<gfpoly>::size_type num = 3;
+    const uintmax_t num = 3;
     // степень искомых многочленов
-    const typename gfpoly::size_type degree = 5;
+    const uintmax_t degree = 5;
     // какой из методов проверки на неприводимость хотим использовать
     // возможные варианты - отсутствие приверки (nil), Берлекампа (berlekamp), Рабина (rabin) и Бенора (benor)
     const typename multithread::irreducible_method irr_meth = multithread::irreducible_method::benor;

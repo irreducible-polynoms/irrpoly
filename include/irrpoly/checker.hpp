@@ -17,6 +17,7 @@
 #include <vector>
 #include <memory>
 #include <optional>
+#include <algorithm>
 
 namespace irrpoly {
 
@@ -40,17 +41,17 @@ private:
         std::shared_ptr<std::mutex> s_mutex;
         std::shared_ptr<std::condition_variable> s_cond;
 
-        check_func cf; ///< Основная функция проверки
+        check_func m_cf; ///< Основная функция проверки
 
-        bool _terminate; ///< Поток должен быть завершён
-        std::optional<value_type> val; ///< Входные данные
+        bool m_terminate; ///< Поток должен быть завершён
+        std::optional<value_type> m_val; ///< Входные данные
 
-        bool _busy; ///< Поток занят полезной работой
-        std::optional<result_type> res; ///< Результат проверки
+        bool m_busy; ///< Поток занят полезной работой
+        std::optional<result_type> m_res; ///< Результат проверки
 
-        std::thread thread;
-        std::mutex mutex;
-        std::condition_variable cond;
+        std::thread m_thread;
+        std::mutex m_mutex;
+        std::condition_variable m_cond;
 
         /**
          * Собственно функция, выполняющая проверку многочлена на неприводимость и примитивность.
@@ -61,46 +62,41 @@ private:
          * В случае с pthread для этого требуется выполнить pthread_exit.
          */
         void check() {
-            std::unique_lock<std::mutex> lk(mutex);
+            std::unique_lock<std::mutex> lk(m_mutex);
 
-            while (!_terminate) {
-                while (!(_busy || _terminate)) {
-                    cond.wait(lk);
+            while (true) {
+                while (!(m_busy || m_terminate)) {
+                    m_cond.wait(lk);
                 }
-                if (_terminate) {
+                if (m_terminate) {
                     break;
                 }
 
-                cf(val.value(), res);
+                m_cf(m_val.value(), m_res);
 
                 std::lock_guard<std::mutex> lg(*s_mutex);
-                _busy = false;
+                m_busy = false;
                 s_cond->notify_one();
             }
         }
 
     public:
         node(std::shared_ptr<std::mutex> s_mutex, std::shared_ptr<std::condition_variable> s_cond) :
-            s_mutex(std::move(s_mutex)), s_cond(std::move(s_cond)), _busy(false), _terminate(false) {
-            thread = std::thread(&node::check, this);
-            thread.detach();
-        }
-
-        ~node() {
-            if (thread.joinable()) {
-                thread.join();
-            }
+            s_mutex(std::move(s_mutex)), s_cond(std::move(s_cond)), m_busy(false), m_terminate(false),
+            m_val(), m_res() {
+            m_thread = std::thread(&node::check, this);
+            m_thread.detach();
         }
 
         /// Устанавливает функцию, которая будет вызываться в процессе проверки
-        void set_check(check_func c) {
-            cf = c;
+        void set_check(check_func cf) {
+            m_cf = cf;
         }
 
         /// Многочлен, проверка которого выполнялась.
         [[nodiscard]]
         const std::optional<value_type> &get() const {
-            return val;
+            return m_val;
         }
 
         /**
@@ -108,45 +104,41 @@ private:
          * предыдущей проверки и выставляет busy = true.
          */
         void set(value_type v) {
-            std::lock_guard<std::mutex> lg(mutex);
-            val.emplace(v);
-            res.reset();
-            _busy = true;
-            cond.notify_one();
+            std::lock_guard<std::mutex> lg(m_mutex);
+            m_val.emplace(std::move(v));
+            m_res.reset();
+            m_busy = true;
+            m_cond.notify_one();
         }
 
         /// Возвращает текущее состояние потока.
         [[nodiscard]]
         bool busy() const {
-            return _busy;
+            return m_busy;
         }
 
         /// Устанавливает флаг, требующий завершить работу потока по завершении вычислений.
         void terminate() {
-            std::lock_guard<std::mutex> lg(mutex);
-            _terminate = true;
-            cond.notify_one();
+            std::lock_guard<std::mutex> lg(m_mutex);
+            m_terminate = true;
+            m_cond.notify_one();
         }
 
         /// Возвращает результат проверки текущего многочлена на неприводимость и примитивность.
         [[nodiscard]]
         const std::optional<result_type> &result() const {
-            return res;
+            return m_res;
         }
     }; // class node
 
     std::shared_ptr<std::mutex> s_mutex;
     std::shared_ptr<std::condition_variable> s_cond;
 
-    std::vector<std::unique_ptr<node>> s; // slave
+    std::vector<std::unique_ptr<node>> m_nodes;
 
     /// Считает, сколько потоков заняты.
     unsigned countBusy() {
-        unsigned res = 0;
-        for (const auto &n : s) {
-            res += n->busy();
-        }
-        return res;
+        return std::count_if(m_nodes.begin(), m_nodes.end(), std::mem_fn(&node::busy));
     }
 
 public:
@@ -155,9 +147,9 @@ public:
         s_mutex = std::make_shared<std::mutex>();
         s_cond = std::make_shared<std::condition_variable>();
 
-        s.reserve(n);
+        m_nodes.reserve(n);
         for (unsigned i = 0; i < n; ++i) {
-            s.push_back(std::make_unique<node>(s_mutex, s_cond));
+            m_nodes.push_back(std::make_unique<node>(s_mutex, s_cond));
         }
     }
 
@@ -165,24 +157,24 @@ public:
     void check(uint64_t n, input_func in, check_func cf, callback_func back, const bool strict = true) {
         std::unique_lock<std::mutex> lk(*s_mutex);
         // заряжаем многочлены на проверку
-        for (const auto &sl : s) {
+        for (const auto &sl : m_nodes) {
             sl->set_check(cf);
             sl->set(in());
         }
         while (n) {
             // ждём свободный поток
-            while (countBusy() == s.size()) {
+            while (countBusy() == m_nodes.size()) {
                 s_cond->wait(lk);
             }
             // находим свободные потоки и заряжаем новыми входными данными
-            for (unsigned i = 0; i < s.size() && n; ++i) {
-                if (s[i]->busy()) {
+            for (unsigned i = 0; i < m_nodes.size() && n; ++i) {
+                if (m_nodes[i]->busy()) {
                     continue;
                 }
-                if (back(s[i]->get().value(), s[i]->result().value())) {
+                if (back(m_nodes[i]->get().value(), m_nodes[i]->result().value())) {
                     --n;
                 }
-                s[i]->set(in());
+                m_nodes[i]->set(in());
             }
         }
         // ожидаем завершения всех потоков
@@ -191,7 +183,7 @@ public:
         }
         if (!strict) {
             // обрабатываем все проверенные многочлены, даже если их больше, чем требовалось найти
-            for (const auto &sl : s) {
+            for (const auto &sl : m_nodes) {
                 back(sl->get().value(), sl->result().value());
             }
         }
@@ -199,7 +191,7 @@ public:
 
     /// Завершаем работу всех потоков.
     ~checker() {
-        for (const auto &sl : s) {
+        for (const auto &sl : m_nodes) {
             sl->terminate();
         }
     }
