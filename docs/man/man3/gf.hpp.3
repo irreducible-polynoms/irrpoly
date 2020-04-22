@@ -46,6 +46,9 @@ include/irrpoly/gf.hpp
 .ti -1c
 .RI "#define \fBNN_CHECK_THROW\fP(_e)"
 .br
+.ti -1c
+.RI "#define \fBGFN_COMPARISON_OPERATORS\fP(op)"
+.br
 .in -1c
 .SS "Определения типов"
 
@@ -97,6 +100,21 @@ Vadim Piven vadim@piven.tech @license Free use of this library is permitted unde
 
 .SH "Макросы"
 .PP 
+.SS "#define GFN_COMPARISON_OPERATORS(op)"
+\fBМакроопределение:\fP
+.PP
+.nf
+    inline bool operator op(const gfn &l, const gfn &r) { \
+        assert(l\&.field() == r\&.field()); \
+        return l\&.data() op r\&.data(); \
+    } \
+    inline bool operator op(const gfn &l, const uintmax_t r) { \
+        return l\&.data() op (r % l\&.base()); \
+    } \
+    inline bool operator op(const uintmax_t l, const gfn &r) { \
+        return (l % r\&.base()) op r\&.data(); \
+    }
+.fi
 .SS "#define NN_CHECK_THROW(_e)"
 \fBМакроопределение:\fP
 .PP

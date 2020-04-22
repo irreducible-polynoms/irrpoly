@@ -26,20 +26,20 @@ namespace dropbox::oxygen {
 
 // Marker type and value for use by nn below.
 struct i_promise_i_checked_for_null_t {};
-static constexpr i_promise_i_checked_for_null_t i_promise_i_checked_for_null {};
+static constexpr i_promise_i_checked_for_null_t i_promise_i_checked_for_null{};
 
 // Helper to get the type pointed to by a raw or smart pointer. This can be explicitly
 // specialized if need be to provide compatibility with user-defined smart pointers.
 namespace nn_detail {
-template <typename T> struct element_type { using type = typename T::element_type; };
-template <typename Pointee> struct element_type<Pointee *> { using type = Pointee; };
+template<typename T> struct element_type { using type = typename T::element_type; };
+template<typename Pointee> struct element_type<Pointee *> { using type = Pointee; };
 }
 
-template <typename PtrType> class nn;
+template<typename PtrType> class nn;
 
 // Trait to check whether a given type is a non-nullable pointer
-template <typename T> struct is_nn : public std::false_type {};
-template <typename PtrType> struct is_nn<nn<PtrType>> : public std::true_type {};
+template<typename T> struct is_nn : public std::false_type {};
+template<typename PtrType> struct is_nn<nn<PtrType>> : public std::true_type {};
 
 /* nn<PtrType>
  *
@@ -66,7 +66,7 @@ template <typename PtrType> struct is_nn<nn<PtrType>> : public std::true_type {}
  * to a non-nullable pointer. At Dropbox, these use customized error-handling infrastructure
  * and are in a separate file. We've included sample implementations here.
  */
-template <typename PtrType>
+template<typename PtrType>
 class nn {
 public:
     static_assert(!is_nn<PtrType>::value, "nn<nn<T>> is disallowed");
@@ -74,20 +74,20 @@ public:
     using element_type = typename nn_detail::element_type<PtrType>::type;
 
     // Pass through calls to operator* and operator-> transparently
-    element_type & operator*()  const { return *ptr; }
-    element_type * operator->() const { return &*ptr; }
+    element_type &operator*() const { return *ptr; }
+    element_type *operator->() const { return &*ptr; }
 
     // Expose the underlying PtrType
-    explicit operator const PtrType & () const & { return ptr; }
-    explicit operator PtrType && () && { return std::move(ptr); }
+    explicit operator const PtrType &() const & { return ptr; }
+    explicit operator PtrType &&() && { return std::move(ptr); }
 
     // Trying to use the assignment operator to assign a nn<PtrType> to a PtrType using the
     // above conversion functions hits an ambiguous resolution bug in clang:
     // http://llvm.org/bugs/show_bug.cgi?id=18359
     // While that exists, we can use these as simple ways of accessing the underlying type
     // (instead of workarounds calling the operators explicitly or adding a constructor call).
-    const PtrType & as_nullable() const & { return ptr; }
-    PtrType && as_nullable() && { return std::move(ptr); }
+    const PtrType &as_nullable() const &{ return ptr; }
+    PtrType &&as_nullable() &&{ return std::move(ptr); }
 
     // Can't convert to bool (that would be silly). The explicit delete results in
     // "value of type 'nn<...>' is not contextually convertible to 'bool'", rather than
@@ -97,43 +97,39 @@ public:
     // Explicitly deleted constructors. These help produce clearer error messages, as trying
     // to use them will result in clang printing the whole line, including the comment.
     nn(std::nullptr_t) = delete; // nullptr is not allowed here
-    nn & operator=(std::nullptr_t) = delete; // nullptr is not allowed here
+    nn &operator=(std::nullptr_t) = delete; // nullptr is not allowed here
     nn(PtrType) = delete; // must use NN_CHECK_ASSERT or NN_CHECK_THROW
-    nn & operator=(PtrType) = delete; // must use NN_CHECK_ASSERT or NN_CHECK_THROW
+    nn &operator=(PtrType) = delete; // must use NN_CHECK_ASSERT or NN_CHECK_THROW
 
     // Semi-private constructor for use by NN_CHECK_ macros.
-    explicit nn(i_promise_i_checked_for_null_t, const PtrType & arg) : ptr(arg) { assert(ptr); }
-    explicit nn(i_promise_i_checked_for_null_t, PtrType && arg) : ptr(std::move(arg)) { assert(ptr); }
+    explicit nn(i_promise_i_checked_for_null_t, const PtrType &arg) : ptr(arg) { assert(ptr); }
+    explicit nn(i_promise_i_checked_for_null_t, PtrType &&arg) : ptr(std::move(arg)) { assert(ptr); }
 
     // Type-converting move and copy constructor. We have four separate cases here, for
     // implicit and explicit move and copy.
-    template <typename OtherType,
+    template<typename OtherType,
+        typename std::enable_if<
+            std::is_constructible<PtrType, OtherType>::value
+                && !std::is_convertible<OtherType, PtrType>::value, int>::type = 0>
+    explicit nn(const nn<OtherType> &other) : ptr(other.operator const OtherType &()) {}
+
+    template<typename OtherType,
         typename std::enable_if<
             std::is_constructible<PtrType, OtherType>::value
                 && !std::is_convertible<OtherType, PtrType>::value
-            , int>::type = 0>
-    explicit nn(const nn<OtherType> & other) : ptr(other.operator const OtherType & ()) {}
+                && !std::is_pointer<OtherType>::value, int>::type = 0>
+    explicit nn(nn<OtherType> &&other) : ptr(std::move(other).operator OtherType &&()) {}
 
-    template <typename OtherType,
+    template<typename OtherType,
         typename std::enable_if<
-            std::is_constructible<PtrType, OtherType>::value
-                && !std::is_convertible<OtherType, PtrType>::value
-                && !std::is_pointer<OtherType>::value
-            , int>::type = 0>
-    explicit nn(nn<OtherType> && other) : ptr(std::move(other).operator OtherType && ()) {}
+            std::is_convertible<OtherType, PtrType>::value, int>::type = 0>
+    explicit nn(const nn<OtherType> &other) : ptr(other.operator const OtherType &()) {}
 
-    template <typename OtherType,
+    template<typename OtherType,
         typename std::enable_if<
             std::is_convertible<OtherType, PtrType>::value
-            , int >::type = 0>
-    explicit nn(const nn<OtherType> & other) : ptr(other.operator const OtherType & ()) {}
-
-    template <typename OtherType,
-        typename std::enable_if<
-            std::is_convertible<OtherType, PtrType>::value
-                && !std::is_pointer<OtherType>::value
-            , int>::type = 0>
-    explicit nn(nn<OtherType> && other) : ptr(std::move(other).operator OtherType && ()) {}
+                && !std::is_pointer<OtherType>::value, int>::type = 0>
+    explicit nn(nn<OtherType> &&other) : ptr(std::move(other).operator OtherType &&()) {}
 
     // A type-converting move and copy assignment operator aren't necessary; writing
     // "base_ptr = derived_ptr;" will run the type-converting constructor followed by the
@@ -141,34 +137,33 @@ public:
 
     // Two-argument constructor, designed for use with the shared_ptr aliasing constructor.
     // This will not be instantiated if PtrType doesn't have a suitable constructor.
-    template <typename OtherType,
+    template<typename OtherType,
         typename std::enable_if<
-            std::is_constructible<PtrType, OtherType, element_type *>::value
-            , int>::type = 0>
-    nn(const nn<OtherType> & ownership_ptr, nn<element_type *> target_ptr)
-        : ptr(ownership_ptr.operator const OtherType & (), target_ptr) {}
+            std::is_constructible<PtrType, OtherType, element_type *>::value, int>::type = 0>
+    nn(const nn<OtherType> &ownership_ptr, nn<element_type *> target_ptr)
+        : ptr(ownership_ptr.operator const OtherType &(), target_ptr) {}
 
     // Comparisons. Other comparisons are implemented in terms of these.
-    template <typename L, typename R>
+    template<typename L, typename R>
     friend bool operator==(const nn<L> &, const R &);
-    template <typename L, typename R>
+    template<typename L, typename R>
     friend bool operator==(const L &, const nn<R> &);
-    template <typename L, typename R>
+    template<typename L, typename R>
     friend bool operator==(const nn<L> &, const nn<R> &);
 
-    template <typename L, typename R>
+    template<typename L, typename R>
     friend bool operator<(const nn<L> &, const R &);
-    template <typename L, typename R>
+    template<typename L, typename R>
     friend bool operator<(const L &, const nn<R> &);
-    template <typename L, typename R>
+    template<typename L, typename R>
     friend bool operator<(const nn<L> &, const nn<R> &);
 
     // ostream operator
-    template <typename T>
-    friend std::ostream & operator<<(std::ostream &, const nn<T> &);
+    template<typename T>
+    friend std::ostream &operator<<(std::ostream &, const nn<T> &);
 
-    template <typename T = PtrType>
-    element_type * get() const { return ptr.get(); }
+    template<typename T = PtrType>
+    element_type *get() const { return ptr.get(); }
 
 private:
     // Backing pointer
@@ -176,20 +171,20 @@ private:
 };
 
 // Base comparisons - these are friends of nn<PtrType>, so they can access .ptr directly.
-template <typename L, typename R>
-bool operator==(const nn<L> & l, const R & r) { return l.ptr == r; }
-template <typename L, typename R>
-bool operator==(const L & l, const nn<R> & r) { return l == r.ptr; }
-template <typename L, typename R>
-bool operator==(const nn<L> & l, const nn<R> & r) { return l.ptr == r.ptr; }
-template <typename L, typename R>
-bool operator<(const nn<L> & l, const R & r) { return l.ptr < r; }
-template <typename L, typename R>
-bool operator<(const L & l, const nn<R> & r) { return l < r.ptr; }
-template <typename L, typename R>
-bool operator<(const nn<L> & l, const nn<R> & r) { return l.ptr < r.ptr; }
-template <typename T>
-std::ostream & operator<<(std::ostream & os, const nn<T> & p) { return os << p.ptr; }
+template<typename L, typename R>
+bool operator==(const nn<L> &l, const R &r) { return l.ptr == r; }
+template<typename L, typename R>
+bool operator==(const L &l, const nn<R> &r) { return l == r.ptr; }
+template<typename L, typename R>
+bool operator==(const nn<L> &l, const nn<R> &r) { return l.ptr == r.ptr; }
+template<typename L, typename R>
+bool operator<(const nn<L> &l, const R &r) { return l.ptr < r; }
+template<typename L, typename R>
+bool operator<(const L &l, const nn<R> &r) { return l < r.ptr; }
+template<typename L, typename R>
+bool operator<(const nn<L> &l, const nn<R> &r) { return l.ptr < r.ptr; }
+template<typename T>
+std::ostream &operator<<(std::ostream &os, const nn<T> &p) { return os << p.ptr; }
 
 #define NN_DERIVED_OPERATORS(op, base) \
     template <typename L, typename R> \
@@ -207,22 +202,22 @@ NN_DERIVED_OPERATORS(!=, !(l == r))
 #undef NN_DERIVED_OPERATORS
 
 // Convenience typedefs
-template <typename T> using nn_unique_ptr = nn<std::unique_ptr<T>>;
-template <typename T> using nn_shared_ptr = nn<std::shared_ptr<T>>;
+template<typename T> using nn_unique_ptr = nn<std::unique_ptr<T>>;
+template<typename T> using nn_shared_ptr = nn<std::shared_ptr<T>>;
 
-template <typename T, typename... Args>
+template<typename T, typename... Args>
 nn_unique_ptr<T> nn_make_unique(Args &&... args) {
     return nn_unique_ptr<T>(i_promise_i_checked_for_null,
                             std::unique_ptr<T>(new T(std::forward<Args>(args)...)));
 }
 
-template <typename T, typename... Args>
+template<typename T, typename... Args>
 nn_shared_ptr<T> nn_make_shared(Args &&... args) {
     return nn_shared_ptr<T>(i_promise_i_checked_for_null,
                             std::make_shared<T>(std::forward<Args>(args)...));
 }
 
-template <typename T>
+template<typename T>
 class nn_enable_shared_from_this : public std::enable_shared_from_this<T> {
 public:
     using std::enable_shared_from_this<T>::enable_shared_from_this;
@@ -234,28 +229,28 @@ public:
     }
 };
 
-template <typename T>
-nn<T*> nn_addr(T & object) {
-    return nn<T*>(i_promise_i_checked_for_null, &object);
+template<typename T>
+nn<T *> nn_addr(T &object) {
+    return nn<T *>(i_promise_i_checked_for_null, &object);
 }
 
-template <typename T>
-nn<const T*> nn_addr(const T & object) {
-    return nn<const T*>(i_promise_i_checked_for_null, &object);
+template<typename T>
+nn<const T *> nn_addr(const T &object) {
+    return nn<const T *>(i_promise_i_checked_for_null, &object);
 }
 
 /* Non-nullable equivalents of shared_ptr's specialized casting functions.
  * These convert through a shared_ptr since nn<shared_ptr<T>> lacks the ref-count-sharing cast
  * constructor, but thanks to moves there shouldn't be any significant extra cost. */
-template <typename T, typename U>
-nn_shared_ptr<T> nn_static_pointer_cast(const nn_shared_ptr<U> & org_ptr) {
+template<typename T, typename U>
+nn_shared_ptr<T> nn_static_pointer_cast(const nn_shared_ptr<U> &org_ptr) {
     auto raw_ptr = static_cast<typename nn_shared_ptr<T>::element_type *>(org_ptr.get());
     std::shared_ptr<T> nullable_ptr(org_ptr.as_nullable(), raw_ptr);
     return nn_shared_ptr<T>(i_promise_i_checked_for_null, std::move(nullable_ptr));
 }
 
-template <typename T, typename U>
-std::shared_ptr<T> nn_dynamic_pointer_cast(const nn_shared_ptr<U> & org_ptr) {
+template<typename T, typename U>
+std::shared_ptr<T> nn_dynamic_pointer_cast(const nn_shared_ptr<U> &org_ptr) {
     auto raw_ptr = dynamic_cast<typename std::shared_ptr<T>::element_type *>(org_ptr.get());
     if (!raw_ptr) {
         return nullptr;
@@ -264,8 +259,8 @@ std::shared_ptr<T> nn_dynamic_pointer_cast(const nn_shared_ptr<U> & org_ptr) {
     }
 }
 
-template <typename T, typename U>
-nn_shared_ptr<T> nn_const_pointer_cast(const nn_shared_ptr<U> & org_ptr) {
+template<typename T, typename U>
+nn_shared_ptr<T> nn_const_pointer_cast(const nn_shared_ptr<U> &org_ptr) {
     auto raw_ptr = const_cast<typename nn_shared_ptr<T>::element_type *>(org_ptr.get());
     std::shared_ptr<T> nullable_ptr(org_ptr.as_nullable(), raw_ptr);
     return nn_shared_ptr<T>(i_promise_i_checked_for_null, std::move(nullable_ptr));
@@ -274,11 +269,11 @@ nn_shared_ptr<T> nn_const_pointer_cast(const nn_shared_ptr<U> & org_ptr) {
 } /* end namespace dropbox::oxygen */
 
 namespace std {
-template <typename T>
+template<typename T>
 struct hash<::dropbox::oxygen::nn<T>> {
     using argument_type = ::dropbox::oxygen::nn<T>;
     using result_type = size_t;
-    result_type operator()(const argument_type & obj) const {
+    result_type operator()(const argument_type &obj) const {
         return std::hash<T>{}(obj.as_nullable());
     }
 };

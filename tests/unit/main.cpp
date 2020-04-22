@@ -80,3 +80,7 @@ TEST_CASE("gfn could be created correctly", "[gfn]") {
         }
     }
 }
+
+TEST_CASE("gfn comparison works", "[gfn]") {
+
+}

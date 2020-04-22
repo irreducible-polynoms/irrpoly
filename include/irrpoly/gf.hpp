@@ -293,66 +293,33 @@ public:
         return *this;
     }
 
-    bool operator==(const gfn &other) const {
-        assert(m_field == other.field());
-        return m_val == other.m_val;
-    }
-
-    bool operator==(const uintmax_t other) const {
-        return m_val == (other % base());
-    }
-
-    bool operator!=(const gfn &other) const {
-        assert(m_field == other.field());
-        return m_val != other.m_val;
-    }
-
-    bool operator!=(const uintmax_t other) const {
-        return m_val != (other % base());
-    }
-
-    bool operator>(const gfn &other) const {
-        assert(m_field == other.field());
-        return m_val > other.m_val;
-    }
-
-    bool operator>(const uintmax_t other) const {
-        return m_val > (other % base());
-    }
-
-    bool operator>=(const gfn &other) const {
-        assert(m_field == other.field());
-        return m_val >= other.m_val;
-    }
-
-    bool operator>=(const uintmax_t other) const {
-        return m_val >= (other % base());
-    }
-
-    bool operator<(const gfn &other) const {
-        assert(m_field == other.field());
-        return m_val < other.m_val;
-    }
-
-    bool operator<(const uintmax_t other) const {
-        return m_val < (other % base());
-    }
-
-    bool operator<=(const gfn &other) const {
-        assert(m_field == other.field());
-        return m_val <= other.m_val;
-    }
-
-    bool operator<=(const uintmax_t other) const {
-        return m_val <= (other % base());
-    }
-
     friend
     std::ostream &operator<<(std::ostream &, const gfn &);
 
     friend
     std::istream &operator>>(std::istream &, gfn &);
 };
+
+#define GFN_COMPARISON_OPERATORS(op) \
+    inline bool operator op(const gfn &l, const gfn &r) { \
+        assert(l.field() == r.field()); \
+        return l.data() op r.data(); \
+    } \
+    inline bool operator op(const gfn &l, const uintmax_t r) { \
+        return l.data() op (r % l.base()); \
+    } \
+    inline bool operator op(const uintmax_t l, const gfn &r) { \
+        return (l % r.base()) op r.data(); \
+    }
+
+GFN_COMPARISON_OPERATORS(==)
+GFN_COMPARISON_OPERATORS(!=)
+GFN_COMPARISON_OPERATORS(<)
+GFN_COMPARISON_OPERATORS(<=)
+GFN_COMPARISON_OPERATORS(>)
+GFN_COMPARISON_OPERATORS(>=)
+
+#undef GFN_COMPARISON_OPERATORS
 
 [[nodiscard]]
 gfn operator+(const uintmax_t other, const gfn &curr) {
@@ -439,7 +406,7 @@ uintmax_t gfbase::mul_inv(const uintmax_t val) const {
 [[nodiscard]]
 inline
 gf make_gf(const uintmax_t base) {
-    return dropbox::oxygen::nn_shared_ptr<gfbase>(dropbox::oxygen::nn(
+    return dropbox::oxygen::nn<std::shared_ptr<gfbase>>(dropbox::oxygen::nn(
         dropbox::oxygen::i_promise_i_checked_for_null_t{}, new gfbase(base)));
 }
 

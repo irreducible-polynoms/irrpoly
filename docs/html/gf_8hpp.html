@@ -109,6 +109,8 @@ $(function() {
 Макросы</h2></td></tr>
 <tr class="memitem:a35fc05e35139b6c5d46933a6a8c18c5e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>NN_CHECK_THROW</b>(_e)</td></tr>
 <tr class="separator:a35fc05e35139b6c5d46933a6a8c18c5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c66e295c7b741a4a5902198d8d1952b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>GFN_COMPARISON_OPERATORS</b>(op)</td></tr>
+<tr class="separator:a0c66e295c7b741a4a5902198d8d1952b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Определения типов</h2></td></tr>
@@ -149,6 +151,34 @@ gf&#160;</td><td class="memItemRight" valign="bottom"><b>irrpoly::make_gf</b> (c
 <a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
 <div class="textblock"><dl class="section author"><dt>Автор</dt><dd>Vadim Piven <a href="#" onclick="location.href='mai'+'lto:'+'vad'+'im'+'@pi'+'ve'+'n.t'+'ec'+'h'; return false;">vadim<span style="display: none;">.nosp@m.</span>@piv<span style="display: none;">.nosp@m.</span>en.te<span style="display: none;">.nosp@m.</span>ch</a> @license Free use of this library is permitted under the guidelines and in accordance with the MIT License (MIT). @url <a href="https://github.com/irreducible-polynoms/irrpoly">https://github.com/irreducible-polynoms/irrpoly</a> </dd></dl>
 </div><h2 class="groupheader">Макросы</h2>
+<a id="a0c66e295c7b741a4a5902198d8d1952b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c66e295c7b741a4a5902198d8d1952b">&#9670;&nbsp;</a></span>GFN_COMPARISON_OPERATORS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define GFN_COMPARISON_OPERATORS</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">op</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Макроопределение:</b><div class="fragment"><div class="line">    <span class="keyword">inline</span> <span class="keywordtype">bool</span> <span class="keyword">operator</span> op(<span class="keyword">const</span> gfn &amp;l, <span class="keyword">const</span> gfn &amp;r) { \</div>
+<div class="line">        assert(l.field() == r.field()); \</div>
+<div class="line">        return l.data() op r.data(); \</div>
+<div class="line">    } \</div>
+<div class="line">    inline <span class="keywordtype">bool</span> <span class="keyword">operator</span> op(<span class="keyword">const</span> gfn &amp;l, <span class="keyword">const</span> uintmax_t r) { \</div>
+<div class="line">        return l.data() op (r % l.base()); \</div>
+<div class="line">    } \</div>
+<div class="line">    inline <span class="keywordtype">bool</span> <span class="keyword">operator</span> op(<span class="keyword">const</span> uintmax_t l, <span class="keyword">const</span> gfn &amp;r) { \</div>
+<div class="line">        return (l % r.base()) op r.data(); \</div>
+<div class="line">    }</div>
+</div><!-- fragment -->
+</div>
+</div>
 <a id="a35fc05e35139b6c5d46933a6a8c18c5e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a35fc05e35139b6c5d46933a6a8c18c5e">&#9670;&nbsp;</a></span>NN_CHECK_THROW</h2>
 
@@ -176,7 +206,7 @@ gf&#160;</td><td class="memItemRight" valign="bottom"><b>irrpoly::make_gf</b> (c
 <div class="ttc" id="aclassdropbox_1_1oxygen_1_1nn_html"><div class="ttname"><a href="classdropbox_1_1oxygen_1_1nn.html">dropbox::oxygen::nn</a></div><div class="ttdef"><b>Definition:</b> nn.hpp:38</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Ср 22 Апр 2020 16:49:51. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Ср 22 Апр 2020 22:11:31. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.18
 </small></address>
