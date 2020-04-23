@@ -71,7 +71,7 @@ int main() {
     const typename multithread::primitive_method prim_meth = multithread::primitive_method::nil;
     // число потоков, выполняюих проверку многочленов на соответствие заданной характеристике
     // должно быть равно числу физических ядер минус один
-    const unsigned threads_num = std::thread::hardware_concurrency() - 1;
+    const unsigned threads_num = std::thread::hardware_concurrency();
 
     // генерируем многочлены и выводим результат
     auto poly = generate_irreducible(base, num, degree, irr_meth, prim_meth, threads_num);

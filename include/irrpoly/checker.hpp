@@ -43,7 +43,7 @@ private:
 
         check_func m_cf; ///< Основная функция проверки
 
-        bool m_terminate; ///< Поток должен быть завершён
+        volatile bool m_terminate; ///< Поток должен быть завершён
         std::optional<value_type> m_val; ///< Входные данные
 
         bool m_busy; ///< Поток занят полезной работой
@@ -64,12 +64,10 @@ private:
         void check() {
             std::unique_lock<std::mutex> lk(m_mutex);
 
-            while (true) {
-                while (!(m_busy || m_terminate)) {
+            while (!m_terminate) {
+                if (!(m_busy || m_terminate)) {
                     m_cond.wait(lk);
-                }
-                if (m_terminate) {
-                    break;
+                    continue;
                 }
 
                 m_cf(m_val.value(), m_res);
@@ -85,7 +83,10 @@ private:
             s_mutex(std::move(s_mutex)), s_cond(std::move(s_cond)), m_busy(false), m_terminate(false),
             m_val(), m_res() {
             m_thread = std::thread(&node::check, std::ref(*this));
-            m_thread.detach();
+        }
+
+        ~node() {
+            m_thread.join();
         }
 
         /// Устанавливает функцию, которая будет вызываться в процессе проверки
@@ -143,19 +144,34 @@ private:
 
 public:
     explicit
-    checker(const unsigned n = std::thread::hardware_concurrency() - 1) {
+    checker(unsigned n = std::thread::hardware_concurrency()) {
         s_mutex = std::make_shared<std::mutex>();
         s_cond = std::make_shared<std::condition_variable>();
 
-        m_nodes.reserve(n);
-        for (unsigned i = 0; i < n; ++i) {
-            m_nodes.push_back(std::make_unique<node>(s_mutex, s_cond));
+        if (n > 1) {
+            m_nodes.reserve(--n);
+            for (unsigned i = 0; i < n; ++i) {
+                m_nodes.push_back(std::make_unique<node>(s_mutex, s_cond));
+            }
         }
     }
 
     /// Основной цикл разделения работы на потоки.
     void check(uint64_t n, input_func in, check_func cf, callback_func back, const bool strict = true) {
+        if (m_nodes.empty()) {
+            while (n > 0) {
+                auto input = in();
+                std::optional<result_type> result;
+                cf(input, result);
+                if (back(input, result.value())) {
+                    --n;
+                }
+            }
+            return;
+        }
+
         std::unique_lock<std::mutex> lk(*s_mutex);
+
         // заряжаем многочлены на проверку
         for (const auto &sl : m_nodes) {
             sl->set_check(cf);
