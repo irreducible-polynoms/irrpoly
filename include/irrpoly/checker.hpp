@@ -84,7 +84,7 @@ private:
         node(std::shared_ptr<std::mutex> s_mutex, std::shared_ptr<std::condition_variable> s_cond) :
             s_mutex(std::move(s_mutex)), s_cond(std::move(s_cond)), m_busy(false), m_terminate(false),
             m_val(), m_res() {
-            m_thread = std::thread(&node::check, this);
+            m_thread = std::thread(&node::check, std::ref(*this));
             m_thread.detach();
         }
 
