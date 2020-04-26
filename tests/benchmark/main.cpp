@@ -22,7 +22,7 @@ std::vector<gfpoly> generate_irreducible(uint64_t num) {
         return res;
     }
 
-    multithread::polychecker ch;
+    static multithread::polychecker ch;
 
     auto input = [&]() -> gfpoly {
         static uint64_t index = 1;

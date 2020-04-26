@@ -1,4 +1,4 @@
-.TH "include/irrpoly/gfpoly.hpp" 3 "Чт 23 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
+.TH "include/irrpoly/gfpoly.hpp" 3 "Вс 26 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -19,6 +19,12 @@ include/irrpoly/gfpoly.hpp
 \fC#include <functional>\fP
 .br
 \fC#include <initializer_list>\fP
+.br
+\fC#include <string>\fP
+.br
+\fC#include <sstream>\fP
+.br
+\fC#include <cctype>\fP
 .br
 
 .SS "Классы"
@@ -105,6 +111,9 @@ include/irrpoly/gfpoly.hpp
 .br
 .ti -1c
 .RI "template<class charT , class traits > std::basic_ostream< charT, traits > & \fBirrpoly::operator<<\fP (std::basic_ostream< charT, traits > &os, const gfpoly &poly)"
+.br
+.ti -1c
+.RI "template<class charT , class traits > std::basic_istream< charT, traits > & \fBirrpoly::operator>>\fP (std::basic_istream< charT, traits > &is, gfpoly &poly)"
 .br
 .in -1c
 .SH "Подробное описание"

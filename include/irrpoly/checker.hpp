@@ -171,6 +171,7 @@ public:
         }
 
         std::unique_lock<std::mutex> lk(*s_mutex);
+        std::this_thread::yield();
 
         // заряжаем многочлены на проверку
         for (const auto &sl : m_nodes) {

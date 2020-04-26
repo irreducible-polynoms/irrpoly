@@ -1,4 +1,4 @@
-.TH "irrpoly::gfpoly" 3 "Чт 23 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
+.TH "irrpoly::gfpoly" 3 "Вс 26 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -19,6 +19,9 @@ irrpoly::gfpoly
 .br
 .ti -1c
 .RI "\fBgfpoly\fP (const \fBgf\fP &field, const std::vector< uintmax_t > &l)"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP (const \fBgf\fP &field, std::vector< uintmax_t > &&l)"
 .br
 .ti -1c
 .RI "\fBgfpoly\fP (const \fBgf\fP &field, std::initializer_list< uintmax_t > l)"
@@ -60,6 +63,15 @@ irrpoly::gfpoly
 .RI "\fBgfpoly\fP & \fBoperator=\fP (const \fBgfpoly\fP &p)"
 .br
 .ti -1c
+.RI "bool \fBis_zero\fP () const"
+.br
+.ti -1c
+.RI "\fBoperator bool\fP () const"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP & \fBset_zero\fP ()"
+.br
+.ti -1c
 .RI "template<class U > \fBgfpoly\fP & \fBoperator+=\fP (const U &value)"
 .br
 .ti -1c
@@ -94,15 +106,6 @@ irrpoly::gfpoly
 .br
 .ti -1c
 .RI "template<typename U > \fBgfpoly\fP & \fBoperator<<=\fP (U const &n)"
-.br
-.ti -1c
-.RI "bool \fBis_zero\fP () const"
-.br
-.ti -1c
-.RI "\fBoperator bool\fP () const"
-.br
-.ti -1c
-.RI "\fBgfpoly\fP & \fBset_zero\fP ()"
 .br
 .in -1c
 .SS "Открытые статические члены"

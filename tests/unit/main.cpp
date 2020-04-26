@@ -64,7 +64,7 @@ TEST_CASE("gfn could be created correctly", "[gfn]") {
         SECTION("field remains the same") {
             REQUIRE(gfn::random(gf5).field() == gf5);
         }SECTION("value is normalized") {
-            for (auto i : {0, 1, 2, 3, 4}) {
+            for (auto _ : {0, 1, 2, 3, 4}) {
                 REQUIRE(gfn::random(gf5).data() < 5);
             }
         }
@@ -82,5 +82,72 @@ TEST_CASE("gfn could be created correctly", "[gfn]") {
 }
 
 TEST_CASE("gfn comparison works", "[gfn]") {
+    auto gf5 = make_gf(5);
+    auto num = gfn(gf5, 2);
+    SECTION("comparison with numbers") {
+        REQUIRE(num < gfn(gf5, 8));
+        REQUIRE(num < 8);
+        REQUIRE(6 < num);
+    }SECTION("comparison with zero") {
+        REQUIRE(!num.is_zero());
+        REQUIRE(num.set_zero().is_zero());
+    }SECTION("bool coerce") {
+        REQUIRE(num);
+        REQUIRE(!num.set_zero());
+    }
+}
+
+TEST_CASE("gfn operations work", "[gfn]") {
+    auto gf5 = make_gf(5);
+    SECTION("sum works") {
+        REQUIRE(gfn(gf5, 2) + gfn(gf5, 3) == 0);
+        REQUIRE(2 + gfn(gf5, 3) == 0);
+        REQUIRE(gfn(gf5, 2) + 3 == 0);
+        REQUIRE(++gfn(gf5, 2) == 3);
+        auto num = gfn(gf5, 2);
+        REQUIRE(num++ == 2);
+        REQUIRE(num == 3);
+        num += 4;
+        REQUIRE(num == 2);
+        num += gfn(gf5, 2);
+        REQUIRE(num == 4);
+        REQUIRE(+num == 4);
+    }SECTION("sub works") {
+        REQUIRE(gfn(gf5, 2) - gfn(gf5, 3) == 4);
+        REQUIRE(2 - gfn(gf5, 3) == 4);
+        REQUIRE(gfn(gf5, 2) - 3 == 4);
+        REQUIRE(--gfn(gf5, 2) == 1);
+        auto num = gfn(gf5, 2);
+        REQUIRE(num-- == 2);
+        REQUIRE(num == 1);
+        num -= 4;
+        REQUIRE(num == 2);
+        num -= gfn(gf5, 3);
+        REQUIRE(num == 4);
+        REQUIRE(-num == 1);
+    }SECTION("mul works") {
+        REQUIRE(gfn(gf5, 2) * gfn(gf5, 3) == 1);
+        REQUIRE(2 * gfn(gf5, 3) == 1);
+        REQUIRE(gfn(gf5, 2) * 3 == 1);
+        auto num = gfn(gf5, 2);
+        num *= 4;
+        REQUIRE(num == 3);
+        num *= gfn(gf5, 2);
+        REQUIRE(num == 1);
+    }SECTION("div works") {
+        REQUIRE(gfn(gf5, 2) / gfn(gf5, 3) == 4);
+        REQUIRE(2 / gfn(gf5, 3) == 4);
+        REQUIRE(gfn(gf5, 2) / 3 == 4);
+        auto num = gfn(gf5, 2);
+        num /= 4;
+        REQUIRE(num == 3);
+        num /= gfn(gf5, 2);
+        REQUIRE(num == 4);
+        REQUIRE_THROWS(num / 0);
+    }
+}
+
+TEST_CASE("gfpoly could be constructed correctly") {
+    auto gf5 = make_gf(5);
 
 }

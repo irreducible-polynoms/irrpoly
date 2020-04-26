@@ -97,6 +97,9 @@ $(function() {
 <tr class="memitem:a9146258391ceeb04bcf112b0d895ede1"><td class="memItemLeft" align="right" valign="top"><a id="a9146258391ceeb04bcf112b0d895ede1"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>gfpoly</b> (const <a class="el" href="classdropbox_1_1oxygen_1_1nn.html">gf</a> &amp;field, const std::vector&lt; uintmax_t &gt; &amp;l)</td></tr>
 <tr class="separator:a9146258391ceeb04bcf112b0d895ede1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0982214b12c50bbd8022d4750b3d920b"><td class="memItemLeft" align="right" valign="top"><a id="a0982214b12c50bbd8022d4750b3d920b"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>gfpoly</b> (const <a class="el" href="classdropbox_1_1oxygen_1_1nn.html">gf</a> &amp;field, std::vector&lt; uintmax_t &gt; &amp;&amp;l)</td></tr>
+<tr class="separator:a0982214b12c50bbd8022d4750b3d920b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a207a8b54e87286f8e22656b63e272e2d"><td class="memItemLeft" align="right" valign="top"><a id="a207a8b54e87286f8e22656b63e272e2d"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>gfpoly</b> (const <a class="el" href="classdropbox_1_1oxygen_1_1nn.html">gf</a> &amp;field, std::initializer_list&lt; uintmax_t &gt; l)</td></tr>
 <tr class="separator:a207a8b54e87286f8e22656b63e272e2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -136,6 +139,15 @@ const std::vector&lt; <a class="el" href="classirrpoly_1_1gfn.html">gfn</a> &gt;
 <tr class="memitem:a117bd42f7270f1d6022acd39a4a6825c"><td class="memItemLeft" align="right" valign="top"><a id="a117bd42f7270f1d6022acd39a4a6825c"></a>
 <a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;p)</td></tr>
 <tr class="separator:a117bd42f7270f1d6022acd39a4a6825c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69a94b6bdca1cd59fe10a1758134e990"><td class="memItemLeft" align="right" valign="top"><a id="a69a94b6bdca1cd59fe10a1758134e990"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_zero</b> () const</td></tr>
+<tr class="separator:a69a94b6bdca1cd59fe10a1758134e990"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af83933371822ec730abf9c69ee22fa85"><td class="memItemLeft" align="right" valign="top"><a id="af83933371822ec730abf9c69ee22fa85"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>operator bool</b> () const</td></tr>
+<tr class="separator:af83933371822ec730abf9c69ee22fa85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a269c8d63781a80108479904c801f5471"><td class="memItemLeft" align="right" valign="top"><a id="a269c8d63781a80108479904c801f5471"></a>
+<a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>set_zero</b> ()</td></tr>
+<tr class="separator:a269c8d63781a80108479904c801f5471"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4558ac0d2951038daa787f2d78f8ef8"><td class="memTemplParams" colspan="2"><a id="ab4558ac0d2951038daa787f2d78f8ef8"></a>
 template&lt;class U &gt; </td></tr>
 <tr class="memitem:ab4558ac0d2951038daa787f2d78f8ef8"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator+=</b> (const U &amp;value)</td></tr>
@@ -179,15 +191,6 @@ template&lt;typename U &gt; </td></tr>
 template&lt;typename U &gt; </td></tr>
 <tr class="memitem:a57d1fc49cac11efd61e851215e738422"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator&lt;&lt;=</b> (U const &amp;n)</td></tr>
 <tr class="separator:a57d1fc49cac11efd61e851215e738422"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a69a94b6bdca1cd59fe10a1758134e990"><td class="memItemLeft" align="right" valign="top"><a id="a69a94b6bdca1cd59fe10a1758134e990"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_zero</b> () const</td></tr>
-<tr class="separator:a69a94b6bdca1cd59fe10a1758134e990"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af83933371822ec730abf9c69ee22fa85"><td class="memItemLeft" align="right" valign="top"><a id="af83933371822ec730abf9c69ee22fa85"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>operator bool</b> () const</td></tr>
-<tr class="separator:af83933371822ec730abf9c69ee22fa85"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a269c8d63781a80108479904c801f5471"><td class="memItemLeft" align="right" valign="top"><a id="a269c8d63781a80108479904c801f5471"></a>
-<a class="el" href="classirrpoly_1_1gfpoly.html">gfpoly</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>set_zero</b> ()</td></tr>
-<tr class="separator:a269c8d63781a80108479904c801f5471"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Открытые статические члены</h2></td></tr>
@@ -222,7 +225,7 @@ static std::vector&lt; uintmax_t &gt;&#160;</td><td class="memItemRight" valign=
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Чт 23 Апр 2020 22:29:19. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Вс 26 Апр 2020 19:28:16. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.18
 </small></address>

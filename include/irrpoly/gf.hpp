@@ -285,7 +285,7 @@ public:
     }
 
     explicit operator bool() const {
-        return !m_val;
+        return 0 != m_val;
     }
 
     gfn &set_zero() {
@@ -293,11 +293,15 @@ public:
         return *this;
     }
 
+    template<class charT, class traits>
     friend
-    std::ostream &operator<<(std::ostream &, const gfn &);
+    std::basic_ostream<charT, traits> &
+    operator<<(std::basic_ostream<charT, traits> &, const gfn &);
 
+    template<class charT, class traits>
     friend
-    std::istream &operator>>(std::istream &, gfn &);
+    std::basic_istream<charT, traits> &
+    operator>>(std::basic_istream<charT, traits> &, gfn &);
 };
 
 #define GFN_COMPARISON_OPERATORS(op) \
@@ -346,11 +350,15 @@ gfn operator/(const uintmax_t other, const gfn &curr) {
     }
 }
 
-std::ostream &operator<<(std::ostream &os, const gfn &val) {
+template<class charT, class traits>
+std::basic_ostream<charT, traits> &
+operator<<(std::basic_ostream<charT, traits> &os, const gfn &val) {
     return os << val.m_val;
 }
 
-std::istream &operator>>(std::istream &is, gfn &val) {
+template<class charT, class traits>
+std::basic_istream<charT, traits> &
+operator>>(std::basic_istream<charT, traits> &is, gfn &val) {
     is >> val.m_val;
     val.m_val %= val.base();
     return is;
@@ -365,7 +373,7 @@ gfbase::gfbase(const uintmax_t base) : m_base(base), m_inv(base, 0) {
     if (UINTMAX_MAX / (base - 1) < (base - 1))
         throw std::logic_error("too large field");
 
-    auto i_base = (intmax_t) base;
+    auto i_base = static_cast<intmax_t>(base);
     auto inv_calc = [](const intmax_t base, const intmax_t val) -> uintmax_t {
         intmax_t u0 = base, u1 = 1, u2 = 0,
             v0 = val, v1 = 0, v2 = 1, w0, w1, w2, q;
@@ -376,7 +384,7 @@ gfbase::gfbase(const uintmax_t base) : m_base(base), m_inv(base, 0) {
         }
         if (u0 > 1)
             throw std::logic_error("multiplicative inverse don't exist");
-        return (uintmax_t) (u2 < 0 ? (base + u2) : (u2));
+        return static_cast<uintmax_t>(u2 < 0 ? (base + u2) : (u2));
     };
 
     m_inv[1] = 1;

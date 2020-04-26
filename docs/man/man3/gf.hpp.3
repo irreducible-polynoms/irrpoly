@@ -1,4 +1,4 @@
-.TH "include/irrpoly/gf.hpp" 3 "Чт 23 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
+.TH "include/irrpoly/gf.hpp" 3 "Вс 26 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -79,10 +79,10 @@ include/irrpoly/gf.hpp
 .RI "gfn \fBirrpoly::operator/\fP (const uintmax_t other, const gfn &curr)"
 .br
 .ti -1c
-.RI "std::ostream & \fBirrpoly::operator<<\fP (std::ostream &os, const gfn &val)"
+.RI "template<class charT , class traits > std::basic_ostream< charT, traits > & \fBirrpoly::operator<<\fP (std::basic_ostream< charT, traits > &os, const gfn &val)"
 .br
 .ti -1c
-.RI "std::istream & \fBirrpoly::operator>>\fP (std::istream &is, gfn &val)"
+.RI "template<class charT , class traits > std::basic_istream< charT, traits > & \fBirrpoly::operator>>\fP (std::basic_istream< charT, traits > &is, gfn &val)"
 .br
 .ti -1c
 .RI "gf \fBirrpoly::make_gf\fP (const uintmax_t base)"
