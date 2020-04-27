@@ -1,4 +1,4 @@
-#include <irrpoly.hpp>
+#include <irrpoly.h>
 
 #include <iostream>
 

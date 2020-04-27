@@ -62,11 +62,11 @@ T integer_power(T t, N n) {
 /// Вычисляет производную данного многочлена.
 gfpoly derivative(const gfpoly &val) {
     assert(val && val.degree());
-    gfpoly res(val.field(), std::vector<uintmax_t>(val.size() - 1, 0));
+    std::vector<uintmax_t> res(val.size() - 1, 0);
     for (uintmax_t i = 1; i < val.size(); ++i) {
-        res[i - 1] = i * val[i];
+        res[i - 1] = (i * val[i]).value();
     }
-    return res.normalize();
+    return gfpoly(val.field(), res);
 }
 
 /**

@@ -144,9 +144,9 @@ $(function() {
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a>(field, dis(gen));</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    }</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keyword">static</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    uintmax_t into_num(<a class="code" href="classirrpoly_1_1gfn.html">gfn</a> &amp;&amp;val) {</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keywordflow">return</span> val.m_val;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    [[nodiscard]]</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    uintmax_t value()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keywordflow">return</span> m_val;</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    }</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keyword">explicit</span></div>
@@ -233,7 +233,7 @@ $(function() {
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    [[nodiscard]]</div>
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> operator-()<span class="keyword"> const </span>{</div>
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> tmp{*<span class="keyword">this</span>};</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        tmp.m_val = base() - m_val;</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        tmp.m_val = (base() - m_val) % base();</div>
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        <span class="keywordflow">return</span> tmp;</div>
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    }</div>
 <div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160; </div>
@@ -494,7 +494,7 @@ $(function() {
 <div class="ttc" id="aclassirrpoly_1_1gfn_html_a6f95003ff4bb44b972bb8b300623a84b"><div class="ttname"><a href="classirrpoly_1_1gfn.html#a6f95003ff4bb44b972bb8b300623a84b">irrpoly::gfn::random</a></div><div class="ttdeci">static gfn random(const gf &amp;field)</div><div class="ttdoc">Генерирует случайное число в пределах [0, P-1].</div><div class="ttdef"><b>Definition:</b> gf.hpp:69</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Вс 26 Апр 2020 19:28:16. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Пн 27 Апр 2020 12:53:52. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.18
 </small></address>

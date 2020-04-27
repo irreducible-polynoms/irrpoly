@@ -77,9 +77,9 @@ public:
         return gfn(field, dis(gen));
     }
 
-    static
-    uintmax_t into_num(gfn &&val) {
-        return val.m_val;
+    [[nodiscard]]
+    uintmax_t value() const {
+        return m_val;
     }
 
     /// Конструктор по умолчанию, обнуляет переменную.
@@ -168,7 +168,7 @@ public:
     [[nodiscard]]
     gfn operator-() const {
         gfn tmp{*this};
-        tmp.m_val = base() - m_val;
+        tmp.m_val = (base() - m_val) % base();
         return tmp;
     }
 

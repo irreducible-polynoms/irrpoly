@@ -48,17 +48,17 @@ public:
         return gfpoly(field, std::move(data));
     }
 
-    static
-    std::vector<uintmax_t> into_vec(gfpoly &&poly) {
+    std::vector<uintmax_t> value() const {
+        normalize();
         std::vector<uintmax_t> res;
-        res.reserve(poly.size());
-        for (gfn &val : poly.m_data) {
-            res.emplace_back(gfn::into_num(std::move(val)));
+        res.reserve(size());
+        for (const gfn &val : m_data) {
+            res.emplace_back(val.value());
         }
         return res;
     }
 
-    gfpoly & normalize() {
+    gfpoly &normalize() {
         if (!m_normalized) {
             m_data.erase(std::find_if(
                 m_data.rbegin(), m_data.rend(),
@@ -70,7 +70,7 @@ public:
     }
 
 private:
-    const gfpoly & normalize() const {
+    const gfpoly &normalize() const {
         if (!m_normalized) {
             m_data.erase(std::find_if(
                 m_data.rbegin(), m_data.rend(),
@@ -99,15 +99,42 @@ public:
         normalize();
     }
 
-    gfpoly(const gf &field, std::vector<uintmax_t> &&l) :
-        gfpoly(field, l) {}
+    gfpoly &operator=(const std::vector<uintmax_t> &l) {
+        gfpoly copy(m_field, l);
+        std::swap(*this, copy);
+        return *this;
+    }
 
     gfpoly(const gf &field, std::initializer_list<uintmax_t> l) :
         gfpoly(field, std::vector<uintmax_t>{l}) {}
 
-    gfpoly(const gfpoly &p) = default;
+    gfpoly &operator=(std::initializer_list<uintmax_t> l) {
+        gfpoly copy(m_field, l);
+        std::swap(*this, copy);
+        return *this;
+    }
 
-    gfpoly(gfpoly &&p) = default;
+    gfpoly(const gfpoly &p) :
+        m_field(p.m_field), m_data(p.m_data), m_normalized(p.m_normalized) {
+        normalize();
+    };
+
+    gfpoly(gfpoly &&p) noexcept :
+        m_field(std::move(p.m_field)), m_data(std::move(p.m_data)),
+        m_normalized(p.m_normalized) {
+        normalize();
+    };
+
+    gfpoly &operator=(const gfpoly &p) {
+        if (this != &p) {
+            assert(m_field == nullptr || m_field == p.m_field);
+            m_field = p.m_field;
+            m_data = p.m_data;
+            m_normalized = p.m_normalized;
+        }
+        normalize();
+        return *this;
+    }
 
     explicit
     gfpoly(gfn value) :
@@ -116,10 +143,23 @@ public:
         normalize();
     }
 
+    gfpoly &operator=(gfn value) {
+        assert(m_field == nullptr || m_field == value.field());
+        gfpoly copy(std::move(value));
+        std::swap(*this, copy);
+        return *this;
+    }
+
     gfpoly(const gf &field, uintmax_t value) :
         m_field(field), m_data(), m_normalized(false) {
         m_data.emplace_back(field, value);
         normalize();
+    }
+
+    gfpoly &operator=(uintmax_t value) {
+        gfpoly copy(m_field, value);
+        std::swap(*this, copy);
+        return *this;
     }
 
     [[nodiscard]]
@@ -170,16 +210,6 @@ private:
     }
 
 public:
-    gfpoly &operator=(const gfpoly &p) {
-        if (this != &p) {
-            assert(m_field == nullptr || m_field == p.m_field);
-            m_field = p.m_field;
-            m_data = p.m_data;
-            m_normalized = p.m_normalized;
-        }
-        return normalize();
-    }
-
     [[nodiscard]]
     bool is_zero() const {
         normalize();
@@ -199,7 +229,6 @@ public:
 private:
     template<class U, class R>
     gfpoly &transform(const U &value, R op) {
-        assert(field() == value.field());
         m_normalized = false;
         if (m_data.empty())
             m_data.resize(1, gfn(m_field));
@@ -326,9 +355,7 @@ public:
 
     template<typename U>
     gfpoly &operator>>=(U const &n) {
-        assert(n <= m_data.size());
-        normalize();
-        m_data.erase(m_data.begin(), m_data.begin() + n);
+        m_data.erase(m_data.begin(), m_data.begin() + (n <= size() ? n : size()));
         return *this;
     }
 

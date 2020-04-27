@@ -1,4 +1,4 @@
-.TH "irrpoly::gfpoly" 3 "Вс 26 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
+.TH "irrpoly::gfpoly" 3 "Пн 27 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,6 +12,9 @@ irrpoly::gfpoly
 
 .in +1c
 .ti -1c
+.RI "std::vector< uintmax_t > \fBvalue\fP () const"
+.br
+.ti -1c
 .RI "\fBgfpoly\fP & \fBnormalize\fP ()"
 .br
 .ti -1c
@@ -21,22 +24,34 @@ irrpoly::gfpoly
 .RI "\fBgfpoly\fP (const \fBgf\fP &field, const std::vector< uintmax_t > &l)"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP (const \fBgf\fP &field, std::vector< uintmax_t > &&l)"
+.RI "\fBgfpoly\fP & \fBoperator=\fP (const std::vector< uintmax_t > &l)"
 .br
 .ti -1c
 .RI "\fBgfpoly\fP (const \fBgf\fP &field, std::initializer_list< uintmax_t > l)"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP (const \fBgfpoly\fP &p)=default"
+.RI "\fBgfpoly\fP & \fBoperator=\fP (std::initializer_list< uintmax_t > l)"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP (\fBgfpoly\fP &&p)=default"
+.RI "\fBgfpoly\fP (const \fBgfpoly\fP &p)"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP (\fBgfpoly\fP &&p) noexcept"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP & \fBoperator=\fP (const \fBgfpoly\fP &p)"
 .br
 .ti -1c
 .RI "\fBgfpoly\fP (\fBgfn\fP value)"
 .br
 .ti -1c
+.RI "\fBgfpoly\fP & \fBoperator=\fP (\fBgfn\fP value)"
+.br
+.ti -1c
 .RI "\fBgfpoly\fP (const \fBgf\fP &field, uintmax_t value)"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP & \fBoperator=\fP (uintmax_t value)"
 .br
 .ti -1c
 .RI "const \fBgf\fP & \fBfield\fP () const"
@@ -58,9 +73,6 @@ irrpoly::gfpoly
 .br
 .ti -1c
 .RI "const std::vector< \fBgfn\fP > & \fBdata\fP () const"
-.br
-.ti -1c
-.RI "\fBgfpoly\fP & \fBoperator=\fP (const \fBgfpoly\fP &p)"
 .br
 .ti -1c
 .RI "bool \fBis_zero\fP () const"
@@ -115,9 +127,6 @@ irrpoly::gfpoly
 .RI "static \fBgfpoly\fP \fBrandom\fP (const \fBgf\fP &field, uintmax_t degree)"
 .br
 .RI "Генерирует случайный многочлен над полем GF[P] заданной степени\&. "
-.ti -1c
-.RI "static std::vector< uintmax_t > \fBinto_vec\fP (\fBgfpoly\fP &&poly)"
-.br
 .in -1c
 .SS "Друзья"
 
