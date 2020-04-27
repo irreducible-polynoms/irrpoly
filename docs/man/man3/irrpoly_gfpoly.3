@@ -12,10 +12,10 @@ irrpoly::gfpoly
 
 .in +1c
 .ti -1c
-.RI "std::vector< uintmax_t > \fBvalue\fP () const"
+.RI "auto \fBvalue\fP () const \-> std::vector< uintmax_t >"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP & \fBnormalize\fP ()"
+.RI "auto \fBnormalize\fP () \-> \fBgfpoly\fP &"
 .br
 .ti -1c
 .RI "\fBgfpoly\fP (const \fBgf\fP &field)"
@@ -24,13 +24,13 @@ irrpoly::gfpoly
 .RI "\fBgfpoly\fP (const \fBgf\fP &field, const std::vector< uintmax_t > &l)"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP & \fBoperator=\fP (const std::vector< uintmax_t > &l)"
+.RI "auto \fBoperator=\fP (const std::vector< uintmax_t > &l) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
 .RI "\fBgfpoly\fP (const \fBgf\fP &field, std::initializer_list< uintmax_t > l)"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP & \fBoperator=\fP (std::initializer_list< uintmax_t > l)"
+.RI "auto \fBoperator=\fP (std::initializer_list< uintmax_t > l) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
 .RI "\fBgfpoly\fP (const \fBgfpoly\fP &p)"
@@ -39,92 +39,92 @@ irrpoly::gfpoly
 .RI "\fBgfpoly\fP (\fBgfpoly\fP &&p) noexcept"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP & \fBoperator=\fP (const \fBgfpoly\fP &p)"
+.RI "auto \fBoperator=\fP (const \fBgfpoly\fP &p) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
 .RI "\fBgfpoly\fP (\fBgfn\fP value)"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP & \fBoperator=\fP (\fBgfn\fP value)"
+.RI "auto \fBoperator=\fP (\fBgfn\fP value) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
 .RI "\fBgfpoly\fP (const \fBgf\fP &field, uintmax_t value)"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP & \fBoperator=\fP (uintmax_t value)"
+.RI "auto \fBoperator=\fP (uintmax_t value) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "const \fBgf\fP & \fBfield\fP () const"
+.RI "auto \fBfield\fP () const \-> const \fBgf\fP &"
 .br
 .ti -1c
-.RI "uintmax_t \fBbase\fP () const"
+.RI "auto \fBbase\fP () const \-> uintmax_t"
 .br
 .ti -1c
-.RI "uintmax_t \fBsize\fP () const"
+.RI "auto \fBsize\fP () const \-> uintmax_t"
 .br
 .ti -1c
-.RI "uintmax_t \fBdegree\fP () const"
+.RI "auto \fBdegree\fP () const \-> uintmax_t"
 .br
 .ti -1c
-.RI "\fBgfn\fP & \fBoperator[]\fP (uintmax_t i)"
+.RI "auto \fBoperator[]\fP (uintmax_t i) \-> \fBgfn\fP &"
 .br
 .ti -1c
-.RI "const \fBgfn\fP & \fBoperator[]\fP (uintmax_t i) const"
+.RI "auto \fBoperator[]\fP (uintmax_t i) const \-> const \fBgfn\fP &"
 .br
 .ti -1c
-.RI "const std::vector< \fBgfn\fP > & \fBdata\fP () const"
+.RI "auto \fBdata\fP () const \-> const std::vector< \fBgfn\fP > &"
 .br
 .ti -1c
-.RI "bool \fBis_zero\fP () const"
+.RI "auto \fBis_zero\fP () const \-> bool"
 .br
 .ti -1c
 .RI "\fBoperator bool\fP () const"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP & \fBset_zero\fP ()"
+.RI "auto \fBset_zero\fP () \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "template<class U > \fBgfpoly\fP & \fBoperator+=\fP (const U &value)"
+.RI "template<class U > auto \fBoperator+=\fP (const U &value) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "template<class U > \fBgfpoly\fP & \fBoperator\-=\fP (const U &value)"
+.RI "template<class U > auto \fBoperator\-=\fP (const U &value) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "template<class U > \fBgfpoly\fP & \fBoperator*=\fP (const U &value)"
+.RI "template<class U > auto \fBoperator*=\fP (const U &value) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "template<class U > \fBgfpoly\fP & \fBoperator/=\fP (const U &value)"
+.RI "template<class U > auto \fBoperator/=\fP (const U &value) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "template<class U > \fBgfpoly\fP & \fBoperator%=\fP (const U &)"
+.RI "template<class U > auto \fBoperator%=\fP (const U &) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP & \fBoperator+=\fP (const \fBgfpoly\fP &value)"
+.RI "auto \fBoperator+=\fP (const \fBgfpoly\fP &value) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP & \fBoperator\-=\fP (const \fBgfpoly\fP &value)"
+.RI "auto \fBoperator\-=\fP (const \fBgfpoly\fP &value) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP & \fBoperator*=\fP (const \fBgfpoly\fP &value)"
+.RI "auto \fBoperator*=\fP (const \fBgfpoly\fP &value) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP & \fBoperator/=\fP (const \fBgfpoly\fP &value)"
+.RI "auto \fBoperator/=\fP (const \fBgfpoly\fP &value) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP & \fBoperator%=\fP (const \fBgfpoly\fP &value)"
+.RI "auto \fBoperator%=\fP (const \fBgfpoly\fP &value) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "template<typename U > \fBgfpoly\fP & \fBoperator>>=\fP (U const &n)"
+.RI "template<typename U > auto \fBoperator>>=\fP (U const &n) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "template<typename U > \fBgfpoly\fP & \fBoperator<<=\fP (U const &n)"
+.RI "template<typename U > auto \fBoperator<<=\fP (U const &n) \-> \fBgfpoly\fP &"
 .br
 .in -1c
 .SS "Открытые статические члены"
 
 .in +1c
 .ti -1c
-.RI "static \fBgfpoly\fP \fBrandom\fP (const \fBgf\fP &field, uintmax_t degree)"
+.RI "static auto \fBrandom\fP (const \fBgf\fP &field, uintmax_t degree) \-> \fBgfpoly\fP"
 .br
 .RI "Генерирует случайный многочлен над полем GF[P] заданной степени\&. "
 .in -1c
@@ -132,16 +132,16 @@ irrpoly::gfpoly
 
 .in +1c
 .ti -1c
-.RI "\fBgfpoly\fP \fBoperator\-\fP (\fBgfpoly\fP)"
+.RI "auto \fBoperator\-\fP (\fBgfpoly\fP) \-> \fBgfpoly\fP"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP \fBoperator*\fP (const \fBgfpoly\fP &, const \fBgfpoly\fP &)"
+.RI "auto \fBoperator*\fP (const \fBgfpoly\fP &, const \fBgfpoly\fP &) \-> \fBgfpoly\fP"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP \fBoperator/\fP (const \fBgfpoly\fP &, const \fBgfpoly\fP &)"
+.RI "auto \fBoperator/\fP (const \fBgfpoly\fP &, const \fBgfpoly\fP &) \-> \fBgfpoly\fP"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP \fBoperator%\fP (const \fBgfpoly\fP &, const \fBgfpoly\fP &)"
+.RI "auto \fBoperator%\fP (const \fBgfpoly\fP &, const \fBgfpoly\fP &) \-> \fBgfpoly\fP"
 .br
 .in -1c
 .SH "Подробное описание"

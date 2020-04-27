@@ -12,7 +12,7 @@ static auto gf2 = make_gf(2);
 static multithread::polychecker ch;
 
 [[nodiscard]]
-std::vector<gfpoly> generate_irreducible(uint64_t num, multithread::irreducible_method method) {
+auto generate_irreducible(uint64_t num, multithread::irreducible_method method) -> std::vector<gfpoly> {
     std::vector<gfpoly> res;
     if (num == 0) {
         return res;
@@ -59,9 +59,8 @@ std::vector<gfpoly> generate_irreducible(uint64_t num, multithread::irreducible_
                 }
             }
             return a[0] < b[0];
-        } else {
-            return a.degree() < b.degree();
         }
+        return a.degree() < b.degree();
     });
     while (res.size() > num) {
         res.pop_back();
@@ -71,7 +70,7 @@ std::vector<gfpoly> generate_irreducible(uint64_t num, multithread::irreducible_
 }
 
 [[nodiscard]]
-std::vector<gfpoly> generate_primitive(uint64_t num) {
+auto generate_primitive(uint64_t num) -> std::vector<gfpoly> {
     std::vector<gfpoly> res;
     if (num == 0) {
         return res;
@@ -118,9 +117,8 @@ std::vector<gfpoly> generate_primitive(uint64_t num) {
                 }
             }
             return a[0] < b[0];
-        } else {
-            return a.degree() < b.degree();
         }
+        return a.degree() < b.degree();
     });
     while (res.size() > num) {
         res.pop_back();

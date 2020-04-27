@@ -35,7 +35,7 @@ private:
 public:
     /// Генерирует случайный многочлен над полем GF[P] заданной степени.
     static
-    gfpoly random(const gf &field, uintmax_t degree) {
+    auto random(const gf &field, uintmax_t degree) -> gfpoly {
         std::vector<gfn> data;
         data.reserve(degree + 1);
         for (uintmax_t i = 0; i < degree; ++i) {
@@ -48,7 +48,7 @@ public:
         return gfpoly(field, std::move(data));
     }
 
-    std::vector<uintmax_t> value() const {
+    auto value() const -> std::vector<uintmax_t> {
         normalize();
         std::vector<uintmax_t> res;
         res.reserve(size());
@@ -58,7 +58,7 @@ public:
         return res;
     }
 
-    gfpoly &normalize() {
+    auto normalize() -> gfpoly & {
         if (!m_normalized) {
             m_data.erase(std::find_if(
                 m_data.rbegin(), m_data.rend(),
@@ -70,7 +70,7 @@ public:
     }
 
 private:
-    const gfpoly &normalize() const {
+    auto normalize() const -> const gfpoly & {
         if (!m_normalized) {
             m_data.erase(std::find_if(
                 m_data.rbegin(), m_data.rend(),
@@ -99,7 +99,7 @@ public:
         normalize();
     }
 
-    gfpoly &operator=(const std::vector<uintmax_t> &l) {
+    auto operator=(const std::vector<uintmax_t> &l) -> gfpoly & {
         gfpoly copy(m_field, l);
         std::swap(*this, copy);
         return *this;
@@ -108,7 +108,7 @@ public:
     gfpoly(const gf &field, std::initializer_list<uintmax_t> l) :
         gfpoly(field, std::vector<uintmax_t>{l}) {}
 
-    gfpoly &operator=(std::initializer_list<uintmax_t> l) {
+    auto operator=(std::initializer_list<uintmax_t> l) -> gfpoly & {
         gfpoly copy(m_field, l);
         std::swap(*this, copy);
         return *this;
@@ -119,13 +119,13 @@ public:
         normalize();
     };
 
-    gfpoly(gfpoly &&p) noexcept :
+    gfpoly(gfpoly &&p) noexcept:
         m_field(std::move(p.m_field)), m_data(std::move(p.m_data)),
         m_normalized(p.m_normalized) {
         normalize();
     };
 
-    gfpoly &operator=(const gfpoly &p) {
+    auto operator=(const gfpoly &p) -> gfpoly & {
         if (this != &p) {
             assert(m_field == nullptr || m_field == p.m_field);
             m_field = p.m_field;
@@ -143,7 +143,7 @@ public:
         normalize();
     }
 
-    gfpoly &operator=(gfn value) {
+    auto operator=(gfn value) -> gfpoly & {
         assert(m_field == nullptr || m_field == value.field());
         gfpoly copy(std::move(value));
         std::swap(*this, copy);
@@ -156,24 +156,24 @@ public:
         normalize();
     }
 
-    gfpoly &operator=(uintmax_t value) {
+    auto operator=(uintmax_t value) -> gfpoly & {
         gfpoly copy(m_field, value);
         std::swap(*this, copy);
         return *this;
     }
 
     [[nodiscard]]
-    const gf &field() const {
+    auto field() const -> const gf & {
         return m_field;
     }
 
     [[nodiscard]]
-    uintmax_t base() const {
+    auto base() const -> uintmax_t {
         return m_field->base();
     }
 
     [[nodiscard]]
-    uintmax_t size() const {
+    auto size() const -> uintmax_t {
         if (!m_normalized) {
             normalize();
         }
@@ -181,37 +181,38 @@ public:
     }
 
     [[nodiscard]]
-    uintmax_t degree() const {
+    auto degree() const -> uintmax_t {
         normalize();
-        if (size() == 0)
+        if (size() == 0) {
             throw std::logic_error("degree() is undefined for the zero polynomial");
+        }
         return m_data.size() - 1;
     }
 
-    gfn &operator[](uintmax_t i) {
+    auto operator[](uintmax_t i) -> gfn & {
         m_normalized = false;
         return m_data[i];
     }
 
-    const gfn &operator[](uintmax_t i) const {
+    auto operator[](uintmax_t i) const -> const gfn & {
         return m_data[i];
     }
 
     [[nodiscard]]
-    const std::vector<gfn> &data() const {
+    auto data() const -> const std::vector<gfn> & {
         normalize();
         return m_data;
     }
 
 private:
-    std::vector<gfn> &data() {
+    auto data() -> std::vector<gfn> & {
         m_normalized = false;
         return m_data;
     }
 
 public:
     [[nodiscard]]
-    bool is_zero() const {
+    auto is_zero() const -> bool {
         normalize();
         return m_data.empty();
     }
@@ -220,7 +221,7 @@ public:
         return !is_zero();
     }
 
-    gfpoly &set_zero() {
+    auto set_zero() -> gfpoly & {
         m_data.clear();
         m_normalized = true;
         return *this;
@@ -228,38 +229,41 @@ public:
 
 private:
     template<class U, class R>
-    gfpoly &transform(const U &value, R op) {
+    auto transform(const U &value, R op) -> gfpoly & {
         m_normalized = false;
-        if (m_data.empty())
+        if (m_data.empty()) {
             m_data.resize(1, gfn(m_field));
+        }
         m_data[0] = op(m_data[0], value);
         return normalize();
     }
 
     template<class R>
-    gfpoly &transform(const gfpoly &value, R op) {
+    auto transform(const gfpoly &value, R op) -> gfpoly & {
         assert(field() == value.field());
         m_normalized = false;
-        if (m_data.size() < value.size())
+        if (m_data.size() < value.size()) {
             m_data.resize(value.size(), gfn(m_field));
-        for (uintmax_t i = 0; i < value.size(); ++i)
+        }
+        for (uintmax_t i = 0; i < value.size(); ++i) {
             m_data[i] = op(m_data[i], value[i]);
+        }
         return normalize();
     }
 
 public:
     template<class U>
-    gfpoly &operator+=(const U &value) {
+    auto operator+=(const U &value) -> gfpoly & {
         return transform(value, std::plus());
     }
 
     template<class U>
-    gfpoly &operator-=(const U &value) {
+    auto operator-=(const U &value) -> gfpoly & {
         return transform(value, std::minus());
     }
 
     template<class U>
-    gfpoly &operator*=(const U &value) {
+    auto operator*=(const U &value) -> gfpoly & {
         m_normalized = false;
         std::transform(m_data.begin(), m_data.end(), m_data.begin(),
                        [&](const gfn &x) -> gfn { return x * value; });
@@ -267,7 +271,7 @@ public:
     }
 
     template<class U>
-    gfpoly &operator/=(const U &value) {
+    auto operator/=(const U &value) -> gfpoly & {
         m_normalized = false;
         std::transform(m_data.begin(), m_data.end(), m_data.begin(),
                        [&](const gfn &x) -> gfn { return x / value; });
@@ -275,36 +279,38 @@ public:
     }
 
     template<class U>
-    gfpoly &operator%=(const U & /*value_type*/) {
+    auto operator%=(const U & /*value_type*/) -> gfpoly & {
         // We can always divide by a scalar, so there is no remainder:
         return set_zero();
     }
 
-    gfpoly &operator+=(const gfpoly &value) {
+    auto operator+=(const gfpoly &value) -> gfpoly & {
         return transform(value, std::plus());
     }
 
-    gfpoly &operator-=(const gfpoly &value) {
+    auto operator-=(const gfpoly &value) -> gfpoly & {
         return transform(value, std::minus());
     }
 
 private:
-    gfpoly &multiply(const gfpoly &a, const gfpoly &b) {
+    auto multiply(const gfpoly &a, const gfpoly &b) -> gfpoly & {
         assert(a.field() == b.field());
         m_normalized = false;
         if (!a || !b) {
             return set_zero();
         }
         std::vector<gfn> prod(a.size() + b.size() - 1, gfn(m_field));
-        for (typename std::vector<gfn>::size_type i = 0; i < a.size(); ++i)
-            for (typename std::vector<gfn>::size_type j = 0; j < b.size(); ++j)
+        for (uintmax_t i = 0; i < a.size(); ++i) {
+            for (uintmax_t j = 0; j < b.size(); ++j) {
                 prod[i + j] += a.m_data[i] * b.m_data[j];
+            }
+        }
         m_data.swap(prod);
         return normalize();
     }
 
 public:
-    gfpoly &operator*=(const gfpoly &value) {
+    auto operator*=(const gfpoly &value) -> gfpoly & {
         return multiply(*this, value);
     }
 
@@ -319,7 +325,7 @@ private:
         }
     }
 
-    static std::pair<gfpoly, gfpoly> division(gfpoly u, const gfpoly &v) {
+    static auto division(gfpoly u, const gfpoly &v) -> std::pair<gfpoly, gfpoly> {
         assert(u.field() == v.field() && v.size() <= u.size() && v && u);
         uintmax_t const m = u.size() - 1, n = v.size() - 1;
         uintmax_t k = m - n;
@@ -337,189 +343,190 @@ private:
       * because the same amount of computation yields both.
       * This function is not defined for division by zero: user beware.
       */
-    static std::pair<gfpoly, gfpoly> quotient_remainder(const gfpoly &dividend, const gfpoly &divisor) {
+    static auto quotient_remainder(const gfpoly &dividend, const gfpoly &divisor) -> std::pair<gfpoly, gfpoly> {
         assert(dividend.field() == divisor.field() && divisor);
-        if (dividend.size() < divisor.size())
+        if (dividend.size() < divisor.size()) {
             return std::make_pair(gfpoly(dividend.field()), dividend);
+        }
         return division(dividend, divisor);
     }
 
 public:
-    gfpoly &operator/=(const gfpoly &value) {
+    auto operator/=(const gfpoly &value) -> gfpoly & {
         return *this = quotient_remainder(*this, value).first;
     }
 
-    gfpoly &operator%=(const gfpoly &value) {
+    auto operator%=(const gfpoly &value) -> gfpoly & {
         return *this = quotient_remainder(*this, value).second;
     }
 
     template<typename U>
-    gfpoly &operator>>=(U const &n) {
+    auto operator>>=(U const &n) -> gfpoly & {
         m_data.erase(m_data.begin(), m_data.begin() + (n <= size() ? n : size()));
         return *this;
     }
 
     template<typename U>
-    gfpoly &operator<<=(U const &n) {
+    auto operator<<=(U const &n) -> gfpoly & {
         normalize();
         m_data.insert(m_data.begin(), n, gfn(m_field));
         return *this;
     }
 
-    friend gfpoly operator-(gfpoly);
+    friend auto operator-(gfpoly /*a*/) -> gfpoly;
 
-    friend gfpoly operator*(const gfpoly &, const gfpoly &);
+    friend auto operator*(const gfpoly & /*a*/, const gfpoly & /*b*/) -> gfpoly;
 
-    friend gfpoly operator/(const gfpoly &, const gfpoly &);
+    friend auto operator/(const gfpoly & /*a*/, const gfpoly & /*b*/) -> gfpoly;
 
-    friend gfpoly operator%(const gfpoly &, const gfpoly &);
+    friend auto operator%(const gfpoly & /*a*/, const gfpoly & /*b*/) -> gfpoly;
 };
 
-gfpoly operator-(gfpoly a) {
+auto operator-(gfpoly a) -> gfpoly {
     a.m_normalized = false;
     std::transform(a.data().begin(), a.data().end(), a.data().begin(), std::negate());
     return a.normalize();
 }
 
-gfpoly operator+(const gfpoly &a, const gfpoly &b) {
+auto operator+(const gfpoly &a, const gfpoly &b) -> gfpoly {
     assert(a.field() == b.field());
     gfpoly result(a);
     result += b;
     return result;
 }
 
-gfpoly operator+(gfpoly &&a, const gfpoly &b) {
+auto operator+(gfpoly &&a, const gfpoly &b) -> gfpoly {
     assert(a.field() == b.field());
     a += b;
     return a;
 }
 
-gfpoly operator+(const gfpoly &a, gfpoly &&b) {
+auto operator+(const gfpoly &a, gfpoly &&b) -> gfpoly {
     assert(a.field() == b.field());
     b += a;
     return b;
 }
 
-gfpoly operator+(gfpoly &&a, gfpoly &&b) {
+auto operator+(gfpoly &&a, gfpoly &&b) -> gfpoly {
     assert(a.field() == b.field());
     a += b;
     return a;
 }
 
-gfpoly operator-(const gfpoly &a, const gfpoly &b) {
+auto operator-(const gfpoly &a, const gfpoly &b) -> gfpoly {
     assert(a.field() == b.field());
     gfpoly result(a);
     result -= b;
     return result;
 }
 
-gfpoly operator-(gfpoly &&a, const gfpoly &b) {
+auto operator-(gfpoly &&a, const gfpoly &b) -> gfpoly {
     assert(a.field() == b.field());
     a -= b;
     return a;
 }
 
-gfpoly operator-(const gfpoly &a, gfpoly &&b) {
+auto operator-(const gfpoly &a, gfpoly &&b) -> gfpoly {
     assert(a.field() == b.field());
     b -= a;
     return -b;
 }
 
-gfpoly operator-(gfpoly &&a, gfpoly &&b) {
+auto operator-(gfpoly &&a, gfpoly &&b) -> gfpoly {
     assert(a.field() == b.field());
     a -= b;
     return a;
 }
 
-gfpoly operator*(const gfpoly &a, const gfpoly &b) {
+auto operator*(const gfpoly &a, const gfpoly &b) -> gfpoly {
     gfpoly result(a.field());
     return result.multiply(a, b);
 }
 
-gfpoly operator/(const gfpoly &a, const gfpoly &b) {
+auto operator/(const gfpoly &a, const gfpoly &b) -> gfpoly {
     return gfpoly::quotient_remainder(a, b).first;
 }
 
-gfpoly operator%(const gfpoly &a, const gfpoly &b) {
+auto operator%(const gfpoly &a, const gfpoly &b) -> gfpoly {
     return gfpoly::quotient_remainder(a, b).second;
 }
 
 template<class U>
-gfpoly operator+(gfpoly a, const U &b) {
+auto operator+(gfpoly a, const U &b) -> gfpoly {
     a += b;
     return a;
 }
 
 template<class U>
-gfpoly operator-(gfpoly a, const U &b) {
+auto operator-(gfpoly a, const U &b) -> gfpoly {
     a -= b;
     return a;
 }
 
 template<class U>
-gfpoly operator*(gfpoly a, const U &b) {
+auto operator*(gfpoly a, const U &b) -> gfpoly {
     a *= b;
     return a;
 }
 
 template<class U>
-gfpoly operator/(gfpoly a, const U &b) {
+auto operator/(gfpoly a, const U &b) -> gfpoly {
     a /= b;
     return a;
 }
 
 template<class U>
-gfpoly operator%(const gfpoly &a, const U &) {
+auto operator%(const gfpoly &a, const U & /*unused*/) -> gfpoly {
     return gfpoly(a.field());
 }
 
 template<class U>
-gfpoly operator+(const U &a, gfpoly b) {
+auto operator+(const U &a, gfpoly b) -> gfpoly {
     b += a;
     return b;
 }
 
 template<class U>
-gfpoly operator-(const U &a, gfpoly b) {
+auto operator-(const U &a, gfpoly b) -> gfpoly {
     b -= a;
     return -b;
 }
 
 template<class U>
-gfpoly operator*(const U &a, gfpoly b) {
+auto operator*(const U &a, gfpoly b) -> gfpoly {
     b *= a;
     return b;
 }
 
-bool operator==(const gfpoly &a, const gfpoly &b) {
+auto operator==(const gfpoly &a, const gfpoly &b) -> bool {
     assert(a.field() == b.field());
     return a.data() == b.data();
 }
 
-bool operator!=(const gfpoly &a, const gfpoly &b) {
+auto operator!=(const gfpoly &a, const gfpoly &b) -> bool {
     assert(a.field() == b.field());
     return a.data() != b.data();
 }
 
 template<typename U>
-gfpoly operator>>(gfpoly a, const U &b) {
+auto operator>>(gfpoly a, const U &b) -> gfpoly {
     a >>= b;
     return a;
 }
 
 template<typename U>
-gfpoly operator<<(gfpoly a, const U &b) {
+auto operator<<(gfpoly a, const U &b) -> gfpoly {
     a <<= b;
     return a;
 }
 
 template<class charT, class traits>
-std::basic_ostream<charT, traits> &
-operator<<(std::basic_ostream<charT, traits> &os, const gfpoly &poly) {
+auto operator<<(std::basic_ostream<charT, traits> &os, const gfpoly &poly) -> std::basic_ostream<charT, traits> & {
     os << "{ ";
     for (uintmax_t i = 0; i < poly.size(); ++i) {
-        if (i)
+        if (i) {
             os << ", ";
+        }
         os << poly[i];
     }
     os << " }";
@@ -527,10 +534,9 @@ operator<<(std::basic_ostream<charT, traits> &os, const gfpoly &poly) {
 }
 
 template<class charT, class traits>
-std::basic_istream<charT, traits> &
-operator>>(std::basic_istream<charT, traits> &is, gfpoly &poly) {
+auto operator>>(std::basic_istream<charT, traits> &is, gfpoly &poly) -> std::basic_istream<charT, traits> & {
     charT tmp;
-    uintmax_t num;
+    uintmax_t num = 0;
     std::string str;
     std::vector<uintmax_t> vec;
     while (is.good() && is.get(tmp) && tmp != '{') {

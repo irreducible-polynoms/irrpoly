@@ -21,14 +21,14 @@ using namespace irrpoly;
  * @return вектор сгенерированных многочленов с требуемыми характеристиками
  */
 [[nodiscard]]
-std::vector<gfpoly> generate_irreducible(
+auto generate_irreducible(
     const uintmax_t base,
     const uintmax_t num,
     const uintmax_t degree,
     const typename multithread::irreducible_method irr_meth,
     const typename multithread::primitive_method prim_meth,
     const unsigned threads_num
-) {
+) -> std::vector<gfpoly> {
     // возвращаемое значение
     std::vector<gfpoly> arr;
     arr.reserve(num);
@@ -56,7 +56,7 @@ std::vector<gfpoly> generate_irreducible(
     return arr;
 }
 
-int main() {
+auto main() -> int {
     // основание поля Галуа
     const uintmax_t base = 2;
     // число многочленов, которые требуется найти

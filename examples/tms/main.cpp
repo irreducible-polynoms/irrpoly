@@ -9,7 +9,7 @@
 using namespace irrpoly;
 
 [[nodiscard]]
-std::vector<gfpoly> generate_irreducible(uint64_t num) {
+auto generate_irreducible(uint64_t num) -> std::vector<gfpoly> {
     auto gf2 = make_gf(2);
     // возвращаемое значение
     std::vector<gfpoly> res;
@@ -69,9 +69,8 @@ std::vector<gfpoly> generate_irreducible(uint64_t num) {
                 }
             }
             return a[0] < b[0];
-        } else {
-            return a.degree() < b.degree();
         }
+        return a.degree() < b.degree();
     });
     // выкидываем лишние с конца, чтобы осталось только требуемое число
     while (res.size() > num) {
@@ -81,7 +80,7 @@ std::vector<gfpoly> generate_irreducible(uint64_t num) {
     return res;
 }
 
-int main() {
+auto main() -> int {
     // генерируем многочлены и выводим результат
     auto poly = generate_irreducible(5);
     for (const auto &p : poly) {

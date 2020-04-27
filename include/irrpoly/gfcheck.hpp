@@ -24,7 +24,7 @@ namespace irrpoly {
  * (greatest common divisor) двух многочленов. Реализация сделана на основе
  * кода из библиотеки Boost 1.71.0.
  */
-gfpoly gcd(gfpoly m, gfpoly n) {
+auto gcd(gfpoly m, gfpoly n) -> gfpoly {
     assert(m.field() == n.field());
     if (m.is_zero() || n.is_zero()) {
         throw std::domain_error("arguments must be strictly positive");
@@ -48,19 +48,19 @@ namespace detail {
 
 /// Быстрое возведение в степень, взято из библиотеки Boost.
 template<class T, class N>
-T integer_power(T t, N n) {
+auto integer_power(T t, N n) -> T {
     switch (n) {
-    case 0:return static_cast<T>(1u);
+    case 0:return static_cast<T>(1U);
     case 1:return t;
     case 2:return t * t;
     case 3:return t * t * t;
     default:T result = integer_power(t, n / 2);
-        return (n & 1u) ? result * result * t : result * result;
+        return (n & 1U) ? result * result * t : result * result;
     }
 }
 
 /// Вычисляет производную данного многочлена.
-gfpoly derivative(const gfpoly &val) {
+auto derivative(const gfpoly &val) -> gfpoly {
     assert(val && val.degree());
     std::vector<uintmax_t> res(val.size() - 1, 0);
     for (uintmax_t i = 1; i < val.size(); ++i) {
@@ -78,13 +78,13 @@ gfpoly derivative(const gfpoly &val) {
  * @param mod многочлен, остаток деления на который необходимо найти
  */
 [[nodiscard]]
-gfpoly x_pow_mod(uintmax_t pow, const gfpoly &mod) {
+auto x_pow_mod(uintmax_t pow, const gfpoly &mod) -> gfpoly {
     const auto n = mod.degree();
     gfpoly xn = gfpoly(mod.field(), 1) << n; // x^n
     gfpoly res(mod.field(), 1);
 
     uintmax_t d = 0;
-    uintmax_t tmp;
+    uintmax_t tmp = 0;
     for (auto m = res.degree(); pow + m >= n; m = res.degree()) {
         tmp = n - m, pow -= tmp, res <<= tmp;
         d = (res == xn) ? (d) ? (d -= pow, pow %= d, 0) : pow : d;
@@ -93,7 +93,7 @@ gfpoly x_pow_mod(uintmax_t pow, const gfpoly &mod) {
     return res << pow;
 }
 
-} // namespace
+} // namespace detail
 
 /**
  * Алгоритм Берлекампа проверки многочлена на неприводимость в поле GF[P].
@@ -115,7 +115,7 @@ gfpoly x_pow_mod(uintmax_t pow, const gfpoly &mod) {
  * матрицы к ступенчатому виду и подсчёт числа ступеней в ней.
  * Кроме того, все многочлены первой степени неприводимы в любом поле.
  */
-bool is_irreducible_berlekamp(const gfpoly &val) {
+auto is_irreducible_berlekamp(const gfpoly &val) -> bool {
     if (val.is_zero()) {
         return false;
     }
@@ -132,7 +132,7 @@ bool is_irreducible_berlekamp(const gfpoly &val) {
     // функция для построения матрицы берлекампа и вычисления её ранга
     auto berlekampMatrixRank = [](const gfpoly &val) {
         gfpoly poly(val.field());
-        uintmax_t i, j, k, l;
+        uintmax_t i = 0, j = 0, k = 0, l = 0;
         const auto n = val.degree();
         std::vector<std::vector<gfn>> m(n, std::vector<gfn>(n, gfn(val.field()))); // M = 0
         for (i = 0; i < n; ++i) {
@@ -193,7 +193,7 @@ bool is_irreducible_berlekamp(const gfpoly &val) {
  * или на странице Википедии в разделе Rabin's test of irreducibility
  * https://en.wikipedia.org/wiki/Factorization_of_polynomials_over_finite_fields
  */
-bool is_irreducible_rabin(const gfpoly &val) {
+auto is_irreducible_rabin(const gfpoly &val) -> bool {
     if (val.is_zero()) {
         return false;
     }
@@ -251,7 +251,7 @@ bool is_irreducible_rabin(const gfpoly &val) {
  * После завершения шагов 1-2 для всех i получаем, что многочлен неприводим.
  * Кроме того, все многочлены первой степени неприводимы в любом поле.
  */
-bool is_irreducible_benor(const gfpoly &val) {
+auto is_irreducible_benor(const gfpoly &val) -> bool {
     if (val.is_zero()) {
         return false;
     }
@@ -290,7 +290,7 @@ bool is_irreducible_benor(const gfpoly &val) {
  * Возможные пути параллелизации данного алгоритма приведены в статье
  * https://www.researchgate.net/publication/329358609_Parallelization_of_Algorithm_for_Primitive_Polynomials_Generation_in_Extended_Galois_Field_pm
  */
-bool is_primitive_definition(const gfpoly &val) {
+auto is_primitive_definition(const gfpoly &val) -> bool {
     if (val.is_zero()) {
         return false;
     }
@@ -352,9 +352,8 @@ bool is_primitive_definition(const gfpoly &val) {
             }
             if (m == 0) {
                 break;
-            } else {
-                m -= 1;
             }
+            m -= 1;
         }
     }
 
@@ -404,8 +403,8 @@ enum class primitive_method {
 using polychecker = checker<gfpoly, result_type>;
 
 /// Формируется универсальная функция проверки многочленов.
-typename checker<gfpoly, result_type>::check_func make_check_func(
-    irreducible_method irr_meth, primitive_method prim_meth) {
+auto make_check_func(
+    irreducible_method irr_meth, primitive_method prim_meth) -> typename checker<gfpoly, result_type>::check_func {
     return [=](const gfpoly &poly, std::optional<result_type> &res) {
         // в случае, когда проверка не выполняется устанавливается результат true
         res.emplace(result_type{true, true});

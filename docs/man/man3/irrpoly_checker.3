@@ -13,15 +13,15 @@ irrpoly::checker< value_type, result_type > \- Выполняет проверк
 
 .in +1c
 .ti -1c
-.RI "typedef std::function< value_type()> \fBinput_func\fP"
+.RI "using \fBinput_func\fP = std::function< value_type()>"
 .br
 .RI "Вид функции, генерирующей многочлены для проверки\&. "
 .ti -1c
-.RI "typedef std::function< void(const value_type &, std::optional< result_type > &)> \fBcheck_func\fP"
+.RI "using \fBcheck_func\fP = std::function< void(const value_type &, std::optional< result_type > &)>"
 .br
 .RI "Вид функции, выполняющей проверку и сохраняющей результат\&. "
 .ti -1c
-.RI "typedef std::function< bool(const value_type &, const result_type &)> \fBcallback_func\fP"
+.RI "using \fBcallback_func\fP = std::function< bool(const value_type &, const result_type &)>"
 .br
 .in -1c
 .SS "Открытые члены"
@@ -48,7 +48,7 @@ class irrpoly::checker< value_type, result_type >"
 Выполняет проверку на неприводимось и примитивность заданного многочлена над полем GF[P]\&. 
 .SH "Определения типов"
 .PP 
-.SS "template<typename value_type , typename result_type > typedef std::function<bool(const value_type &, const result_type &)> \fBirrpoly::checker\fP< value_type, result_type >::\fBcallback_func\fP"
+.SS "template<typename value_type , typename result_type > using \fBirrpoly::checker\fP< value_type, result_type >::\fBcallback_func\fP =  std::function<bool(const value_type &, const result_type &)>"
 Вид функции, обрабатывающей результат проверки (если многочлен удовлетворяет требуемым условиям возвращает true, иначе - false)\&. 
 
 .SH "Автор"

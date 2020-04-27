@@ -4,7 +4,7 @@
 
 using namespace irrpoly;
 
-int main() {
+auto main() -> int {
     std::cout << "TEST DATA" << std::endl;
     for (auto base : {2, 3, 5, 7}) {
         auto gf = make_gf(base);

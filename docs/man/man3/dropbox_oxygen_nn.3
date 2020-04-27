@@ -17,10 +17,10 @@ dropbox::oxygen::nn< PtrType >
 
 .in +1c
 .ti -1c
-.RI "element_type & \fBoperator*\fP () const"
+.RI "auto \fBoperator*\fP () const \-> element_type &"
 .br
 .ti -1c
-.RI "element_type * \fBoperator\->\fP () const"
+.RI "auto \fBoperator\->\fP () const \-> element_type *"
 .br
 .ti -1c
 .RI "\fBoperator const PtrType &\fP () const &"
@@ -29,10 +29,10 @@ dropbox::oxygen::nn< PtrType >
 .RI "\fBoperator PtrType &&\fP () &&"
 .br
 .ti -1c
-.RI "const PtrType & \fBas_nullable\fP () const &"
+.RI "auto \fBas_nullable\fP () const &\-> const PtrType &"
 .br
 .ti -1c
-.RI "PtrType && \fBas_nullable\fP () &&"
+.RI "auto \fBas_nullable\fP () &&\-> PtrType &&"
 .br
 .ti -1c
 .RI "\fBoperator bool\fP () const =delete"
@@ -41,13 +41,13 @@ dropbox::oxygen::nn< PtrType >
 .RI "\fBnn\fP (std::nullptr_t)=delete"
 .br
 .ti -1c
-.RI "\fBnn\fP & \fBoperator=\fP (std::nullptr_t)=delete"
+.RI "auto \fBoperator=\fP (std::nullptr_t) \-> \fBnn\fP &=delete"
 .br
 .ti -1c
 .RI "\fBnn\fP (PtrType)=delete"
 .br
 .ti -1c
-.RI "\fBnn\fP & \fBoperator=\fP (PtrType)=delete"
+.RI "auto \fBoperator=\fP (PtrType) \-> \fBnn\fP &=delete"
 .br
 .ti -1c
 .RI "\fBnn\fP (\fBi_promise_i_checked_for_null_t\fP, const PtrType &arg)"
@@ -71,32 +71,32 @@ dropbox::oxygen::nn< PtrType >
 .RI "template<typename OtherType , typename std::enable_if< std::is_constructible< PtrType, OtherType, element_type * >::value, int >::type  = 0> \fBnn\fP (const \fBnn\fP< OtherType > &ownership_ptr, \fBnn\fP< element_type * > target_ptr)"
 .br
 .ti -1c
-.RI "template<typename T  = PtrType> element_type * \fBget\fP () const"
+.RI "template<typename T  = PtrType> auto \fBget\fP () const \-> element_type *"
 .br
 .in -1c
 .SS "Друзья"
 
 .in +1c
 .ti -1c
-.RI "template<typename L , typename R > bool \fBoperator==\fP (const \fBnn\fP< L > &, const R &)"
+.RI "template<typename L , typename R > auto \fBoperator==\fP (const \fBnn\fP< L > &, const R &) \-> bool"
 .br
 .ti -1c
-.RI "template<typename L , typename R > bool \fBoperator==\fP (const L &, const \fBnn\fP< R > &)"
+.RI "template<typename L , typename R > auto \fBoperator==\fP (const L &, const \fBnn\fP< R > &) \-> bool"
 .br
 .ti -1c
-.RI "template<typename L , typename R > bool \fBoperator==\fP (const \fBnn\fP< L > &, const \fBnn\fP< R > &)"
+.RI "template<typename L , typename R > auto \fBoperator==\fP (const \fBnn\fP< L > &, const \fBnn\fP< R > &) \-> bool"
 .br
 .ti -1c
-.RI "template<typename L , typename R > bool \fBoperator<\fP (const \fBnn\fP< L > &, const R &)"
+.RI "template<typename L , typename R > auto \fBoperator<\fP (const \fBnn\fP< L > &, const R &) \-> bool"
 .br
 .ti -1c
-.RI "template<typename L , typename R > bool \fBoperator<\fP (const L &, const \fBnn\fP< R > &)"
+.RI "template<typename L , typename R > auto \fBoperator<\fP (const L &, const \fBnn\fP< R > &) \-> bool"
 .br
 .ti -1c
-.RI "template<typename L , typename R > bool \fBoperator<\fP (const \fBnn\fP< L > &, const \fBnn\fP< R > &)"
+.RI "template<typename L , typename R > auto \fBoperator<\fP (const \fBnn\fP< L > &, const \fBnn\fP< R > &) \-> bool"
 .br
 .ti -1c
-.RI "template<typename T > std::ostream & \fBoperator<<\fP (std::ostream &, const \fBnn\fP< T > &)"
+.RI "template<typename T > auto \fBoperator<<\fP (std::ostream &, const \fBnn\fP< T > &) \-> std::ostream &"
 .br
 .in -1c
 

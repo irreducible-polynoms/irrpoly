@@ -61,31 +61,31 @@ include/irrpoly/gf.hpp
 
 .in +1c
 .ti -1c
-.RI "bool \fBirrpoly::operator==\fP (const gf &lb, const gf &rb)"
+.RI "auto \fBirrpoly::operator==\fP (const gf &lb, const gf &rb) \-> bool"
 .br
 .ti -1c
-.RI "bool \fBirrpoly::operator!=\fP (const gf &lb, const gf &rb)"
+.RI "auto \fBirrpoly::operator!=\fP (const gf &lb, const gf &rb) \-> bool"
 .br
 .ti -1c
-.RI "gfn \fBirrpoly::operator+\fP (const uintmax_t other, const gfn &curr)"
+.RI "auto \fBirrpoly::operator+\fP (const uintmax_t other, const gfn &curr) \-> gfn"
 .br
 .ti -1c
-.RI "gfn \fBirrpoly::operator\-\fP (const uintmax_t other, const gfn &curr)"
+.RI "auto \fBirrpoly::operator\-\fP (const uintmax_t other, const gfn &curr) \-> gfn"
 .br
 .ti -1c
-.RI "gfn \fBirrpoly::operator*\fP (const uintmax_t other, const gfn &curr)"
+.RI "auto \fBirrpoly::operator*\fP (const uintmax_t other, const gfn &curr) \-> gfn"
 .br
 .ti -1c
-.RI "gfn \fBirrpoly::operator/\fP (const uintmax_t other, const gfn &curr)"
+.RI "auto \fBirrpoly::operator/\fP (const uintmax_t other, const gfn &curr) \-> gfn"
 .br
 .ti -1c
-.RI "template<class charT , class traits > std::basic_ostream< charT, traits > & \fBirrpoly::operator<<\fP (std::basic_ostream< charT, traits > &os, const gfn &val)"
+.RI "template<class charT , class traits > auto \fBirrpoly::operator<<\fP (std::basic_ostream< charT, traits > &os, const gfn &val) \-> std::basic_ostream< charT, traits > &"
 .br
 .ti -1c
-.RI "template<class charT , class traits > std::basic_istream< charT, traits > & \fBirrpoly::operator>>\fP (std::basic_istream< charT, traits > &is, gfn &val)"
+.RI "template<class charT , class traits > auto \fBirrpoly::operator>>\fP (std::basic_istream< charT, traits > &is, gfn &val) \-> std::basic_istream< charT, traits > &"
 .br
 .ti -1c
-.RI "gf \fBirrpoly::make_gf\fP (const uintmax_t base)"
+.RI "auto \fBirrpoly::make_gf\fP (const uintmax_t base) \-> gf"
 .br
 .in -1c
 .SH "Подробное описание"
@@ -104,14 +104,14 @@ Vadim Piven vadim@piven.tech @license Free use of this library is permitted unde
 \fBМакроопределение:\fP
 .PP
 .nf
-    inline bool operator op(const gfn &l, const gfn &r) { \
+    inline auto operator op(const gfn &l, const gfn &r) -> bool { \
         assert(l\&.field() == r\&.field()); \
         return l\&.data() op r\&.data(); \
     } \
-    inline bool operator op(const gfn &l, const uintmax_t r) { \
+    inline auto operator op(const gfn &l, const uintmax_t r) -> bool { \
         return l\&.data() op (r % l\&.base()); \
     } \
-    inline bool operator op(const uintmax_t l, const gfn &r) { \
+    inline auto operator op(const uintmax_t l, const gfn &r) -> bool { \
         return (l % r\&.base()) op r\&.data(); \
     }
 .fi

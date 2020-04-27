@@ -26,14 +26,14 @@ template<typename value_type, typename result_type>
 class checker {
 public:
     /// Вид функции, генерирующей многочлены для проверки.
-    typedef std::function<value_type()> input_func;
+    using input_func = std::function<value_type()>;
 
     /// Вид функции, выполняющей проверку и сохраняющей результат.
-    typedef std::function<void(const value_type &, std::optional<result_type> &)> check_func;
+    using check_func = std::function<void(const value_type &, std::optional<result_type> &)>;
 
     /// Вид функции, обрабатывающей результат проверки (если многочлен удовлетворяет
     /// требуемым условиям возвращает true, иначе - false).
-    typedef std::function<bool(const value_type &, const result_type &)> callback_func;
+    using callback_func = std::function<bool(const value_type &, const result_type &)>;
 
 private:
     /// Потоки, непосредственно выполняющие проверку многочленов на неприводимость и примитивность.
@@ -96,7 +96,7 @@ private:
 
         /// Многочлен, проверка которого выполнялась.
         [[nodiscard]]
-        const std::optional<value_type> &get() const {
+        auto get() const -> const std::optional<value_type> & {
             return m_val;
         }
 
@@ -114,7 +114,7 @@ private:
 
         /// Возвращает текущее состояние потока.
         [[nodiscard]]
-        bool busy() const {
+        auto busy() const -> bool {
             return m_busy;
         }
 
@@ -127,7 +127,7 @@ private:
 
         /// Возвращает результат проверки текущего многочлена на неприводимость и примитивность.
         [[nodiscard]]
-        const std::optional<result_type> &result() const {
+        auto result() const -> const std::optional<result_type> & {
             return m_res;
         }
     }; // class node
@@ -138,7 +138,7 @@ private:
     std::vector<std::unique_ptr<node>> m_nodes;
 
     /// Считает, сколько потоков заняты.
-    unsigned countBusy() {
+    auto countBusy() -> unsigned {
         return std::count_if(m_nodes.begin(), m_nodes.end(), std::mem_fn(&node::busy));
     }
 

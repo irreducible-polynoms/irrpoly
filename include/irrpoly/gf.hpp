@@ -34,23 +34,23 @@ private:
     const uintmax_t m_base; /// Основание поля
 
     explicit
-    gfbase(uintmax_t);
+    gfbase(uintmax_t /*base*/);
 
-    friend gf make_gf(uintmax_t);
+    friend auto make_gf(uintmax_t /*base*/) -> gf;
 
 public:
     [[nodiscard]]
-    uintmax_t base() const;
+    auto base() const -> uintmax_t;
 
     [[nodiscard]]
-    uintmax_t mul_inv(uintmax_t) const;
+    auto mul_inv(uintmax_t /*val*/) const -> uintmax_t;
 };
 
-bool operator==(const gf &lb, const gf &rb) {
+auto operator==(const gf &lb, const gf &rb) -> bool {
     return lb->base() == rb->base();
 }
 
-bool operator!=(const gf &lb, const gf &rb) {
+auto operator!=(const gf &lb, const gf &rb) -> bool {
     return lb->base() != rb->base();
 }
 
@@ -66,7 +66,7 @@ private:
 public:
     /// Генерирует случайное число в пределах [0, P-1].
     static
-    gfn random(const gf &field) {
+    auto random(const gf &field) -> gfn {
         static std::random_device rd;
 #ifdef __LP64__
         static std::mt19937_64 gen(rd());
@@ -78,7 +78,7 @@ public:
     }
 
     [[nodiscard]]
-    uintmax_t value() const {
+    auto value() const -> uintmax_t {
         return m_val;
     }
 
@@ -93,7 +93,7 @@ public:
 
     gfn(gfn &&other) = default;
 
-    gfn &operator=(const gfn &other) {
+    auto operator=(const gfn &other) -> gfn & {
         if (this != &other) {
             assert(m_field == nullptr || m_field == other.m_field);
             m_field = other.m_field;
@@ -103,144 +103,144 @@ public:
     }
 
     [[nodiscard]]
-    uintmax_t base() const {
+    auto base() const -> uintmax_t {
         return m_field->base();
     }
 
-    gfn &operator=(const uintmax_t other) {
+    auto operator=(const uintmax_t other) -> gfn & {
         m_val = other % base();
         return *this;
     }
 
     [[nodiscard]]
-    const gf &field() const {
+    auto field() const -> const gf & {
         return m_field;
     }
 
     /// Возвращает значение класса в виде целого числа.
     [[nodiscard]]
-    uintmax_t data() const {
+    auto data() const -> uintmax_t {
         return m_val;
     }
 
     [[nodiscard]]
-    gfn operator+() const {
+    auto operator+() const -> gfn {
         return gfn{*this};
     }
 
     [[nodiscard]]
-    gfn operator+(const gfn &other) const {
+    auto operator+(const gfn &other) const -> gfn {
         assert(m_field == other.field());
         return gfn{m_field, m_val + other.m_val};
     }
 
     [[nodiscard]]
-    gfn operator+(const uintmax_t other) const {
+    auto operator+(const uintmax_t other) const -> gfn {
         return gfn{m_field, m_val + (other % m_field->base())};
     }
 
     friend
-    gfn operator+(uintmax_t, const gfn &);
+    auto operator+(uintmax_t /*other*/, const gfn & /*curr*/) -> gfn;
 
-    gfn &operator+=(const gfn &other) {
+    auto operator+=(const gfn &other) -> gfn & {
         assert(m_field == other.field());
         m_val = (m_val + other.m_val) % base();
         return *this;
     }
 
-    gfn operator+=(const uintmax_t other) {
+    auto operator+=(const uintmax_t other) -> gfn {
         m_val = (m_val + (other % base())) % base();
         return *this;
     }
 
-    gfn &operator++() {
+    auto operator++() -> gfn & {
         m_val = (m_val + 1) % base();
         return *this;
     }
 
     [[nodiscard]]
-    gfn operator++(int) &{
+    auto operator++(int) & -> gfn {
         gfn tmp{*this};
         m_val = (m_val + 1) % base();
         return tmp;
     }
 
     [[nodiscard]]
-    gfn operator-() const {
+    auto operator-() const -> gfn {
         gfn tmp{*this};
         tmp.m_val = (base() - m_val) % base();
         return tmp;
     }
 
     [[nodiscard]]
-    gfn operator-(const gfn &other) const {
+    auto operator-(const gfn &other) const -> gfn {
         assert(m_field == other.field());
         return gfn{m_field, base() + m_val - other.m_val};
     }
 
     [[nodiscard]]
-    gfn operator-(const uintmax_t other) const {
+    auto operator-(const uintmax_t other) const -> gfn {
         return gfn{m_field, base() + m_val - (other % base())};
     }
 
     friend
-    gfn operator-(uintmax_t, const gfn &);
+    auto operator-(uintmax_t /*other*/, const gfn & /*curr*/) -> gfn;
 
-    gfn &operator-=(const gfn &other) {
+    auto operator-=(const gfn &other) -> gfn & {
         assert(m_field == other.field());
         m_val = (base() + m_val - other.m_val) % base();
         return *this;
     }
 
-    gfn operator-=(const uintmax_t other) {
+    auto operator-=(const uintmax_t other) -> gfn {
         m_val = (base() + m_val - (other % base())) % base();
         return *this;
     }
 
-    gfn &operator--() {
+    auto operator--() -> gfn & {
         m_val = (base() + m_val - 1) % base();
         return *this;
     }
 
     [[nodiscard]]
-    gfn operator--(int) &{
+    auto operator--(int) & -> gfn {
         gfn tmp{*this};
         m_val = (base() + m_val - 1) % base();
         return tmp;
     }
 
     [[nodiscard]]
-    gfn operator*(const gfn &other) const {
+    auto operator*(const gfn &other) const -> gfn {
         assert(m_field == other.field());
         return gfn{m_field, m_val * other.m_val};
     }
 
     [[nodiscard]]
-    gfn operator*(const uintmax_t other) const {
+    auto operator*(const uintmax_t other) const -> gfn {
         return gfn{m_field, m_val * (other % base())};
     }
 
     friend
-    gfn operator*(uintmax_t, const gfn &);
+    auto operator*(uintmax_t /*other*/, const gfn & /*curr*/) -> gfn;
 
-    gfn &operator*=(const gfn &other) {
+    auto operator*=(const gfn &other) -> gfn & {
         assert(m_field == other.field());
         m_val = (m_val * other.m_val) % base();
         return *this;
     }
 
-    gfn operator*=(const uintmax_t other) {
+    auto operator*=(const uintmax_t other) -> gfn {
         m_val = (m_val * (other % base())) % base();
         return *this;
     }
 
     [[nodiscard]]
-    gfn mul_inv() {
+    auto mul_inv() -> gfn {
         return gfn{m_field, m_field->mul_inv(m_val)};
     }
 
     [[nodiscard]]
-    gfn operator/(const gfn &other) const {
+    auto operator/(const gfn &other) const -> gfn {
         assert(m_field == other.field());
         switch (other.m_val) {
         case 0:throw std::invalid_argument("division by zero");
@@ -249,7 +249,7 @@ public:
     }
 
     [[nodiscard]]
-    gfn operator/(const uintmax_t other) const {
+    auto operator/(const uintmax_t other) const -> gfn {
         switch (other % base()) {
         case 0:throw std::invalid_argument("division by zero");
         default:
@@ -259,9 +259,9 @@ public:
     }
 
     friend
-    gfn operator/(uintmax_t, const gfn &);
+    auto operator/(uintmax_t /*other*/, const gfn & /*curr*/) -> gfn;
 
-    gfn &operator/=(const gfn &other) {
+    auto operator/=(const gfn &other) -> gfn & {
         assert(m_field == other.field());
         switch (other.m_val) {
         case 0:throw std::invalid_argument("division by zero");
@@ -270,7 +270,7 @@ public:
         }
     }
 
-    gfn operator/=(const uintmax_t other) {
+    auto operator/=(const uintmax_t other) -> gfn {
         switch (other % base()) {
         case 0:throw std::invalid_argument("division by zero");
         default:m_val = (m_val * m_field->mul_inv(other % base())) % base();
@@ -280,7 +280,7 @@ public:
 
     /// Проверяет равенство данного числа нулю.
     [[nodiscard]]
-    bool is_zero() const {
+    auto is_zero() const -> bool {
         return 0 == m_val;
     }
 
@@ -288,31 +288,30 @@ public:
         return 0 != m_val;
     }
 
-    gfn &set_zero() {
+    auto set_zero() -> gfn & {
         m_val = 0;
         return *this;
     }
 
     template<class charT, class traits>
     friend
-    std::basic_ostream<charT, traits> &
-    operator<<(std::basic_ostream<charT, traits> &, const gfn &);
+    auto operator<<(std::basic_ostream<charT, traits> & /*os*/, const gfn & /*val*/) -> std::basic_ostream<charT,
+                                                                                                           traits> &;
 
     template<class charT, class traits>
     friend
-    std::basic_istream<charT, traits> &
-    operator>>(std::basic_istream<charT, traits> &, gfn &);
+    auto operator>>(std::basic_istream<charT, traits> & /*is*/, gfn & /*val*/) -> std::basic_istream<charT, traits> &;
 };
 
 #define GFN_COMPARISON_OPERATORS(op) \
-    inline bool operator op(const gfn &l, const gfn &r) { \
+    inline auto operator op(const gfn &l, const gfn &r) -> bool { \
         assert(l.field() == r.field()); \
         return l.data() op r.data(); \
     } \
-    inline bool operator op(const gfn &l, const uintmax_t r) { \
+    inline auto operator op(const gfn &l, const uintmax_t r) -> bool { \
         return l.data() op (r % l.base()); \
     } \
-    inline bool operator op(const uintmax_t l, const gfn &r) { \
+    inline auto operator op(const uintmax_t l, const gfn &r) -> bool { \
         return (l % r.base()) op r.data(); \
     }
 
@@ -326,22 +325,22 @@ GFN_COMPARISON_OPERATORS(>=)
 #undef GFN_COMPARISON_OPERATORS
 
 [[nodiscard]]
-gfn operator+(const uintmax_t other, const gfn &curr) {
+auto operator+(const uintmax_t other, const gfn &curr) -> gfn {
     return gfn{curr.m_field, (other % curr.base()) + curr.m_val};
 }
 
 [[nodiscard]]
-gfn operator-(const uintmax_t other, const gfn &curr) {
+auto operator-(const uintmax_t other, const gfn &curr) -> gfn {
     return gfn{curr.m_field, curr.base() + (other % curr.base()) - curr.m_val};
 }
 
 [[nodiscard]]
-gfn operator*(const uintmax_t other, const gfn &curr) {
+auto operator*(const uintmax_t other, const gfn &curr) -> gfn {
     return gfn{curr.m_field, (other % curr.base()) * curr.m_val};
 }
 
 [[nodiscard]]
-gfn operator/(const uintmax_t other, const gfn &curr) {
+auto operator/(const uintmax_t other, const gfn &curr) -> gfn {
     switch (curr.m_val) {
     case 0:throw std::invalid_argument("division by zero");
     default:
@@ -351,14 +350,14 @@ gfn operator/(const uintmax_t other, const gfn &curr) {
 }
 
 template<class charT, class traits>
-std::basic_ostream<charT, traits> &
-operator<<(std::basic_ostream<charT, traits> &os, const gfn &val) {
+auto
+operator<<(std::basic_ostream<charT, traits> &os, const gfn &val) -> std::basic_ostream<charT, traits> & {
     return os << val.m_val;
 }
 
 template<class charT, class traits>
-std::basic_istream<charT, traits> &
-operator>>(std::basic_istream<charT, traits> &is, gfn &val) {
+auto
+operator>>(std::basic_istream<charT, traits> &is, gfn &val) -> std::basic_istream<charT, traits> & {
     is >> val.m_val;
     val.m_val %= val.base();
     return is;
@@ -366,31 +365,36 @@ operator>>(std::basic_istream<charT, traits> &is, gfn &val) {
 
 inline
 gfbase::gfbase(const uintmax_t base) : m_base(base), m_inv(base, 0) {
-    if (base == 0)
+    if (base == 0) {
         throw std::logic_error("empty field");
-    if (base == 1)
+    }
+    if (base == 1) {
         throw std::logic_error("field could contain only zero");
-    if (UINTMAX_MAX / (base - 1) < (base - 1))
+    }
+    if (UINTMAX_MAX / (base - 1) < (base - 1)) {
         throw std::logic_error("too large field");
+    }
 
     auto i_base = static_cast<intmax_t>(base);
     auto inv_calc = [](const intmax_t base, const intmax_t val) -> uintmax_t {
         intmax_t u0 = base, u1 = 1, u2 = 0,
-            v0 = val, v1 = 0, v2 = 1, w0, w1, w2, q;
+            v0 = val, v1 = 0, v2 = 1, w0 = 0, w1 = 0, w2 = 0, q = 0;
         while (v0 > 0) {
             q = u0 / v0;
             w0 = u0 - q * v0, w1 = u1 - q * v1, w2 = u2 - q * v2;
             u0 = v0, u1 = v1, u2 = v2, v0 = w0, v1 = w1, v2 = w2;
         }
-        if (u0 > 1)
+        if (u0 > 1) {
             throw std::logic_error("multiplicative inverse don't exist");
+        }
         return static_cast<uintmax_t>(u2 < 0 ? (base + u2) : (u2));
     };
 
     m_inv[1] = 1;
     for (uintmax_t i = 2; i < m_base; ++i) {
-        if (m_inv[i])
+        if (m_inv[i]) {
             continue;
+        }
         m_inv[i] = inv_calc(i_base, i);
         m_inv[m_inv[i]] = i;
     }
@@ -398,13 +402,13 @@ gfbase::gfbase(const uintmax_t base) : m_base(base), m_inv(base, 0) {
 
 [[nodiscard]]
 inline
-uintmax_t gfbase::base() const {
+auto gfbase::base() const -> uintmax_t {
     return m_base;
 }
 
 [[nodiscard]]
 inline
-uintmax_t gfbase::mul_inv(const uintmax_t val) const {
+auto gfbase::mul_inv(const uintmax_t val) const -> uintmax_t {
     switch (val % m_base) {
     case 0:throw std::logic_error("multiplicative inverse don't exist");
     default:return m_inv[val % m_base];
@@ -413,7 +417,7 @@ uintmax_t gfbase::mul_inv(const uintmax_t val) const {
 
 [[nodiscard]]
 inline
-gf make_gf(const uintmax_t base) {
+auto make_gf(const uintmax_t base) -> gf {
     return dropbox::oxygen::nn<std::shared_ptr<gfbase>>(dropbox::oxygen::nn(
         dropbox::oxygen::i_promise_i_checked_for_null_t{}, new gfbase(base)));
 }

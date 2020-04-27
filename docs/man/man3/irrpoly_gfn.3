@@ -12,7 +12,7 @@ irrpoly::gfn
 
 .in +1c
 .ti -1c
-.RI "uintmax_t \fBvalue\fP () const"
+.RI "auto \fBvalue\fP () const \-> uintmax_t"
 .br
 .ti -1c
 .RI "\fBgfn\fP (const \fBgf\fP &field)"
@@ -28,106 +28,106 @@ irrpoly::gfn
 .RI "\fBgfn\fP (\fBgfn\fP &&other)=default"
 .br
 .ti -1c
-.RI "\fBgfn\fP & \fBoperator=\fP (const \fBgfn\fP &other)"
+.RI "auto \fBoperator=\fP (const \fBgfn\fP &other) \-> \fBgfn\fP &"
 .br
 .ti -1c
-.RI "uintmax_t \fBbase\fP () const"
+.RI "auto \fBbase\fP () const \-> uintmax_t"
 .br
 .ti -1c
-.RI "\fBgfn\fP & \fBoperator=\fP (const uintmax_t other)"
+.RI "auto \fBoperator=\fP (const uintmax_t other) \-> \fBgfn\fP &"
 .br
 .ti -1c
-.RI "const \fBgf\fP & \fBfield\fP () const"
+.RI "auto \fBfield\fP () const \-> const \fBgf\fP &"
 .br
 .ti -1c
-.RI "uintmax_t \fBdata\fP () const"
+.RI "auto \fBdata\fP () const \-> uintmax_t"
 .br
 .RI "Возвращает значение класса в виде целого числа\&. "
 .ti -1c
-.RI "\fBgfn\fP \fBoperator+\fP () const"
+.RI "auto \fBoperator+\fP () const \-> \fBgfn\fP"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator+\fP (const \fBgfn\fP &other) const"
+.RI "auto \fBoperator+\fP (const \fBgfn\fP &other) const \-> \fBgfn\fP"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator+\fP (const uintmax_t other) const"
+.RI "auto \fBoperator+\fP (const uintmax_t other) const \-> \fBgfn\fP"
 .br
 .ti -1c
-.RI "\fBgfn\fP & \fBoperator+=\fP (const \fBgfn\fP &other)"
+.RI "auto \fBoperator+=\fP (const \fBgfn\fP &other) \-> \fBgfn\fP &"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator+=\fP (const uintmax_t other)"
+.RI "auto \fBoperator+=\fP (const uintmax_t other) \-> \fBgfn\fP"
 .br
 .ti -1c
-.RI "\fBgfn\fP & \fBoperator++\fP ()"
+.RI "auto \fBoperator++\fP () \-> \fBgfn\fP &"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator++\fP (int) &"
+.RI "auto \fBoperator++\fP (int) &\-> \fBgfn\fP"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator\-\fP () const"
+.RI "auto \fBoperator\-\fP () const \-> \fBgfn\fP"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator\-\fP (const \fBgfn\fP &other) const"
+.RI "auto \fBoperator\-\fP (const \fBgfn\fP &other) const \-> \fBgfn\fP"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator\-\fP (const uintmax_t other) const"
+.RI "auto \fBoperator\-\fP (const uintmax_t other) const \-> \fBgfn\fP"
 .br
 .ti -1c
-.RI "\fBgfn\fP & \fBoperator\-=\fP (const \fBgfn\fP &other)"
+.RI "auto \fBoperator\-=\fP (const \fBgfn\fP &other) \-> \fBgfn\fP &"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator\-=\fP (const uintmax_t other)"
+.RI "auto \fBoperator\-=\fP (const uintmax_t other) \-> \fBgfn\fP"
 .br
 .ti -1c
-.RI "\fBgfn\fP & \fBoperator\-\-\fP ()"
+.RI "auto \fBoperator\-\-\fP () \-> \fBgfn\fP &"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator\-\-\fP (int) &"
+.RI "auto \fBoperator\-\-\fP (int) &\-> \fBgfn\fP"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator*\fP (const \fBgfn\fP &other) const"
+.RI "auto \fBoperator*\fP (const \fBgfn\fP &other) const \-> \fBgfn\fP"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator*\fP (const uintmax_t other) const"
+.RI "auto \fBoperator*\fP (const uintmax_t other) const \-> \fBgfn\fP"
 .br
 .ti -1c
-.RI "\fBgfn\fP & \fBoperator*=\fP (const \fBgfn\fP &other)"
+.RI "auto \fBoperator*=\fP (const \fBgfn\fP &other) \-> \fBgfn\fP &"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator*=\fP (const uintmax_t other)"
+.RI "auto \fBoperator*=\fP (const uintmax_t other) \-> \fBgfn\fP"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBmul_inv\fP ()"
+.RI "auto \fBmul_inv\fP () \-> \fBgfn\fP"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator/\fP (const \fBgfn\fP &other) const"
+.RI "auto \fBoperator/\fP (const \fBgfn\fP &other) const \-> \fBgfn\fP"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator/\fP (const uintmax_t other) const"
+.RI "auto \fBoperator/\fP (const uintmax_t other) const \-> \fBgfn\fP"
 .br
 .ti -1c
-.RI "\fBgfn\fP & \fBoperator/=\fP (const \fBgfn\fP &other)"
+.RI "auto \fBoperator/=\fP (const \fBgfn\fP &other) \-> \fBgfn\fP &"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator/=\fP (const uintmax_t other)"
+.RI "auto \fBoperator/=\fP (const uintmax_t other) \-> \fBgfn\fP"
 .br
 .ti -1c
-.RI "bool \fBis_zero\fP () const"
+.RI "auto \fBis_zero\fP () const \-> bool"
 .br
 .RI "Проверяет равенство данного числа нулю\&. "
 .ti -1c
 .RI "\fBoperator bool\fP () const"
 .br
 .ti -1c
-.RI "\fBgfn\fP & \fBset_zero\fP ()"
+.RI "auto \fBset_zero\fP () \-> \fBgfn\fP &"
 .br
 .in -1c
 .SS "Открытые статические члены"
 
 .in +1c
 .ti -1c
-.RI "static \fBgfn\fP \fBrandom\fP (const \fBgf\fP &field)"
+.RI "static auto \fBrandom\fP (const \fBgf\fP &field) \-> \fBgfn\fP"
 .br
 .RI "Генерирует случайное число в пределах [0, P-1]\&. "
 .in -1c
@@ -135,22 +135,22 @@ irrpoly::gfn
 
 .in +1c
 .ti -1c
-.RI "\fBgfn\fP \fBoperator+\fP (uintmax_t, const \fBgfn\fP &)"
+.RI "auto \fBoperator+\fP (uintmax_t, const \fBgfn\fP &) \-> \fBgfn\fP"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator\-\fP (uintmax_t, const \fBgfn\fP &)"
+.RI "auto \fBoperator\-\fP (uintmax_t, const \fBgfn\fP &) \-> \fBgfn\fP"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator*\fP (uintmax_t, const \fBgfn\fP &)"
+.RI "auto \fBoperator*\fP (uintmax_t, const \fBgfn\fP &) \-> \fBgfn\fP"
 .br
 .ti -1c
-.RI "\fBgfn\fP \fBoperator/\fP (uintmax_t, const \fBgfn\fP &)"
+.RI "auto \fBoperator/\fP (uintmax_t, const \fBgfn\fP &) \-> \fBgfn\fP"
 .br
 .ti -1c
-.RI "template<class charT , class traits > std::basic_ostream< charT, traits > & \fBoperator<<\fP (std::basic_ostream< charT, traits > &, const \fBgfn\fP &)"
+.RI "template<class charT , class traits > auto \fBoperator<<\fP (std::basic_ostream< charT, traits > &, const \fBgfn\fP &) \-> std::basic_ostream< charT, traits > &"
 .br
 .ti -1c
-.RI "template<class charT , class traits > std::basic_istream< charT, traits > & \fBoperator>>\fP (std::basic_istream< charT, traits > &, \fBgfn\fP &)"
+.RI "template<class charT , class traits > auto \fBoperator>>\fP (std::basic_istream< charT, traits > &, \fBgfn\fP &) \-> std::basic_istream< charT, traits > &"
 .br
 .in -1c
 .SH "Подробное описание"
