@@ -358,14 +358,16 @@ function (pvs_studio_add_target)
     set(PVS_STUDIO_BIN "${PVS_STUDIO_BIN_PATH}")
 
     if (NOT EXISTS "${PVS_STUDIO_BIN}")
-        message(FATAL_ERROR "pvs-studio-analyzer is not found")
+        message(WARNING "pvs-studio-analyzer is not found")
+        return()
     endif ()
 
     find_program(PVS_STUDIO_CONVERTER_PATH "${PVS_STUDIO_CONVERTER}" ${PATHS})
     set(PVS_STUDIO_CONVERTER "${PVS_STUDIO_CONVERTER_PATH}")
 
     if (NOT EXISTS "${PVS_STUDIO_CONVERTER}")
-        message(FATAL_ERROR "plog-converter is not found")
+        message(WARNING "plog-converter is not found")
+        return()
     endif ()
 
     default(PVS_STUDIO_MODE "GA:1,2")
@@ -390,7 +392,8 @@ function (pvs_studio_add_target)
             COMMENT "Generating PVS-Studio.cfg")
 
     if (NOT "${PVS_STUDIO_PREPROCESSOR}" MATCHES "^${PVS_STUDIO_SUPPORTED_PREPROCESSORS}$")
-        message(FATAL_ERROR "Preprocessor ${PVS_STUDIO_PREPROCESSOR} isn't supported. Available options: ${PVS_STUDIO_SUPPORTED_PREPROCESSORS}.")
+        message(WARNING "Preprocessor ${PVS_STUDIO_PREPROCESSOR} isn't supported. Available options: ${PVS_STUDIO_SUPPORTED_PREPROCESSORS}.")
+        return()
     endif ()
 
     pvs_studio_append_standard_flag(PVS_STUDIO_CXX_FLAGS "${CMAKE_CXX_STANDARD}")
@@ -473,7 +476,8 @@ function (pvs_studio_add_target)
     if (PVS_STUDIO_COMPILE_COMMANDS)
         set(COMPILE_COMMANDS_LOG "${PVS_STUDIO_LOG}.pvs.analyzer.raw")
         if (NOT CMAKE_EXPORT_COMPILE_COMMANDS)
-            message(FATAL_ERROR "You should set CMAKE_EXPORT_COMPILE_COMMANDS to TRUE")
+            message(WARNING "You should set CMAKE_EXPORT_COMPILE_COMMANDS to TRUE")
+            return()
         endif ()
         add_custom_command(
                 OUTPUT "${COMPILE_COMMANDS_LOG}"
