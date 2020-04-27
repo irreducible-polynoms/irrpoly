@@ -258,7 +258,7 @@ $(function() {
 <div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    }</div>
 <div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160; </div>
 <div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;    <span class="keyword">auto</span> operator[](uintmax_t i) -&gt; gfn &amp; {</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        m_normalized = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        m_normalized = i + 1 == m_data.size() ? false : m_normalized;</div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        <span class="keywordflow">return</span> m_data[i];</div>
 <div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    }</div>
 <div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160; </div>
@@ -638,11 +638,11 @@ $(function() {
 <div class="ttc" id="agf_8hpp_html"><div class="ttname"><a href="gf_8hpp.html">gf.hpp</a></div></div>
 <div class="ttc" id="aclassirrpoly_1_1gfn_html_a2b564f8407de09fcb22f1c2e0c5b5c15"><div class="ttname"><a href="classirrpoly_1_1gfn.html#a2b564f8407de09fcb22f1c2e0c5b5c15">irrpoly::gfn::random</a></div><div class="ttdeci">static auto random(const gf &amp;field) -&gt; gfn</div><div class="ttdoc">Генерирует случайное число в пределах [0, P-1].</div><div class="ttdef"><b>Definition:</b> gf.hpp:69</div></div>
 <div class="ttc" id="aclassirrpoly_1_1gfpoly_html"><div class="ttname"><a href="classirrpoly_1_1gfpoly.html">irrpoly::gfpoly</a></div><div class="ttdef"><b>Definition:</b> gfpoly.hpp:29</div></div>
-<div class="ttc" id="aclassirrpoly_1_1gfn_html_a6895e0b71202b7d34495f6cbeb9f0e02"><div class="ttname"><a href="classirrpoly_1_1gfn.html#a6895e0b71202b7d34495f6cbeb9f0e02">irrpoly::gfn::is_zero</a></div><div class="ttdeci">auto is_zero() const -&gt; bool</div><div class="ttdoc">Проверяет равенство данного числа нулю.</div><div class="ttdef"><b>Definition:</b> gf.hpp:283</div></div>
+<div class="ttc" id="aclassirrpoly_1_1gfn_html_a6895e0b71202b7d34495f6cbeb9f0e02"><div class="ttname"><a href="classirrpoly_1_1gfn.html#a6895e0b71202b7d34495f6cbeb9f0e02">irrpoly::gfn::is_zero</a></div><div class="ttdeci">auto is_zero() const -&gt; bool</div><div class="ttdoc">Проверяет равенство данного числа нулю.</div><div class="ttdef"><b>Definition:</b> gf.hpp:278</div></div>
 <div class="ttc" id="aclassdropbox_1_1oxygen_1_1nn_html"><div class="ttname"><a href="classdropbox_1_1oxygen_1_1nn.html">dropbox::oxygen::nn</a></div><div class="ttdef"><b>Definition:</b> nn.hpp:38</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Пн 27 Апр 2020 14:32:35. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Вт 28 Апр 2020 00:45:08. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.18
 </small></address>

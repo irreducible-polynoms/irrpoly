@@ -1,4 +1,4 @@
-.TH "include/irrpoly/gf.hpp" 3 "Пн 27 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
+.TH "include/irrpoly/gf.hpp" 3 "Вт 28 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -106,13 +106,13 @@ Vadim Piven vadim@piven.tech @license Free use of this library is permitted unde
 .nf
     inline auto operator op(const gfn &l, const gfn &r) -> bool { \
         assert(l\&.field() == r\&.field()); \
-        return l\&.data() op r\&.data(); \
+        return l\&.value() op r\&.value(); \
     } \
     inline auto operator op(const gfn &l, const uintmax_t r) -> bool { \
-        return l\&.data() op (r % l\&.base()); \
+        return l\&.value() op (r % l\&.base()); \
     } \
     inline auto operator op(const uintmax_t l, const gfn &r) -> bool { \
-        return (l % r\&.base()) op r\&.data(); \
+        return (l % r\&.base()) op r\&.value(); \
     }
 .fi
 .SS "#define NN_CHECK_THROW(_e)"

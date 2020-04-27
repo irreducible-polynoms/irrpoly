@@ -77,6 +77,7 @@ public:
         return gfn(field, dis(gen));
     }
 
+    /// Возвращает значение класса в виде целого числа.
     [[nodiscard]]
     auto value() const -> uintmax_t {
         return m_val;
@@ -115,12 +116,6 @@ public:
     [[nodiscard]]
     auto field() const -> const gf & {
         return m_field;
-    }
-
-    /// Возвращает значение класса в виде целого числа.
-    [[nodiscard]]
-    auto data() const -> uintmax_t {
-        return m_val;
     }
 
     [[nodiscard]]
@@ -306,13 +301,13 @@ public:
 #define GFN_COMPARISON_OPERATORS(op) \
     inline auto operator op(const gfn &l, const gfn &r) -> bool { \
         assert(l.field() == r.field()); \
-        return l.data() op r.data(); \
+        return l.value() op r.value(); \
     } \
     inline auto operator op(const gfn &l, const uintmax_t r) -> bool { \
-        return l.data() op (r % l.base()); \
+        return l.value() op (r % l.base()); \
     } \
     inline auto operator op(const uintmax_t l, const gfn &r) -> bool { \
-        return (l % r.base()) op r.data(); \
+        return (l % r.base()) op r.value(); \
     }
 
 GFN_COMPARISON_OPERATORS(==)

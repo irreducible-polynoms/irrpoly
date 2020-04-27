@@ -170,13 +170,13 @@ auto&#160;</td><td class="memItemRight" valign="bottom"><b>irrpoly::make_gf</b> 
 </div><div class="memdoc">
 <b>Макроопределение:</b><div class="fragment"><div class="line">    <span class="keyword">inline</span> <span class="keyword">auto</span> <span class="keyword">operator</span> op(<span class="keyword">const</span> gfn &amp;l, <span class="keyword">const</span> gfn &amp;r) -&gt; <span class="keywordtype">bool</span> { \</div>
 <div class="line">        assert(l.field() == r.field()); \</div>
-<div class="line">        return l.data() op r.data(); \</div>
+<div class="line">        return l.value() op r.value(); \</div>
 <div class="line">    } \</div>
 <div class="line">    inline <span class="keyword">auto</span> <span class="keyword">operator</span> op(<span class="keyword">const</span> gfn &amp;l, <span class="keyword">const</span> uintmax_t r) -&gt; <span class="keywordtype">bool</span> { \</div>
-<div class="line">        return l.data() op (r % l.base()); \</div>
+<div class="line">        return l.value() op (r % l.base()); \</div>
 <div class="line">    } \</div>
 <div class="line">    inline <span class="keyword">auto</span> <span class="keyword">operator</span> op(<span class="keyword">const</span> uintmax_t l, <span class="keyword">const</span> gfn &amp;r) -&gt; <span class="keywordtype">bool</span> { \</div>
-<div class="line">        return (l % r.base()) op r.data(); \</div>
+<div class="line">        return (l % r.base()) op r.value(); \</div>
 <div class="line">    }</div>
 </div><!-- fragment -->
 </div>
@@ -208,7 +208,7 @@ auto&#160;</td><td class="memItemRight" valign="bottom"><b>irrpoly::make_gf</b> 
 <div class="ttc" id="aclassdropbox_1_1oxygen_1_1nn_html"><div class="ttname"><a href="classdropbox_1_1oxygen_1_1nn.html">dropbox::oxygen::nn</a></div><div class="ttdef"><b>Definition:</b> nn.hpp:38</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Пн 27 Апр 2020 14:32:35. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Вт 28 Апр 2020 00:45:08. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.18
 </small></address>

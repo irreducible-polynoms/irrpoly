@@ -145,7 +145,7 @@ auto is_irreducible_berlekamp(const gfpoly &val) -> bool {
         }
 
         // приведение матрицы к ступенчатому виду
-        bool f;
+        bool f = false;
         gfn num(val.field());
         for (i = k = 0; i < n && k < n; ++k) {
             f = !m[i][k].is_zero();

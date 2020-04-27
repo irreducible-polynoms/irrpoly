@@ -1,5 +1,6 @@
 Checks: '*,
-         -cppcoreguidelines-pro-type-const-cast
+         -cppcoreguidelines-pro-type-const-cast,
+         -cppcoreguidelines-pro-type-vararg,
          -cppcoreguidelines-special-member-functions,
          -misc-bool-pointer-implicit-conversion,
          -misc-definitions-in-headers,
@@ -14,7 +15,8 @@ Checks: '*,
          -readability-implicit-bool-conversion,
          -readability-non-const-parameter,
          -google-build-using-namespace,
-         -hicpp-special-member-functions'
+         -hicpp-special-member-functions,
+         -hicpp-vararg'
 WarningsAsErrors: '*'
 HeaderFilterRegex: '\/include\/'
 AnalyzeTemporaryDtors: true

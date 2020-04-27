@@ -55,8 +55,8 @@ TEST_CASE("gfn could be created correctly", "[gfn]") {
             REQUIRE(gfn(gf5).field() == gf5);
             REQUIRE(gfn(gf5, 3).field() == gf5);
         }SECTION("value is normalized") {
-            REQUIRE(gfn(gf5).data() == 0);
-            REQUIRE(gfn(gf5, 7).data() == 2);
+            REQUIRE(gfn(gf5).value() == 0);
+            REQUIRE(gfn(gf5, 7).value() == 2);
         }
     }SECTION("for randomly picked") {
         SECTION("field remains the same") {
@@ -74,7 +74,7 @@ TEST_CASE("gfn could be created correctly", "[gfn]") {
             REQUIRE(field_before == num.field());
         }SECTION("value is normalized") {
             num = 10;
-            REQUIRE(num.data() < 5);
+            REQUIRE(num.value() < 5);
         }
     }
 }

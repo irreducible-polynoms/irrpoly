@@ -190,7 +190,7 @@ public:
     }
 
     auto operator[](uintmax_t i) -> gfn & {
-        m_normalized = false;
+        m_normalized = i + 1 == m_data.size() ? false : m_normalized;
         return m_data[i];
     }
 
