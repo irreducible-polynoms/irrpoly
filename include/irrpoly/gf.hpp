@@ -14,11 +14,10 @@
 #include <utility>
 #include <vector>
 #include <cstdint>
-#include <iostream>
+#include <ostream>
 #include <random>
 #include <stdexcept>
 #include <type_traits>
-#include <cassert>
 #include <memory>
 
 namespace irrpoly {

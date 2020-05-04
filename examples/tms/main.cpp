@@ -9,7 +9,7 @@
 using namespace irrpoly;
 
 [[nodiscard]]
-auto generate_irreducible(uint64_t num) -> std::vector<gfpoly> {
+auto generate_irreducible(uintmax_t num) -> std::vector<gfpoly> {
     auto gf2 = make_gf(2);
     // возвращаемое значение
     std::vector<gfpoly> res;
@@ -27,7 +27,7 @@ auto generate_irreducible(uint64_t num) -> std::vector<gfpoly> {
 
     // функция, генерирующая многочлены для проверки
     auto input = [&]() -> gfpoly {
-        static uint64_t index = 1;
+        static uintmax_t index = 1;
         uint8_t degree = 0;
         for (uint8_t i = 1; index >> i; ++i, ++degree);
         std::vector<uintmax_t> res;
@@ -41,7 +41,7 @@ auto generate_irreducible(uint64_t num) -> std::vector<gfpoly> {
     };
 
     auto check = multithread::make_check_func(
-        multithread::irreducible_method::benor,
+        multithread::irreducible_method::berlekamp,
         multithread::primitive_method::nil);
 
     // функция, вызываемая по окончании проверки, если результат нам подходит - сохраняем и возвращаем true, иначе false
@@ -63,7 +63,7 @@ auto generate_irreducible(uint64_t num) -> std::vector<gfpoly> {
     // сортируем многочлены в лексико-графическом порядке для получения правильной последовательности
     std::sort(res.begin(), res.end(), [](const gfpoly &a, const gfpoly &b) {
         if (a.degree() == b.degree()) {
-            for (uint64_t i = a.degree(); i > 0; --i) {
+            for (auto i = a.degree(); i > 0; --i) {
                 if (a[i] != b[i]) {
                     return a[i] < b[i];
                 }

@@ -11,12 +11,6 @@
 #include "checker.hpp"
 #include "gfpoly.hpp"
 
-#include <algorithm>
-#include <utility>
-#include <cmath>
-#include <stdexcept>
-#include <vector>
-
 namespace irrpoly {
 
 /**

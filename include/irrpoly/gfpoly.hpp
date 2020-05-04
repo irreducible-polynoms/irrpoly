@@ -11,9 +11,6 @@
 #include "gf.hpp"
 
 #include <vector>
-#include <cassert>
-#include <ostream>
-#include <algorithm>
 #include <functional>
 #include <initializer_list>
 #include <string>
