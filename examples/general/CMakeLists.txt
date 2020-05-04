@@ -10,5 +10,8 @@ project(${PROJECT_NAME}.${CURRDIR})
 # и добавляющий исполняемый файл с именем текущего проекта
 include(sources)
 
+# подключаем многопоточность
+include(thread)
+
 # подсключает статический нализатор PVS-Studio
 include(analyze)
