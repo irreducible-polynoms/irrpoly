@@ -23,14 +23,35 @@
 namespace irrpoly {
 
 /**
+ * Бинарные операции над gfn корректно определены лишь в том случае, когда
+ * оба числа принадлежат одному и тому же полю. По умолчанию, проверка этого
+ * факта выполняется только для конфигурации Debug, чтобы в конфигурации Release
+ * добиться наибольшей производительности. Однако, если в конфигурации Release
+ * проверки также требуется выполнять, достаточно объявить
+ * #define IRRPOLY_RELEASE_CHECKED
+ * перед подключением заголовочного файла
+ * #include <irrpoly.h>
+ */
+#if !defined(NDEBUG) || defined(IRRPOLY_RELEASE_CHECKED) // Debug or Release Checked
+#define CHECK_FIELD(comparison) \
+    if (!(comparison)) { \
+        throw std::logic_error("field check failed"); \
+    }
+#else // Release
+#define CHECK_FIELD(comparison)
+#endif
+
+/**
  * Класс gfpoly представляет многочлены над полем Галуа.
  * Основан на классе polynomial из библиотеки Boost.
+ * Взятие значения по индексу [i] возвращает коэффициент при x^i.
+ * Старший коэффициент всегда не нулевой, за исключением случая, когда
+ * весь многочлен равен нулю.
  */
 class gfpoly final {
 private:
-    gf m_field;
-    mutable std::vector<gfn> m_data;
-    mutable bool m_normalized;
+    gf m_field; /// Поле
+    std::vector<gfn> m_data; /// Вектор коэффициентов при степенях x
 
 public:
     /// Генерирует случайный многочлен над полем GF[P] заданной степени.
@@ -48,8 +69,9 @@ public:
         return gfpoly(field, std::move(data));
     }
 
+    /// Возвращает значение многочлена в виде вектора чисел.
+    [[nodiscard]]
     auto value() const -> std::vector<uintmax_t> {
-        normalize();
         std::vector<uintmax_t> res;
         res.reserve(size());
         for (const gfn &val : m_data) {
@@ -58,40 +80,29 @@ public:
         return res;
     }
 
-    auto normalize() -> gfpoly & {
-        if (!m_normalized) {
-            m_data.erase(std::find_if(
-                m_data.rbegin(), m_data.rend(),
-                std::not_fn(std::mem_fn(&gfn::is_zero))
-            ).base(), m_data.end());
-            m_normalized = true;
-        }
-        return *this;
-    }
-
 private:
-    auto normalize() const -> const gfpoly & {
-        if (!m_normalized) {
-            m_data.erase(std::find_if(
-                m_data.rbegin(), m_data.rend(),
-                std::not_fn(std::mem_fn(&gfn::is_zero))
-            ).base(), m_data.end());
-            m_normalized = true;
-        }
+    /// Позволяет сохранять условие отличия от нуля старшего коэффициента.
+    auto normalize() -> gfpoly & {
+        m_data.erase(std::find_if(
+            m_data.rbegin(), m_data.rend(),
+            std::not_fn(std::mem_fn(&gfn::is_zero))
+        ).base(), m_data.end());
         return *this;
     }
 
+    /// Данный конструктор не является публичным, т.к. в противном случае
+    /// требовалось бы проверять, что все числа лежат в одном и том же поле.
     gfpoly(const gf &field, std::vector<gfn> &&p) :
-        m_field(field), m_data(std::move(p)), m_normalized(false) {
+        m_field(field), m_data(std::move(p)) {
         normalize();
     }
 
 public:
     explicit
-    gfpoly(const gf &field) : m_field(field), m_data(), m_normalized(true) {}
+    gfpoly(const gf &field) : m_field(field), m_data() {}
 
     gfpoly(const gf &field, const std::vector<uintmax_t> &l) :
-        m_field(field), m_data(), m_normalized(false) {
+        m_field(field), m_data() {
         m_data.reserve(l.size());
         for (uintmax_t v : l) {
             m_data.emplace_back(field, v);
@@ -114,46 +125,45 @@ public:
         return *this;
     }
 
-    gfpoly(const gfpoly &p) :
-        m_field(p.m_field), m_data(p.m_data), m_normalized(p.m_normalized) {
-        normalize();
-    };
+    gfpoly(const gfpoly &p) = default;
 
-    gfpoly(gfpoly &&p) noexcept:
-        m_field(std::move(p.m_field)), m_data(std::move(p.m_data)),
-        m_normalized(p.m_normalized) {
-        normalize();
-    };
+    gfpoly(gfpoly &&p) = default;
 
+    /// Операция присваивания корректно определена только для многочленов над одним полем,
+    /// операция перемещения также корректно определена для неинициализированных
+    /// переменных (случай field = nullptr).
     auto operator=(const gfpoly &p) -> gfpoly & {
         if (this != &p) {
-            assert(m_field == nullptr || m_field == p.m_field);
+            CHECK_FIELD(m_field == nullptr || m_field == p.m_field)
             m_field = p.m_field;
             m_data = p.m_data;
-            m_normalized = p.m_normalized;
         }
-        normalize();
         return *this;
     }
 
     explicit
     gfpoly(gfn value) :
-        m_field(value.field()), m_data(), m_normalized(false) {
-        m_data.push_back(std::move(value));
-        normalize();
+        m_field(value.field()), m_data() {
+        if (value) {
+            m_data.push_back(std::move(value));
+        }
     }
 
+    /// Операция присваивания корректно определена только для числел из одного поля,
+    /// операция перемещения также корректно определена для неинициализированных
+    /// переменных (случай field = nullptr).
     auto operator=(gfn value) -> gfpoly & {
-        assert(m_field == nullptr || m_field == value.field());
+        CHECK_FIELD(m_field == nullptr || m_field == value.field())
         gfpoly copy(std::move(value));
         std::swap(*this, copy);
         return *this;
     }
 
     gfpoly(const gf &field, uintmax_t value) :
-        m_field(field), m_data(), m_normalized(false) {
-        m_data.emplace_back(field, value);
-        normalize();
+        m_field(field), m_data() {
+        if (value % base() != 0) {
+            m_data.emplace_back(field, value);
+        }
     }
 
     auto operator=(uintmax_t value) -> gfpoly & {
@@ -174,46 +184,25 @@ public:
 
     [[nodiscard]]
     auto size() const -> uintmax_t {
-        if (!m_normalized) {
-            normalize();
-        }
         return m_data.size();
     }
 
+    /// Возвращает степень многочлена, степень нулевого многочлена не определена.
     [[nodiscard]]
     auto degree() const -> uintmax_t {
-        normalize();
         if (size() == 0) {
             throw std::logic_error("degree() is undefined for the zero polynomial");
         }
         return m_data.size() - 1;
     }
 
-    auto operator[](uintmax_t i) -> gfn & {
-        m_normalized = i + 1 == m_data.size() ? false : m_normalized;
-        return m_data[i];
-    }
-
+    /// Изменение значений многочлена по индексу запрещено.
     auto operator[](uintmax_t i) const -> const gfn & {
         return m_data[i];
     }
 
     [[nodiscard]]
-    auto data() const -> const std::vector<gfn> & {
-        normalize();
-        return m_data;
-    }
-
-private:
-    auto data() -> std::vector<gfn> & {
-        m_normalized = false;
-        return m_data;
-    }
-
-public:
-    [[nodiscard]]
     auto is_zero() const -> bool {
-        normalize();
         return m_data.empty();
     }
 
@@ -223,14 +212,12 @@ public:
 
     auto set_zero() -> gfpoly & {
         m_data.clear();
-        m_normalized = true;
         return *this;
     }
 
 private:
     template<class U, class R>
     auto transform(const U &value, R op) -> gfpoly & {
-        m_normalized = false;
         if (m_data.empty()) {
             m_data.resize(1, gfn(m_field));
         }
@@ -240,8 +227,7 @@ private:
 
     template<class R>
     auto transform(const gfpoly &value, R op) -> gfpoly & {
-        assert(field() == value.field());
-        m_normalized = false;
+        CHECK_FIELD(field() == value.field())
         if (m_data.size() < value.size()) {
             m_data.resize(value.size(), gfn(m_field));
         }
@@ -264,7 +250,6 @@ public:
 
     template<class U>
     auto operator*=(const U &value) -> gfpoly & {
-        m_normalized = false;
         std::transform(m_data.begin(), m_data.end(), m_data.begin(),
                        [&](const gfn &x) -> gfn { return x * value; });
         return normalize();
@@ -272,14 +257,13 @@ public:
 
     template<class U>
     auto operator/=(const U &value) -> gfpoly & {
-        m_normalized = false;
         std::transform(m_data.begin(), m_data.end(), m_data.begin(),
                        [&](const gfn &x) -> gfn { return x / value; });
         return normalize();
     }
 
     template<class U>
-    auto operator%=(const U & /*value_type*/) -> gfpoly & {
+    auto operator%=(const U & /*value*/) -> gfpoly & {
         // We can always divide by a scalar, so there is no remainder:
         return set_zero();
     }
@@ -294,8 +278,7 @@ public:
 
 private:
     auto multiply(const gfpoly &a, const gfpoly &b) -> gfpoly & {
-        assert(a.field() == b.field());
-        m_normalized = false;
+        CHECK_FIELD(a.field() == b.field())
         if (!a || !b) {
             return set_zero();
         }
@@ -316,26 +299,26 @@ public:
 
 private:
     template<typename N>
-    static void division_impl(gfpoly &q, gfpoly &u, const gfpoly &v, N n, N k) {
-        assert(q.field() == u.field() && u.field() == v.field());
-        q[k] = u[n + k] / v[n];
+    static void division_impl(gfpoly *q, gfpoly *u, const gfpoly &v, N n, N k) {
+        CHECK_FIELD(q->field() == u->field() && u->field() == v.field())
+        q->m_data[k] = u->m_data[n + k] / v.m_data[n];
         for (N j = n + k; j > k;) {
             j--;
-            u[j] -= q[k] * v[j - k];
+            u->m_data[j] -= q->m_data[k] * v.m_data[j - k];
         }
     }
 
     static auto division(gfpoly u, const gfpoly &v) -> std::pair<gfpoly, gfpoly> {
-        assert(u.field() == v.field() && v.size() <= u.size() && v && u);
+        CHECK_FIELD(u.field() == v.field() && v.size() <= u.size() && v && u)
         uintmax_t const m = u.size() - 1, n = v.size() - 1;
         uintmax_t k = m - n;
         gfpoly q(u.field());
-        q.data().resize(m - n + 1, gfn(q.field()));
+        q.m_data.resize(m - n + 1, gfn(q.field()));
 
         do {
-            division_impl(q, u, v, n, k);
+            division_impl(&q, &u, v, n, k);
         } while (k-- != 0);
-        u.data().resize(n, gfn(q.field())), gfn(q.field());
+        u.m_data.resize(n, gfn(q.field())), gfn(q.field());
         return std::make_pair(q.normalize(), u.normalize());
     }
 
@@ -344,7 +327,7 @@ private:
       * This function is not defined for division by zero: user beware.
       */
     static auto quotient_remainder(const gfpoly &dividend, const gfpoly &divisor) -> std::pair<gfpoly, gfpoly> {
-        assert(dividend.field() == divisor.field() && divisor);
+        CHECK_FIELD(dividend.field() == divisor.field() && divisor)
         if (dividend.size() < divisor.size()) {
             return std::make_pair(gfpoly(dividend.field()), dividend);
         }
@@ -380,60 +363,63 @@ public:
     friend auto operator/(const gfpoly & /*a*/, const gfpoly & /*b*/) -> gfpoly;
 
     friend auto operator%(const gfpoly & /*a*/, const gfpoly & /*b*/) -> gfpoly;
+
+    friend auto operator==(const gfpoly & /*a*/, const gfpoly & /*b*/) -> bool;
+
+    friend auto operator!=(const gfpoly & /*a*/, const gfpoly & /*b*/) -> bool;
 };
 
 auto operator-(gfpoly a) -> gfpoly {
-    a.m_normalized = false;
-    std::transform(a.data().begin(), a.data().end(), a.data().begin(), std::negate());
+    std::transform(a.m_data.begin(), a.m_data.end(), a.m_data.begin(), std::negate());
     return a.normalize();
 }
 
 auto operator+(const gfpoly &a, const gfpoly &b) -> gfpoly {
-    assert(a.field() == b.field());
+    CHECK_FIELD(a.field() == b.field())
     gfpoly result(a);
     result += b;
     return result;
 }
 
 auto operator+(gfpoly &&a, const gfpoly &b) -> gfpoly {
-    assert(a.field() == b.field());
+    CHECK_FIELD(a.field() == b.field())
     a += b;
     return a;
 }
 
 auto operator+(const gfpoly &a, gfpoly &&b) -> gfpoly {
-    assert(a.field() == b.field());
+    CHECK_FIELD(a.field() == b.field())
     b += a;
     return b;
 }
 
 auto operator+(gfpoly &&a, gfpoly &&b) -> gfpoly {
-    assert(a.field() == b.field());
+    CHECK_FIELD(a.field() == b.field())
     a += b;
     return a;
 }
 
 auto operator-(const gfpoly &a, const gfpoly &b) -> gfpoly {
-    assert(a.field() == b.field());
+    CHECK_FIELD(a.field() == b.field())
     gfpoly result(a);
     result -= b;
     return result;
 }
 
 auto operator-(gfpoly &&a, const gfpoly &b) -> gfpoly {
-    assert(a.field() == b.field());
+    CHECK_FIELD(a.field() == b.field())
     a -= b;
     return a;
 }
 
 auto operator-(const gfpoly &a, gfpoly &&b) -> gfpoly {
-    assert(a.field() == b.field());
+    CHECK_FIELD(a.field() == b.field())
     b -= a;
     return -b;
 }
 
 auto operator-(gfpoly &&a, gfpoly &&b) -> gfpoly {
-    assert(a.field() == b.field());
+    CHECK_FIELD(a.field() == b.field())
     a -= b;
     return a;
 }
@@ -499,13 +485,13 @@ auto operator*(const U &a, gfpoly b) -> gfpoly {
 }
 
 auto operator==(const gfpoly &a, const gfpoly &b) -> bool {
-    assert(a.field() == b.field());
-    return a.data() == b.data();
+    CHECK_FIELD(a.field() == b.field())
+    return a.m_data == b.m_data;
 }
 
 auto operator!=(const gfpoly &a, const gfpoly &b) -> bool {
-    assert(a.field() == b.field());
-    return a.data() != b.data();
+    CHECK_FIELD(a.field() == b.field())
+    return a.m_data != b.m_data;
 }
 
 template<typename U>
@@ -566,5 +552,7 @@ auto operator>>(std::basic_istream<charT, traits> &is, gfpoly &poly) -> std::bas
     poly = gfpoly(poly.field(), vec);
     return is;
 }
+
+#undef CHECK_FIELD
 
 } // namespace irrpoly

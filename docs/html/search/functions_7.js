@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['random_61',['random',['../classirrpoly_1_1gf.html#a8f8643eabd6e9e689b248f487ed7b55d',1,'irrpoly::gf::random()'],['../polynomialgf_8hpp.html#a79ca2c7e6664943767270c3072a2c46c',1,'irrpoly::random()']]]
+  ['value_58',['value',['../classirrpoly_1_1gfn.html#a1c9d15e51c02d7599d521b3b2fd30d78',1,'irrpoly::gfn::value()'],['../classirrpoly_1_1gfpoly.html#acd17d646f7f1393ebf9ab478610d4617',1,'irrpoly::gfpoly::value()']]]
 ];

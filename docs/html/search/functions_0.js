@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['check_42',['check',['../classirrpoly_1_1checker.html#acc20c7913c9f213e3d10be0b393856d2',1,'irrpoly::checker']]]
+  ['base_49',['base',['../classirrpoly_1_1gfbase.html#a9ed5099504e538324094806845f66b40',1,'irrpoly::gfbase::base()'],['../classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62',1,'irrpoly::gfn::base()']]]
 ];

@@ -2,6 +2,7 @@ Checks: '*,
          -cppcoreguidelines-pro-type-const-cast,
          -cppcoreguidelines-pro-type-vararg,
          -cppcoreguidelines-special-member-functions,
+         -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
          -misc-bool-pointer-implicit-conversion,
          -misc-definitions-in-headers,
          -fuchsia-trailing-return,
@@ -16,6 +17,7 @@ Checks: '*,
          -readability-non-const-parameter,
          -google-build-using-namespace,
          -hicpp-special-member-functions,
+         -hicpp-no-array-decay,
          -hicpp-vararg'
 WarningsAsErrors: '*'
 HeaderFilterRegex: '\/include\/'

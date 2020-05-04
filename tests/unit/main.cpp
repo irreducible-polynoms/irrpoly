@@ -187,8 +187,6 @@ TEST_CASE("gfpoly could be constructed correctly", "[gfpoly]") {
     }SECTION("random") {
         for (auto i : {0, 1, 2, 3, 4}) {
             auto poly = gfpoly::random(gf5, i);
-            auto normalized = gfpoly(poly).normalize();
-            REQUIRE(poly.value() == normalized.value());
             REQUIRE(poly.size() == i + 1);
             REQUIRE(poly.degree() == i);
             REQUIRE(poly.field() == gf5);

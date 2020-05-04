@@ -1,6 +1,7 @@
 // This is an open source non-commercial project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 
+#define IRRPOLY_RELEASE_CHECKED
 #include <irrpoly.h>
 
 #include <iostream>
@@ -65,10 +66,10 @@ auto main() -> int {
     const uintmax_t degree = 5;
     // какой из методов проверки на неприводимость хотим использовать
     // возможные варианты - отсутствие приверки (nil), Берлекампа (berlekamp), Рабина (rabin) и Бенора (benor)
-    const typename multithread::irreducible_method irr_meth = multithread::irreducible_method::benor;
+    const auto irr_meth = multithread::irreducible_method::benor;
     // какой из методов проверки на примитивность хотим использовать
     // возможные варианты - отсутствие приверки (nil) и проверка по определению (definition)
-    const typename multithread::primitive_method prim_meth = multithread::primitive_method::nil;
+    const auto prim_meth = multithread::primitive_method::nil;
     // число потоков, выполняюих проверку многочленов на соответствие заданной характеристике
     // должно быть равно числу физических ядер минус один
     const unsigned threads_num = std::thread::hardware_concurrency();

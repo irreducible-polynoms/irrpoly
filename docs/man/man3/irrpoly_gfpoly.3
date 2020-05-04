@@ -1,4 +1,4 @@
-.TH "irrpoly::gfpoly" 3 "Вт 28 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
+.TH "irrpoly::gfpoly" 3 "Пн 4 Май 2020" "Version 2.1.0" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -14,9 +14,7 @@ irrpoly::gfpoly
 .ti -1c
 .RI "auto \fBvalue\fP () const \-> std::vector< uintmax_t >"
 .br
-.ti -1c
-.RI "auto \fBnormalize\fP () \-> \fBgfpoly\fP &"
-.br
+.RI "Возвращает значение многочлена в виде вектора чисел\&. "
 .ti -1c
 .RI "\fBgfpoly\fP (const \fBgf\fP &field)"
 .br
@@ -33,25 +31,25 @@ irrpoly::gfpoly
 .RI "auto \fBoperator=\fP (std::initializer_list< uintmax_t > l) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP (const \fBgfpoly\fP &p)"
+.RI "\fBgfpoly\fP (const \fBgfpoly\fP &p)=default"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP (\fBgfpoly\fP &&p) noexcept"
+.RI "\fBgfpoly\fP (\fBgfpoly\fP &&p)=default"
 .br
 .ti -1c
 .RI "auto \fBoperator=\fP (const \fBgfpoly\fP &p) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP (\fBgfn\fP value)"
+.RI "\fBgfpoly\fP (\fBgfn\fP \fBvalue\fP)"
 .br
 .ti -1c
-.RI "auto \fBoperator=\fP (\fBgfn\fP value) \-> \fBgfpoly\fP &"
+.RI "auto \fBoperator=\fP (\fBgfn\fP \fBvalue\fP) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP (const \fBgf\fP &field, uintmax_t value)"
+.RI "\fBgfpoly\fP (const \fBgf\fP &field, uintmax_t \fBvalue\fP)"
 .br
 .ti -1c
-.RI "auto \fBoperator=\fP (uintmax_t value) \-> \fBgfpoly\fP &"
+.RI "auto \fBoperator=\fP (uintmax_t \fBvalue\fP) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
 .RI "auto \fBfield\fP () const \-> const \fBgf\fP &"
@@ -65,15 +63,11 @@ irrpoly::gfpoly
 .ti -1c
 .RI "auto \fBdegree\fP () const \-> uintmax_t"
 .br
-.ti -1c
-.RI "auto \fBoperator[]\fP (uintmax_t i) \-> \fBgfn\fP &"
-.br
+.RI "Возвращает степень многочлена, степень нулевого многочлена не определена\&. "
 .ti -1c
 .RI "auto \fBoperator[]\fP (uintmax_t i) const \-> const \fBgfn\fP &"
 .br
-.ti -1c
-.RI "auto \fBdata\fP () const \-> const std::vector< \fBgfn\fP > &"
-.br
+.RI "Изменение значений многочлена по индексу запрещено\&. "
 .ti -1c
 .RI "auto \fBis_zero\fP () const \-> bool"
 .br
@@ -84,34 +78,34 @@ irrpoly::gfpoly
 .RI "auto \fBset_zero\fP () \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "template<class U > auto \fBoperator+=\fP (const U &value) \-> \fBgfpoly\fP &"
+.RI "template<class U > auto \fBoperator+=\fP (const U &\fBvalue\fP) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "template<class U > auto \fBoperator\-=\fP (const U &value) \-> \fBgfpoly\fP &"
+.RI "template<class U > auto \fBoperator\-=\fP (const U &\fBvalue\fP) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "template<class U > auto \fBoperator*=\fP (const U &value) \-> \fBgfpoly\fP &"
+.RI "template<class U > auto \fBoperator*=\fP (const U &\fBvalue\fP) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "template<class U > auto \fBoperator/=\fP (const U &value) \-> \fBgfpoly\fP &"
+.RI "template<class U > auto \fBoperator/=\fP (const U &\fBvalue\fP) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
 .RI "template<class U > auto \fBoperator%=\fP (const U &) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "auto \fBoperator+=\fP (const \fBgfpoly\fP &value) \-> \fBgfpoly\fP &"
+.RI "auto \fBoperator+=\fP (const \fBgfpoly\fP &\fBvalue\fP) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "auto \fBoperator\-=\fP (const \fBgfpoly\fP &value) \-> \fBgfpoly\fP &"
+.RI "auto \fBoperator\-=\fP (const \fBgfpoly\fP &\fBvalue\fP) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "auto \fBoperator*=\fP (const \fBgfpoly\fP &value) \-> \fBgfpoly\fP &"
+.RI "auto \fBoperator*=\fP (const \fBgfpoly\fP &\fBvalue\fP) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "auto \fBoperator/=\fP (const \fBgfpoly\fP &value) \-> \fBgfpoly\fP &"
+.RI "auto \fBoperator/=\fP (const \fBgfpoly\fP &\fBvalue\fP) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "auto \fBoperator%=\fP (const \fBgfpoly\fP &value) \-> \fBgfpoly\fP &"
+.RI "auto \fBoperator%=\fP (const \fBgfpoly\fP &\fBvalue\fP) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
 .RI "template<typename U > auto \fBoperator>>=\fP (U const &n) \-> \fBgfpoly\fP &"
@@ -124,9 +118,9 @@ irrpoly::gfpoly
 
 .in +1c
 .ti -1c
-.RI "static auto \fBrandom\fP (const \fBgf\fP &field, uintmax_t degree) \-> \fBgfpoly\fP"
+.RI "static auto \fBrandom\fP (const \fBgf\fP &field, uintmax_t \fBdegree\fP) \-> \fBgfpoly\fP"
 .br
-.RI "Генерирует случайный многочлен над полем GF[P] заданной степени\&. "
+.RI "Вектор коэффициентов при степенях x\&. "
 .in -1c
 .SS "Друзья"
 
@@ -143,10 +137,26 @@ irrpoly::gfpoly
 .ti -1c
 .RI "auto \fBoperator%\fP (const \fBgfpoly\fP &, const \fBgfpoly\fP &) \-> \fBgfpoly\fP"
 .br
+.ti -1c
+.RI "auto \fBoperator==\fP (const \fBgfpoly\fP &, const \fBgfpoly\fP &) \-> bool"
+.br
+.ti -1c
+.RI "auto \fBoperator!=\fP (const \fBgfpoly\fP &, const \fBgfpoly\fP &) \-> bool"
+.br
 .in -1c
 .SH "Подробное описание"
 .PP 
-Класс gfpoly представляет многочлены над полем Галуа\&. Основан на классе polynomial из библиотеки Boost\&. 
+Класс gfpoly представляет многочлены над полем Галуа\&. Основан на классе polynomial из библиотеки Boost\&. Взятие значения по индексу [i] возвращает коэффициент при x^i\&. Старший коэффициент всегда не нулевой, за исключением случая, когда весь многочлен равен нулю\&. 
+.SH "Методы"
+.PP 
+.SS "auto irrpoly::gfpoly::operator= (const \fBgfpoly\fP & p) \-> \fBgfpoly\fP & \fC [inline]\fP"
+Операция присваивания корректно определена только для многочленов над одним полем, операция перемещения также корректно определена для неинициализированных переменных (случай field = nullptr)\&. 
+.SS "auto irrpoly::gfpoly::operator= (\fBgfn\fP value) \-> \fBgfpoly\fP & \fC [inline]\fP"
+Операция присваивания корректно определена только для числел из одного поля, операция перемещения также корректно определена для неинициализированных переменных (случай field = nullptr)\&. 
+.SS "static auto irrpoly::gfpoly::random (const \fBgf\fP & field, uintmax_t degree) \-> \fBgfpoly\fP \fC [inline]\fP, \fC [static]\fP"
+
+.PP
+Вектор коэффициентов при степенях x\&. Генерирует случайный многочлен над полем GF[P] заданной степени\&. 
 
 .SH "Автор"
 .PP 

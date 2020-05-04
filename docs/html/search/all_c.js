@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['wait_33',['wait',['../classirrpoly_1_1detail_1_1sync.html#a67f7424249809fd8f6654691e0e53f0c',1,'irrpoly::detail::sync']]]
+  ['_7echecker_31',['~checker',['../classirrpoly_1_1checker.html#ae2f767186d9060c993c0255d9cec527b',1,'irrpoly::checker']]]
 ];

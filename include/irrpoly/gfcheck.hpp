@@ -36,7 +36,7 @@ auto gcd(gfpoly m, gfpoly n) -> gfpoly {
         v0 = n, v1 = gfpoly(m.field()), v2 = gfpoly(m.field(), 1),
         w0 = gfpoly(m.field()), w1 = gfpoly(m.field()), w2 = gfpoly(m.field()),
         q = gfpoly(m.field());
-    while (!v0.is_zero()) {
+    while (v0) {
         q = u0 / v0;
         w0 = u0 - q * v0, w1 = u1 - q * v1, w2 = u2 - q * v2;
         u0 = v0, u1 = v1, u2 = v2, v0 = w0, v1 = w1, v2 = w2;
@@ -131,13 +131,12 @@ auto is_irreducible_berlekamp(const gfpoly &val) -> bool {
 
     // функция для построения матрицы берлекампа и вычисления её ранга
     auto berlekampMatrixRank = [](const gfpoly &val) {
-        gfpoly poly(val.field());
         uintmax_t i = 0, j = 0, k = 0, l = 0;
         const auto n = val.degree();
         std::vector<std::vector<gfn>> m(n, std::vector<gfn>(n, gfn(val.field()))); // M = 0
         for (i = 0; i < n; ++i) {
             // M[i,*] = x ^ ip (mod val)
-            poly = detail::x_pow_mod(i * val.base(), val);
+            const auto poly = detail::x_pow_mod(i * val.base(), val);
             for (j = 0, k = poly.degree(); j <= k; ++j) {
                 m[i][j] += poly[j];
             }
@@ -148,9 +147,9 @@ auto is_irreducible_berlekamp(const gfpoly &val) -> bool {
         bool f = false;
         gfn num(val.field());
         for (i = k = 0; i < n && k < n; ++k) {
-            f = !m[i][k].is_zero();
+            f = !!m[i][k];
             for (j = i + 1; j < n; ++j) {
-                if (!m[j][k].is_zero()) {
+                if (m[j][k]) {
                     if (f) {
                         num = m[j][k] / m[i][k];
                         m[j][k].set_zero();
@@ -172,7 +171,7 @@ auto is_irreducible_berlekamp(const gfpoly &val) -> bool {
 
     // алгоритм Берлекампа
     auto d = detail::derivative(val);
-    return !d.is_zero() && gcd(val, d).degree() == 0 &&
+    return !!d && gcd(val, d).degree() == 0 &&
         berlekampMatrixRank(val) == val.degree() - 1;
 }
 
@@ -360,7 +359,7 @@ auto is_primitive_definition(const gfpoly &val) -> bool {
     // проверяется выполнение второго условия
     uintmax_t r = (detail::integer_power(P, n) - 1) / (P - 1);
     auto tmp = detail::x_pow_mod(r, val) - mp;
-    if (!tmp.is_zero()) {
+    if (tmp) {
         return false;
     }
 
@@ -403,26 +402,29 @@ enum class primitive_method {
 using polychecker = checker<gfpoly, result_type>;
 
 /// Формируется универсальная функция проверки многочленов.
+/// В случае, когда проверка не выполняется устанавливается результат true.
 auto make_check_func(
     irreducible_method irr_meth, primitive_method prim_meth) -> typename checker<gfpoly, result_type>::check_func {
     return [=](const gfpoly &poly, std::optional<result_type> &res) {
-        // в случае, когда проверка не выполняется устанавливается результат true
-        res.emplace(result_type{true, true});
+        auto result = result_type{true, true};
+
         switch (irr_meth) {
-        case irreducible_method::berlekamp:res.value().irreducible = is_irreducible_berlekamp(poly);
+        case irreducible_method::berlekamp:result.irreducible = is_irreducible_berlekamp(poly);
             break;
-        case irreducible_method::rabin:res.value().irreducible = is_irreducible_rabin(poly);
+        case irreducible_method::rabin:result.irreducible = is_irreducible_rabin(poly);
             break;
-        case irreducible_method::benor:res.value().irreducible = is_irreducible_benor(poly);
+        case irreducible_method::benor:result.irreducible = is_irreducible_benor(poly);
             break;
         default:; // irreducible_method::nil
         }
+
         switch (prim_meth) {
-        case primitive_method::definition:
-            res.value().primitive = res.value().irreducible ? is_primitive_definition(poly) : false;
+        case primitive_method::definition:result.primitive = result.irreducible ? is_primitive_definition(poly) : false;
             break;
         default:; // primitive_method::nil
         }
+
+        res.emplace(result);
     };
 }
 

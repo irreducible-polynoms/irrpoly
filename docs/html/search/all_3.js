@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['hash_3c_3a_3adropbox_3a_3aoxygen_3a_3ann_3c_20t_20_3e_20_3e_12',['hash&lt;::dropbox::oxygen::nn&lt; T &gt; &gt;',['../structstd_1_1hash_3_1_1dropbox_1_1oxygen_1_1nn_3_01_t_01_4_01_4.html',1,'std']]]
+  ['element_5ftype_8',['element_type',['../structdropbox_1_1oxygen_1_1nn__detail_1_1element__type.html',1,'dropbox::oxygen::nn_detail']]],
+  ['element_5ftype_3c_20pointee_20_2a_20_3e_9',['element_type&lt; Pointee * &gt;',['../structdropbox_1_1oxygen_1_1nn__detail_1_1element__type_3_01_pointee_01_5_01_4.html',1,'dropbox::oxygen::nn_detail']]]
 ];

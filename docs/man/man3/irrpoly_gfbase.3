@@ -1,23 +1,22 @@
-.TH "irrpoly::gfbase" 3 "Вт 28 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
+.TH "irrpoly::gfbase" 3 "Пн 4 Май 2020" "Version 2.1.0" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-irrpoly::gfbase \- Класс gf представляет поле Галуа\&.  
-
+irrpoly::gfbase
 .SH SYNOPSIS
 .br
 .PP
-.PP
-\fC#include <gf\&.hpp>\fP
 .SS "Открытые члены"
 
 .in +1c
 .ti -1c
 .RI "auto \fBbase\fP () const \-> uintmax_t"
 .br
+.RI "Возвращает основание поля Галуа\&. "
 .ti -1c
 .RI "auto \fBmul_inv\fP (uintmax_t) const \-> uintmax_t"
 .br
+.RI "Возвращает обратное по умнажению в виде числа\&. "
 .in -1c
 .SS "Друзья"
 
@@ -26,9 +25,6 @@ irrpoly::gfbase \- Класс gf представляет поле Галуа\&.
 .RI "auto \fBmake_gf\fP (uintmax_t) \-> \fBgf\fP"
 .br
 .in -1c
-.SH "Подробное описание"
-.PP 
-Класс gf представляет поле Галуа\&. 
 
 .SH "Автор"
 .PP 

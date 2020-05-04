@@ -33,4 +33,7 @@ var menudata={children:[
 {text:"Функции",url:"functions_func.html"},
 {text:"Определения типов",url:"functions_type.html"}]}]},
 {text:"Файлы",url:"files.html",children:[
-{text:"Файлы",url:"files.html"}]}]}
+{text:"Файлы",url:"files.html"},
+{text:"Список членов всех файлов",url:"globals.html",children:[
+{text:"Указатель",url:"globals.html"},
+{text:"Макросы",url:"globals_defs.html"}]}]}]}

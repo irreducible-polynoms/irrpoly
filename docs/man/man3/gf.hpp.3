@@ -1,4 +1,4 @@
-.TH "include/irrpoly/gf.hpp" 3 "Вт 28 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
+.TH "include/irrpoly/gf.hpp" 3 "Пн 4 Май 2020" "Version 2.1.0" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -35,7 +35,6 @@ include/irrpoly/gf.hpp
 .ti -1c
 .RI "class \fBirrpoly::gfbase\fP"
 .br
-.RI "Класс gf представляет поле Галуа\&. "
 .ti -1c
 .RI "class \fBirrpoly::gfn\fP"
 .br
@@ -45,6 +44,9 @@ include/irrpoly/gf.hpp
 .in +1c
 .ti -1c
 .RI "#define \fBNN_CHECK_THROW\fP(_e)"
+.br
+.ti -1c
+.RI "#define \fBCHECK_FIELD\fP(comparison)"
 .br
 .ti -1c
 .RI "#define \fBGFN_COMPARISON_OPERATORS\fP(op)"
@@ -100,12 +102,21 @@ Vadim Piven vadim@piven.tech @license Free use of this library is permitted unde
 
 .SH "Макросы"
 .PP 
+.SS "#define CHECK_FIELD(comparison)"
+\fBМакроопределение:\fP
+.PP
+.nf
+    if (!(comparison)) { \
+        throw std::logic_error("field check failed"); \
+    }
+.fi
+Бинарные операции над gfn корректно определены лишь в том случае, когда оба числа принадлежат одному и тому же полю\&. По умолчанию, проверка этого факта выполняется только для конфигурации Debug, чтобы в конфигурации Release добиться наибольшей производительности\&. Однако, если в конфигурации Release проверки также требуется выполнять, достаточно объявить #define IRRPOLY_RELEASE_CHECKED перед подключением заголовочного файла #include <irrpoly\&.h> 
 .SS "#define GFN_COMPARISON_OPERATORS(op)"
 \fBМакроопределение:\fP
 .PP
 .nf
     inline auto operator op(const gfn &l, const gfn &r) -> bool { \
-        assert(l\&.field() == r\&.field()); \
+        CHECK_FIELD(l\&.field() == r\&.field()) \
         return l\&.value() op r\&.value(); \
     } \
     inline auto operator op(const gfn &l, const uintmax_t r) -> bool { \
@@ -125,6 +136,10 @@ Vadim Piven vadim@piven.tech @license Free use of this library is permitted unde
             dropbox::oxygen::i_promise_i_checked_for_null, std::move(p)); \
     })(_e))
 .fi
+.SH "Типы"
+.PP 
+.SS "using \fBirrpoly::gf\fP = typedef \fBdropbox::oxygen::nn_shared_ptr\fP<gfbase>"
+Поле всегда должно существовать, поэтому используется обёртка, не позволяющая хранящим поле переменным иметь значение nullptr\&. Для него корректно определена операция копирования за счёт использования примитива shared_ptr\&. 
 .SH "Автор"
 .PP 
 Автоматически создано Doxygen для irrpoly из исходного текста\&.

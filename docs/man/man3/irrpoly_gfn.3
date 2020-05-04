@@ -1,4 +1,4 @@
-.TH "irrpoly::gfn" 3 "Вт 28 Апр 2020" "Version 2.0.0" "irrpoly" \" -*- nroff -*-
+.TH "irrpoly::gfn" 3 "Пн 4 Май 2020" "Version 2.1.0" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -22,6 +22,7 @@ irrpoly::gfn
 .ti -1c
 .RI "\fBgfn\fP (const \fBgf\fP &field, const uintmax_t val)"
 .br
+.RI "Поле всегда принимается по указателю и копируется в последний момент\&. "
 .ti -1c
 .RI "\fBgfn\fP (const \fBgfn\fP &other)=default"
 .br
@@ -34,6 +35,7 @@ irrpoly::gfn
 .ti -1c
 .RI "auto \fBbase\fP () const \-> uintmax_t"
 .br
+.RI "Возвращает основание поля Галуа\&. "
 .ti -1c
 .RI "auto \fBoperator=\fP (const uintmax_t other) \-> \fBgfn\fP &"
 .br
@@ -97,9 +99,11 @@ irrpoly::gfn
 .ti -1c
 .RI "auto \fBmul_inv\fP () \-> \fBgfn\fP"
 .br
+.RI "Возвращает обратное по умножению в виде gfn\&. "
 .ti -1c
 .RI "auto \fBoperator/\fP (const \fBgfn\fP &other) const \-> \fBgfn\fP"
 .br
+.RI "Операция деления определена как умножение на обратный элемент\&. "
 .ti -1c
 .RI "auto \fBoperator/\fP (const uintmax_t other) const \-> \fBgfn\fP"
 .br
@@ -112,7 +116,6 @@ irrpoly::gfn
 .ti -1c
 .RI "auto \fBis_zero\fP () const \-> bool"
 .br
-.RI "Проверяет равенство данного числа нулю\&. "
 .ti -1c
 .RI "\fBoperator bool\fP () const"
 .br
@@ -126,7 +129,7 @@ irrpoly::gfn
 .ti -1c
 .RI "static auto \fBrandom\fP (const \fBgf\fP &field) \-> \fBgfn\fP"
 .br
-.RI "Генерирует случайное число в пределах [0, P-1]\&. "
+.RI "Число в поле, всегда лежит в диапазоне [0, P-1]\&. "
 .in -1c
 .SS "Друзья"
 
@@ -152,14 +155,15 @@ irrpoly::gfn
 .in -1c
 .SH "Подробное описание"
 .PP 
-Класс gfn представляет число в поле GF[P] 
-.PP
-\fBПараметры шаблона\fP
-.RS 4
-\fIP\fP основание поля Галуа GF[P]\&. 
-.RE
-.PP
+Класс, представляющий число в поле Галуа с корректно заданными арифметическими операциями и операторами сравнения\&. 
+.SH "Методы"
+.PP 
+.SS "auto irrpoly::gfn::operator= (const \fBgfn\fP & other) \-> \fBgfn\fP & \fC [inline]\fP"
+Операция присваивания корректно определена только для числел из одного поля, операция перемещения также корректно определена для неинициализированных переменных (случай field = nullptr)\&. 
+.SS "static auto irrpoly::gfn::random (const \fBgf\fP & field) \-> \fBgfn\fP \fC [inline]\fP, \fC [static]\fP"
 
+.PP
+Число в поле, всегда лежит в диапазоне [0, P-1]\&. Генерирует случайное число в диапазоне [0, P-1]\&. 
 
 .SH "Автор"
 .PP 

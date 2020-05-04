@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['unlock_32',['unlock',['../classirrpoly_1_1detail_1_1sync.html#a4eebab782338e3a5c42e644f5716bfcf',1,'irrpoly::detail::sync']]]
+  ['value_30',['value',['../classirrpoly_1_1gfn.html#a1c9d15e51c02d7599d521b3b2fd30d78',1,'irrpoly::gfn::value()'],['../classirrpoly_1_1gfpoly.html#acd17d646f7f1393ebf9ab478610d4617',1,'irrpoly::gfpoly::value()']]]
 ];

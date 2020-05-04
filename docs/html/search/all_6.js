@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['random_21',['random',['../classirrpoly_1_1gfn.html#a2b564f8407de09fcb22f1c2e0c5b5c15',1,'irrpoly::gfn::random()'],['../classirrpoly_1_1gfpoly.html#a8b58ebfd8f096906daadd72333776eb3',1,'irrpoly::gfpoly::random()']]],
-  ['result_5ftype_22',['result_type',['../structirrpoly_1_1multithread_1_1result__type.html',1,'irrpoly::multithread']]]
+  ['i_5fpromise_5fi_5fchecked_5ffor_5fnull_5ft_17',['i_promise_i_checked_for_null_t',['../structdropbox_1_1oxygen_1_1i__promise__i__checked__for__null__t.html',1,'dropbox::oxygen']]],
+  ['input_5ffunc_18',['input_func',['../classirrpoly_1_1checker.html#a708118f70cf34c7a300857efeabfb97d',1,'irrpoly::checker']]],
+  ['is_5fnn_19',['is_nn',['../structdropbox_1_1oxygen_1_1is__nn.html',1,'dropbox::oxygen']]],
+  ['is_5fnn_3c_20nn_3c_20ptrtype_20_3e_20_3e_20',['is_nn&lt; nn&lt; PtrType &gt; &gt;',['../structdropbox_1_1oxygen_1_1is__nn_3_01nn_3_01_ptr_type_01_4_01_4.html',1,'dropbox::oxygen']]]
 ];

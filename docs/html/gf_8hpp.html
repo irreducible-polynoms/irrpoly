@@ -29,7 +29,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">irrpoly
-   &#160;<span id="projectnumber">2.0.0</span>
+   &#160;<span id="projectnumber">2.1.0</span>
    </div>
    <div id="projectbrief">Проверка многочленов на неприводимость и примитивность над заданным полем Галуа</div>
   </td>
@@ -100,7 +100,6 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Классы</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1gfbase.html">irrpoly::gfbase</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Класс gf представляет поле Галуа.  <a href="classirrpoly_1_1gfbase.html#details">Подробнее...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1gfn.html">irrpoly::gfn</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -109,13 +108,14 @@ $(function() {
 Макросы</h2></td></tr>
 <tr class="memitem:a35fc05e35139b6c5d46933a6a8c18c5e"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>NN_CHECK_THROW</b>(_e)</td></tr>
 <tr class="separator:a35fc05e35139b6c5d46933a6a8c18c5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62037f060bdaeba367520e96a03706a2"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gf_8hpp.html#a62037f060bdaeba367520e96a03706a2">CHECK_FIELD</a>(comparison)</td></tr>
+<tr class="separator:a62037f060bdaeba367520e96a03706a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0c66e295c7b741a4a5902198d8d1952b"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><b>GFN_COMPARISON_OPERATORS</b>(op)</td></tr>
 <tr class="separator:a0c66e295c7b741a4a5902198d8d1952b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Определения типов</h2></td></tr>
-<tr class="memitem:a49b6832f1afa3581768e57301d355575"><td class="memItemLeft" align="right" valign="top"><a id="a49b6832f1afa3581768e57301d355575"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>irrpoly::gf</b> = <a class="el" href="classdropbox_1_1oxygen_1_1nn.html">dropbox::oxygen::nn_shared_ptr</a>&lt; gfbase &gt;</td></tr>
+<tr class="memitem:a49b6832f1afa3581768e57301d355575"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="gf_8hpp.html#a49b6832f1afa3581768e57301d355575">irrpoly::gf</a> = <a class="el" href="classdropbox_1_1oxygen_1_1nn.html">dropbox::oxygen::nn_shared_ptr</a>&lt; gfbase &gt;</td></tr>
 <tr class="separator:a49b6832f1afa3581768e57301d355575"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -153,6 +153,28 @@ auto&#160;</td><td class="memItemRight" valign="bottom"><b>irrpoly::make_gf</b> 
 <a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
 <div class="textblock"><dl class="section author"><dt>Автор</dt><dd>Vadim Piven <a href="#" onclick="location.href='mai'+'lto:'+'vad'+'im'+'@pi'+'ve'+'n.t'+'ec'+'h'; return false;">vadim<span style="display: none;">.nosp@m.</span>@piv<span style="display: none;">.nosp@m.</span>en.te<span style="display: none;">.nosp@m.</span>ch</a> @license Free use of this library is permitted under the guidelines and in accordance with the MIT License (MIT). @url <a href="https://github.com/irreducible-polynoms/irrpoly">https://github.com/irreducible-polynoms/irrpoly</a> </dd></dl>
 </div><h2 class="groupheader">Макросы</h2>
+<a id="a62037f060bdaeba367520e96a03706a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62037f060bdaeba367520e96a03706a2">&#9670;&nbsp;</a></span>CHECK_FIELD</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CHECK_FIELD</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">comparison</td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Макроопределение:</b><div class="fragment"><div class="line">    <span class="keywordflow">if</span> (!(comparison)) { \</div>
+<div class="line">        throw std::logic_error(<span class="stringliteral">&quot;field check failed&quot;</span>); \</div>
+<div class="line">    }</div>
+</div><!-- fragment --><p>Бинарные операции над gfn корректно определены лишь в том случае, когда оба числа принадлежат одному и тому же полю. По умолчанию, проверка этого факта выполняется только для конфигурации Debug, чтобы в конфигурации Release добиться наибольшей производительности. Однако, если в конфигурации Release проверки также требуется выполнять, достаточно объявить #define IRRPOLY_RELEASE_CHECKED перед подключением заголовочного файла #include &lt;irrpoly.h&gt; </p>
+
+</div>
+</div>
 <a id="a0c66e295c7b741a4a5902198d8d1952b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0c66e295c7b741a4a5902198d8d1952b">&#9670;&nbsp;</a></span>GFN_COMPARISON_OPERATORS</h2>
 
@@ -169,7 +191,7 @@ auto&#160;</td><td class="memItemRight" valign="bottom"><b>irrpoly::make_gf</b> 
       </table>
 </div><div class="memdoc">
 <b>Макроопределение:</b><div class="fragment"><div class="line">    <span class="keyword">inline</span> <span class="keyword">auto</span> <span class="keyword">operator</span> op(<span class="keyword">const</span> gfn &amp;l, <span class="keyword">const</span> gfn &amp;r) -&gt; <span class="keywordtype">bool</span> { \</div>
-<div class="line">        assert(l.field() == r.field()); \</div>
+<div class="line">        CHECK_FIELD(l.field() == r.field()) \</div>
 <div class="line">        return l.value() op r.value(); \</div>
 <div class="line">    } \</div>
 <div class="line">    inline <span class="keyword">auto</span> <span class="keyword">operator</span> op(<span class="keyword">const</span> gfn &amp;l, <span class="keyword">const</span> uintmax_t r) -&gt; <span class="keywordtype">bool</span> { \</div>
@@ -204,11 +226,27 @@ auto&#160;</td><td class="memItemRight" valign="bottom"><b>irrpoly::make_gf</b> 
 </div><!-- fragment -->
 </div>
 </div>
+<h2 class="groupheader">Типы</h2>
+<a id="a49b6832f1afa3581768e57301d355575"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49b6832f1afa3581768e57301d355575">&#9670;&nbsp;</a></span>gf</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="gf_8hpp.html#a49b6832f1afa3581768e57301d355575">irrpoly::gf</a> = typedef <a class="el" href="classdropbox_1_1oxygen_1_1nn.html">dropbox::oxygen::nn_shared_ptr</a>&lt;gfbase&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Поле всегда должно существовать, поэтому используется обёртка, не позволяющая хранящим поле переменным иметь значение nullptr. Для него корректно определена операция копирования за счёт использования примитива shared_ptr. </p>
+
+</div>
+</div>
 </div><!-- contents -->
 <div class="ttc" id="aclassdropbox_1_1oxygen_1_1nn_html"><div class="ttname"><a href="classdropbox_1_1oxygen_1_1nn.html">dropbox::oxygen::nn</a></div><div class="ttdef"><b>Definition:</b> nn.hpp:38</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Вт 28 Апр 2020 01:11:10. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Пн 4 Май 2020 13:42:29. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.18
 </small></address>

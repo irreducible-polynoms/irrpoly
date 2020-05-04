@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['_7echecker_24',['~checker',['../classirrpoly_1_1checker.html#ae2f767186d9060c993c0255d9cec527b',1,'irrpoly::checker']]]
+  ['nn_22',['nn',['../classdropbox_1_1oxygen_1_1nn.html',1,'dropbox::oxygen']]],
+  ['nn_3c_20gfbase_20_3e_23',['nn&lt; gfbase &gt;',['../classdropbox_1_1oxygen_1_1nn.html',1,'dropbox::oxygen']]],
+  ['nn_5fenable_5fshared_5ffrom_5fthis_24',['nn_enable_shared_from_this',['../classdropbox_1_1oxygen_1_1nn__enable__shared__from__this.html',1,'dropbox::oxygen']]]
 ];

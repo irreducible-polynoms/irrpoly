@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['input_5ffunc_50',['input_func',['../classirrpoly_1_1checker.html#a708118f70cf34c7a300857efeabfb97d',1,'irrpoly::checker']]]
+  ['gf_62',['gf',['../gf_8hpp.html#a49b6832f1afa3581768e57301d355575',1,'irrpoly']]]
 ];

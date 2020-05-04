@@ -23,11 +23,33 @@
 
 namespace irrpoly {
 
+/**
+ * Бинарные операции над gfn корректно определены лишь в том случае, когда
+ * оба числа принадлежат одному и тому же полю. По умолчанию, проверка этого
+ * факта выполняется только для конфигурации Debug, чтобы в конфигурации Release
+ * добиться наибольшей производительности. Однако, если в конфигурации Release
+ * проверки также требуется выполнять, достаточно объявить
+ * #define IRRPOLY_RELEASE_CHECKED
+ * перед подключением заголовочного файла
+ * #include <irrpoly.h>
+ */
+#if !defined(NDEBUG) || defined(IRRPOLY_RELEASE_CHECKED) // Debug or Release Checked
+#define CHECK_FIELD(comparison) \
+    if (!(comparison)) { \
+        throw std::logic_error("field check failed"); \
+    }
+#else // Release
+#define CHECK_FIELD(comparison)
+#endif
+
+/// Класс, содержащий основание поля Галуа и все обратные по умножению элементы.
 class gfbase;
 
+/// Поле всегда должно существовать, поэтому используется обёртка, не позволяющая
+/// хранящим поле переменным иметь значение nullptr. Для него корректно определена
+/// операция копирования за счёт использования примитива shared_ptr.
 using gf = dropbox::oxygen::nn_shared_ptr<gfbase>;
 
-/// Класс gf представляет поле Галуа.
 class gfbase final {
 private:
     std::vector<uintmax_t> m_inv; /// Обратные элементы по умножению
@@ -39,9 +61,11 @@ private:
     friend auto make_gf(uintmax_t /*base*/) -> gf;
 
 public:
+    /// Возвращает основание поля Галуа.
     [[nodiscard]]
     auto base() const -> uintmax_t;
 
+    /// Возвращает обратное по умнажению в виде числа.
     [[nodiscard]]
     auto mul_inv(uintmax_t /*val*/) const -> uintmax_t;
 };
@@ -54,17 +78,15 @@ auto operator!=(const gf &lb, const gf &rb) -> bool {
     return lb->base() != rb->base();
 }
 
-/**
- * Класс gfn представляет число в поле GF[P]
- * @tparam P основание поля Галуа GF[P].
- */
+/// Класс, представляющий число в поле Галуа с корректно заданными
+/// арифметическими операциями и операторами сравнения.
 class gfn final {
 private:
-    gf m_field;
-    uintmax_t m_val;
+    gf m_field; /// Поле GF[P]
+    uintmax_t m_val; /// Число в поле, всегда лежит в диапазоне [0, P-1]
 
 public:
-    /// Генерирует случайное число в пределах [0, P-1].
+    /// Генерирует случайное число в диапазоне [0, P-1].
     static
     auto random(const gf &field) -> gfn {
         static std::random_device rd;
@@ -87,6 +109,7 @@ public:
     explicit
     gfn(const gf &field) : m_field(field), m_val(0) {}
 
+    /// Поле всегда принимается по указателю и копируется в последний момент.
     gfn(const gf &field, const uintmax_t val) :
         m_field(field), m_val(val % m_field->base()) {}
 
@@ -94,15 +117,19 @@ public:
 
     gfn(gfn &&other) = default;
 
+    /// Операция присваивания корректно определена только для числел из одного поля,
+    /// операция перемещения также корректно определена для неинициализированных
+    /// переменных (случай field = nullptr).
     auto operator=(const gfn &other) -> gfn & {
         if (this != &other) {
-            assert(m_field == nullptr || m_field == other.m_field);
+            CHECK_FIELD(m_field == nullptr || m_field == other.m_field)
             m_field = other.m_field;
             m_val = other.m_val;
         }
         return *this;
     }
 
+    /// Возвращает основание поля Галуа.
     [[nodiscard]]
     auto base() const -> uintmax_t {
         return m_field->base();
@@ -125,7 +152,7 @@ public:
 
     [[nodiscard]]
     auto operator+(const gfn &other) const -> gfn {
-        assert(m_field == other.field());
+        CHECK_FIELD(m_field == other.field())
         return gfn{m_field, m_val + other.m_val};
     }
 
@@ -138,7 +165,7 @@ public:
     auto operator+(uintmax_t /*other*/, const gfn & /*curr*/) -> gfn;
 
     auto operator+=(const gfn &other) -> gfn & {
-        assert(m_field == other.field());
+        CHECK_FIELD(m_field == other.field())
         m_val = (m_val + other.m_val) % base();
         return *this;
     }
@@ -169,7 +196,7 @@ public:
 
     [[nodiscard]]
     auto operator-(const gfn &other) const -> gfn {
-        assert(m_field == other.field());
+        CHECK_FIELD(m_field == other.field())
         return gfn{m_field, base() + m_val - other.m_val};
     }
 
@@ -182,7 +209,7 @@ public:
     auto operator-(uintmax_t /*other*/, const gfn & /*curr*/) -> gfn;
 
     auto operator-=(const gfn &other) -> gfn & {
-        assert(m_field == other.field());
+        CHECK_FIELD(m_field == other.field())
         m_val = (base() + m_val - other.m_val) % base();
         return *this;
     }
@@ -206,7 +233,7 @@ public:
 
     [[nodiscard]]
     auto operator*(const gfn &other) const -> gfn {
-        assert(m_field == other.field());
+        CHECK_FIELD(m_field == other.field())
         return gfn{m_field, m_val * other.m_val};
     }
 
@@ -219,7 +246,7 @@ public:
     auto operator*(uintmax_t /*other*/, const gfn & /*curr*/) -> gfn;
 
     auto operator*=(const gfn &other) -> gfn & {
-        assert(m_field == other.field());
+        CHECK_FIELD(m_field == other.field())
         m_val = (m_val * other.m_val) % base();
         return *this;
     }
@@ -229,14 +256,16 @@ public:
         return *this;
     }
 
-    [[nodiscard]]
+    /// Возвращает обратное по умножению в виде gfn.
+    [[maybe_unused]] [[nodiscard]]
     auto mul_inv() -> gfn {
         return gfn{m_field, m_field->mul_inv(m_val)};
     }
 
+    /// Операция деления определена как умножение на обратный элемент.
     [[nodiscard]]
     auto operator/(const gfn &other) const -> gfn {
-        assert(m_field == other.field());
+        CHECK_FIELD(m_field == other.field())
         switch (other.m_val) {
         case 0:throw std::invalid_argument("division by zero");
         default:return gfn{m_field, m_val * m_field->mul_inv(other.m_val)};
@@ -257,7 +286,7 @@ public:
     auto operator/(uintmax_t /*other*/, const gfn & /*curr*/) -> gfn;
 
     auto operator/=(const gfn &other) -> gfn & {
-        assert(m_field == other.field());
+        CHECK_FIELD(m_field == other.field())
         switch (other.m_val) {
         case 0:throw std::invalid_argument("division by zero");
         default:m_val = (m_val * m_field->mul_inv(other.m_val)) % base();
@@ -273,7 +302,6 @@ public:
         }
     }
 
-    /// Проверяет равенство данного числа нулю.
     [[nodiscard]]
     auto is_zero() const -> bool {
         return 0 == m_val;
@@ -300,7 +328,7 @@ public:
 
 #define GFN_COMPARISON_OPERATORS(op) \
     inline auto operator op(const gfn &l, const gfn &r) -> bool { \
-        assert(l.field() == r.field()); \
+        CHECK_FIELD(l.field() == r.field()) \
         return l.value() op r.value(); \
     } \
     inline auto operator op(const gfn &l, const uintmax_t r) -> bool { \
@@ -345,19 +373,27 @@ auto operator/(const uintmax_t other, const gfn &curr) -> gfn {
 }
 
 template<class charT, class traits>
-auto
-operator<<(std::basic_ostream<charT, traits> &os, const gfn &val) -> std::basic_ostream<charT, traits> & {
+auto operator<<(std::basic_ostream<charT, traits> &os, const gfn &val) -> std::basic_ostream<charT, traits> & {
     return os << val.m_val;
 }
 
 template<class charT, class traits>
-auto
-operator>>(std::basic_istream<charT, traits> &is, gfn &val) -> std::basic_istream<charT, traits> & {
+auto operator>>(std::basic_istream<charT, traits> &is, gfn &val) -> std::basic_istream<charT, traits> & {
     is >> val.m_val;
     val.m_val %= val.base();
     return is;
 }
 
+/**
+ * Поле обязательно должно содержать как минимум 0 и 1, кроме того, если для
+ * какого-то из элементов предполагаемого поля не существует обратного элемента
+ * по умножению, значит данное кольцо не является полем. При этом все операции
+ * должны быть корректно определены, поэтому слишком большое поле создать
+ * невозможно (в нём умножение двух максимальных элементов могло бы вызывать
+ * переполнение, а значит приводить к undefined behaviour). Эта же проверка
+ * гарантирует, что безнаковое значение поля может быть без дополнительных
+ * проверок приведено к знаковому типу (intmax_t).
+ */
 inline
 gfbase::gfbase(const uintmax_t base) : m_base(base), m_inv(base, 0) {
     if (base == 0) {
@@ -416,5 +452,7 @@ auto make_gf(const uintmax_t base) -> gf {
     return dropbox::oxygen::nn<std::shared_ptr<gfbase>>(dropbox::oxygen::nn(
         dropbox::oxygen::i_promise_i_checked_for_null_t{}, new gfbase(base)));
 }
+
+#undef CHECK_FIELD
 
 } // namespace irrpoly
