@@ -1,4 +1,4 @@
-.TH "irrpoly::gfpoly" 3 "Пн 4 Май 2020" "Version 2.1.2" "irrpoly" \" -*- nroff -*-
+.TH "irrpoly::gfpoly" 3 "Вт 5 Май 2020" "Version 2.1.0" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -110,9 +110,11 @@ irrpoly::gfpoly
 .ti -1c
 .RI "template<typename U > auto \fBoperator>>=\fP (U const &n) \-> \fBgfpoly\fP &"
 .br
+.RI "Эквивалентно операции a /= x^b, определено только когда такое деление возможно\&. "
 .ti -1c
 .RI "template<typename U > auto \fBoperator<<=\fP (U const &n) \-> \fBgfpoly\fP &"
 .br
+.RI "Эквивалентно операции a *= x^b\&. "
 .in -1c
 .SS "Открытые статические члены"
 

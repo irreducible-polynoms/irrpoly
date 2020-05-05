@@ -189,6 +189,7 @@ TEST_CASE("gfpoly could be constructed correctly", "[gfpoly]") {
             auto poly = gfpoly::random(gf5, i);
             REQUIRE(poly.size() == i + 1);
             REQUIRE(poly.degree() == i);
+            REQUIRE(poly[poly.degree()] != 0);
             REQUIRE(poly.field() == gf5);
             REQUIRE(poly.base() == 5);
         }
@@ -220,10 +221,9 @@ TEST_CASE("gfpoly operations work correctly", "[gfpoly]") {
     auto gf5 = make_gf(5);
     auto poly = gfpoly(gf5, {0, 1, 2, 3, 4});
     SECTION("rs works") {
-        auto p = poly >> 2;
-        REQUIRE(p == gfpoly(gf5, {2, 3, 4}));
-        p >>= 2;
-        REQUIRE(p == gfpoly(gf5, 4));
+        auto p = poly >> 1;
+        REQUIRE(p == gfpoly(gf5, {1, 2, 3, 4}));
+        REQUIRE_THROWS(p >>= 2);
     }SECTION("ls works") {
         auto p = poly << 1;
         REQUIRE(p == gfpoly(gf5, {0, 0, 1, 2, 3, 4}));

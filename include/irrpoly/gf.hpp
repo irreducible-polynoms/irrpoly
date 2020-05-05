@@ -326,14 +326,19 @@ public:
 };
 
 #define GFN_COMPARISON_OPERATORS(op) \
-    inline auto operator op(const gfn &l, const gfn &r) -> bool { \
+    inline \
+    auto operator op(const gfn &l, const gfn &r) -> bool { \
         CHECK_FIELD(l.field() == r.field()) \
         return l.value() op r.value(); \
     } \
-    inline auto operator op(const gfn &l, const uintmax_t r) -> bool { \
+    \
+    inline \
+    auto operator op(const gfn &l, const uintmax_t r) -> bool { \
         return l.value() op (r % l.base()); \
     } \
-    inline auto operator op(const uintmax_t l, const gfn &r) -> bool { \
+    \
+    inline \
+    auto operator op(const uintmax_t l, const gfn &r) -> bool { \
         return (l % r.base()) op r.value(); \
     }
 

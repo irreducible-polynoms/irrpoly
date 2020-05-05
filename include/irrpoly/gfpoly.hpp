@@ -207,6 +207,7 @@ public:
         return !is_zero();
     }
 
+    [[maybe_unused]]
     auto set_zero() -> gfpoly & {
         m_data.clear();
         return *this;
@@ -295,22 +296,21 @@ public:
     }
 
 private:
-    template<typename N>
-    static void division_impl(gfpoly *q, gfpoly *u, const gfpoly &v, N n, N k) {
-        CHECK_FIELD(q->field() == u->field() && u->field() == v.field())
-        q->m_data[k] = u->m_data[n + k] / v.m_data[n];
-        for (N j = n + k; j > k;) {
-            j--;
-            u->m_data[j] -= q->m_data[k] * v.m_data[j - k];
-        }
-    }
-
     static auto division(gfpoly u, const gfpoly &v) -> std::pair<gfpoly, gfpoly> {
         CHECK_FIELD(u.field() == v.field() && v.size() <= u.size() && v && u)
         uintmax_t const m = u.size() - 1, n = v.size() - 1;
         uintmax_t k = m - n;
         gfpoly q(u.field());
         q.m_data.resize(m - n + 1, gfn(q.field()));
+
+        auto division_impl = [](gfpoly *q, gfpoly *u, const gfpoly &v, auto n, auto k) {
+            CHECK_FIELD(q->field() == u->field() && u->field() == v.field())
+            q->m_data[k] = u->m_data[n + k] / v.m_data[n];
+            for (auto j = n + k; j > k;) {
+                j--;
+                u->m_data[j] -= q->m_data[k] * v.m_data[j - k];
+            }
+        };
 
         do {
             division_impl(&q, &u, v, n, k);
@@ -340,12 +340,18 @@ public:
         return *this = quotient_remainder(*this, value).second;
     }
 
+    /// Эквивалентно операции a /= x^b, определено только когда такое деление возможно.
     template<typename U>
     auto operator>>=(U const &n) -> gfpoly & {
-        m_data.erase(m_data.begin(), m_data.begin() + (n <= size() ? n : size()));
+        if (n > degree() ||
+            !std::all_of(m_data.begin(), m_data.begin() + n, std::mem_fn(&gfn::is_zero))) {
+            throw std::logic_error("division is impossible");
+        }
+        m_data.erase(m_data.begin(), m_data.begin() + n);
         return *this;
     }
 
+    /// Эквивалентно операции a *= x^b
     template<typename U>
     auto operator<<=(U const &n) -> gfpoly & {
         normalize();
@@ -366,11 +372,13 @@ public:
     friend auto operator!=(const gfpoly & /*a*/, const gfpoly & /*b*/) -> bool;
 };
 
+inline
 auto operator-(gfpoly a) -> gfpoly {
     std::transform(a.m_data.begin(), a.m_data.end(), a.m_data.begin(), std::negate());
     return a.normalize();
 }
 
+inline
 auto operator+(const gfpoly &a, const gfpoly &b) -> gfpoly {
     CHECK_FIELD(a.field() == b.field())
     gfpoly result(a);
@@ -378,24 +386,28 @@ auto operator+(const gfpoly &a, const gfpoly &b) -> gfpoly {
     return result;
 }
 
+inline
 auto operator+(gfpoly &&a, const gfpoly &b) -> gfpoly {
     CHECK_FIELD(a.field() == b.field())
     a += b;
     return a;
 }
 
+inline
 auto operator+(const gfpoly &a, gfpoly &&b) -> gfpoly {
     CHECK_FIELD(a.field() == b.field())
     b += a;
     return b;
 }
 
+inline
 auto operator+(gfpoly &&a, gfpoly &&b) -> gfpoly {
     CHECK_FIELD(a.field() == b.field())
     a += b;
     return a;
 }
 
+inline
 auto operator-(const gfpoly &a, const gfpoly &b) -> gfpoly {
     CHECK_FIELD(a.field() == b.field())
     gfpoly result(a);
@@ -403,101 +415,119 @@ auto operator-(const gfpoly &a, const gfpoly &b) -> gfpoly {
     return result;
 }
 
+inline
 auto operator-(gfpoly &&a, const gfpoly &b) -> gfpoly {
     CHECK_FIELD(a.field() == b.field())
     a -= b;
     return a;
 }
 
+inline
 auto operator-(const gfpoly &a, gfpoly &&b) -> gfpoly {
     CHECK_FIELD(a.field() == b.field())
     b -= a;
     return -b;
 }
 
+inline
 auto operator-(gfpoly &&a, gfpoly &&b) -> gfpoly {
     CHECK_FIELD(a.field() == b.field())
     a -= b;
     return a;
 }
 
+inline
 auto operator*(const gfpoly &a, const gfpoly &b) -> gfpoly {
     gfpoly result(a.field());
     return result.multiply(a, b);
 }
 
+inline
 auto operator/(const gfpoly &a, const gfpoly &b) -> gfpoly {
     return gfpoly::quotient_remainder(a, b).first;
 }
 
+inline
 auto operator%(const gfpoly &a, const gfpoly &b) -> gfpoly {
     return gfpoly::quotient_remainder(a, b).second;
 }
 
 template<class U>
+inline
 auto operator+(gfpoly a, const U &b) -> gfpoly {
     a += b;
     return a;
 }
 
 template<class U>
+inline
 auto operator-(gfpoly a, const U &b) -> gfpoly {
     a -= b;
     return a;
 }
 
 template<class U>
+inline
 auto operator*(gfpoly a, const U &b) -> gfpoly {
     a *= b;
     return a;
 }
 
 template<class U>
+inline
 auto operator/(gfpoly a, const U &b) -> gfpoly {
     a /= b;
     return a;
 }
 
 template<class U>
+inline
 auto operator%(const gfpoly &a, const U & /*unused*/) -> gfpoly {
     return gfpoly(a.field());
 }
 
 template<class U>
+inline
 auto operator+(const U &a, gfpoly b) -> gfpoly {
     b += a;
     return b;
 }
 
 template<class U>
+inline
 auto operator-(const U &a, gfpoly b) -> gfpoly {
     b -= a;
     return -b;
 }
 
 template<class U>
+inline
 auto operator*(const U &a, gfpoly b) -> gfpoly {
     b *= a;
     return b;
 }
 
+inline
 auto operator==(const gfpoly &a, const gfpoly &b) -> bool {
     CHECK_FIELD(a.field() == b.field())
     return a.m_data == b.m_data;
 }
 
+inline
 auto operator!=(const gfpoly &a, const gfpoly &b) -> bool {
     CHECK_FIELD(a.field() == b.field())
     return a.m_data != b.m_data;
 }
 
 template<typename U>
+inline
 auto operator>>(gfpoly a, const U &b) -> gfpoly {
     a >>= b;
     return a;
 }
 
 template<typename U>
+inline
 auto operator<<(gfpoly a, const U &b) -> gfpoly {
     a <<= b;
     return a;
