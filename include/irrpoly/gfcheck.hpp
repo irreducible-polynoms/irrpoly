@@ -8,10 +8,19 @@
 
 #pragma once
 
-#include "checker.hpp"
+#include "pipeline.hpp"
 #include "gfpoly.hpp"
 
 namespace irrpoly {
+
+#if !defined(NDEBUG) || defined(IRRPOLY_RELEASE_CHECKED) // Debug or Release Checked
+#define CHECK_FIELD(comparison) \
+    if (!(comparison)) { \
+        throw std::logic_error("field check failed"); \
+    }
+#else // Release
+#define CHECK_FIELD(comparison)
+#endif
 
 /**
  * Расширенный алгоритм Евклида для поиска наибольшего общего делителя
@@ -19,7 +28,7 @@ namespace irrpoly {
  * кода из библиотеки Boost 1.71.0.
  */
 auto gcd(gfpoly m, gfpoly n) -> gfpoly {
-    assert(m.field() == n.field());
+    CHECK_FIELD(m.field() == n.field())
     if (m.is_zero() || n.is_zero()) {
         throw std::domain_error("arguments must be strictly positive");
     }
@@ -55,7 +64,9 @@ auto integer_power(T t, N n) -> T {
 
 /// Вычисляет производную данного многочлена.
 auto derivative(const gfpoly &val) -> gfpoly {
-    assert(val && val.degree());
+    if (val.is_zero() || val.degree() == 0) {
+        return gfpoly(val.field());
+    }
     std::vector<uintmax_t> res(val.size() - 1, 0);
     for (uintmax_t i = 1; i < val.size(); ++i) {
         res[i - 1] = (i * val[i]).value();
@@ -146,7 +157,7 @@ auto is_irreducible_berlekamp(const gfpoly &val) -> bool {
                 if (m[j][k]) {
                     if (f) {
                         num = m[j][k] / m[i][k];
-                        m[j][k].set_zero();
+                        m[j][k] = 0;
                         for (l = k + 1; l < n; ++l) {
                             m[j][l] -= m[i][l] * num;
                         }
@@ -393,12 +404,12 @@ enum class primitive_method {
     definition, ///< проверка по определению
 };
 
-using polychecker = checker<gfpoly, result_type>;
+using polychecker = pipeline<gfpoly, result_type>;
 
 /// Формируется универсальная функция проверки многочленов.
 /// В случае, когда проверка не выполняется устанавливается результат true.
 auto make_check_func(
-    irreducible_method irr_meth, primitive_method prim_meth) -> typename checker<gfpoly, result_type>::check_func {
+    irreducible_method irr_meth, primitive_method prim_meth) -> typename pipeline<gfpoly, result_type>::payload_fn {
     return [=](const gfpoly &poly, std::optional<result_type> &res) {
         auto result = result_type{true, true};
 
@@ -423,5 +434,7 @@ auto make_check_func(
 }
 
 } // namespace multithread
+
+#undef CHECK_FIELD
 
 } // namespace irrpoly

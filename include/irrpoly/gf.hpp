@@ -51,8 +51,8 @@ using gf = dropbox::oxygen::nn_shared_ptr<gfbase>;
 
 class gfbase final {
 private:
-    std::vector<uintmax_t> m_inv; /// Обратные элементы по умножению
     const uintmax_t m_base; /// Основание поля
+    std::vector<uintmax_t> m_inv; /// Обратные элементы по умножению
 
     explicit
     gfbase(uintmax_t /*base*/);
@@ -308,11 +308,6 @@ public:
 
     explicit operator bool() const {
         return 0 != m_val;
-    }
-
-    auto set_zero() -> gfn & {
-        m_val = 0;
-        return *this;
     }
 
     template<class charT, class traits>

@@ -88,10 +88,12 @@ TEST_CASE("gfn comparison works", "[gfn]") {
         REQUIRE(6 < num);
     }SECTION("comparison with zero") {
         REQUIRE(!num.is_zero());
-        REQUIRE(num.set_zero().is_zero());
+        num = 0;
+        REQUIRE(num.is_zero());
     }SECTION("bool coerce") {
         REQUIRE(num);
-        REQUIRE(!num.set_zero());
+        num = 0;
+        REQUIRE_FALSE(num);
     }
 }
 

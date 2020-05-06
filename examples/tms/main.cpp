@@ -44,21 +44,21 @@ auto generate_irreducible(uintmax_t num) -> std::vector<gfpoly> {
         multithread::irreducible_method::berlekamp,
         multithread::primitive_method::nil);
 
+    uintmax_t n = num - 1;
     // функция, вызываемая по окончании проверки, если результат нам подходит - сохраняем и возвращаем true, иначе false
     auto callback = [&](const gfpoly &poly, const typename multithread::result_type &result) -> bool {
-        if (!result.irreducible) {
-            return false;
+        if (result.irreducible) {
+            --n;
+            res.emplace_back(poly);
         }
-        res.emplace_back(poly);
-        return true;
+        return !n;
     };
 
-    // запускаем генерацию num - 1 многочленов (т.к. один у нас уже есть)
     // последний false говорит, что нам нужны все результаты проверки, включая лишние, поскольку мы загружаем
     // многочлены на проверку последовательно, но многопоточность не гарантирует строгого порядка, и какие-то
     // многочлены из начала последовательности могли провериться только после того, как мы уже набрали необходимое
     // количество подходящих, поэтому нужно обработать и их, т.е. последовательность будет избыточна
-    ch.check(num - 1, input, check, callback, false);
+    ch.pipe(input, check, callback, false);
 
     // сортируем многочлены в лексико-графическом порядке для получения правильной последовательности
     std::sort(res.begin(), res.end(), [](const gfpoly &a, const gfpoly &b) {

@@ -24,7 +24,7 @@ using namespace irrpoly;
 [[nodiscard]]
 auto generate_irreducible(
     const uintmax_t base,
-    const uintmax_t num,
+    uintmax_t num,
     const uintmax_t degree,
     const typename multithread::irreducible_method irr_meth,
     const typename multithread::primitive_method prim_meth,
@@ -46,13 +46,13 @@ auto generate_irreducible(
 
     auto callback = [&](const gfpoly &poly, const typename multithread::result_type &res) -> bool {
         if (res.irreducible) {
+            --num;
             arr.emplace_back(poly);
-            return true;
         }
-        return false;
+        return !num;
     };
 
-    ch.check(num, input, check, callback);
+    ch.pipe(input, check, callback);
 
     return arr;
 }
