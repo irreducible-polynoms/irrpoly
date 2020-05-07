@@ -11,6 +11,7 @@ using namespace irrpoly;
 [[nodiscard]]
 auto generate_irreducible(uintmax_t num) -> std::vector<gfpoly> {
     auto gf2 = make_gf(2);
+
     // возвращаемое значение
     std::vector<gfpoly> res;
     if (num == 0) {
@@ -46,7 +47,9 @@ auto generate_irreducible(uintmax_t num) -> std::vector<gfpoly> {
 
     uintmax_t n = num - 1;
     // функция, вызываемая по окончании проверки, если результат нам подходит - сохраняем и возвращаем true, иначе false
-    auto callback = [&](const gfpoly &poly, const typename multithread::result_type &result) -> bool {
+    auto callback = [&](const gfpoly &poly,
+                        const typename multithread::check_result &result)
+        -> bool {
         if (result.irreducible) {
             --n;
             res.emplace_back(poly);
@@ -61,17 +64,18 @@ auto generate_irreducible(uintmax_t num) -> std::vector<gfpoly> {
     ch.pipe(input, check, callback, false);
 
     // сортируем многочлены в лексико-графическом порядке для получения правильной последовательности
-    std::sort(res.begin(), res.end(), [](const gfpoly &a, const gfpoly &b) {
-        if (a.degree() == b.degree()) {
-            for (auto i = a.degree(); i > 0; --i) {
-                if (a[i] != b[i]) {
-                    return a[i] < b[i];
-                }
-            }
-            return a[0] < b[0];
-        }
-        return a.degree() < b.degree();
-    });
+    std::sort(res.begin(), res.end(),
+              [](const gfpoly &a, const gfpoly &b) {
+                  if (a.degree() == b.degree()) {
+                      for (auto i = a.degree(); i > 0; --i) {
+                          if (a[i] != b[i]) {
+                              return a[i] < b[i];
+                          }
+                      }
+                      return a[0] < b[0];
+                  }
+                  return a.degree() < b.degree();
+              });
     // выкидываем лишние с конца, чтобы осталось только требуемое число
     while (res.size() > num) {
         res.pop_back();

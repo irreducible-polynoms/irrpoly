@@ -29,10 +29,12 @@ public:
     using input_fn = std::function<value_t()>;
 
     /// Вид функции, выполняющей основную работу и возвращающей её результат.
-    using payload_fn = std::function<void(const value_t &, std::optional<result_t> &)>;
+    using payload_fn =
+    std::function<void(const value_t &, std::optional<result_t> &)>;
 
     /// Вид функции, обрабатывающей результат и возвращающей true, если работу необходимо завершить.
-    using callback_fn = std::function<bool(const value_t &, const result_t &)>;
+    using callback_fn =
+    std::function<bool(const value_t &, const result_t &)>;
 
 private:
     /// Потоки, непосредственно выполняющие проверку многочленов на неприводимость и примитивность.
@@ -40,7 +42,7 @@ private:
         std::shared_ptr<std::mutex> s_mutex;
         std::shared_ptr<std::condition_variable> s_cond;
 
-        payload_fn m_cf; ///< Основная функция проверки
+        payload_fn m_pl; ///< Основная функция проверки
 
         volatile bool m_terminate; ///< Поток должен быть завершён
         std::optional<value_t> m_val; ///< Входные данные
@@ -69,7 +71,7 @@ private:
                     continue;
                 }
 
-                m_cf(m_val.value(), m_res);
+                m_pl(m_val.value(), m_res);
 
                 std::lock_guard<std::mutex> lg(*s_mutex);
                 m_busy = false;
@@ -78,8 +80,10 @@ private:
         }
 
     public:
-        pod(std::shared_ptr<std::mutex> s_mutex, std::shared_ptr<std::condition_variable> s_cond) :
-            s_mutex(std::move(s_mutex)), s_cond(std::move(s_cond)), m_busy(false), m_terminate(false),
+        pod(std::shared_ptr<std::mutex> s_mutex,
+            std::shared_ptr<std::condition_variable> s_cond) :
+            s_mutex(std::move(s_mutex)), s_cond(std::move(s_cond)),
+            m_busy(false), m_terminate(false),
             m_val(), m_res() {
             m_thread = std::thread(&pod::execute, std::ref(*this));
         }
@@ -92,8 +96,8 @@ private:
         }
 
         /// Устанавливает функцию, которая выполняет основную работу
-        void set_payload(payload_fn cf) {
-            m_cf = cf;
+        void set_payload(payload_fn pl) {
+            m_pl = pl;
         }
 
         /// Многочлен, проверка которого выполнялась.
@@ -149,7 +153,8 @@ private:
 
     /// Считает, сколько потоков заняты.
     auto countBusy() -> unsigned {
-        return std::count_if(m_pods.begin(), m_pods.end(), std::mem_fn(&pod::is_busy));
+        return std::count_if(m_pods.begin(), m_pods.end(),
+                             std::mem_fn(&pod::is_busy));
     }
 
 public:
@@ -167,7 +172,8 @@ public:
     }
 
     /// Основной цикл разделения работы на потоки.
-    void pipe(input_fn in, payload_fn pl, callback_fn bk, const bool strict = true) {
+    void pipe(input_fn in, payload_fn pl, callback_fn bk,
+              const bool strict = true) {
         if (m_pods.empty()) {
             while (true) {
                 auto input = in();
@@ -197,7 +203,8 @@ public:
                 if (m_pods[i]->is_busy()) {
                     continue;
                 }
-                if (bk(m_pods[i]->get_data().value(), m_pods[i]->get_result().value())) {
+                if (bk(m_pods[i]->get_data().value(),
+                       m_pods[i]->get_result().value())) {
                     m_pods[i]->clear();
                     goto end;
                 }
@@ -210,9 +217,11 @@ public:
             s_cond->wait(lk);
         }
         if (!strict) {
-            // обрабатываем все проверенные многочлены, даже если их больше, чем требовалось найти
+            // обрабатываем все проверенные многочлены,
+            // даже если их больше, чем требовалось найти
             for (const auto &sl : m_pods) {
-                if (sl->get_data().has_value() && sl->get_result().has_value()) {
+                if (sl->get_data().has_value() &&
+                    sl->get_result().has_value()) {
                     bk(sl->get_data().value(), sl->get_result().value());
                     sl->clear();
                 }

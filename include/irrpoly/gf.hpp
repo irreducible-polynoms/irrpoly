@@ -312,12 +312,13 @@ public:
 
     template<class charT, class traits>
     friend
-    auto operator<<(std::basic_ostream<charT, traits> & /*os*/, const gfn & /*val*/) -> std::basic_ostream<charT,
-                                                                                                           traits> &;
+    auto operator<<(std::basic_ostream<charT, traits> & /*os*/, const gfn & /*val*/)
+    -> std::basic_ostream<charT, traits> &;
 
     template<class charT, class traits>
     friend
-    auto operator>>(std::basic_istream<charT, traits> & /*is*/, gfn & /*val*/) -> std::basic_istream<charT, traits> &;
+    auto operator>>(std::basic_istream<charT, traits> & /*is*/, gfn & /*val*/)
+    -> std::basic_istream<charT, traits> &;
 };
 
 #define GFN_COMPARISON_OPERATORS(op) \
@@ -372,12 +373,14 @@ auto operator/(const uintmax_t other, const gfn &curr) -> gfn {
 }
 
 template<class charT, class traits>
-auto operator<<(std::basic_ostream<charT, traits> &os, const gfn &val) -> std::basic_ostream<charT, traits> & {
+auto operator<<(std::basic_ostream<charT, traits> &os, const gfn &val)
+-> std::basic_ostream<charT, traits> & {
     return os << val.m_val;
 }
 
 template<class charT, class traits>
-auto operator>>(std::basic_istream<charT, traits> &is, gfn &val) -> std::basic_istream<charT, traits> & {
+auto operator>>(std::basic_istream<charT, traits> &is, gfn &val)
+-> std::basic_istream<charT, traits> & {
     is >> val.m_val;
     val.m_val %= val.base();
     return is;

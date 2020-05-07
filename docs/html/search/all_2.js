@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['degree_7',['degree',['../classirrpoly_1_1gfpoly.html#a43a015b162c416cdfb821a0f859f3d3b',1,'irrpoly::gfpoly']]]
+  ['degree_4',['degree',['../classirrpoly_1_1gfpoly.html#a43a015b162c416cdfb821a0f859f3d3b',1,'irrpoly::gfpoly']]]
 ];

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['callback_5ffunc_64',['callback_func',['../classirrpoly_1_1checker.html#a25a9fc7a0838e9441f0d8efac4ccbf91',1,'irrpoly::checker']]],
-  ['check_5ffunc_65',['check_func',['../classirrpoly_1_1checker.html#a7abc6a6ff84fc4e3ddbb2eca6d766c69',1,'irrpoly::checker']]]
+  ['callback_5ffn_62',['callback_fn',['../classirrpoly_1_1multithread_1_1pipeline.html#abdf6c0753b9a79325547ec67af5bbafa',1,'irrpoly::multithread::pipeline']]]
 ];

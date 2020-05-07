@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.18"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>irrpoly: Шаблон класса irrpoly::multithread::pipeline&lt; value_t, result_t &gt;</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    extensions: ["tex2jax.js"],
+    jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">irrpoly
+   &#160;<span id="projectnumber">2.1.0</span>
+   </div>
+   <div id="projectbrief">Проверка многочленов на неприводимость и примитивность над заданным полем Галуа</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Создано системой Doxygen 1.8.18 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+var searchBox = new SearchBox("searchBox", "search",false,'Поиск');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',true,false,'search.php','Поиск');
+  $(document).ready(function() { init_search(); });
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<iframe src="javascript:void(0)" frameborder="0" 
+        name="MSearchResults" id="MSearchResults">
+</iframe>
+</div>
+
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><b>irrpoly</b></li><li class="navelem"><b>multithread</b></li><li class="navelem"><a class="el" href="classirrpoly_1_1multithread_1_1pipeline.html">pipeline</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Классы</a> &#124;
+<a href="#pub-types">Открытые типы</a> &#124;
+<a href="#pub-methods">Открытые члены</a> &#124;
+<a href="classirrpoly_1_1multithread_1_1pipeline-members.html">Полный список членов класса</a>  </div>
+  <div class="headertitle">
+<div class="title">Шаблон класса irrpoly::multithread::pipeline&lt; value_t, result_t &gt;</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>Выполняет цепочку "получение входных данных - обработка - возврат результата" в несколько потоков.  
+ <a href="classirrpoly_1_1multithread_1_1pipeline.html#details">Подробнее...</a></p>
+
+<p><code>#include &lt;<a class="el" href="pipeline_8hpp_source.html">pipeline.hpp</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Открытые типы</h2></td></tr>
+<tr class="memitem:a551b60f342b83013f368e77bd942ba57"><td class="memItemLeft" align="right" valign="top"><a id="a551b60f342b83013f368e77bd942ba57"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1multithread_1_1pipeline.html#a551b60f342b83013f368e77bd942ba57">input_fn</a> = std::function&lt; value_t()&gt;</td></tr>
+<tr class="memdesc:a551b60f342b83013f368e77bd942ba57"><td class="mdescLeft">&#160;</td><td class="mdescRight">Вид функции, генерирующей входные данные. <br /></td></tr>
+<tr class="separator:a551b60f342b83013f368e77bd942ba57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf28c0788b07ed7ec3342a728addc118"><td class="memItemLeft" align="right" valign="top"><a id="acf28c0788b07ed7ec3342a728addc118"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1multithread_1_1pipeline.html#acf28c0788b07ed7ec3342a728addc118">payload_fn</a> = std::function&lt; void(const value_t &amp;, std::optional&lt; result_t &gt; &amp;)&gt;</td></tr>
+<tr class="memdesc:acf28c0788b07ed7ec3342a728addc118"><td class="mdescLeft">&#160;</td><td class="mdescRight">Вид функции, выполняющей основную работу и возвращающей её результат. <br /></td></tr>
+<tr class="separator:acf28c0788b07ed7ec3342a728addc118"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdf6c0753b9a79325547ec67af5bbafa"><td class="memItemLeft" align="right" valign="top"><a id="abdf6c0753b9a79325547ec67af5bbafa"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1multithread_1_1pipeline.html#abdf6c0753b9a79325547ec67af5bbafa">callback_fn</a> = std::function&lt; bool(const value_t &amp;, const result_t &amp;)&gt;</td></tr>
+<tr class="memdesc:abdf6c0753b9a79325547ec67af5bbafa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Вид функции, обрабатывающей результат и возвращающей true, если работу необходимо завершить. <br /></td></tr>
+<tr class="separator:abdf6c0753b9a79325547ec67af5bbafa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Открытые члены</h2></td></tr>
+<tr class="memitem:a3d038443bf47c243f585d6dcb7ae94f6"><td class="memItemLeft" align="right" valign="top"><a id="a3d038443bf47c243f585d6dcb7ae94f6"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>pipeline</b> (unsigned n=std::thread::hardware_concurrency())</td></tr>
+<tr class="separator:a3d038443bf47c243f585d6dcb7ae94f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e6c7534c069186cb6b579a8dff3faf0"><td class="memItemLeft" align="right" valign="top"><a id="a7e6c7534c069186cb6b579a8dff3faf0"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1multithread_1_1pipeline.html#a7e6c7534c069186cb6b579a8dff3faf0">pipe</a> (<a class="el" href="classirrpoly_1_1multithread_1_1pipeline.html#a551b60f342b83013f368e77bd942ba57">input_fn</a> in, <a class="el" href="classirrpoly_1_1multithread_1_1pipeline.html#acf28c0788b07ed7ec3342a728addc118">payload_fn</a> pl, <a class="el" href="classirrpoly_1_1multithread_1_1pipeline.html#abdf6c0753b9a79325547ec67af5bbafa">callback_fn</a> bk, const bool strict=true)</td></tr>
+<tr class="memdesc:a7e6c7534c069186cb6b579a8dff3faf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Основной цикл разделения работы на потоки. <br /></td></tr>
+<tr class="separator:a7e6c7534c069186cb6b579a8dff3faf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5171372cbbf6d6b91550cbf80558bc51"><td class="memItemLeft" align="right" valign="top"><a id="a5171372cbbf6d6b91550cbf80558bc51"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classirrpoly_1_1multithread_1_1pipeline.html#a5171372cbbf6d6b91550cbf80558bc51">~pipeline</a> ()</td></tr>
+<tr class="memdesc:a5171372cbbf6d6b91550cbf80558bc51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Завершаем работу всех потоков. <br /></td></tr>
+<tr class="separator:a5171372cbbf6d6b91550cbf80558bc51"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Подробное описание</h2>
+<div class="textblock"><h3>template&lt;typename value_t, typename result_t&gt;<br />
+class irrpoly::multithread::pipeline&lt; value_t, result_t &gt;</h3>
+
+<p>Выполняет цепочку "получение входных данных - обработка - возврат результата" в несколько потоков. </p>
+</div><hr/>Объявления и описания членов класса находятся в файле:<ul>
+<li>include/irrpoly/<a class="el" href="pipeline_8hpp_source.html">pipeline.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+Документация по irrpoly. Последние изменения: Пт 8 Май 2020 00:21:54. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.18
+</small></address>
+</body>
+</html>

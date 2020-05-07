@@ -44,7 +44,7 @@ auto generate_irreducible(
 
     auto check = multithread::make_check_func(irr_meth, prim_meth);
 
-    auto callback = [&](const gfpoly &poly, const typename multithread::result_type &res) -> bool {
+    auto callback = [&](const gfpoly &poly, const typename multithread::check_result &res) -> bool {
         if (res.irreducible) {
             --num;
             arr.emplace_back(poly);

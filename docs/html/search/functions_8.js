@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['_7echecker_63',['~checker',['../classirrpoly_1_1checker.html#ae2f767186d9060c993c0255d9cec527b',1,'irrpoly::checker']]]
+  ['_7epipeline_61',['~pipeline',['../classirrpoly_1_1multithread_1_1pipeline.html#a5171372cbbf6d6b91550cbf80558bc51',1,'irrpoly::multithread::pipeline']]]
 ];

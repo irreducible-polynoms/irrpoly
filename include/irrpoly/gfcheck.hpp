@@ -385,7 +385,7 @@ auto is_primitive_definition(const gfpoly &val) -> bool {
 namespace multithread {
 
 /// Структура, представляющая результаты проверки многочлена.
-struct result_type {
+struct check_result {
     bool irreducible;
     bool primitive;
 };
@@ -404,27 +404,33 @@ enum class primitive_method {
     definition, ///< проверка по определению
 };
 
-using polychecker = pipeline<gfpoly, result_type>;
+using polychecker = pipeline<gfpoly, check_result>;
 
 /// Формируется универсальная функция проверки многочленов.
 /// В случае, когда проверка не выполняется устанавливается результат true.
 auto make_check_func(
-    irreducible_method irr_meth, primitive_method prim_meth) -> typename pipeline<gfpoly, result_type>::payload_fn {
-    return [=](const gfpoly &poly, std::optional<result_type> &res) {
-        auto result = result_type{true, true};
+    irreducible_method irr_meth, primitive_method prim_meth)
+-> typename pipeline<gfpoly, check_result>::payload_fn {
+    return [=](const gfpoly &poly, std::optional<check_result> &res) {
+        auto result = check_result{true, true};
 
         switch (irr_meth) {
-        case irreducible_method::berlekamp:result.irreducible = is_irreducible_berlekamp(poly);
+        case irreducible_method::berlekamp:
+            result.irreducible = is_irreducible_berlekamp(poly);
             break;
-        case irreducible_method::rabin:result.irreducible = is_irreducible_rabin(poly);
+        case irreducible_method::rabin:
+            result.irreducible = is_irreducible_rabin(poly);
             break;
-        case irreducible_method::benor:result.irreducible = is_irreducible_benor(poly);
+        case irreducible_method::benor:
+            result.irreducible = is_irreducible_benor(poly);
             break;
         default:; // irreducible_method::nil
         }
 
         switch (prim_meth) {
-        case primitive_method::definition:result.primitive = result.irreducible ? is_primitive_definition(poly) : false;
+        case primitive_method::definition:
+            result.primitive = result.irreducible ?
+                               is_primitive_definition(poly) : false;
             break;
         default:; // primitive_method::nil
         }

@@ -110,8 +110,8 @@ $(function() {
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
 <div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classirrpoly_1_1gfbase.html">   52</a></span>&#160;<span class="keyword">class </span><a class="code" href="classirrpoly_1_1gfbase.html">gfbase</a> final {</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    std::vector&lt;uintmax_t&gt; m_inv; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keyword">const</span> uintmax_t m_base; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keyword">const</span> uintmax_t m_base; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    std::vector&lt;uintmax_t&gt; m_inv; </div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">explicit</span></div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <a class="code" href="classirrpoly_1_1gfbase.html">gfbase</a>(uintmax_t <span class="comment">/*base*/</span>);</div>
@@ -355,148 +355,146 @@ $(function() {
 <div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        <span class="keywordflow">return</span> 0 != m_val;</div>
 <div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    }</div>
 <div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160; </div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    <span class="keyword">auto</span> set_zero() -&gt; <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> &amp; {</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        m_val = 0;</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;        <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    }</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">class</span> <span class="keywordtype">char</span>T, <span class="keyword">class</span> traits&gt;</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;    <span class="keyword">friend</span></div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;    <span class="keyword">auto</span> operator&lt;&lt;(std::basic_ostream&lt;charT, traits&gt; &amp; <span class="comment">/*os*/</span>, <span class="keyword">const</span> <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> &amp; <span class="comment">/*val*/</span>)</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    -&gt; std::basic_ostream&lt;charT, traits&gt; &amp;;</div>
 <div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160; </div>
 <div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">class</span> <span class="keywordtype">char</span>T, <span class="keyword">class</span> traits&gt;</div>
 <div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    <span class="keyword">friend</span></div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    <span class="keyword">auto</span> operator&lt;&lt;(std::basic_ostream&lt;charT, traits&gt; &amp; <span class="comment">/*os*/</span>, <span class="keyword">const</span> <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> &amp; <span class="comment">/*val*/</span>) -&gt; std::basic_ostream&lt;charT,</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;                                                                                                           traits&gt; &amp;;</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160; </div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">class</span> <span class="keywordtype">char</span>T, <span class="keyword">class</span> traits&gt;</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    <span class="keyword">friend</span></div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;    <span class="keyword">auto</span> operator&gt;&gt;(std::basic_istream&lt;charT, traits&gt; &amp; <span class="comment">/*is*/</span>, <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> &amp; <span class="comment">/*val*/</span>) -&gt; std::basic_istream&lt;charT, traits&gt; &amp;;</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;};</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160; </div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;<span class="preprocessor">#define GFN_COMPARISON_OPERATORS(op) \</span></div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;<span class="preprocessor">    inline \</span></div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;<span class="preprocessor">    auto operator op(const gfn &amp;l, const gfn &amp;r) -&gt; bool { \</span></div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;<span class="preprocessor">        CHECK_FIELD(l.field() == r.field()) \</span></div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;<span class="preprocessor">        return l.value() op r.value(); \</span></div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;<span class="preprocessor">    } \</span></div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;<span class="preprocessor">    \</span></div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;<span class="preprocessor">    inline \</span></div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;<span class="preprocessor">    auto operator op(const gfn &amp;l, const uintmax_t r) -&gt; bool { \</span></div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;<span class="preprocessor">        return l.value() op (r % l.base()); \</span></div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;<span class="preprocessor">    } \</span></div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;<span class="preprocessor">    \</span></div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;<span class="preprocessor">    inline \</span></div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;<span class="preprocessor">    auto operator op(const uintmax_t l, const gfn &amp;r) -&gt; bool { \</span></div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;<span class="preprocessor">        return (l % r.base()) op r.value(); \</span></div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;<span class="preprocessor">    }</span></div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160; </div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;GFN_COMPARISON_OPERATORS(==)</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;GFN_COMPARISON_OPERATORS(!=)</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;GFN_COMPARISON_OPERATORS(&lt;)</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;GFN_COMPARISON_OPERATORS(&lt;=)</div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;GFN_COMPARISON_OPERATORS(&gt;)</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;GFN_COMPARISON_OPERATORS(&gt;=)</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160; </div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;<span class="preprocessor">#undef GFN_COMPARISON_OPERATORS</span></div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160; </div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;[[nodiscard]]</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;<span class="keyword">auto</span> operator+(<span class="keyword">const</span> uintmax_t other, <span class="keyword">const</span> <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> &amp;curr) -&gt; <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> {</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a>{curr.m_field, (other % curr.base()) + curr.m_val};</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;}</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160; </div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;[[nodiscard]]</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;<span class="keyword">auto</span> operator-(<span class="keyword">const</span> uintmax_t other, <span class="keyword">const</span> <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> &amp;curr) -&gt; <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> {</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a>{curr.m_field, curr.base() + (other % curr.base()) - curr.m_val};</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;}</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160; </div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;[[nodiscard]]</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;<span class="keyword">auto</span> operator*(<span class="keyword">const</span> uintmax_t other, <span class="keyword">const</span> <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> &amp;curr) -&gt; <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> {</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a>{curr.m_field, (other % curr.base()) * curr.m_val};</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;}</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160; </div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;[[nodiscard]]</div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;<span class="keyword">auto</span> <a class="code" href="classirrpoly_1_1gfn.html#a8934664cf52af120a896688667a0a091">operator/</a>(<span class="keyword">const</span> uintmax_t other, <span class="keyword">const</span> <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> &amp;curr) -&gt; <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> {</div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;    <span class="keywordflow">switch</span> (curr.m_val) {</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;    <span class="keywordflow">case</span> 0:<span class="keywordflow">throw</span> std::invalid_argument(<span class="stringliteral">&quot;division by zero&quot;</span>);</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;    <span class="keywordflow">default</span>:</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a>{curr.m_field,</div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;                   (other % curr.base()) * curr.m_field-&gt;mul_inv(curr.m_val)};</div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;    }</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;}</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160; </div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">class</span> <span class="keywordtype">char</span>T, <span class="keyword">class</span> traits&gt;</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;<span class="keyword">auto</span> operator&lt;&lt;(std::basic_ostream&lt;charT, traits&gt; &amp;os, <span class="keyword">const</span> <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> &amp;val) -&gt; std::basic_ostream&lt;charT, traits&gt; &amp; {</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;    <span class="keywordflow">return</span> os &lt;&lt; val.m_val;</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;}</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160; </div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">class</span> <span class="keywordtype">char</span>T, <span class="keyword">class</span> traits&gt;</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;<span class="keyword">auto</span> operator&gt;&gt;(std::basic_istream&lt;charT, traits&gt; &amp;is, <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> &amp;val) -&gt; std::basic_istream&lt;charT, traits&gt; &amp; {</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;    is &gt;&gt; val.m_val;</div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;    val.m_val %= val.base();</div>
-<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;    <span class="keywordflow">return</span> is;</div>
-<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;}</div>
-<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160; </div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;gfbase::gfbase(<span class="keyword">const</span> uintmax_t <a class="code" href="classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62">base</a>) : m_base(<a class="code" href="classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62">base</a>), m_inv(<a class="code" href="classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62">base</a>, 0) {</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62">base</a> == 0) {</div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;        <span class="keywordflow">throw</span> std::logic_error(<span class="stringliteral">&quot;empty field&quot;</span>);</div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;    }</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62">base</a> == 1) {</div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;        <span class="keywordflow">throw</span> std::logic_error(<span class="stringliteral">&quot;field could contain only zero&quot;</span>);</div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;    }</div>
-<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;    <span class="keywordflow">if</span> (UINTMAX_MAX / (<a class="code" href="classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62">base</a> - 1) &lt; (<a class="code" href="classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62">base</a> - 1)) {</div>
-<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160;        <span class="keywordflow">throw</span> std::logic_error(<span class="stringliteral">&quot;too large field&quot;</span>);</div>
-<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;    }</div>
-<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160; </div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;    <span class="keyword">auto</span> i_base = <span class="keyword">static_cast&lt;</span>intmax_t<span class="keyword">&gt;</span>(<a class="code" href="classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62">base</a>);</div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;    <span class="keyword">auto</span> inv_calc = [](<span class="keyword">const</span> intmax_t <a class="code" href="classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62">base</a>, <span class="keyword">const</span> intmax_t val) -&gt; uintmax_t {</div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;        intmax_t u0 = <a class="code" href="classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62">base</a>, u1 = 1, u2 = 0,</div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;            v0 = val, v1 = 0, v2 = 1, w0 = 0, w1 = 0, w2 = 0, q = 0;</div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;        <span class="keywordflow">while</span> (v0 &gt; 0) {</div>
-<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;            q = u0 / v0;</div>
-<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;            w0 = u0 - q * v0, w1 = u1 - q * v1, w2 = u2 - q * v2;</div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;            u0 = v0, u1 = v1, u2 = v2, v0 = w0, v1 = w1, v2 = w2;</div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;        }</div>
-<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;        <span class="keywordflow">if</span> (u0 &gt; 1) {</div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;            <span class="keywordflow">throw</span> std::logic_error(<span class="stringliteral">&quot;multiplicative inverse don&#39;t exist&quot;</span>);</div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;        }</div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>uintmax_t<span class="keyword">&gt;</span>(u2 &lt; 0 ? (<a class="code" href="classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62">base</a> + u2) : (u2));</div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;    };</div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160; </div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;    m_inv[1] = 1;</div>
-<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;    <span class="keywordflow">for</span> (uintmax_t i = 2; i &lt; m_base; ++i) {</div>
-<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;        <span class="keywordflow">if</span> (m_inv[i]) {</div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;            <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;        }</div>
-<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;        m_inv[i] = inv_calc(i_base, i);</div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;        m_inv[m_inv[i]] = i;</div>
-<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;    }</div>
-<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;}</div>
-<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160; </div>
-<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;[[nodiscard]]</div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00440"></a><span class="lineno"><a class="line" href="classirrpoly_1_1gfbase.html#a9ed5099504e538324094806845f66b40">  440</a></span>&#160;<span class="keyword">auto</span> <a class="code" href="classirrpoly_1_1gfbase.html#a9ed5099504e538324094806845f66b40">gfbase::base</a>() const -&gt; uintmax_t {</div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;    <span class="keywordflow">return</span> m_base;</div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;}</div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160; </div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;[[nodiscard]]</div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00446"></a><span class="lineno"><a class="line" href="classirrpoly_1_1gfbase.html#a82e5ad117ce524339e674df7ca5615d4">  446</a></span>&#160;<span class="keyword">auto</span> <a class="code" href="classirrpoly_1_1gfbase.html#a82e5ad117ce524339e674df7ca5615d4">gfbase::mul_inv</a>(<span class="keyword">const</span> uintmax_t val) <span class="keyword">const</span> -&gt; uintmax_t {</div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;    <span class="keywordflow">switch</span> (val % m_base) {</div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;    <span class="keywordflow">case</span> 0:<span class="keywordflow">throw</span> std::logic_error(<span class="stringliteral">&quot;multiplicative inverse don&#39;t exist&quot;</span>);</div>
-<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;    <span class="keywordflow">default</span>:<span class="keywordflow">return</span> m_inv[val % m_base];</div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;    }</div>
-<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;}</div>
-<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160; </div>
-<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;[[nodiscard]]</div>
-<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;<span class="keyword">inline</span></div>
-<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;<span class="keyword">auto</span> make_gf(<span class="keyword">const</span> uintmax_t base) -&gt; <a class="code" href="classdropbox_1_1oxygen_1_1nn.html">gf</a> {</div>
-<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classdropbox_1_1oxygen_1_1nn.html">dropbox::oxygen::nn&lt;std::shared_ptr&lt;gfbase&gt;</a>&gt;(<a class="code" href="classdropbox_1_1oxygen_1_1nn.html">dropbox::oxygen::nn</a>(</div>
-<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;        <a class="code" href="structdropbox_1_1oxygen_1_1i__promise__i__checked__for__null__t.html">dropbox::oxygen::i_promise_i_checked_for_null_t</a>{}, <span class="keyword">new</span> gfbase(base)));</div>
-<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;}</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    <span class="keyword">auto</span> operator&gt;&gt;(std::basic_istream&lt;charT, traits&gt; &amp; <span class="comment">/*is*/</span>, <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> &amp; <span class="comment">/*val*/</span>)</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    -&gt; std::basic_istream&lt;charT, traits&gt; &amp;;</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;};</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160; </div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;<span class="preprocessor">#define GFN_COMPARISON_OPERATORS(op) \</span></div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;<span class="preprocessor">    inline \</span></div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;<span class="preprocessor">    auto operator op(const gfn &amp;l, const gfn &amp;r) -&gt; bool { \</span></div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;<span class="preprocessor">        CHECK_FIELD(l.field() == r.field()) \</span></div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;<span class="preprocessor">        return l.value() op r.value(); \</span></div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;<span class="preprocessor">    } \</span></div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;<span class="preprocessor">    \</span></div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;<span class="preprocessor">    inline \</span></div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;<span class="preprocessor">    auto operator op(const gfn &amp;l, const uintmax_t r) -&gt; bool { \</span></div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;<span class="preprocessor">        return l.value() op (r % l.base()); \</span></div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;<span class="preprocessor">    } \</span></div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;<span class="preprocessor">    \</span></div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;<span class="preprocessor">    inline \</span></div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;<span class="preprocessor">    auto operator op(const uintmax_t l, const gfn &amp;r) -&gt; bool { \</span></div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;<span class="preprocessor">        return (l % r.base()) op r.value(); \</span></div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;<span class="preprocessor">    }</span></div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160; </div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;GFN_COMPARISON_OPERATORS(==)</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;GFN_COMPARISON_OPERATORS(!=)</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;GFN_COMPARISON_OPERATORS(&lt;)</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;GFN_COMPARISON_OPERATORS(&lt;=)</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;GFN_COMPARISON_OPERATORS(&gt;)</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;GFN_COMPARISON_OPERATORS(&gt;=)</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160; </div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;<span class="preprocessor">#undef GFN_COMPARISON_OPERATORS</span></div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160; </div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;[[nodiscard]]</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;<span class="keyword">auto</span> operator+(<span class="keyword">const</span> uintmax_t other, <span class="keyword">const</span> <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> &amp;curr) -&gt; <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> {</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a>{curr.m_field, (other % curr.base()) + curr.m_val};</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;}</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160; </div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;[[nodiscard]]</div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;<span class="keyword">auto</span> operator-(<span class="keyword">const</span> uintmax_t other, <span class="keyword">const</span> <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> &amp;curr) -&gt; <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> {</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a>{curr.m_field, curr.base() + (other % curr.base()) - curr.m_val};</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;}</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160; </div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;[[nodiscard]]</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;<span class="keyword">auto</span> operator*(<span class="keyword">const</span> uintmax_t other, <span class="keyword">const</span> <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> &amp;curr) -&gt; <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> {</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a>{curr.m_field, (other % curr.base()) * curr.m_val};</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;}</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160; </div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;[[nodiscard]]</div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;<span class="keyword">auto</span> <a class="code" href="classirrpoly_1_1gfn.html#a8934664cf52af120a896688667a0a091">operator/</a>(<span class="keyword">const</span> uintmax_t other, <span class="keyword">const</span> <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> &amp;curr) -&gt; <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> {</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;    <span class="keywordflow">switch</span> (curr.m_val) {</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;    <span class="keywordflow">case</span> 0:<span class="keywordflow">throw</span> std::invalid_argument(<span class="stringliteral">&quot;division by zero&quot;</span>);</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;    <span class="keywordflow">default</span>:</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a>{curr.m_field,</div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;                   (other % curr.base()) * curr.m_field-&gt;mul_inv(curr.m_val)};</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;    }</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;}</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160; </div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">class</span> <span class="keywordtype">char</span>T, <span class="keyword">class</span> traits&gt;</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;<span class="keyword">auto</span> operator&lt;&lt;(std::basic_ostream&lt;charT, traits&gt; &amp;os, <span class="keyword">const</span> <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> &amp;val)</div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;-&gt; std::basic_ostream&lt;charT, traits&gt; &amp; {</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;    <span class="keywordflow">return</span> os &lt;&lt; val.m_val;</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;}</div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160; </div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">class</span> <span class="keywordtype">char</span>T, <span class="keyword">class</span> traits&gt;</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;<span class="keyword">auto</span> operator&gt;&gt;(std::basic_istream&lt;charT, traits&gt; &amp;is, <a class="code" href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">gfn</a> &amp;val)</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;-&gt; std::basic_istream&lt;charT, traits&gt; &amp; {</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;    is &gt;&gt; val.m_val;</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;    val.m_val %= val.base();</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;    <span class="keywordflow">return</span> is;</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;}</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160; </div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;gfbase::gfbase(<span class="keyword">const</span> uintmax_t <a class="code" href="classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62">base</a>) : m_base(<a class="code" href="classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62">base</a>), m_inv(<a class="code" href="classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62">base</a>, 0) {</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62">base</a> == 0) {</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;        <span class="keywordflow">throw</span> std::logic_error(<span class="stringliteral">&quot;empty field&quot;</span>);</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;    }</div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62">base</a> == 1) {</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;        <span class="keywordflow">throw</span> std::logic_error(<span class="stringliteral">&quot;field could contain only zero&quot;</span>);</div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;    }</div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;    <span class="keywordflow">if</span> (UINTMAX_MAX / (<a class="code" href="classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62">base</a> - 1) &lt; (<a class="code" href="classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62">base</a> - 1)) {</div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;        <span class="keywordflow">throw</span> std::logic_error(<span class="stringliteral">&quot;too large field&quot;</span>);</div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;    }</div>
+<div class="line"><a name="l00410"></a><span class="lineno">  410</span>&#160; </div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;    <span class="keyword">auto</span> i_base = <span class="keyword">static_cast&lt;</span>intmax_t<span class="keyword">&gt;</span>(<a class="code" href="classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62">base</a>);</div>
+<div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;    <span class="keyword">auto</span> inv_calc = [](<span class="keyword">const</span> intmax_t <a class="code" href="classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62">base</a>, <span class="keyword">const</span> intmax_t val) -&gt; uintmax_t {</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;        intmax_t u0 = <a class="code" href="classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62">base</a>, u1 = 1, u2 = 0,</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;            v0 = val, v1 = 0, v2 = 1, w0 = 0, w1 = 0, w2 = 0, q = 0;</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;        <span class="keywordflow">while</span> (v0 &gt; 0) {</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;            q = u0 / v0;</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;            w0 = u0 - q * v0, w1 = u1 - q * v1, w2 = u2 - q * v2;</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;            u0 = v0, u1 = v1, u2 = v2, v0 = w0, v1 = w1, v2 = w2;</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;        }</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;        <span class="keywordflow">if</span> (u0 &gt; 1) {</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;            <span class="keywordflow">throw</span> std::logic_error(<span class="stringliteral">&quot;multiplicative inverse don&#39;t exist&quot;</span>);</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;        }</div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>uintmax_t<span class="keyword">&gt;</span>(u2 &lt; 0 ? (<a class="code" href="classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62">base</a> + u2) : (u2));</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;    };</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160; </div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;    m_inv[1] = 1;</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;    <span class="keywordflow">for</span> (uintmax_t i = 2; i &lt; m_base; ++i) {</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;        <span class="keywordflow">if</span> (m_inv[i]) {</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;            <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;        }</div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;        m_inv[i] = inv_calc(i_base, i);</div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;        m_inv[m_inv[i]] = i;</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;    }</div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;}</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160; </div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;[[nodiscard]]</div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00438"></a><span class="lineno"><a class="line" href="classirrpoly_1_1gfbase.html#a9ed5099504e538324094806845f66b40">  438</a></span>&#160;<span class="keyword">auto</span> <a class="code" href="classirrpoly_1_1gfbase.html#a9ed5099504e538324094806845f66b40">gfbase::base</a>() const -&gt; uintmax_t {</div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;    <span class="keywordflow">return</span> m_base;</div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;}</div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160; </div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;[[nodiscard]]</div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00444"></a><span class="lineno"><a class="line" href="classirrpoly_1_1gfbase.html#a82e5ad117ce524339e674df7ca5615d4">  444</a></span>&#160;<span class="keyword">auto</span> <a class="code" href="classirrpoly_1_1gfbase.html#a82e5ad117ce524339e674df7ca5615d4">gfbase::mul_inv</a>(<span class="keyword">const</span> uintmax_t val) <span class="keyword">const</span> -&gt; uintmax_t {</div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;    <span class="keywordflow">switch</span> (val % m_base) {</div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;    <span class="keywordflow">case</span> 0:<span class="keywordflow">throw</span> std::logic_error(<span class="stringliteral">&quot;multiplicative inverse don&#39;t exist&quot;</span>);</div>
+<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;    <span class="keywordflow">default</span>:<span class="keywordflow">return</span> m_inv[val % m_base];</div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;    }</div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;}</div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160; </div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;[[nodiscard]]</div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;<span class="keyword">inline</span></div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;<span class="keyword">auto</span> make_gf(<span class="keyword">const</span> uintmax_t base) -&gt; <a class="code" href="classdropbox_1_1oxygen_1_1nn.html">gf</a> {</div>
+<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;    <span class="keywordflow">return</span> <a class="code" href="classdropbox_1_1oxygen_1_1nn.html">dropbox::oxygen::nn&lt;std::shared_ptr&lt;gfbase&gt;</a>&gt;(<a class="code" href="classdropbox_1_1oxygen_1_1nn.html">dropbox::oxygen::nn</a>(</div>
+<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;        <a class="code" href="structdropbox_1_1oxygen_1_1i__promise__i__checked__for__null__t.html">dropbox::oxygen::i_promise_i_checked_for_null_t</a>{}, <span class="keyword">new</span> gfbase(base)));</div>
+<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;}</div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160; </div>
+<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;<span class="preprocessor">#undef CHECK_FIELD</span></div>
 <div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160; </div>
-<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;<span class="preprocessor">#undef CHECK_FIELD</span></div>
-<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160; </div>
-<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;} <span class="comment">// namespace irrpoly</span></div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;} <span class="comment">// namespace irrpoly</span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aclassirrpoly_1_1gfbase_html_a9ed5099504e538324094806845f66b40"><div class="ttname"><a href="classirrpoly_1_1gfbase.html#a9ed5099504e538324094806845f66b40">irrpoly::gfbase::base</a></div><div class="ttdeci">auto base() const -&gt; uintmax_t</div><div class="ttdoc">Возвращает основание поля Галуа.</div><div class="ttdef"><b>Definition:</b> gf.hpp:440</div></div>
+<div class="ttc" id="aclassirrpoly_1_1gfbase_html_a9ed5099504e538324094806845f66b40"><div class="ttname"><a href="classirrpoly_1_1gfbase.html#a9ed5099504e538324094806845f66b40">irrpoly::gfbase::base</a></div><div class="ttdeci">auto base() const -&gt; uintmax_t</div><div class="ttdoc">Возвращает основание поля Галуа.</div><div class="ttdef"><b>Definition:</b> gf.hpp:438</div></div>
 <div class="ttc" id="aclassirrpoly_1_1gfn_html_ac75fd3c2b73231cb6cbc78b2b8ce3304"><div class="ttname"><a href="classirrpoly_1_1gfn.html#ac75fd3c2b73231cb6cbc78b2b8ce3304">irrpoly::gfn::operator=</a></div><div class="ttdeci">auto operator=(const gfn &amp;other) -&gt; gfn &amp;</div><div class="ttdef"><b>Definition:</b> gf.hpp:122</div></div>
 <div class="ttc" id="aclassirrpoly_1_1gfn_html_a6a7c78f7bff03638cec68f867b6a7252"><div class="ttname"><a href="classirrpoly_1_1gfn.html#a6a7c78f7bff03638cec68f867b6a7252">irrpoly::gfn::mul_inv</a></div><div class="ttdeci">auto mul_inv() -&gt; gfn</div><div class="ttdoc">Возвращает обратное по умножению в виде gfn.</div><div class="ttdef"><b>Definition:</b> gf.hpp:260</div></div>
 <div class="ttc" id="aclassirrpoly_1_1gfn_html_a4151ea768db94a4cc7ddaed1c4001170"><div class="ttname"><a href="classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170">irrpoly::gfn::gfn</a></div><div class="ttdeci">gfn(const gf &amp;field)</div><div class="ttdoc">Конструктор по умолчанию, обнуляет переменную.</div><div class="ttdef"><b>Definition:</b> gf.hpp:109</div></div>
@@ -504,7 +502,7 @@ $(function() {
 <div class="ttc" id="astructdropbox_1_1oxygen_1_1i__promise__i__checked__for__null__t_html"><div class="ttname"><a href="structdropbox_1_1oxygen_1_1i__promise__i__checked__for__null__t.html">dropbox::oxygen::i_promise_i_checked_for_null_t</a></div><div class="ttdef"><b>Definition:</b> nn.hpp:28</div></div>
 <div class="ttc" id="aclassirrpoly_1_1gfn_html_a1c9d15e51c02d7599d521b3b2fd30d78"><div class="ttname"><a href="classirrpoly_1_1gfn.html#a1c9d15e51c02d7599d521b3b2fd30d78">irrpoly::gfn::value</a></div><div class="ttdeci">auto value() const -&gt; uintmax_t</div><div class="ttdoc">Возвращает значение класса в виде целого числа.</div><div class="ttdef"><b>Definition:</b> gf.hpp:103</div></div>
 <div class="ttc" id="aclassirrpoly_1_1gfbase_html"><div class="ttname"><a href="classirrpoly_1_1gfbase.html">irrpoly::gfbase</a></div><div class="ttdef"><b>Definition:</b> gf.hpp:52</div></div>
-<div class="ttc" id="aclassirrpoly_1_1gfbase_html_a82e5ad117ce524339e674df7ca5615d4"><div class="ttname"><a href="classirrpoly_1_1gfbase.html#a82e5ad117ce524339e674df7ca5615d4">irrpoly::gfbase::mul_inv</a></div><div class="ttdeci">auto mul_inv(uintmax_t) const -&gt; uintmax_t</div><div class="ttdoc">Возвращает обратное по умнажению в виде числа.</div><div class="ttdef"><b>Definition:</b> gf.hpp:446</div></div>
+<div class="ttc" id="aclassirrpoly_1_1gfbase_html_a82e5ad117ce524339e674df7ca5615d4"><div class="ttname"><a href="classirrpoly_1_1gfbase.html#a82e5ad117ce524339e674df7ca5615d4">irrpoly::gfbase::mul_inv</a></div><div class="ttdeci">auto mul_inv(uintmax_t) const -&gt; uintmax_t</div><div class="ttdoc">Возвращает обратное по умнажению в виде числа.</div><div class="ttdef"><b>Definition:</b> gf.hpp:444</div></div>
 <div class="ttc" id="aclassirrpoly_1_1gfn_html_a2b564f8407de09fcb22f1c2e0c5b5c15"><div class="ttname"><a href="classirrpoly_1_1gfn.html#a2b564f8407de09fcb22f1c2e0c5b5c15">irrpoly::gfn::random</a></div><div class="ttdeci">static auto random(const gf &amp;field) -&gt; gfn</div><div class="ttdoc">Число в поле, всегда лежит в диапазоне [0, P-1].</div><div class="ttdef"><b>Definition:</b> gf.hpp:90</div></div>
 <div class="ttc" id="agf_8hpp_html_a62037f060bdaeba367520e96a03706a2"><div class="ttname"><a href="gf_8hpp.html#a62037f060bdaeba367520e96a03706a2">CHECK_FIELD</a></div><div class="ttdeci">#define CHECK_FIELD(comparison)</div><div class="ttdef"><b>Definition:</b> gf.hpp:36</div></div>
 <div class="ttc" id="aclassirrpoly_1_1gfn_html_ad03a46c5b472f19f4a844a29c8a1cd62"><div class="ttname"><a href="classirrpoly_1_1gfn.html#ad03a46c5b472f19f4a844a29c8a1cd62">irrpoly::gfn::base</a></div><div class="ttdeci">auto base() const -&gt; uintmax_t</div><div class="ttdoc">Возвращает основание поля Галуа.</div><div class="ttdef"><b>Definition:</b> gf.hpp:133</div></div>
@@ -513,7 +511,7 @@ $(function() {
 <div class="ttc" id="aclassirrpoly_1_1gfn_html_a8934664cf52af120a896688667a0a091"><div class="ttname"><a href="classirrpoly_1_1gfn.html#a8934664cf52af120a896688667a0a091">irrpoly::gfn::operator/</a></div><div class="ttdeci">auto operator/(const gfn &amp;other) const -&gt; gfn</div><div class="ttdoc">Операция деления определена как умножение на обратный элемент.</div><div class="ttdef"><b>Definition:</b> gf.hpp:266</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Документация по irrpoly. Последние изменения: Вт 5 Май 2020 10:35:52. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
+Документация по irrpoly. Последние изменения: Пт 8 Май 2020 00:21:54. Создано системой &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.18
 </small></address>

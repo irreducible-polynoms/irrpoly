@@ -1,0 +1,53 @@
+.TH "irrpoly::multithread::pipeline< value_t, result_t >" 3 "Пт 8 Май 2020" "Version 2.1.0" "irrpoly" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+irrpoly::multithread::pipeline< value_t, result_t > \- Выполняет цепочку 'получение входных данных - обработка - возврат результата' в несколько потоков\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <pipeline\&.hpp>\fP
+.SS "Открытые типы"
+
+.in +1c
+.ti -1c
+.RI "using \fBinput_fn\fP = std::function< value_t()>"
+.br
+.RI "Вид функции, генерирующей входные данные\&. "
+.ti -1c
+.RI "using \fBpayload_fn\fP = std::function< void(const value_t &, std::optional< result_t > &)>"
+.br
+.RI "Вид функции, выполняющей основную работу и возвращающей её результат\&. "
+.ti -1c
+.RI "using \fBcallback_fn\fP = std::function< bool(const value_t &, const result_t &)>"
+.br
+.RI "Вид функции, обрабатывающей результат и возвращающей true, если работу необходимо завершить\&. "
+.in -1c
+.SS "Открытые члены"
+
+.in +1c
+.ti -1c
+.RI "\fBpipeline\fP (unsigned n=std::thread::hardware_concurrency())"
+.br
+.ti -1c
+.RI "void \fBpipe\fP (\fBinput_fn\fP in, \fBpayload_fn\fP pl, \fBcallback_fn\fP bk, const bool strict=true)"
+.br
+.RI "Основной цикл разделения работы на потоки\&. "
+.ti -1c
+.RI "\fB~pipeline\fP ()"
+.br
+.RI "Завершаем работу всех потоков\&. "
+.in -1c
+.SH "Подробное описание"
+.PP 
+
+.SS "template<typename value_t, typename result_t>
+.br
+class irrpoly::multithread::pipeline< value_t, result_t >"
+Выполняет цепочку 'получение входных данных - обработка - возврат результата' в несколько потоков\&. 
+
+.SH "Автор"
+.PP 
+Автоматически создано Doxygen для irrpoly из исходного текста\&.

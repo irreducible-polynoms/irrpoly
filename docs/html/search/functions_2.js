@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['degree_53',['degree',['../classirrpoly_1_1gfpoly.html#a43a015b162c416cdfb821a0f859f3d3b',1,'irrpoly::gfpoly']]]
+  ['gfn_51',['gfn',['../classirrpoly_1_1gfn.html#a4151ea768db94a4cc7ddaed1c4001170',1,'irrpoly::gfn::gfn(const gf &amp;field)'],['../classirrpoly_1_1gfn.html#aa6d00130e202d36f2d0ba54918126c44',1,'irrpoly::gfn::gfn(const gf &amp;field, const uintmax_t val)']]]
 ];

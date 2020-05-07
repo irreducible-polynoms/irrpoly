@@ -323,7 +323,8 @@ private:
       * because the same amount of computation yields both.
       * This function is not defined for division by zero: user beware.
       */
-    static auto quotient_remainder(const gfpoly &dividend, const gfpoly &divisor) -> std::pair<gfpoly, gfpoly> {
+    static auto quotient_remainder(const gfpoly &dividend, const gfpoly &divisor)
+    -> std::pair<gfpoly, gfpoly> {
         CHECK_FIELD(dividend.field() == divisor.field() && divisor)
         if (dividend.size() < divisor.size()) {
             return std::make_pair(gfpoly(dividend.field()), dividend);
@@ -343,8 +344,8 @@ public:
     /// Эквивалентно операции a /= x^b, определено только когда такое деление возможно.
     template<typename U>
     auto operator>>=(U const &n) -> gfpoly & {
-        if (n > degree() ||
-            !std::all_of(m_data.begin(), m_data.begin() + n, std::mem_fn(&gfn::is_zero))) {
+        if (n > degree() || !std::all_of(
+            m_data.begin(), m_data.begin() + n, std::mem_fn(&gfn::is_zero))) {
             throw std::logic_error("division is impossible");
         }
         m_data.erase(m_data.begin(), m_data.begin() + n);
@@ -534,7 +535,8 @@ auto operator<<(gfpoly a, const U &b) -> gfpoly {
 }
 
 template<class charT, class traits>
-auto operator<<(std::basic_ostream<charT, traits> &os, const gfpoly &poly) -> std::basic_ostream<charT, traits> & {
+auto operator<<(std::basic_ostream<charT, traits> &os, const gfpoly &poly)
+-> std::basic_ostream<charT, traits> & {
     os << "{ ";
     for (uintmax_t i = 0; i < poly.size(); ++i) {
         if (i) {
@@ -547,7 +549,8 @@ auto operator<<(std::basic_ostream<charT, traits> &os, const gfpoly &poly) -> st
 }
 
 template<class charT, class traits>
-auto operator>>(std::basic_istream<charT, traits> &is, gfpoly &poly) -> std::basic_istream<charT, traits> & {
+auto operator>>(std::basic_istream<charT, traits> &is, gfpoly &poly)
+-> std::basic_istream<charT, traits> & {
     charT tmp;
     uintmax_t num = 0;
     std::string str;
