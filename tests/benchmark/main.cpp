@@ -31,7 +31,7 @@ auto fill_data(gf field, uintmax_t n) -> std::vector<gfpoly> {
 
     while (n > 0) {
         data.emplace_back(input());
-        if (is_primitive_definition(data.back())) {
+        if (is_primitive(data.back())) {
             --n;
         }
     }
@@ -71,6 +71,22 @@ void bench_definition(const std::vector<gfpoly> &data, uintmax_t n) {
     }
 }
 
+void bench_irreducible(const std::vector<gfpoly> &data, uintmax_t n) {
+    for (uintmax_t i = 0; n > 0; ++i) {
+        if (is_irreducible(data[i])) {
+            --n;
+        }
+    }
+}
+
+void bench_primitive(const std::vector<gfpoly> &data, uintmax_t n) {
+    for (uintmax_t i = 0; n > 0; ++i) {
+        if (is_primitive(data[i])) {
+            --n;
+        }
+    }
+}
+
 /**
  * BENCHMARK пока находится в состоянии разработки, поэтому с ним есть некоторые проблемы.
  * Чтобы получить корректные результаты - закомментируйте все SECTION кроме одного, для одного
@@ -85,6 +101,12 @@ TEST_CASE("speed test") {
         BENCHMARK("gf2 200 rabin") { bench_rabin(data, N); };
         BENCHMARK("gf2 200 benor")  { bench_benor(data, N); };
         BENCHMARK("gf2 200 primitive") { bench_definition(data, N); };
+        BENCHMARK("gf2 200 recommended_irreducible") {
+            bench_irreducible(data, N);
+        };
+        BENCHMARK("gf2 200 recommended_primitive") {
+            bench_primitive(data, N);
+        };
     }
     SECTION("gf3 300") {
         uintmax_t P = 3, N = 300;
@@ -93,6 +115,12 @@ TEST_CASE("speed test") {
         BENCHMARK("gf3 300 rabin") { bench_rabin(data, N); };
         BENCHMARK("gf3 300 benor")  { bench_benor(data, N); };
         BENCHMARK("gf3 300 primitive") { bench_definition(data, N); };
+        BENCHMARK("gf3 300 recommended_irreducible") {
+            bench_irreducible(data, N);
+        };
+        BENCHMARK("gf3 300 recommended_primitive") {
+            bench_primitive(data, N);
+        };
     }
     SECTION("gf5 400") {
         uintmax_t P = 5, N = 400;
@@ -101,6 +129,12 @@ TEST_CASE("speed test") {
         BENCHMARK("gf5 400 rabin") { bench_rabin(data, N); };
         BENCHMARK("gf5 400 benor")  { bench_benor(data, N); };
         BENCHMARK("gf5 400 primitive") { bench_definition(data, N); };
+        BENCHMARK("gf5 400 recommended_irreducible") {
+            bench_irreducible(data, N);
+        };
+        BENCHMARK("gf5 400 recommended_primitive") {
+            bench_primitive(data, N);
+        };
     }
     SECTION("gf7 500") {
         uintmax_t P = 7, N = 500;
@@ -109,6 +143,12 @@ TEST_CASE("speed test") {
         BENCHMARK("gf7 500 rabin") { bench_rabin(data, N); };
         BENCHMARK("gf7 500 benor")  { bench_benor(data, N); };
         BENCHMARK("gf7 500 primitive") { bench_definition(data, N); };
+        BENCHMARK("gf7 500 recommended_irreducible") {
+            bench_irreducible(data, N);
+        };
+        BENCHMARK("gf7 500 recommended_primitive") {
+            bench_primitive(data, N);
+        };
     }
     SECTION("gf11 600") {
         uintmax_t P = 11, N = 600;
@@ -117,5 +157,11 @@ TEST_CASE("speed test") {
         BENCHMARK("gf11 600 rabin") { bench_rabin(data, N); };
         BENCHMARK("gf11 600 benor")  { bench_benor(data, N); };
         BENCHMARK("gf11 600 primitive") { bench_definition(data, N); };
+        BENCHMARK("gf11 600 recommended_irreducible") {
+            bench_irreducible(data, N);
+        };
+        BENCHMARK("gf11 600 recommended_primitive") {
+            bench_primitive(data, N);
+        };
     }
 }

@@ -280,6 +280,14 @@ auto is_irreducible_benor(const gfpoly &val) -> bool {
     return true;
 }
 
+inline
+auto is_irreducible(const gfpoly &val) -> bool {
+    switch (val.base()) {
+    case 2: return is_irreducible_berlekamp(val);
+    default: return is_irreducible_benor(val);
+    }
+}
+
 /**
  * Алгоритм проверки многочлена на примитивность по определению. Многочлен является
  * примитивным над полем GF[P], если выполнены три условия:
@@ -382,6 +390,11 @@ auto is_primitive_definition(const gfpoly &val) -> bool {
     return true;
 }
 
+inline
+auto is_primitive(const gfpoly &val) -> bool {
+    return is_irreducible(val) ? is_primitive_definition(val) : false;
+}
+
 namespace multithread {
 
 /// Структура, представляющая результаты проверки многочлена.
@@ -396,12 +409,14 @@ enum class irreducible_method {
     berlekamp, ///< алгоритм Берлекампа
     rabin, ///< алгоритм Рабина
     benor, ///< алгоритм Бен-Ора
+    recommended, ///< оптимальный алгоритм
 };
 
 /// Доступные методы проверки примитивность.
 enum class primitive_method {
     nil, ///< не проверять
     definition, ///< проверка по определению
+    recommended, ///< оптимальный алгоритм
 };
 
 using polychecker = pipeline<gfpoly, check_result>;
@@ -415,6 +430,9 @@ auto make_check_func(
         auto result = check_result{true, true};
 
         switch (irr_meth) {
+        case irreducible_method::recommended:
+            result.irreducible = is_irreducible(poly);
+            break;
         case irreducible_method::berlekamp:
             result.irreducible = is_irreducible_berlekamp(poly);
             break;
@@ -428,6 +446,10 @@ auto make_check_func(
         }
 
         switch (prim_meth) {
+        case primitive_method::recommended:
+            result.primitive = result.irreducible ?
+                               is_primitive(poly) : false;
+            break;
         case primitive_method::definition:
             result.primitive = result.irreducible ?
                                is_primitive_definition(poly) : false;
