@@ -8,6 +8,8 @@ using namespace irrpoly;
 
 [[nodiscard]]
 auto fill_data(gf field, uintmax_t n) -> std::vector<gfpoly> {
+    n += 2 * std::thread::hardware_concurrency();
+
     std::vector<gfpoly> data;
     data.push_back(gfpoly(field, {1}));
     data.push_back(gfpoly(field, {0, 1}));
@@ -87,6 +89,52 @@ void bench_primitive(const std::vector<gfpoly> &data, uintmax_t n) {
     }
 }
 
+static multithread::polychecker ch;
+
+void bench_irr_multithread(const std::vector<gfpoly> &data, uintmax_t n) {
+    uintmax_t i = 0;
+    auto input = [&]() -> gfpoly {
+        return data[i++];
+    };
+
+    auto check = multithread::make_check_func(
+        multithread::irreducible_method::recommended,
+        multithread::primitive_method::nil);
+
+    auto callback = [&](const gfpoly &/*poly*/,
+                        const typename multithread::check_result &result)
+        -> bool {
+        if (result.irreducible) {
+            --n;
+        }
+        return !n;
+    };
+
+    ch.pipe(input, check, callback);
+}
+
+void bench_prim_multithread(const std::vector<gfpoly> &data, uintmax_t n) {
+    uintmax_t i = 0;
+    auto input = [&]() -> gfpoly {
+        return data[i++];
+    };
+
+    auto check = multithread::make_check_func(
+        multithread::irreducible_method::nil,
+        multithread::primitive_method::recommended);
+
+    auto callback = [&](const gfpoly &/*poly*/,
+                        const typename multithread::check_result &result)
+        -> bool {
+        if (result.primitive) {
+            --n;
+        }
+        return !n;
+    };
+
+    ch.pipe(input, check, callback);
+}
+
 /**
  * BENCHMARK пока находится в состоянии разработки, поэтому с ним есть некоторые проблемы.
  * Чтобы получить корректные результаты - закомментируйте все SECTION кроме одного, для одного
@@ -107,6 +155,12 @@ TEST_CASE("speed test") {
         BENCHMARK("gf2 200 recommended_primitive") {
             bench_primitive(data, N);
         };
+        BENCHMARK("gf2 200 multithread_irreducible") {
+            bench_irr_multithread(data, N);
+        };
+        BENCHMARK("gf2 200 multithread_primitive") {
+            bench_prim_multithread(data, N);
+        };
     }
     SECTION("gf3 300") {
         uintmax_t P = 3, N = 300;
@@ -120,6 +174,12 @@ TEST_CASE("speed test") {
         };
         BENCHMARK("gf3 300 recommended_primitive") {
             bench_primitive(data, N);
+        };
+        BENCHMARK("gf3 300 multithread_irreducible") {
+            bench_irr_multithread(data, N);
+        };
+        BENCHMARK("gf3 300 multithread_primitive") {
+            bench_prim_multithread(data, N);
         };
     }
     SECTION("gf5 400") {
@@ -135,6 +195,12 @@ TEST_CASE("speed test") {
         BENCHMARK("gf5 400 recommended_primitive") {
             bench_primitive(data, N);
         };
+        BENCHMARK("gf5 400 multithread_irreducible") {
+            bench_irr_multithread(data, N);
+        };
+        BENCHMARK("gf5 400 multithread_primitive") {
+            bench_prim_multithread(data, N);
+        };
     }
     SECTION("gf7 500") {
         uintmax_t P = 7, N = 500;
@@ -149,6 +215,12 @@ TEST_CASE("speed test") {
         BENCHMARK("gf7 500 recommended_primitive") {
             bench_primitive(data, N);
         };
+        BENCHMARK("gf7 500 multithread_irreducible") {
+            bench_irr_multithread(data, N);
+        };
+        BENCHMARK("gf7 500 multithread_primitive") {
+            bench_prim_multithread(data, N);
+        };
     }
     SECTION("gf11 600") {
         uintmax_t P = 11, N = 600;
@@ -162,6 +234,12 @@ TEST_CASE("speed test") {
         };
         BENCHMARK("gf11 600 recommended_primitive") {
             bench_primitive(data, N);
+        };
+        BENCHMARK("gf11 600 multithread_irreducible") {
+            bench_irr_multithread(data, N);
+        };
+        BENCHMARK("gf11 600 multithread_primitive") {
+            bench_prim_multithread(data, N);
         };
     }
 }

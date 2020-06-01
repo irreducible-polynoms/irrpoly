@@ -27,6 +27,7 @@ namespace irrpoly {
  * (greatest common divisor) двух многочленов. Реализация сделана на основе
  * кода из библиотеки Boost 1.71.0.
  */
+[[nodiscard]]
 auto gcd(gfpoly m, gfpoly n) -> gfpoly {
     CHECK_FIELD(m.field() == n.field())
     if (m.is_zero() || n.is_zero()) {
@@ -51,6 +52,7 @@ namespace detail {
 
 /// Быстрое возведение в степень, взято из библиотеки Boost.
 template<class T, class N>
+[[nodiscard]]
 auto integer_power(T t, N n) -> T {
     switch (n) {
     case 0:return static_cast<T>(1U);
@@ -63,6 +65,7 @@ auto integer_power(T t, N n) -> T {
 }
 
 /// Вычисляет производную данного многочлена.
+[[nodiscard]]
 auto derivative(const gfpoly &val) -> gfpoly {
     if (val.is_zero() || val.degree() == 0) {
         return gfpoly(val.field());
@@ -120,6 +123,7 @@ auto x_pow_mod(uintmax_t pow, const gfpoly &mod) -> gfpoly {
  * матрицы к ступенчатому виду и подсчёт числа ступеней в ней.
  * Кроме того, все многочлены первой степени неприводимы в любом поле.
  */
+[[nodiscard]]
 auto is_irreducible_berlekamp(const gfpoly &val) -> bool {
     if (val.is_zero()) {
         return false;
@@ -197,6 +201,7 @@ auto is_irreducible_berlekamp(const gfpoly &val) -> bool {
  * или на странице Википедии в разделе Rabin's test of irreducibility
  * https://en.wikipedia.org/wiki/Factorization_of_polynomials_over_finite_fields
  */
+[[nodiscard]]
 auto is_irreducible_rabin(const gfpoly &val) -> bool {
     if (val.is_zero()) {
         return false;
@@ -255,6 +260,7 @@ auto is_irreducible_rabin(const gfpoly &val) -> bool {
  * После завершения шагов 1-2 для всех i получаем, что многочлен неприводим.
  * Кроме того, все многочлены первой степени неприводимы в любом поле.
  */
+[[nodiscard]]
 auto is_irreducible_benor(const gfpoly &val) -> bool {
     if (val.is_zero()) {
         return false;
@@ -280,6 +286,7 @@ auto is_irreducible_benor(const gfpoly &val) -> bool {
     return true;
 }
 
+[[nodiscard]]
 inline
 auto is_irreducible(const gfpoly &val) -> bool {
     switch (val.base()) {
@@ -302,6 +309,7 @@ auto is_irreducible(const gfpoly &val) -> bool {
  * Возможные пути параллелизации данного алгоритма приведены в статье
  * https://www.researchgate.net/publication/329358609_Parallelization_of_Algorithm_for_Primitive_Polynomials_Generation_in_Extended_Galois_Field_pm
  */
+[[nodiscard]]
 auto is_primitive_definition(const gfpoly &val) -> bool {
     if (val.is_zero()) {
         return false;
@@ -390,6 +398,7 @@ auto is_primitive_definition(const gfpoly &val) -> bool {
     return true;
 }
 
+[[nodiscard]]
 inline
 auto is_primitive(const gfpoly &val) -> bool {
     return is_irreducible(val) ? is_primitive_definition(val) : false;
@@ -423,6 +432,7 @@ using polychecker = pipeline<gfpoly, check_result>;
 
 /// Формируется универсальная функция проверки многочленов.
 /// В случае, когда проверка не выполняется устанавливается результат true.
+[[nodiscard]]
 auto make_check_func(
     irreducible_method irr_meth, primitive_method prim_meth)
 -> typename pipeline<gfpoly, check_result>::payload_fn {
