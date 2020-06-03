@@ -6,10 +6,12 @@ project(irrpoly VERSION 2.2.0 LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 17)
 
 # указываем, где искать вспомогательные модули Cmake
-set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" "${CMAKE_MODULE_PATH}")
 
 # исходники библиотеки
-include_directories("${CMAKE_SOURCE_DIR}/include")
+add_library("${CMAKE_PROJECT_NAME}" INTERFACE)
+target_include_directories("${CMAKE_PROJECT_NAME}"
+    INTERFACE "${CMAKE_SOURCE_DIR}/include")
 
 # примеры использования библиотеки
 add_subdirectory(examples)
