@@ -23,14 +23,12 @@
 namespace irrpoly {
 
 /**
- * Бинарные операции над gfn корректно определены лишь в том случае, когда
- * оба числа принадлежат одному и тому же полю. По умолчанию, проверка этого
- * факта выполняется только для конфигурации Debug, чтобы в конфигурации Release
- * добиться наибольшей производительности. Однако, если в конфигурации Release
- * проверки также требуется выполнять, достаточно объявить
- * #define IRRPOLY_RELEASE_CHECKED
- * перед подключением заголовочного файла
- * #include <irrpoly.h>
+ * Binary operations for two gfn instances are correctly defined only
+ * when field is the same for both of them. By default this is checked
+ * only in Debug configuration and no checks performed in Release to speed
+ * up computations. If you are not sure in correctness of your code add
+ * #define IRRPOLY_RELEASE_CHECKED before #include <irrpoly.h> to enable
+ * checks for Release configuration.
  */
 #if !defined(NDEBUG) || defined(IRRPOLY_RELEASE_CHECKED) // Debug or Release Checked
 #define CHECK_FIELD(comparison) \
@@ -41,18 +39,25 @@ namespace irrpoly {
 #define CHECK_FIELD(comparison)
 #endif
 
-/// Класс, содержащий основание поля Галуа и все обратные по умножению элементы.
 class gfbase;
 
-/// Поле всегда должно существовать, поэтому используется обёртка, не позволяющая
-/// хранящим поле переменным иметь значение nullptr. Для него корректно определена
-/// операция копирования за счёт использования примитива shared_ptr.
+/**
+ * gf type represents PRIME Galois field. It is a shared pointer that couldn't
+ * contain nullptr value that allows to get rid of null checks at runtime.
+ * gf instance could be constructed only then associated Galois field exists.
+ * This fact is checked by calculating multiplicative inverse for every elements.
+ * In PRIME field all multiplicative inverse elements must exist. The smallest
+ * field you can create is GF[2], the largest is GF[65521] for 32-bit architecture
+ * and GF[4294967291] for 64-bit architecture. gfn instance must always be passed
+ * by reference and copied at the very last moment.
+ * TODO: add support for COMPOSITE fields P^N.
+ */
 using gf = dropbox::oxygen::nn_shared_ptr<gfbase>;
 
 class gfbase final {
 private:
-    const uintmax_t m_base; /// Основание поля
-    std::vector<uintmax_t> m_inv; /// Обратные элементы по умножению
+    const uintmax_t m_base; ///< field base, always could be converted to intmax_t
+    std::vector<uintmax_t> m_inv; ///< multiplicative inverses for all elements
 
     explicit
     gfbase(uintmax_t /*base*/);
@@ -60,11 +65,12 @@ private:
     friend auto make_gf(uintmax_t /*base*/) -> gf;
 
 public:
-    /// Возвращает основание поля Галуа.
     [[nodiscard]]
     auto base() const -> uintmax_t;
 
-    /// Возвращает обратное по умнажению в виде числа.
+    /**
+     * Returns multiplicative inverse for given number.
+     */
     [[nodiscard]]
     auto mul_inv(uintmax_t /*val*/) const -> uintmax_t;
 };
@@ -77,15 +83,18 @@ auto operator!=(const gf &lb, const gf &rb) -> bool {
     return lb->base() != rb->base();
 }
 
-/// Класс, представляющий число в поле Галуа с корректно заданными
-/// арифметическими операциями и операторами сравнения.
+/**
+ * gfn type represents number in GF[P]. The number is always within 0 and P-1.
+ */
 class gfn final {
 private:
-    gf m_field; /// Поле GF[P]
-    uintmax_t m_val; /// Число в поле, всегда лежит в диапазоне [0, P-1]
+    gf m_field;
+    uintmax_t m_val;
 
 public:
-    /// Генерирует случайное число в диапазоне [0, P-1].
+    /**
+     * Generates a random number from  range [0, P-1].
+     */
     static
     auto random(const gf &field) -> gfn {
         static std::random_device rd;
@@ -98,17 +107,14 @@ public:
         return gfn(field, dis(gen));
     }
 
-    /// Возвращает значение класса в виде целого числа.
     [[nodiscard]]
     auto value() const -> uintmax_t {
         return m_val;
     }
 
-    /// Конструктор по умолчанию, обнуляет переменную.
     explicit
     gfn(const gf &field) : m_field(field), m_val(0) {}
 
-    /// Поле всегда принимается по указателю и копируется в последний момент.
     gfn(const gf &field, const uintmax_t val) :
         m_field(field), m_val(val % m_field->base()) {}
 
@@ -116,11 +122,10 @@ public:
 
     gfn(gfn &&other) = default;
 
-    /// Операция присваивания корректно определена только для числел из одного поля,
-    /// операция перемещения также корректно определена для неинициализированных
-    /// переменных (случай field = nullptr).
     auto operator=(const gfn &other) -> gfn & {
         if (this != &other) {
+            // m_field == nullptr means that gfn instance is uninitialised
+            // this happens during std::move, std::swap and inside some std::vector methods
             CHECK_FIELD(m_field == nullptr || m_field == other.m_field)
             m_field = other.m_field;
             m_val = other.m_val;
@@ -128,7 +133,6 @@ public:
         return *this;
     }
 
-    /// Возвращает основание поля Галуа.
     [[nodiscard]]
     auto base() const -> uintmax_t {
         return m_field->base();
@@ -255,13 +259,17 @@ public:
         return *this;
     }
 
-    /// Возвращает обратное по умножению в виде gfn.
+    /**
+     * Returns multiplicative inverse for current gfn instance.
+     */
     [[maybe_unused]] [[nodiscard]]
     auto mul_inv() -> gfn {
         return gfn{m_field, m_field->mul_inv(m_val)};
     }
 
-    /// Операция деления определена как умножение на обратный элемент.
+    /**
+     * Division is defined as multiplication by multiplicative inverse.
+     */
     [[nodiscard]]
     auto operator/(const gfn &other) const -> gfn {
         CHECK_FIELD(m_field == other.field())
@@ -386,16 +394,6 @@ auto operator>>(std::basic_istream<charT, traits> &is, gfn &val)
     return is;
 }
 
-/**
- * Поле обязательно должно содержать как минимум 0 и 1, кроме того, если для
- * какого-то из элементов предполагаемого поля не существует обратного элемента
- * по умножению, значит данное кольцо не является полем. При этом все операции
- * должны быть корректно определены, поэтому слишком большое поле создать
- * невозможно (в нём умножение двух максимальных элементов могло бы вызывать
- * переполнение, а значит приводить к undefined behaviour). Эта же проверка
- * гарантирует, что безнаковое значение поля может быть без дополнительных
- * проверок приведено к знаковому типу (intmax_t).
- */
 inline
 gfbase::gfbase(const uintmax_t base) : m_base(base), m_inv(base, 0) {
     if (base == 0) {

@@ -9,18 +9,7 @@
 
 using namespace irrpoly;
 
-/**
- * Шаблон функции, применяемой для генерации многочленов с требуемыми характеристиками.
- * В функции генерируются случайные многочлены требуемой степени и выполняется их проверка
- * на неприводимость и примитивность. Для осмысленного применения рекоммендуется перебирать
- * многочлены последовательно, а не выбирать каждый раз случайный (во избежание повторов).
- * @param num число многочленов с требуемыми характеристиками, которые необходимо получить
- * @param degree степень многочленов, которые требуется проверять
- * @param irr_meth метод проверки на неприводимость
- * @param prim_meth метод проверки на примитивность
- * @param threads_num число потоков, выполняющих проверку (число физических ядер минус один)
- * @return вектор сгенерированных многочленов с требуемыми характеристиками
- */
+/// Here is the template of function for using the multithread pipeline.
 [[nodiscard]]
 auto generate_irreducible(
     const uintmax_t base,
@@ -30,11 +19,9 @@ auto generate_irreducible(
     const typename multithread::primitive_method prim_meth,
     const unsigned threads_num
 ) -> std::vector<gfpoly> {
-    // возвращаемое значение
     std::vector<gfpoly> arr;
     arr.reserve(num);
 
-    // создаём всё необходимое для многопоточности
     multithread::polychecker ch(threads_num);
 
     auto field = make_gf(base);
@@ -52,29 +39,19 @@ auto generate_irreducible(
         return !num;
     };
 
-    ch.pipe(input, check, callback);
+    ch.chain(input, check, callback);
 
     return arr;
 }
 
 auto main() -> int {
-    // основание поля Галуа
-    const uintmax_t base = 2;
-    // число многочленов, которые требуется найти
-    const uintmax_t num = 3;
-    // степень искомых многочленов
-    const uintmax_t degree = 5;
-    // какой из методов проверки на неприводимость хотим использовать
-    // возможные варианты - отсутствие приверки (nil), Берлекампа (berlekamp), Рабина (rabin) и Бенора (benor)
-    const auto irr_meth = multithread::irreducible_method::benor;
-    // какой из методов проверки на примитивность хотим использовать
-    // возможные варианты - отсутствие приверки (nil) и проверка по определению (definition)
-    const auto prim_meth = multithread::primitive_method::nil;
-    // число потоков, выполняюих проверку многочленов на соответствие заданной характеристике
-    // должно быть равно числу физических ядер минус один
-    const unsigned threads_num = std::thread::hardware_concurrency();
+    const uintmax_t base = 2; //< Galois field base
+    const uintmax_t num = 3; //< number of polynomials to find
+    const uintmax_t degree = 5; // degree of polynomials to find
+    const auto irr_meth = multithread::irreducible_method::benor; // irreducibility test to use
+    const auto prim_meth = multithread::primitive_method::nil; // primitivity test to use
+    const unsigned threads_num = std::thread::hardware_concurrency(); // number of threads to use
 
-    // генерируем многочлены и выводим результат
     auto poly = generate_irreducible(base, num, degree, irr_meth, prim_meth, threads_num);
     for (const auto &p : poly) {
         std::cout << p << std::endl;

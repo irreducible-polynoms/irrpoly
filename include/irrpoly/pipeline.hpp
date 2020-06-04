@@ -21,47 +21,39 @@
 
 namespace irrpoly::multithread {
 
-/// Выполняет цепочку "получение входных данных - обработка - возврат результата" в несколько потоков.
-template<typename value_t, typename result_t>
+/**
+ * Chains the input_fn, payload_fn and callback_fn provided. Executes this chain in several
+ * threads at the same time.
+ * TODO: change architecture to make checks faster.
+ */
+template<typename input_t, typename output_t>
 class pipeline {
 public:
-    /// Вид функции, генерирующей входные данные.
-    using input_fn = std::function<value_t()>;
+    using input_fn = std::function<input_t()>;
 
-    /// Вид функции, выполняющей основную работу и возвращающей её результат.
     using payload_fn =
-    std::function<void(const value_t &, std::optional<result_t> &)>;
+    std::function<void(const input_t &, std::optional<output_t> &)>;
 
-    /// Вид функции, обрабатывающей результат и возвращающей true, если работу необходимо завершить.
     using callback_fn =
-    std::function<bool(const value_t &, const result_t &)>;
+    std::function<bool(const input_t &, const output_t &)>;
 
 private:
-    /// Потоки, непосредственно выполняющие проверку многочленов на неприводимость и примитивность.
     class pod {
         std::shared_ptr<std::mutex> s_mutex;
         std::shared_ptr<std::condition_variable> s_cond;
 
-        payload_fn m_pl; ///< Основная функция проверки
+        payload_fn m_pl;
 
-        volatile bool m_terminate; ///< Поток должен быть завершён
-        std::optional<value_t> m_val; ///< Входные данные
+        volatile bool m_terminate; ///< set to true when pod should be terminated
+        std::optional<input_t> m_val;
 
-        bool m_busy; ///< Поток занят полезной работой
-        std::optional<result_t> m_res; ///< Результат проверки
+        bool m_busy; ///< set to true during payload_fn execution, otherwise false
+        std::optional<output_t> m_res;
 
         std::thread m_thread;
         std::mutex m_mutex;
         std::condition_variable m_cond;
 
-        /**
-         * Собственно функция, выполняющая основную работу. Поток бесконечно
-         * ожидает получения новых данных. Если данные получены - выполняется их
-         * проверка, выставление результата и уведомление условной переменной.
-         * Кроме того, постоянно проверяется, не должен ли поток завершить работу.
-         * Выход из функции прекращает работу потока и освобожает его ресурсы.
-         * В случае с pthread для этого требуется выполнить pthread_exit.
-         */
         void execute() {
             std::unique_lock<std::mutex> lk(m_mutex);
 
@@ -89,28 +81,20 @@ private:
         }
 
         ~pod() {
-            // Необходимо дождаться завершения потока и лишь затем освобождать
-            // память объекта, иначе могут вознивать ошибки доступа к уже
-            // освобождённой памяти.
+            // waits for thread to terminate, only then object resources will be freed
             m_thread.join();
         }
 
-        /// Устанавливает функцию, которая выполняет основную работу
         void set_payload(payload_fn pl) {
             m_pl = pl;
         }
 
-        /// Многочлен, проверка которого выполнялась.
         [[nodiscard]]
-        auto get_data() const -> const std::optional<value_t> & {
+        auto input() const -> const std::optional<input_t> & {
             return m_val;
         }
 
-        /**
-         * Установка новых входных данных, сбрасывает предыдущий результат
-         * и выставляет busy = true.
-         */
-        void set_data(value_t v) {
+        void input(input_t v) {
             std::lock_guard<std::mutex> lg(m_mutex);
             m_val.emplace(std::move(v));
             m_res.reset();
@@ -118,27 +102,23 @@ private:
             m_cond.notify_one();
         }
 
-        /// Возвращает текущее состояние потока.
         [[nodiscard]]
         auto is_busy() const -> bool {
             return m_busy;
         }
 
-        /// Устанавливает флаг, требующий завершить работу потока по завершении вычислений.
         void terminate() {
             std::lock_guard<std::mutex> lg(m_mutex);
             m_terminate = true;
             m_cond.notify_one();
         }
 
-        /// Возвращает результат проверки текущего многочлена на неприводимость и примитивность.
         [[nodiscard]]
-        auto get_result() const -> const std::optional<result_t> & {
+        auto output() const -> const std::optional<output_t> & {
             return m_res;
         }
 
-        /// Очищает хранимые в объекте данные.
-        void clear() {
+        void clean() {
             std::lock_guard<std::mutex> lg(m_mutex);
             m_val.reset();
             m_res.reset();
@@ -151,8 +131,7 @@ private:
 
     std::vector<std::unique_ptr<pod>> m_pods;
 
-    /// Считает, сколько потоков заняты.
-    auto countBusy() -> unsigned {
+    auto count_busy() -> unsigned {
         return std::count_if(m_pods.begin(), m_pods.end(),
                              std::mem_fn(&pod::is_busy));
     }
@@ -171,13 +150,13 @@ public:
         }
     }
 
-    /// Основной цикл разделения работы на потоки.
-    void pipe(input_fn in, payload_fn pl, callback_fn bk,
-              const bool strict = true) {
+    void chain(input_fn in, payload_fn pl, callback_fn bk,
+               const bool strict = true) {
+        // if multithreading is unavailable - perform everything in main thread
         if (m_pods.empty()) {
             while (true) {
                 auto input = in();
-                std::optional<result_t> result;
+                std::optional<output_t> result;
                 pl(input, result);
                 if (bk(input, result.value())) {
                     return;
@@ -188,17 +167,14 @@ public:
         std::unique_lock<std::mutex> lk(*s_mutex);
         std::this_thread::yield();
 
-        // заряжаем многочлены на проверку
         for (const auto &sl : m_pods) {
             sl->set_payload(pl);
             sl->set_data(in());
         }
         while (true) {
-            // ждём свободный поток
-            while (countBusy() == m_pods.size()) {
+            while (count_busy() == m_pods.size()) {
                 s_cond->wait(lk);
             }
-            // находим свободные потоки и заряжаем новыми входными данными
             for (unsigned i = 0; i < m_pods.size(); ++i) {
                 if (m_pods[i]->is_busy()) {
                     continue;
@@ -212,13 +188,11 @@ public:
             }
         }
         end:
-        // ожидаем завершения всех потоков
-        while (countBusy()) {
+        while (count_busy()) {
             s_cond->wait(lk);
         }
         if (!strict) {
-            // обрабатываем все проверенные многочлены,
-            // даже если их больше, чем требовалось найти
+            // collect all results, by default excess results are discarded
             for (const auto &sl : m_pods) {
                 if (sl->get_data().has_value() &&
                     sl->get_result().has_value()) {
@@ -229,7 +203,6 @@ public:
         }
     }
 
-    /// Завершаем работу всех потоков.
     ~pipeline() {
         for (const auto &sl : m_pods) {
             sl->terminate();

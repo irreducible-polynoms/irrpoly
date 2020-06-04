@@ -1,10 +1,10 @@
 var indexSectionsWithContent =
 {
-  0: "bcdeghimnoprv~",
+  0: "cdeghimnoprv",
   1: "ceghinp",
   2: "g",
-  3: "bdgmoprv~",
-  4: "cgip",
+  3: "dmorv",
+  4: "g",
   5: "c"
 };
 
@@ -20,11 +20,11 @@ var indexSectionNames =
 
 var indexSectionLabels =
 {
-  0: "Указатель",
-  1: "Классы",
-  2: "Файлы",
-  3: "Функции",
-  4: "Определения типов",
-  5: "Макросы"
+  0: "All",
+  1: "Classes",
+  2: "Files",
+  3: "Functions",
+  4: "Typedefs",
+  5: "Macros"
 };
 

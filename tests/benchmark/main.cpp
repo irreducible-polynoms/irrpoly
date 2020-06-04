@@ -110,7 +110,7 @@ void bench_irr_multithread(const std::vector<gfpoly> &data, uintmax_t n) {
         return !n;
     };
 
-    ch.pipe(input, check, callback);
+    ch.chain(input, check, callback);
 }
 
 void bench_prim_multithread(const std::vector<gfpoly> &data, uintmax_t n) {
@@ -132,14 +132,13 @@ void bench_prim_multithread(const std::vector<gfpoly> &data, uintmax_t n) {
         return !n;
     };
 
-    ch.pipe(input, check, callback);
+    ch.chain(input, check, callback);
 }
 
 /**
- * BENCHMARK пока находится в состоянии разработки, поэтому с ним есть некоторые проблемы.
- * Чтобы получить корректные результаты - закомментируйте все SECTION кроме одного, для одного
- * SECTION программа будет работать как ожидается. При использовании более одного SECTION
- * корректные результаты будут только для первого, далее исполнение странным образом замедляется.
+ * BENCHMARK functionality of Catch2 is currently under development, so there are some problems.
+ * To see the correct result comment out all SECTIONs except one and get the result for that one.
+ * Then repeat for others.
  */
 TEST_CASE("speed test") {
     SECTION("gf2 200") {

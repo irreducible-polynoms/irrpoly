@@ -13,6 +13,14 @@
 
 namespace irrpoly {
 
+/**
+ * Binary operations for two gfn instances are correctly defined only
+ * when field is the same for both of them. By default this is checked
+ * only in Debug configuration and no checks performed in Release to speed
+ * up computations. If you are not sure in correctness of your code add
+ * #define IRRPOLY_RELEASE_CHECKED before #include <irrpoly.h> to enable
+ * checks for Release configuration.
+ */
 #if !defined(NDEBUG) || defined(IRRPOLY_RELEASE_CHECKED) // Debug or Release Checked
 #define CHECK_FIELD(comparison) \
     if (!(comparison)) { \
@@ -23,9 +31,8 @@ namespace irrpoly {
 #endif
 
 /**
- * Расширенный алгоритм Евклида для поиска наибольшего общего делителя
- * (greatest common divisor) двух многочленов. Реализация сделана на основе
- * кода из библиотеки Boost 1.71.0.
+ * Calculates greatest common divisor for two polynomials.
+ * Originally taken from Boost library, then made some changes.
  */
 [[nodiscard]]
 auto gcd(gfpoly m, gfpoly n) -> gfpoly {
@@ -50,7 +57,10 @@ auto gcd(gfpoly m, gfpoly n) -> gfpoly {
 
 namespace detail {
 
-/// Быстрое возведение в степень, взято из библиотеки Boost.
+/**
+ * Quick computation of t^n for T and N being integer types.
+ * Originally taken from Boost library, then made some changes.
+ */
 template<class T, class N>
 [[nodiscard]]
 auto integer_power(T t, N n) -> T {
@@ -64,26 +74,30 @@ auto integer_power(T t, N n) -> T {
     }
 }
 
-/// Вычисляет производную данного многочлена.
+/**
+ * Calculates derivative for given polynomial.
+ */
 [[nodiscard]]
-auto derivative(const gfpoly &val) -> gfpoly {
-    if (val.is_zero() || val.degree() == 0) {
-        return gfpoly(val.field());
+auto derivative(const gfpoly &poly) -> gfpoly {
+    if (poly.is_zero() || poly.degree() == 0) {
+        return gfpoly(poly.field());
     }
-    std::vector<uintmax_t> res(val.size() - 1, 0);
-    for (uintmax_t i = 1; i < val.size(); ++i) {
-        res[i - 1] = (i * val[i]).value();
+    std::vector<uintmax_t> res(poly.size() - 1, 0);
+    for (uintmax_t i = 1; i < poly.size(); ++i) {
+        res[i - 1] = (i * poly[i]).value();
     }
-    return gfpoly(val.field(), res);
+    return gfpoly(poly.field(), res);
 }
 
 /**
- * Вычисляет значение (x^pow) % mod.
- * Позволяет экономить память за счёт потери в скорости.
- * Принцип работы: деление в столбик начинается с деления x^n,
- * при больших pow деление успевает зациклиться и мы снова придём к x^n.
- * @param pow степень, в которую требуется возвести x
- * @param mod многочлен, остаток деления на который необходимо найти
+ * Calculates (x^pow) % mod.
+ * Reduces the amount of memory used during computation.
+ * Work principle is that during column division x^n is represented as [0 ... 0 1],
+ * so we can take only some of zeroes, perform division partially, then pad more
+ * zeroes and continue division. As a bonus there are some cases when we'll
+ * get 0 ... 0 1 (which is x^m) somewhere during division process. In this case we
+ * could calculate tmp = (n - m) and skip (k * tmp) steps because after each
+ * tmp division iterations we well get x^(m - k*tmp).
  */
 [[nodiscard]]
 auto x_pow_mod(uintmax_t pow, const gfpoly &mod) -> gfpoly {
@@ -104,70 +118,68 @@ auto x_pow_mod(uintmax_t pow, const gfpoly &mod) -> gfpoly {
 } // namespace detail
 
 /**
- * Алгоритм Берлекампа проверки многочлена на неприводимость в поле GF[P].
- * Первый шаг - вычисление производной данного многочлена. Если производная
- * равна нулю, то многочлен является степенью какого-то другого многочлена,
- * то есть он приводим.
- * Второй шаг - поиск общих множителей многочлена и его производной.
- * Если общие множители (многочлены, а не числа) есть, т.е. многочлены
- * не взаимно просты, то val делится на них, т.е. он не неприводим.
- * Третий шаг - простоение матрицы Берлекампа и вычисление её ранга.
- * Строится матрица M[nxn], где строки - коэффициенты многочлена x^(iP) (mod val),
- * где P - основание поля галуа, 0 < i < n, val - текущий многочлен над полем GF[P].
- * Подробное описание и пример расчёта можно найти в статье
- * "A Formalization of Berlekamp’s Factorization Algorithm" по ссылке
- * http://www21.in.tum.de/~nipkow/Isabelle2016/Isabelle2016_6.pdf (стр. 3-4).
- * Из матрицы M вычитается единичная матрица и получается матрица Берлекампа.
- * Если ранг матрицы Берлекампа равен степени многочлена минус 1,
- * то многочлен неприводим. Для вычисления ранга используется приведение
- * матрицы к ступенчатому виду и подсчёт числа ступеней в ней.
- * Кроме того, все многочлены первой степени неприводимы в любом поле.
+ * This function implements Berlekamp's irreducibility test for polynomials over GF[P].
+ * Before all computations common cases are checked: if deg(poly) = 1 then poly
+ * is irreducible. If zero-indexed term is zero and poly is not zero then poly has
+ * factor x, and so is reducible.
+ * First step is computing the derivative poly', if it is zero - then polynomial
+ * is a power of some other polynomial, and so is reducible.
+ * Second step is calculating gcd(poly, poly'). If it is non-constant - then
+ * poly has some factors common with poly', and so is reducible.
+ * Third step is building Berlekamp's matrix B(m,m) and calculating it's rank.
+ * Its rows consists of coefficients of polynomials x^(iP) (mod poly), 0 < i < n.
+ * For more information read article "A Formalization of Berlekamp’s Factorization
+ * Algorithm" by Davison, Joosten, Thiemann and Yamada.
+ * Then B - I is calculated and rank(B - I) is found. If rank(B - I) == deg(poly) - 1
+ * then poly is irreducible, otherwise it is reducible. For rank calculation
+ * matrix is reduced to a stepwise form and number of steps is calculated,
+ * this number is equal to matrix rank.
+ * TODO: change the way matrix rank is calculated to make algorithm faster.
  */
 [[nodiscard]]
-auto is_irreducible_berlekamp(const gfpoly &val) -> bool {
-    if (val.is_zero()) {
+auto is_irreducible_berlekamp(const gfpoly &poly) -> bool {
+    if (poly.is_zero()) {
         return false;
     }
-    const auto n = val.degree();
+    const auto n = poly.degree();
 
-    // проверка вырожденных случаев
-    if (n == 0 || (val[0].is_zero() && n > 1)) {
+    if (n == 0 || (poly[0].is_zero() && n > 1)) {
         return false;
     }
     if (n == 1) {
         return true;
     }
 
-    // функция для построения матрицы берлекампа и вычисления её ранга
+    // builds matrix B - I and calculates it's rank
     auto berlekampMatrixRank = [](const gfpoly &val) {
         uintmax_t i = 0, j = 0, k = 0, l = 0;
         const auto n = val.degree();
-        std::vector<std::vector<gfn>> m(n, std::vector<gfn>(n, gfn(val.field()))); // M = 0
+        std::vector<std::vector<gfn>> B(n, std::vector<gfn>(n, gfn(val.field()))); // B = 0
         for (i = 0; i < n; ++i) {
-            // M[i,*] = x ^ ip (mod val)
+            // B[i,*] = x ^ ip (mod val)
             const auto poly = detail::x_pow_mod(i * val.base(), val);
             for (j = 0, k = poly.degree(); j <= k; ++j) {
-                m[i][j] += poly[j];
+                B[i][j] += poly[j];
             }
-            m[i][i] -= 1; // M - E
+            B[i][i] -= 1; // B - I
         }
 
-        // приведение матрицы к ступенчатому виду
+        // reduces matrix to stepwise form
         bool f = false;
         gfn num(val.field());
         for (i = k = 0; i < n && k < n; ++k) {
-            f = !!m[i][k];
+            f = !!B[i][k];
             for (j = i + 1; j < n; ++j) {
-                if (m[j][k]) {
+                if (B[j][k]) {
                     if (f) {
-                        num = m[j][k] / m[i][k];
-                        m[j][k] = 0;
+                        num = B[j][k] / B[i][k];
+                        B[j][k] = 0;
                         for (l = k + 1; l < n; ++l) {
-                            m[j][l] -= m[i][l] * num;
+                            B[j][l] -= B[i][l] * num;
                         }
                     } else {
                         for (l = k; l < n; ++l) {
-                            std::swap(m[i][l], m[j][l]);
+                            std::swap(B[i][l], B[j][l]);
                         }
                         f = true;
                     }
@@ -178,46 +190,34 @@ auto is_irreducible_berlekamp(const gfpoly &val) -> bool {
         return i;
     };
 
-    // алгоритм Берлекампа
-    auto d = detail::derivative(val);
-    return !!d && gcd(val, d).degree() == 0 &&
-        berlekampMatrixRank(val) == val.degree() - 1;
+    // algorithm begins here
+    auto d = detail::derivative(poly);
+    return !!d && gcd(poly, d).degree() == 0 &&
+        berlekampMatrixRank(poly) == poly.degree() - 1;
 }
 
 /**
- * Алгоритм Рабина проверки многочлена на неприводимость в поле GF[P].
- * Для использования алгоритма предварительно строится список простых множителей
- * для числа n - степени многочлена. Вместо множителей в список добавляется отношение
- * n_i = n / d_i, где d_i - простой делитель (divisor) n. Если n - простое, то
- * список состоит из одной единицы. Далее выполняется несколько шагов:
- * 1. строится многочлен temp =  x^(P ^ n_i) - x (mod val)
- * 2. находится наиболиший общий дилитель temp и val, если НОД не равен константе,
- * отличной от нуля, то это многочлен, и val, очевидно, делится на него, а значит приводим.
- * 3. если условия 1-2 выполнены для всех n_i, проверяем их для n.
- * Если для n получаем результат 0, то val неприводим.
- * Кроме того, все многочлены первой степени неприводимы в любом поле.
- * Подробную информацию по алгоритму можно найти здесь:
- * https://www.fing.edu.uy/inco/pedeciba/bibliote/reptec/TR0116.pdf
- * или на странице Википедии в разделе Rabin's test of irreducibility
- * https://en.wikipedia.org/wiki/Factorization_of_polynomials_over_finite_fields
+ * This function implements Rabin's irreducibility test for polynomials over Galois field.
+ * Alghoritm is fully described in article "Analysis of Rabin's irreducibility
+ * test for polynomials over finite Fields" by Panario, Pittel, Richmond and Viola.
+ * Added common case checks as in Berlekamp's test above.
  */
 [[nodiscard]]
-auto is_irreducible_rabin(const gfpoly &val) -> bool {
-    if (val.is_zero()) {
+auto is_irreducible_rabin(const gfpoly &poly) -> bool {
+    if (poly.is_zero()) {
         return false;
     }
-    const auto n = val.degree();
+    const auto n = poly.degree();
 
-    // проверка вырожденных случаев
-    if (n == 0 || (val[0].is_zero() && n > 1)) {
+    if (n == 0 || (poly[0].is_zero() && n > 1)) {
         return false;
     }
     if (n == 1) {
         return true;
     }
 
-    // функция разложения числа на множители
-    auto get_list = [](uintmax_t n) {
+    // returns list of distinct prime divisors of n
+    auto factorize = [](uintmax_t n) {
         std::vector<uintmax_t> list;
         const auto begin = n;
         for (uintmax_t d = 2; d * d <= n; ++d) {
@@ -235,110 +235,95 @@ auto is_irreducible_rabin(const gfpoly &val) -> bool {
         return list;
     };
 
-    // шаги 1-2
-    auto P = val.base();
-    auto list = get_list(n);
-    gfpoly tmp(val.field()), x = gfpoly(val.field(), {0, 1});
+    auto P = poly.base();
+    auto list = factorize(n);
+    gfpoly tmp(poly.field()), x = gfpoly(poly.field(), {0, 1});
     for (auto i: list) {
-        tmp = detail::x_pow_mod(detail::integer_power(P, i), val) - x;
-        if (tmp.is_zero() || gcd(val, tmp).degree() > 0) {
+        tmp = detail::x_pow_mod(detail::integer_power(P, i), poly) - x;
+        if (tmp.is_zero() || gcd(poly, tmp).degree() > 0) {
             return false;
         }
     }
 
-    // шаг 3
-    tmp = detail::x_pow_mod(detail::integer_power(P, n), val) - x;
+    tmp = detail::x_pow_mod(detail::integer_power(P, n), poly) - x;
     return tmp.is_zero();
 }
 
 /**
- * Алгоритм Бен-Ора проверки многочлена на неприводимость в поле GF[P].
- * Для всех i от 1 до m/2 включительно, где m - степень проверяемого многочлена:
- * 1. строится многочлен temp =  x^(P ^ i) - x (mod val)
- * 2. находится наиболиший общий дилитель temp и val, если НОД не равен константе,
- * отличной от нуля, то это многочлен, и val, очевидно, делится на него, а значит приводим.
- * После завершения шагов 1-2 для всех i получаем, что многочлен неприводим.
- * Кроме того, все многочлены первой степени неприводимы в любом поле.
+ * This function implements Ben-Or's irreducibility test for polynomials over Galois field.
+ * Alghoritm's pseudocode is provided in article "Tests and constructions of
+ * irreducible polynomials over finite fields" by Gao and Panario.
+ * Added common case checks as in Berlekamp's test above.
  */
 [[nodiscard]]
-auto is_irreducible_benor(const gfpoly &val) -> bool {
-    if (val.is_zero()) {
+auto is_irreducible_benor(const gfpoly &poly) -> bool {
+    if (poly.is_zero()) {
         return false;
     }
-    const auto n = val.degree();
+    const auto n = poly.degree();
 
-    // проверка вырожденных случаев
-    if (n == 0 || (val[0].is_zero() && n > 1)) {
+    if (n == 0 || (poly[0].is_zero() && n > 1)) {
         return false;
     }
     if (n == 1) {
         return true;
     }
 
-    auto P = val.base();
-    gfpoly tmp(val.field()), x = gfpoly(val.field(), {0, 1});
+    auto P = poly.base();
+    gfpoly tmp(poly.field()), x = gfpoly(poly.field(), {0, 1});
     for (uintmax_t m = n / 2, i = 1; i <= m; ++i) {
-        tmp = detail::x_pow_mod(detail::integer_power(P, i), val) - x;
-        if (tmp.is_zero() || gcd(val, tmp).degree() > 0) {
+        tmp = detail::x_pow_mod(detail::integer_power(P, i), poly) - x;
+        if (tmp.is_zero() || gcd(poly, tmp).degree() > 0) {
             return false;
         }
     }
     return true;
 }
 
+/**
+ * This function performs quickest irreducibility test, defined by benchmark results.
+ * TODO: implement Distinct Degree Factorization algorithm, find out cases then it is fastest.
+ */
 [[nodiscard]]
 inline
-auto is_irreducible(const gfpoly &val) -> bool {
-    switch (val.base()) {
-    case 2: return is_irreducible_berlekamp(val);
-    default: return is_irreducible_benor(val);
+auto is_irreducible(const gfpoly &poly) -> bool {
+    switch (poly.base()) {
+    case 2: return is_irreducible_berlekamp(poly);
+    default: return is_irreducible_benor(poly);
     }
 }
 
 /**
- * Алгоритм проверки многочлена на примитивность по определению. Многочлен является
- * примитивным над полем GF[P], если выполнены три условия:
- * 1. элемент mp = (-1)^n * val[0] является примитивным элементом поля GF[P^n], т.е.
- * k^((p-1) / q) != 1 для каждого q - простого множителя P-1
- * данный пункт не применим для P = 2 по объективным причинам
- * 2. x^r = k (mod val), где r = (p^n - 1) / (p - 1)
- * 3. deg[x^(r / q) (mod val)] > 0 для каждого 1 < q < r - простого множителя r
- * Кроме того, многочлен x является примитивным для любого поля GF[P].
- * Подробную информацию по алгоритму можно найти здесь
- * https://www.ams.org/journals/mcom/1992-59-200/S0025-5718-1992-1134730-7/S0025-5718-1992-1134730-7.pdf
- * Возможные пути параллелизации данного алгоритма приведены в статье
- * https://www.researchgate.net/publication/329358609_Parallelization_of_Algorithm_for_Primitive_Polynomials_Generation_in_Extended_Galois_Field_pm
+ * This function implements primitivity test for polynomials over Galois field.
+ * Alghoritm is fully described in article "Primitive polynomials over finite
+ * fields" by Hansen and Mullen. Added common case checks as in Berlekamp's test above.
  */
 [[nodiscard]]
-auto is_primitive_definition(const gfpoly &val) -> bool {
-    if (val.is_zero()) {
+auto is_primitive_definition(const gfpoly &poly) -> bool {
+    if (poly.is_zero()) {
         return false;
     }
-    const auto n = val.degree();
+    const auto n = poly.degree();
 
-    // проверка вырожденных случаев
-    if (n == 0 || (val[0].is_zero() && n > 1)) {
+    if (n == 0 || (poly[0].is_zero() && n > 1)) {
         return false;
     }
-    if (n == 1 && val[0] == 0) {
+    if (n == 1 && poly[0] == 0) {
         return true;
     } // val = k * x + 0
 
-    // выполняется нормировка, т.к. данный алгоритм справедлив только
-    // для многочленов со старшим коэффициентом, равным единице
-    // умножение многочлена на число не меняет его примитивность
-    const auto poly = val / val[n];
+    // this algorithm is defined only for normalized polynomials
+    const auto npoly = poly / poly[n];
 
-    // ещё один вырожденный случай, на работу с которым алгоритм не рассчитан
-    auto P = poly.base();
-    if (P == 2 && poly == gfpoly(poly.field(), {1, 1})) {
+    // degenerate case
+    auto P = npoly.base();
+    if (P == 2 && npoly == gfpoly(npoly.field(), {1, 1})) {
         return false;
     }
 
-    gfn mp = (n % 2) ? -poly[0] : poly[0];
+    gfn mp = (n % 2) ? -npoly[0] : npoly[0];
 
-    // функция для разложения (факторизации) числа на множители
-    // единица и само число (в случае его простоты) в разложение не входят
+    // returns list of distinct prime divisors of n except 1 and n if it's prime
     auto factorize = [](uintmax_t n) {
         std::vector<uintmax_t> list;
         const auto begin = n;
@@ -357,7 +342,6 @@ auto is_primitive_definition(const gfpoly &val) -> bool {
         return list;
     };
 
-    // проверяется выполнение первого условия
     if (P > 2) {
         const auto p = P - 1;
         auto list = (p == 2) ? std::vector<uintmax_t>{2} : factorize(p);
@@ -377,27 +361,27 @@ auto is_primitive_definition(const gfpoly &val) -> bool {
         }
     }
 
-    // проверяется выполнение второго условия
     uintmax_t r = (detail::integer_power(P, n) - 1) / (P - 1);
-    auto tmp = detail::x_pow_mod(r, val) - mp;
+    auto tmp = detail::x_pow_mod(r, poly) - mp;
     if (tmp) {
         return false;
     }
 
-    // проверяется выполнение третьего условия
     auto list3 = factorize(r);
     const auto m = list3.size();
     for (size_t i = 0; i < m; ++i) {
-        tmp = detail::x_pow_mod(r / list3[i], poly);
+        tmp = detail::x_pow_mod(r / list3[i], npoly);
         if (tmp.is_zero() || tmp.degree() == 0) {
             return false;
         }
     }
 
-    // если все условия выполнены - многочлен примитивен
     return true;
 }
 
+/**
+ * This function performs quickest primitivity test, defined by benchmark results.
+ */
 [[nodiscard]]
 inline
 auto is_primitive(const gfpoly &val) -> bool {
@@ -406,22 +390,25 @@ auto is_primitive(const gfpoly &val) -> bool {
 
 namespace multithread {
 
-/// Структура, представляющая результаты проверки многочлена.
 struct check_result {
     bool irreducible;
     bool primitive;
 };
 
-/// Доступные методы проверки нанеприводимость.
+/**
+ * Irreducibility tests available.
+ */
 enum class irreducible_method {
-    nil, ///< не проверять
-    berlekamp, ///< алгоритм Берлекампа
-    rabin, ///< алгоритм Рабина
-    benor, ///< алгоритм Бен-Ора
-    recommended, ///< оптимальный алгоритм
+    nil, ///< do not test
+    berlekamp, ///< Berlekam's test
+    rabin, ///< Rabin's test
+    benor, ///< Ben-Or's test
+    recommended, ///< fastest test
 };
 
-/// Доступные методы проверки примитивность.
+/**
+ * Primitivity tests available.
+ */
 enum class primitive_method {
     nil, ///< не проверять
     definition, ///< проверка по определению
@@ -430,8 +417,10 @@ enum class primitive_method {
 
 using polychecker = pipeline<gfpoly, check_result>;
 
-/// Формируется универсальная функция проверки многочленов.
-/// В случае, когда проверка не выполняется устанавливается результат true.
+/**
+ * Creates payload_fn for irrpoly::multithread::pipeline.
+ * In case nil method is selected - the result is true.
+ */
 [[nodiscard]]
 auto make_check_func(
     irreducible_method irr_meth, primitive_method prim_meth)

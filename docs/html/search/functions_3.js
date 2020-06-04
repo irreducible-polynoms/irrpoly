@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['mul_5finv_52',['mul_inv',['../classirrpoly_1_1gfbase.html#a82e5ad117ce524339e674df7ca5615d4',1,'irrpoly::gfbase::mul_inv()'],['../classirrpoly_1_1gfn.html#a6a7c78f7bff03638cec68f867b6a7252',1,'irrpoly::gfn::mul_inv()']]]
+  ['random_48',['random',['../classirrpoly_1_1gfn.html#a2b564f8407de09fcb22f1c2e0c5b5c15',1,'irrpoly::gfn::random()'],['../classirrpoly_1_1gfpoly.html#a8b58ebfd8f096906daadd72333776eb3',1,'irrpoly::gfpoly::random()']]]
 ];

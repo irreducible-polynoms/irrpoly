@@ -1,5 +1,9 @@
 var searchData=
 [
-  ['element_5ftype_5',['element_type',['../structdropbox_1_1oxygen_1_1nn__detail_1_1element__type.html',1,'dropbox::oxygen::nn_detail']]],
-  ['element_5ftype_3c_20pointee_20_2a_20_3e_6',['element_type&lt; Pointee * &gt;',['../structdropbox_1_1oxygen_1_1nn__detail_1_1element__type_3_01_pointee_01_5_01_4.html',1,'dropbox::oxygen::nn_detail']]]
+  ['gf_5',['gf',['../gf_8hpp.html#a49b6832f1afa3581768e57301d355575',1,'irrpoly']]],
+  ['gf_2ehpp_6',['gf.hpp',['../gf_8hpp.html',1,'']]],
+  ['gfbase_7',['gfbase',['../classirrpoly_1_1gfbase.html',1,'irrpoly']]],
+  ['gfn_8',['gfn',['../classirrpoly_1_1gfn.html',1,'irrpoly']]],
+  ['gfpoly_9',['gfpoly',['../classirrpoly_1_1gfpoly.html',1,'irrpoly']]],
+  ['gfpoly_2ehpp_10',['gfpoly.hpp',['../gfpoly_8hpp.html',1,'']]]
 ];

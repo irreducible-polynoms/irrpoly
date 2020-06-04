@@ -1,53 +1,44 @@
-.TH "irrpoly::multithread::pipeline< value_t, result_t >" 3 "Пн 1 Июн 2020" "Version 2.2.0" "irrpoly" \" -*- nroff -*-
+.TH "irrpoly::multithread::pipeline< input_t, output_t >" 3 "Fri Jun 5 2020" "Version 2.2.1" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
-irrpoly::multithread::pipeline< value_t, result_t > \- Выполняет цепочку 'получение входных данных - обработка - возврат результата' в несколько потоков\&.  
-
+irrpoly::multithread::pipeline< input_t, output_t >
 .SH SYNOPSIS
 .br
 .PP
 .PP
 \fC#include <pipeline\&.hpp>\fP
-.SS "Открытые типы"
+.SS "Public Types"
 
 .in +1c
 .ti -1c
-.RI "using \fBinput_fn\fP = std::function< value_t()>"
+.RI "using \fBinput_fn\fP = std::function< input_t()>"
 .br
-.RI "Вид функции, генерирующей входные данные\&. "
 .ti -1c
-.RI "using \fBpayload_fn\fP = std::function< void(const value_t &, std::optional< result_t > &)>"
+.RI "using \fBpayload_fn\fP = std::function< void(const input_t &, std::optional< output_t > &)>"
 .br
-.RI "Вид функции, выполняющей основную работу и возвращающей её результат\&. "
 .ti -1c
-.RI "using \fBcallback_fn\fP = std::function< bool(const value_t &, const result_t &)>"
+.RI "using \fBcallback_fn\fP = std::function< bool(const input_t &, const output_t &)>"
 .br
-.RI "Вид функции, обрабатывающей результат и возвращающей true, если работу необходимо завершить\&. "
 .in -1c
-.SS "Открытые члены"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
 .RI "\fBpipeline\fP (unsigned n=std::thread::hardware_concurrency())"
 .br
 .ti -1c
-.RI "void \fBpipe\fP (\fBinput_fn\fP in, \fBpayload_fn\fP pl, \fBcallback_fn\fP bk, const bool strict=true)"
+.RI "void \fBchain\fP (input_fn in, payload_fn pl, callback_fn bk, const bool strict=true)"
 .br
-.RI "Основной цикл разделения работы на потоки\&. "
-.ti -1c
-.RI "\fB~pipeline\fP ()"
-.br
-.RI "Завершаем работу всех потоков\&. "
 .in -1c
-.SH "Подробное описание"
+.SH "Detailed Description"
 .PP 
 
-.SS "template<typename value_t, typename result_t>
+.SS "template<typename input_t, typename output_t>
 .br
-class irrpoly::multithread::pipeline< value_t, result_t >"
-Выполняет цепочку 'получение входных данных - обработка - возврат результата' в несколько потоков\&. 
+class irrpoly::multithread::pipeline< input_t, output_t >"
+Chains the input_fn, payload_fn and callback_fn provided\&. Executes this chain in several threads at the same time\&. TODO: change architecture to make checks faster\&. 
 
-.SH "Автор"
+.SH "Author"
 .PP 
-Автоматически создано Doxygen для irrpoly из исходного текста\&.
+Generated automatically by Doxygen for irrpoly from the source code\&.

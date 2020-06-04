@@ -1,17 +1,8 @@
-# версия 3.8 требуется для совместимости с Visual Studio 2017
 cmake_minimum_required(VERSION 3.8)
 
-# подключаем модуль currdir.cmake, сохраняющий имя текущей папки в переменную CURRDIR
-include(currdir)
-# устанавливаем имя проекта
+include(currdir) # save current directory name in CURRDIR variable
 project("${PROJECT_NAME}.${CURRDIR}")
 
-# подключаем модуль sources.cmake, находящий все исходники в текущей папке
-# и добавляющий исполняемый файл с именем текущего проекта
 include(sources)
-
-# подключаем многопоточность
 include(thread)
-
-# подсключает статический нализатор PVS-Studio
 include(analyze)

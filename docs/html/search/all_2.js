@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['degree_4',['degree',['../classirrpoly_1_1gfpoly.html#a43a015b162c416cdfb821a0f859f3d3b',1,'irrpoly::gfpoly']]]
+  ['element_5ftype_3',['element_type',['../structdropbox_1_1oxygen_1_1nn__detail_1_1element__type.html',1,'dropbox::oxygen::nn_detail']]],
+  ['element_5ftype_3c_20pointee_20_2a_20_3e_4',['element_type&lt; Pointee * &gt;',['../structdropbox_1_1oxygen_1_1nn__detail_1_1element__type_3_01_pointee_01_5_01_4.html',1,'dropbox::oxygen::nn_detail']]]
 ];

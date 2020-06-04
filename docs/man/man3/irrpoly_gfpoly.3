@@ -1,4 +1,4 @@
-.TH "irrpoly::gfpoly" 3 "Пн 1 Июн 2020" "Version 2.2.0" "irrpoly" \" -*- nroff -*-
+.TH "irrpoly::gfpoly" 3 "Fri Jun 5 2020" "Version 2.2.1" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -8,13 +8,12 @@ irrpoly::gfpoly
 .PP
 .PP
 \fC#include <gfpoly\&.hpp>\fP
-.SS "Открытые члены"
+.SS "Public Member Functions"
 
 .in +1c
 .ti -1c
 .RI "auto \fBvalue\fP () const \-> std::vector< uintmax_t >"
 .br
-.RI "Возвращает значение многочлена в виде вектора чисел\&. "
 .ti -1c
 .RI "\fBgfpoly\fP (const \fBgf\fP &field)"
 .br
@@ -63,11 +62,9 @@ irrpoly::gfpoly
 .ti -1c
 .RI "auto \fBdegree\fP () const \-> uintmax_t"
 .br
-.RI "Возвращает степень многочлена, степень нулевого многочлена не определена\&. "
 .ti -1c
 .RI "auto \fBoperator[]\fP (uintmax_t i) const \-> const \fBgfn\fP &"
 .br
-.RI "Изменение значений многочлена по индексу запрещено\&. "
 .ti -1c
 .RI "auto \fBis_zero\fP () const \-> bool"
 .br
@@ -110,21 +107,18 @@ irrpoly::gfpoly
 .ti -1c
 .RI "template<typename U > auto \fBoperator>>=\fP (U const &n) \-> \fBgfpoly\fP &"
 .br
-.RI "Эквивалентно операции a /= x^b, определено только когда такое деление возможно\&. "
 .ti -1c
 .RI "template<typename U > auto \fBoperator<<=\fP (U const &n) \-> \fBgfpoly\fP &"
 .br
-.RI "Эквивалентно операции a *= x^b\&. "
 .in -1c
-.SS "Открытые статические члены"
+.SS "Static Public Member Functions"
 
 .in +1c
 .ti -1c
 .RI "static auto \fBrandom\fP (const \fBgf\fP &field, uintmax_t \fBdegree\fP) \-> \fBgfpoly\fP"
 .br
-.RI "Вектор коэффициентов при степенях x\&. "
 .in -1c
-.SS "Друзья"
+.SS "Friends"
 
 .in +1c
 .ti -1c
@@ -146,20 +140,24 @@ irrpoly::gfpoly
 .RI "auto \fBoperator!=\fP (const \fBgfpoly\fP &, const \fBgfpoly\fP &) \-> bool"
 .br
 .in -1c
-.SH "Подробное описание"
+.SH "Detailed Description"
 .PP 
-Класс gfpoly представляет многочлены над полем Галуа\&. Основан на классе polynomial из библиотеки Boost\&. Взятие значения по индексу [i] возвращает коэффициент при x^i\&. Старший коэффициент всегда не нулевой, за исключением случая, когда весь многочлен равен нулю\&. 
-.SH "Методы"
+gfpoly represents a polynomial over Galois field\&. This class is originally taken from Boost library but was significantly changed\&. Get by index operation [i] returns polynomial term x^i\&. Polynomial is either zero or reduced which means that leading term is non-zero\&. 
+.SH "Member Function Documentation"
 .PP 
-.SS "auto irrpoly::gfpoly::operator= (const \fBgfpoly\fP & p) \-> \fBgfpoly\fP & \fC [inline]\fP"
-Операция присваивания корректно определена только для многочленов над одним полем, операция перемещения также корректно определена для неинициализированных переменных (случай field = nullptr)\&. 
-.SS "auto irrpoly::gfpoly::operator= (\fBgfn\fP value) \-> \fBgfpoly\fP & \fC [inline]\fP"
-Операция присваивания корректно определена только для числел из одного поля, операция перемещения также корректно определена для неинициализированных переменных (случай field = nullptr)\&. 
+.SS "auto irrpoly::gfpoly::degree () const \-> uintmax_t \fC [inline]\fP"
+Returns polynomial degree\&. For zero polynomial degree is undefined\&. 
+.SS "template<typename U > auto irrpoly::gfpoly::operator<<= (U const & n) \-> \fBgfpoly\fP & \fC [inline]\fP"
+Logically equal to operation this *= x^n\&. 
+.SS "template<typename U > auto irrpoly::gfpoly::operator>>= (U const & n) \-> \fBgfpoly\fP & \fC [inline]\fP"
+Logically equal to operation this /= x^n\&. Defined only when such devision is possible\&. 
+.SS "auto irrpoly::gfpoly::operator[] (uintmax_t i) const \-> const \fBgfn\fP & \fC [inline]\fP"
+Polynomial couldn't be mutated by index because it would be possible to replace some term by gfn instance with field different to polynomial's one\&. 
 .SS "static auto irrpoly::gfpoly::random (const \fBgf\fP & field, uintmax_t degree) \-> \fBgfpoly\fP \fC [inline]\fP, \fC [static]\fP"
+Generates random polynomial over provided Galois field of given degree\&. 
+.SS "auto irrpoly::gfpoly::value () const \-> std::vector<uintmax_t> \fC [inline]\fP"
+Returns copy of numeric representation of current polynomial\&. 
 
-.PP
-Вектор коэффициентов при степенях x\&. Генерирует случайный многочлен над полем GF[P] заданной степени\&. 
-
-.SH "Автор"
+.SH "Author"
 .PP 
-Автоматически создано Doxygen для irrpoly из исходного текста\&.
+Generated automatically by Doxygen for irrpoly from the source code\&.

@@ -1,4 +1,4 @@
-.TH "include/irrpoly/gf.hpp" 3 "Пн 1 Июн 2020" "Version 2.2.0" "irrpoly" \" -*- nroff -*-
+.TH "include/irrpoly/gf.hpp" 3 "Fri Jun 5 2020" "Version 2.2.1" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -27,7 +27,7 @@ include/irrpoly/gf.hpp
 \fC#include <memory>\fP
 .br
 
-.SS "Классы"
+.SS "Classes"
 
 .in +1c
 .ti -1c
@@ -37,7 +37,7 @@ include/irrpoly/gf.hpp
 .RI "class \fBirrpoly::gfn\fP"
 .br
 .in -1c
-.SS "Макросы"
+.SS "Macros"
 
 .in +1c
 .ti -1c
@@ -50,14 +50,14 @@ include/irrpoly/gf.hpp
 .RI "#define \fBGFN_COMPARISON_OPERATORS\fP(op)"
 .br
 .in -1c
-.SS "Определения типов"
+.SS "Typedefs"
 
 .in +1c
 .ti -1c
 .RI "using \fBirrpoly::gf\fP = \fBdropbox::oxygen::nn_shared_ptr\fP< gfbase >"
 .br
 .in -1c
-.SS "Функции"
+.SS "Functions"
 
 .in +1c
 .ti -1c
@@ -88,29 +88,29 @@ include/irrpoly/gf.hpp
 .RI "auto \fBirrpoly::make_gf\fP (const uintmax_t base) \-> gf"
 .br
 .in -1c
-.SH "Подробное описание"
+.SH "Detailed Description"
 .PP 
 
 .PP
-\fBАвтор\fP
+\fBAuthor\fP
 .RS 4
 Vadim Piven vadim@piven.tech @license Free use of this library is permitted under the guidelines and in accordance with the MIT License (MIT)\&. @url https://github.com/irreducible-polynoms/irrpoly 
 .RE
 .PP
 
-.SH "Макросы"
+.SH "Macro Definition Documentation"
 .PP 
 .SS "#define CHECK_FIELD(comparison)"
-\fBМакроопределение:\fP
+\fBValue:\fP
 .PP
 .nf
     if (!(comparison)) { \
         throw std::logic_error("field check failed"); \
     }
 .fi
-Бинарные операции над gfn корректно определены лишь в том случае, когда оба числа принадлежат одному и тому же полю\&. По умолчанию, проверка этого факта выполняется только для конфигурации Debug, чтобы в конфигурации Release добиться наибольшей производительности\&. Однако, если в конфигурации Release проверки также требуется выполнять, достаточно объявить #define IRRPOLY_RELEASE_CHECKED перед подключением заголовочного файла #include <irrpoly\&.h> 
+Binary operations for two gfn instances are correctly defined only when field is the same for both of them\&. By default this is checked only in Debug configuration and no checks performed in Release to speed up computations\&. If you are not sure in correctness of your code add #define IRRPOLY_RELEASE_CHECKED before #include <irrpoly\&.h> to enable checks for Release configuration\&. 
 .SS "#define GFN_COMPARISON_OPERATORS(op)"
-\fBМакроопределение:\fP
+\fBValue:\fP
 .PP
 .nf
     inline \
@@ -130,7 +130,7 @@ Vadim Piven vadim@piven.tech @license Free use of this library is permitted unde
     }
 .fi
 .SS "#define NN_CHECK_THROW(_e)"
-\fBМакроопределение:\fP
+\fBValue:\fP
 .PP
 .nf
         (([&] (typename std::remove_reference<decltype(_e)>::type p) { \
@@ -139,10 +139,10 @@ Vadim Piven vadim@piven.tech @license Free use of this library is permitted unde
             dropbox::oxygen::i_promise_i_checked_for_null, std::move(p)); \
     })(_e))
 .fi
-.SH "Типы"
+.SH "Typedef Documentation"
 .PP 
 .SS "using \fBirrpoly::gf\fP = typedef \fBdropbox::oxygen::nn_shared_ptr\fP<gfbase>"
-Поле всегда должно существовать, поэтому используется обёртка, не позволяющая хранящим поле переменным иметь значение nullptr\&. Для него корректно определена операция копирования за счёт использования примитива shared_ptr\&. 
-.SH "Автор"
+gf type represents PRIME Galois field\&. It is a shared pointer that couldn't contain nullptr value that allows to get rid of null checks at runtime\&. gf instance could be constructed only then associated Galois field exists\&. This fact is checked by calculating multiplicative inverse for every elements\&. In PRIME field all multiplicative inverse elements must exist\&. The smallest field you can create is GF[2], the largest is GF[65521] for 32-bit architecture and GF[4294967291] for 64-bit architecture\&. gfn instance must always be passed by reference and copied at the very last moment\&. TODO: add support for COMPOSITE fields P^N\&. 
+.SH "Author"
 .PP 
-Автоматически создано Doxygen для irrpoly из исходного текста\&.
+Generated automatically by Doxygen for irrpoly from the source code\&.

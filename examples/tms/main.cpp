@@ -8,11 +8,12 @@
 
 using namespace irrpoly;
 
+/// This function generates the sequence of irreducible polynomials over GF[2]
+/// of growing degree, required sequence length is passed as argument.
 [[nodiscard]]
 auto generate_irreducible(uintmax_t num) -> std::vector<gfpoly> {
     auto gf2 = make_gf(2);
 
-    // возвращаемое значение
     std::vector<gfpoly> res;
     if (num == 0) {
         return res;
@@ -23,10 +24,8 @@ auto generate_irreducible(uintmax_t num) -> std::vector<gfpoly> {
         return res;
     }
 
-    // создаём всё необходимое для многопоточности
     multithread::polychecker ch;
 
-    // функция, генерирующая многочлены для проверки
     auto input = [&]() -> gfpoly {
         static uintmax_t index = 1;
         uint8_t degree = 0;
@@ -46,7 +45,6 @@ auto generate_irreducible(uintmax_t num) -> std::vector<gfpoly> {
         multithread::primitive_method::nil);
 
     uintmax_t n = num - 1;
-    // функция, вызываемая по окончании проверки, если результат нам подходит - сохраняем и возвращаем true, иначе false
     auto callback = [&](const gfpoly &poly,
                         const typename multithread::check_result &result)
         -> bool {
@@ -57,13 +55,11 @@ auto generate_irreducible(uintmax_t num) -> std::vector<gfpoly> {
         return !n;
     };
 
-    // последний false говорит, что нам нужны все результаты проверки, включая лишние, поскольку мы загружаем
-    // многочлены на проверку последовательно, но многопоточность не гарантирует строгого порядка, и какие-то
-    // многочлены из начала последовательности могли провериться только после того, как мы уже набрали необходимое
-    // количество подходящих, поэтому нужно обработать и их, т.е. последовательность будет избыточна
-    ch.pipe(input, check, callback, false);
+    // The last argument `false` says that we want to collect all results of checks started
+    // by default this argument is equal to `true` and after `callback` returns `true`
+    // all results are discarded. Here we need all results for proper sequence.
+    ch.chain(input, check, callback, false);
 
-    // сортируем многочлены в лексико-графическом порядке для получения правильной последовательности
     std::sort(res.begin(), res.end(),
               [](const gfpoly &a, const gfpoly &b) {
                   if (a.degree() == b.degree()) {
@@ -76,7 +72,7 @@ auto generate_irreducible(uintmax_t num) -> std::vector<gfpoly> {
                   }
                   return a.degree() < b.degree();
               });
-    // выкидываем лишние с конца, чтобы осталось только требуемое число
+
     while (res.size() > num) {
         res.pop_back();
     }
@@ -85,7 +81,6 @@ auto generate_irreducible(uintmax_t num) -> std::vector<gfpoly> {
 }
 
 auto main() -> int {
-    // генерируем многочлены и выводим результат
     auto poly = generate_irreducible(5);
     for (const auto &p : poly) {
         std::cout << p << std::endl;

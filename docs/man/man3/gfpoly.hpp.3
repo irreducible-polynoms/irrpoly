@@ -1,4 +1,4 @@
-.TH "include/irrpoly/gfpoly.hpp" 3 "Пн 1 Июн 2020" "Version 2.2.0" "irrpoly" \" -*- nroff -*-
+.TH "include/irrpoly/gfpoly.hpp" 3 "Fri Jun 5 2020" "Version 2.2.1" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -21,21 +21,21 @@ include/irrpoly/gfpoly.hpp
 \fC#include <cctype>\fP
 .br
 
-.SS "Классы"
+.SS "Classes"
 
 .in +1c
 .ti -1c
 .RI "class \fBirrpoly::gfpoly\fP"
 .br
 .in -1c
-.SS "Макросы"
+.SS "Macros"
 
 .in +1c
 .ti -1c
 .RI "#define \fBCHECK_FIELD\fP(comparison)"
 .br
 .in -1c
-.SS "Функции"
+.SS "Functions"
 
 .in +1c
 .ti -1c
@@ -117,27 +117,27 @@ include/irrpoly/gfpoly.hpp
 .RI "template<class charT , class traits > auto \fBirrpoly::operator>>\fP (std::basic_istream< charT, traits > &is, gfpoly &poly) \-> std::basic_istream< charT, traits > &"
 .br
 .in -1c
-.SH "Подробное описание"
+.SH "Detailed Description"
 .PP 
 
 .PP
-\fBАвтор\fP
+\fBAuthor\fP
 .RS 4
 Vadim Piven vadim@piven.tech @license Free use of this library is permitted under the guidelines and in accordance with the MIT License (MIT)\&. @url https://github.com/irreducible-polynoms/irrpoly 
 .RE
 .PP
 
-.SH "Макросы"
+.SH "Macro Definition Documentation"
 .PP 
 .SS "#define CHECK_FIELD(comparison)"
-\fBМакроопределение:\fP
+\fBValue:\fP
 .PP
 .nf
     if (!(comparison)) { \
         throw std::logic_error("field check failed"); \
     }
 .fi
-Бинарные операции над gfn корректно определены лишь в том случае, когда оба числа принадлежат одному и тому же полю\&. По умолчанию, проверка этого факта выполняется только для конфигурации Debug, чтобы в конфигурации Release добиться наибольшей производительности\&. Однако, если в конфигурации Release проверки также требуется выполнять, достаточно объявить #define IRRPOLY_RELEASE_CHECKED перед подключением заголовочного файла #include <irrpoly\&.h> 
-.SH "Автор"
+Binary operations for two gfn instances are correctly defined only when field is the same for both of them\&. By default this is checked only in Debug configuration and no checks performed in Release to speed up computations\&. If you are not sure in correctness of your code add #define IRRPOLY_RELEASE_CHECKED before #include <irrpoly\&.h> to enable checks for Release configuration\&. 
+.SH "Author"
 .PP 
-Автоматически создано Doxygen для irrpoly из исходного текста\&.
+Generated automatically by Doxygen for irrpoly from the source code\&.

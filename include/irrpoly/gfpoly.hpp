@@ -20,14 +20,12 @@
 namespace irrpoly {
 
 /**
- * Бинарные операции над gfn корректно определены лишь в том случае, когда
- * оба числа принадлежат одному и тому же полю. По умолчанию, проверка этого
- * факта выполняется только для конфигурации Debug, чтобы в конфигурации Release
- * добиться наибольшей производительности. Однако, если в конфигурации Release
- * проверки также требуется выполнять, достаточно объявить
- * #define IRRPOLY_RELEASE_CHECKED
- * перед подключением заголовочного файла
- * #include <irrpoly.h>
+ * Binary operations for two gfn instances are correctly defined only
+ * when field is the same for both of them. By default this is checked
+ * only in Debug configuration and no checks performed in Release to speed
+ * up computations. If you are not sure in correctness of your code add
+ * #define IRRPOLY_RELEASE_CHECKED before #include <irrpoly.h> to enable
+ * checks for Release configuration.
  */
 #if !defined(NDEBUG) || defined(IRRPOLY_RELEASE_CHECKED) // Debug or Release Checked
 #define CHECK_FIELD(comparison) \
@@ -39,19 +37,20 @@ namespace irrpoly {
 #endif
 
 /**
- * Класс gfpoly представляет многочлены над полем Галуа.
- * Основан на классе polynomial из библиотеки Boost.
- * Взятие значения по индексу [i] возвращает коэффициент при x^i.
- * Старший коэффициент всегда не нулевой, за исключением случая, когда
- * весь многочлен равен нулю.
+ * gfpoly represents a polynomial over Galois field.
+ * This class is originally taken from Boost library but was significantly changed.
+ * Get by index operation [i] returns polynomial term x^i.
+ * Polynomial is either zero or reduced which means that leading term is non-zero.
  */
 class gfpoly final {
 private:
-    gf m_field; /// Поле
-    std::vector<gfn> m_data; /// Вектор коэффициентов при степенях x
+    gf m_field;
+    std::vector<gfn> m_data; ///< polynomial coefficients
 
 public:
-    /// Генерирует случайный многочлен над полем GF[P] заданной степени.
+    /**
+     * Generates random polynomial over provided Galois field of given degree.
+     */
     static
     auto random(const gf &field, uintmax_t degree) -> gfpoly {
         std::vector<gfn> data;
@@ -66,7 +65,9 @@ public:
         return gfpoly(field, std::move(data));
     }
 
-    /// Возвращает значение многочлена в виде вектора чисел.
+    /**
+     * Returns copy of numeric representation of current polynomial.
+     */
     [[nodiscard]]
     auto value() const -> std::vector<uintmax_t> {
         std::vector<uintmax_t> res;
@@ -78,8 +79,10 @@ public:
     }
 
 private:
-    /// Позволяет сохранять условие отличия от нуля старшего коэффициента.
-    auto normalize() -> gfpoly & {
+    /**
+     * Removes leading zeroes.
+     */
+    auto reduce() -> gfpoly & {
         m_data.erase(std::find_if(
             m_data.rbegin(), m_data.rend(),
             std::not_fn(std::mem_fn(&gfn::is_zero))
@@ -87,11 +90,13 @@ private:
         return *this;
     }
 
-    /// Данный конструктор не является публичным, т.к. в противном случае
-    /// требовалось бы проверять, что все числа лежат в одном и том же поле.
+    /**
+     * This constructor is private because it do not checks that
+     * all gfn instances have the same field.
+     */
     gfpoly(const gf &field, std::vector<gfn> &&p) :
         m_field(field), m_data(std::move(p)) {
-        normalize();
+        reduce();
     }
 
 public:
@@ -104,7 +109,7 @@ public:
         for (uintmax_t v : l) {
             m_data.emplace_back(field, v);
         }
-        normalize();
+        reduce();
     }
 
     auto operator=(const std::vector<uintmax_t> &l) -> gfpoly & {
@@ -126,11 +131,10 @@ public:
 
     gfpoly(gfpoly &&p) = default;
 
-    /// Операция присваивания корректно определена только для многочленов над одним полем,
-    /// операция перемещения также корректно определена для неинициализированных
-    /// переменных (случай field = nullptr).
     auto operator=(const gfpoly &p) -> gfpoly & {
         if (this != &p) {
+            // m_field == nullptr means that gfn instance is uninitialised
+            // this happens during std::move, std::swap and inside some std::vector methods
             CHECK_FIELD(m_field == nullptr || m_field == p.m_field)
             m_field = p.m_field;
             m_data = p.m_data;
@@ -146,10 +150,9 @@ public:
         }
     }
 
-    /// Операция присваивания корректно определена только для числел из одного поля,
-    /// операция перемещения также корректно определена для неинициализированных
-    /// переменных (случай field = nullptr).
     auto operator=(gfn value) -> gfpoly & {
+        // m_field == nullptr means that gfn instance is uninitialised
+        // this happens during std::move, std::swap and inside some std::vector methods
         CHECK_FIELD(m_field == nullptr || m_field == value.field())
         gfpoly copy(std::move(value));
         std::swap(*this, copy);
@@ -184,16 +187,21 @@ public:
         return m_data.size();
     }
 
-    /// Возвращает степень многочлена, степень нулевого многочлена не определена.
+    /**
+     * Returns polynomial degree. For zero polynomial degree is undefined.
+     */
     [[nodiscard]]
     auto degree() const -> uintmax_t {
         if (size() == 0) {
-            throw std::logic_error("degree() is undefined for the zero polynomial");
+            throw std::logic_error("degree is undefined for zero polynomial");
         }
         return m_data.size() - 1;
     }
 
-    /// Изменение значений многочлена по индексу запрещено.
+    /**
+     * Polynomial couldn't be mutated by index because it would be possible to
+     * replace some term by gfn instance with field different to polynomial's one.
+     */
     auto operator[](uintmax_t i) const -> const gfn & {
         return m_data[i];
     }
@@ -220,7 +228,7 @@ private:
             m_data.resize(1, gfn(m_field));
         }
         m_data[0] = op(m_data[0], value);
-        return normalize();
+        return reduce();
     }
 
     template<class R>
@@ -232,7 +240,7 @@ private:
         for (uintmax_t i = 0; i < value.size(); ++i) {
             m_data[i] = op(m_data[i], value[i]);
         }
-        return normalize();
+        return reduce();
     }
 
 public:
@@ -250,19 +258,19 @@ public:
     auto operator*=(const U &value) -> gfpoly & {
         std::transform(m_data.begin(), m_data.end(), m_data.begin(),
                        [&](const gfn &x) -> gfn { return x * value; });
-        return normalize();
+        return reduce();
     }
 
     template<class U>
     auto operator/=(const U &value) -> gfpoly & {
         std::transform(m_data.begin(), m_data.end(), m_data.begin(),
                        [&](const gfn &x) -> gfn { return x / value; });
-        return normalize();
+        return reduce();
     }
 
     template<class U>
     auto operator%=(const U & /*value*/) -> gfpoly & {
-        // We can always divide by a scalar, so there is no remainder:
+        // we can always divide by a scalar, so there is no remainder
         return set_zero();
     }
 
@@ -287,7 +295,7 @@ private:
             }
         }
         m_data.swap(prod);
-        return normalize();
+        return reduce();
     }
 
 public:
@@ -296,6 +304,10 @@ public:
     }
 
 private:
+    /**
+     * This is the core method of the whole class. It takes the most time during computations.
+     * TODO: try implementing polynomial division using Discrete Fourier Transform.
+     */
     static auto division(gfpoly u, const gfpoly &v) -> std::pair<gfpoly, gfpoly> {
         CHECK_FIELD(u.field() == v.field() && v.size() <= u.size() && v && u)
         uintmax_t const m = u.size() - 1, n = v.size() - 1;
@@ -316,13 +328,14 @@ private:
             division_impl(&q, &u, v, n, k);
         } while (k-- != 0);
         u.m_data.resize(n, gfn(q.field())), gfn(q.field());
-        return std::make_pair(q.normalize(), u.normalize());
+        return std::make_pair(q.reduce(), u.reduce());
     }
 
-    /** Calculates a / b and a % b, returning the pair (quotient, remainder) together
-      * because the same amount of computation yields both.
-      * This function is not defined for division by zero: user beware.
-      */
+    /**
+     * Calculates a / b and a % b, returning the pair (quotient, remainder) together
+     * because the same amount of computation yields both.
+     * This function is not defined for division by zero: user beware.
+     */
     static auto quotient_remainder(const gfpoly &dividend, const gfpoly &divisor)
     -> std::pair<gfpoly, gfpoly> {
         CHECK_FIELD(dividend.field() == divisor.field() && divisor)
@@ -341,7 +354,9 @@ public:
         return *this = quotient_remainder(*this, value).second;
     }
 
-    /// Эквивалентно операции a /= x^b, определено только когда такое деление возможно.
+    /**
+     * Logically equal to operation this /= x^n. Defined only when such devision is possible.
+     */
     template<typename U>
     auto operator>>=(U const &n) -> gfpoly & {
         if (n > degree() || !std::all_of(
@@ -352,10 +367,12 @@ public:
         return *this;
     }
 
-    /// Эквивалентно операции a *= x^b
+    /**
+     * Logically equal to operation this *= x^n.
+     */
     template<typename U>
     auto operator<<=(U const &n) -> gfpoly & {
-        normalize();
+        reduce();
         m_data.insert(m_data.begin(), n, gfn(m_field));
         return *this;
     }
@@ -376,7 +393,7 @@ public:
 inline
 auto operator-(gfpoly a) -> gfpoly {
     std::transform(a.m_data.begin(), a.m_data.end(), a.m_data.begin(), std::negate());
-    return a.normalize();
+    return a.reduce();
 }
 
 inline
