@@ -1,0 +1,173 @@
+\documentclass[fleqn,14pt,a5paper]{article}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[russian, english]{babel}
+\usepackage{fullpage}
+\usepackage{times}
+\usepackage{graphicx,amssymb, amstext, amsmath, epstopdf, booktabs, verbatim, gensymb, appendix, natbib, lmodern}
+\usepackage[margin=0.5in]{geometry}
+\geometry{a5paper}
+\pagenumbering{gobble}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+
+\begin{document}
+
+% Берлекамп
+\par ВХОД: $poly$ - многочлен над полем Галуа $GF[P]$
+\par РЕЗУЛЬТАТ: $true$ если многочлен неприводим, иначе $false$
+
+\begin{algorithmic}[1]
+
+    \If{$poly = 0$}
+        \State return $false$
+    \EndIf
+    \State $n = \deg(poly)$
+    \If{$n = 0$ or ($poly[0] = 0$ and $n > 1$)}
+        \State return $false$
+    \EndIf
+    \If{$n = 1$}
+        \State return $true$
+    \EndIf
+    \State
+    \State $poly' = \frac{\partial poly}{\partial x}$
+    \If{$poly' = 0$}
+        \State return $false$
+    \EndIf
+    \If{$\deg\left(\gcd\left(poly, poly'\right)\right) = 0$}
+        \State \textbf{return} $false$
+    \EndIf
+    \State $B =
+        \begin{pmatrix}
+        x^0 & mod & poly \\
+        x^P & mod & poly \\
+        \dots & \dots & \dots \\
+        x^{P\times (P-1)} & mod & poly
+        \end{pmatrix}$
+    \State $B = B - E$
+    \State $r = rank(B)$
+    \If{$r = \deg(poly) - 1$}
+        \State return $true$
+    \Else
+        \State return $false$
+    \EndIf
+
+\end{algorithmic}
+
+\clearpage
+
+% Рабин
+\par ВХОД: $poly$ - многочлен над полем Галуа $GF[P]$ степени $n$,
+    \par $p_1, \dots, p_k$ – простые делители $n$
+\par РЕЗУЛЬТАТ: $true$ если многочлен неприводим, иначе $false$
+
+\begin{algorithmic}[1]
+
+    \If{$poly = 0$}
+        \State return $false$
+    \EndIf
+    \If{$n = 0$ or ($poly[0] = 0$ and $n > 1$)}
+        \State return $false$
+    \EndIf
+    \If{$n = 1$}
+        \State return $true$
+    \EndIf
+    \State
+    \For{$i = 1..k$}
+        \State $n_i = \frac{n}{p_j}$
+        \State $g = \gcd\left( poly, x^{P^{n_i}} - x \; (mod \; poly) \right)$
+        \If{$g = 0$ or $\deg(g) > 0$}
+            \State return $false$
+        \EndIf
+    \EndFor
+    \State $g = \gcd\left( poly, x^{P^n} - x \; (mod \; poly) \right)$
+    \If{$g = 0$}
+        \State return $true$
+    \Else
+        \State return $false$
+    \EndIf
+
+\end{algorithmic}
+
+\clearpage
+
+% Бен-Ор
+\par ВХОД: $poly$ - многочлен над полем Галуа $GF[P]$
+\par РЕЗУЛЬТАТ: $true$ если многочлен неприводим, иначе $false$
+
+\begin{algorithmic}[1]
+
+    \If{$poly = 0$}
+        \State return $false$
+    \EndIf
+    \State $n = \deg(poly)$
+    \If{$n = 0$ or ($poly[0] = 0$ and $n > 1$)}
+        \State return $false$
+    \EndIf
+    \If{$n = 1$}
+        \State return $true$
+    \EndIf
+    \State
+    \State $n = \deg(poly)$
+    \For{$i = 1..\left[\frac{m}{2}\right]$}
+        \State $g = \gcd\left( poly, x^{P^{i}} - x \; (mod \; poly) \right)$
+        \If{$g = 0$ or $\deg(g) > 0$}
+            \State return $false$
+        \EndIf
+    \EndFor
+    \State return $true$
+
+\end{algorithmic}
+
+\clearpage
+
+% Примитивность
+\par ВХОД: $poly$ - многочлен над полем Галуа $GF[P]$,
+    \par $p_1, \dots, p_k$ – простые дилители $P-1$ за исключением $1$ и самого $P-1$
+\par РЕЗУЛЬТАТ: $true$ если многочлен неприводим, иначе $false$
+
+\begin{algorithmic}[1]
+
+    \If{$poly = 0$}
+        \State return $false$
+    \EndIf
+    \State $n = \deg(poly)$
+    \If{$n = 0$ or ($poly[0] = 0$ and $n > 1$)}
+        \State return $false$
+    \EndIf
+    \State
+    \State $poly = noramlize(poly)$
+    \If{$poly = x$}
+        \State return $true$
+    \EndIf
+    \If{$P = 2$ and $poly = 1 + x$}
+        \State return $false$
+    \EndIf
+    \State
+    \If{$P > 2$}
+        \For{$i = 1..k$}
+            \State $l = (-1)^n \;(mod \; P)$
+            \State $el = l^{\frac{P-1}{p_i}}$
+            \If{$el = 1$}
+                \State return $false$
+            \EndIf
+        \EndFor
+    \EndIf
+    \State
+    \State $l = (-1)^n \;(mod \; P)$
+    \State $r = \frac{p^n - 1}{p - 1}$
+    \If{$x^r \neq l$}
+        \State return $false$
+    \EndIf
+    \State
+    \For{$i = 1..k$}
+        \State $tmp = x^{\frac{r}{q_i}} \; (mod \; poly)$
+        \If{$\deg(tmp) = 0$}
+            \State return $false$
+        \EndIf
+    \EndFor
+    \State return $true$
+
+\end{algorithmic}
+
+\end{document}

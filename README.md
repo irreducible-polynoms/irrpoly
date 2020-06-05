@@ -93,9 +93,6 @@ some parts of code are from `boost` library originally distributed under Boost l
 `Catch2` is not redistributed as it is only used for tests.
 
 ## TODO
-- Create a script for generating single-header-version of library and 
-    add it to [Makefile](Makefile)'s `make build` command (check is it allowed
-    to redistribute `nn` in such form).
 - Replace slow Berlekamp's matrix rank calculation algorithm in
     `is_irreducible_berlekamp` method with faster one.
 - Rewrite `pipeline` to make it faster (keep in mind that for most polynomials

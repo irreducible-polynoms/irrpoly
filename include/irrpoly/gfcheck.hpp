@@ -98,6 +98,7 @@ auto derivative(const gfpoly &poly) -> gfpoly {
  * get 0 ... 0 1 (which is x^m) somewhere during division process. In this case we
  * could calculate tmp = (n - m) and skip (k * tmp) steps because after each
  * tmp division iterations we well get x^(m - k*tmp).
+ * TODO: check FLINT sources for similar function and rewrite this to speed up.
  */
 [[nodiscard]]
 auto x_pow_mod(uintmax_t pow, const gfpoly &mod) -> gfpoly {
