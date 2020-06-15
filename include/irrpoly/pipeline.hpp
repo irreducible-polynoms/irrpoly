@@ -169,7 +169,7 @@ public:
 
         for (const auto &sl : m_pods) {
             sl->set_payload(pl);
-            sl->set_data(in());
+            sl->input(in());
         }
         while (true) {
             while (count_busy() == m_pods.size()) {
@@ -179,12 +179,12 @@ public:
                 if (m_pods[i]->is_busy()) {
                     continue;
                 }
-                if (bk(m_pods[i]->get_data().value(),
-                       m_pods[i]->get_result().value())) {
-                    m_pods[i]->clear();
+                if (bk(m_pods[i]->input().value(),
+                       m_pods[i]->output().value())) {
+                    m_pods[i]->clean();
                     goto end;
                 }
-                m_pods[i]->set_data(in());
+                m_pods[i]->input(in());
             }
         }
         end:
@@ -194,10 +194,10 @@ public:
         if (!strict) {
             // collect all results, by default excess results are discarded
             for (const auto &sl : m_pods) {
-                if (sl->get_data().has_value() &&
-                    sl->get_result().has_value()) {
-                    bk(sl->get_data().value(), sl->get_result().value());
-                    sl->clear();
+                if (sl->input().has_value() &&
+                    sl->output().has_value()) {
+                    bk(sl->input().value(), sl->output().value());
+                    sl->clean();
                 }
             }
         }
