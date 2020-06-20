@@ -73,9 +73,6 @@ public:
      */
     [[nodiscard]]
     auto mul_inv(uintmax_t /*val*/) const -> uintmax_t;
-
-    friend class gfn;
-    friend class gfpoly;
 };
 
 auto operator==(const gf &lb, const gf &rb) -> bool {
