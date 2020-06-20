@@ -74,42 +74,6 @@ public:
     [[nodiscard]]
     auto mul_inv(uintmax_t /*val*/) const -> uintmax_t;
 
-private:
-    /**
-     * UNSAFE! Requires lb and rb to lay between 0 and m_base.
-     * Returned number also lays between 0 and m_base.
-     */
-    [[nodiscard]]
-    auto plus(uintmax_t /*lb*/, uintmax_t /*rb*/) const -> uintmax_t;
-
-    /**
-     * UNSAFE! Requires lb and rb to lay between 0 and m_base.
-     * Returned number also lays between 0 and m_base.
-     */
-    [[nodiscard]]
-    auto minus(uintmax_t /*lb*/, uintmax_t /*rb*/) const -> uintmax_t;
-
-    /**
-     * UNSAFE! Requires lb and rb to lay between 0 and m_base.
-     * Returned number also lays between 0 and m_base.
-     */
-    [[nodiscard]]
-    auto multiplies(uintmax_t /*lb*/, uintmax_t /*rb*/) const -> uintmax_t;
-
-    /**
-     * UNSAFE! Requires lb and rb to lay between 0 and m_base.
-     * Returned number also lays between 0 and m_base.
-     */
-    [[nodiscard]]
-    auto divides(uintmax_t /*lb*/, uintmax_t /*rb*/) const -> uintmax_t;
-
-    /**
-     * UNSAFE! Requires lb and rb to lay between 0 and m_base.
-     * Returned number also lays between 0 and m_base.
-     */
-    [[nodiscard]]
-    auto negate(uintmax_t /*rb*/) const -> uintmax_t;
-
     friend class gfn;
     friend class gfpoly;
 };
@@ -483,39 +447,6 @@ auto gfbase::mul_inv(const uintmax_t val) const -> uintmax_t {
     case 0:throw std::logic_error("multiplicative inverse don't exist");
     default:return m_inv[val % m_base];
     }
-}
-
-[[nodiscard]]
-inline
-auto gfbase::plus(uintmax_t lb, uintmax_t rb) const -> uintmax_t {
-    return (lb + rb) % m_base;
-}
-
-[[nodiscard]]
-inline
-auto gfbase::minus(uintmax_t lb, uintmax_t rb) const -> uintmax_t {
- return (m_base + lb - rb) % m_base;
-}
-
-[[nodiscard]]
-inline
-auto gfbase::multiplies(uintmax_t lb, uintmax_t rb) const -> uintmax_t {
-    return (lb * rb) % m_base;
-}
-
-[[nodiscard]]
-inline
-auto gfbase::divides(uintmax_t lb, uintmax_t rb) const -> uintmax_t {
-    switch (rb) {
-    case 0:throw std::invalid_argument("division by zero");
-    default:return (lb * mul_inv(rb)) % m_base;
-    }
-}
-
-[[nodiscard]]
-inline
-auto gfbase::negate(uintmax_t rb) const -> uintmax_t {
-    return (m_base - rb) % m_base;
 }
 
 [[nodiscard]]
