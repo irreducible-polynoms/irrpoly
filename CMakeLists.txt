@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(irrpoly VERSION 2.2.1 LANGUAGES C CXX) # remember to bump VERSION here
+project(irrpoly VERSION 2.3.0 LANGUAGES C CXX) # remember to bump VERSION here
 
 set(CMAKE_CXX_STANDARD 17)
 

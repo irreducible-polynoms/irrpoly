@@ -84,7 +84,7 @@ auto derivative(const gfpoly &poly) -> gfpoly {
     }
     std::vector<uintmax_t> res(poly.size() - 1, 0);
     for (uintmax_t i = 1; i < poly.size(); ++i) {
-        res[i - 1] = (i * poly[i]).value();
+        res[i - 1] = (i % poly.base()) * poly[i];
     }
     return gfpoly(poly.field(), res);
 }
@@ -144,7 +144,7 @@ auto is_irreducible_berlekamp(const gfpoly &poly) -> bool {
     }
     const auto n = poly.degree();
 
-    if (n == 0 || (poly[0].is_zero() && n > 1)) {
+    if (n == 0 || (poly[0] == 0 && n > 1)) {
         return false;
     }
     if (n == 1) {
@@ -210,7 +210,7 @@ auto is_irreducible_rabin(const gfpoly &poly) -> bool {
     }
     const auto n = poly.degree();
 
-    if (n == 0 || (poly[0].is_zero() && n > 1)) {
+    if (n == 0 || (poly[0] == 0 && n > 1)) {
         return false;
     }
     if (n == 1) {
@@ -263,7 +263,7 @@ auto is_irreducible_benor(const gfpoly &poly) -> bool {
     }
     const auto n = poly.degree();
 
-    if (n == 0 || (poly[0].is_zero() && n > 1)) {
+    if (n == 0 || (poly[0] == 0 && n > 1)) {
         return false;
     }
     if (n == 1) {
@@ -306,7 +306,7 @@ auto is_primitive_definition(const gfpoly &poly) -> bool {
     }
     const auto n = poly.degree();
 
-    if (n == 0 || (poly[0].is_zero() && n > 1)) {
+    if (n == 0 || (poly[0] == 0 && n > 1)) {
         return false;
     }
     if (n == 1 && poly[0] == 0) {
@@ -322,7 +322,8 @@ auto is_primitive_definition(const gfpoly &poly) -> bool {
         return false;
     }
 
-    gfn mp = (n % 2) ? -npoly[0] : npoly[0];
+    auto mp = gfn(npoly.field(), npoly[0]);
+    mp = (n % 2) ? -mp : mp;
 
     // returns list of distinct prime divisors of n except 1 and n if it's prime
     auto factorize = [](uintmax_t n) {

@@ -1,4 +1,4 @@
-.TH "irrpoly::gfpoly" 3 "Mon Jun 15 2020" "Version 2.2.1" "irrpoly" \" -*- nroff -*-
+.TH "irrpoly::gfpoly" 3 "Sun Jun 21 2020" "Version 2.3.0" "irrpoly" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -12,13 +12,16 @@ irrpoly::gfpoly
 
 .in +1c
 .ti -1c
-.RI "auto \fBvalue\fP () const \-> std::vector< uintmax_t >"
+.RI "auto \fBvalue\fP () const \-> const std::vector< uintmax_t > &"
 .br
 .ti -1c
 .RI "\fBgfpoly\fP (const \fBgf\fP &field)"
 .br
 .ti -1c
 .RI "\fBgfpoly\fP (const \fBgf\fP &field, const std::vector< uintmax_t > &l)"
+.br
+.ti -1c
+.RI "\fBgfpoly\fP (const \fBgf\fP &field, std::vector< uintmax_t > &&l)"
 .br
 .ti -1c
 .RI "auto \fBoperator=\fP (const std::vector< uintmax_t > &l) \-> \fBgfpoly\fP &"
@@ -39,16 +42,16 @@ irrpoly::gfpoly
 .RI "auto \fBoperator=\fP (const \fBgfpoly\fP &p) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP (\fBgfn\fP \fBvalue\fP)"
+.RI "\fBgfpoly\fP (const \fBgfn\fP &value)"
 .br
 .ti -1c
-.RI "auto \fBoperator=\fP (\fBgfn\fP \fBvalue\fP) \-> \fBgfpoly\fP &"
+.RI "auto \fBoperator=\fP (const \fBgfn\fP &value) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "\fBgfpoly\fP (const \fBgf\fP &field, uintmax_t \fBvalue\fP)"
+.RI "\fBgfpoly\fP (const \fBgf\fP &field, uintmax_t value)"
 .br
 .ti -1c
-.RI "auto \fBoperator=\fP (uintmax_t \fBvalue\fP) \-> \fBgfpoly\fP &"
+.RI "auto \fBoperator=\fP (uintmax_t value) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
 .RI "auto \fBfield\fP () const \-> const \fBgf\fP &"
@@ -63,7 +66,7 @@ irrpoly::gfpoly
 .RI "auto \fBdegree\fP () const \-> uintmax_t"
 .br
 .ti -1c
-.RI "auto \fBoperator[]\fP (uintmax_t i) const \-> const \fBgfn\fP &"
+.RI "auto \fBoperator[]\fP (uintmax_t i) const \-> uintmax_t"
 .br
 .ti -1c
 .RI "auto \fBis_zero\fP () const \-> bool"
@@ -75,34 +78,46 @@ irrpoly::gfpoly
 .RI "auto \fBset_zero\fP () \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "template<class U > auto \fBoperator+=\fP (const U &\fBvalue\fP) \-> \fBgfpoly\fP &"
+.RI "auto \fBoperator+=\fP (uintmax_t value) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "template<class U > auto \fBoperator\-=\fP (const U &\fBvalue\fP) \-> \fBgfpoly\fP &"
+.RI "auto \fBoperator+=\fP (const \fBgfn\fP &value) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "template<class U > auto \fBoperator*=\fP (const U &\fBvalue\fP) \-> \fBgfpoly\fP &"
+.RI "auto \fBoperator+=\fP (const \fBgfpoly\fP &value) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "template<class U > auto \fBoperator/=\fP (const U &\fBvalue\fP) \-> \fBgfpoly\fP &"
+.RI "auto \fBoperator\-=\fP (uintmax_t value) \-> \fBgfpoly\fP &"
+.br
+.ti -1c
+.RI "auto \fBoperator\-=\fP (const \fBgfn\fP &value) \-> \fBgfpoly\fP &"
+.br
+.ti -1c
+.RI "auto \fBoperator\-=\fP (const \fBgfpoly\fP &value) \-> \fBgfpoly\fP &"
+.br
+.ti -1c
+.RI "auto \fBoperator*=\fP (uintmax_t value) \-> \fBgfpoly\fP &"
+.br
+.ti -1c
+.RI "auto \fBoperator*=\fP (const \fBgfn\fP &value) \-> \fBgfpoly\fP &"
+.br
+.ti -1c
+.RI "auto \fBoperator/=\fP (uintmax_t value) \-> \fBgfpoly\fP &"
+.br
+.ti -1c
+.RI "auto \fBoperator/=\fP (const \fBgfn\fP &value) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
 .RI "template<class U > auto \fBoperator%=\fP (const U &) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "auto \fBoperator+=\fP (const \fBgfpoly\fP &\fBvalue\fP) \-> \fBgfpoly\fP &"
+.RI "auto \fBoperator*=\fP (const \fBgfpoly\fP &value) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "auto \fBoperator\-=\fP (const \fBgfpoly\fP &\fBvalue\fP) \-> \fBgfpoly\fP &"
+.RI "auto \fBoperator/=\fP (const \fBgfpoly\fP &value) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
-.RI "auto \fBoperator*=\fP (const \fBgfpoly\fP &\fBvalue\fP) \-> \fBgfpoly\fP &"
-.br
-.ti -1c
-.RI "auto \fBoperator/=\fP (const \fBgfpoly\fP &\fBvalue\fP) \-> \fBgfpoly\fP &"
-.br
-.ti -1c
-.RI "auto \fBoperator%=\fP (const \fBgfpoly\fP &\fBvalue\fP) \-> \fBgfpoly\fP &"
+.RI "auto \fBoperator%=\fP (const \fBgfpoly\fP &value) \-> \fBgfpoly\fP &"
 .br
 .ti -1c
 .RI "template<typename U > auto \fBoperator>>=\fP (U const &n) \-> \fBgfpoly\fP &"
@@ -151,12 +166,10 @@ Returns polynomial degree\&. For zero polynomial degree is undefined\&.
 Logically equal to operation this *= x^n\&. 
 .SS "template<typename U > auto irrpoly::gfpoly::operator>>= (U const & n) \-> \fBgfpoly\fP & \fC [inline]\fP"
 Logically equal to operation this /= x^n\&. Defined only when such devision is possible\&. 
-.SS "auto irrpoly::gfpoly::operator[] (uintmax_t i) const \-> const \fBgfn\fP & \fC [inline]\fP"
+.SS "auto irrpoly::gfpoly::operator[] (uintmax_t i) const \-> uintmax_t \fC [inline]\fP"
 Polynomial couldn't be mutated by index because it would be possible to replace some term by gfn instance with field different to polynomial's one\&. 
 .SS "static auto irrpoly::gfpoly::random (const \fBgf\fP & field, uintmax_t degree) \-> \fBgfpoly\fP \fC [inline]\fP, \fC [static]\fP"
 Generates random polynomial over provided Galois field of given degree\&. 
-.SS "auto irrpoly::gfpoly::value () const \-> std::vector<uintmax_t> \fC [inline]\fP"
-Returns copy of numeric representation of current polynomial\&. 
 
 .SH "Author"
 .PP 

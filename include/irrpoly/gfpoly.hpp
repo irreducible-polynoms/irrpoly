@@ -45,7 +45,7 @@ namespace irrpoly {
 class gfpoly final {
 private:
     gf m_field;
-    std::vector<gfn> m_data; ///< polynomial coefficients
+    std::vector<uintmax_t> m_data; ///< polynomial coefficients
 
 public:
     /**
@@ -53,29 +53,28 @@ public:
      */
     static
     auto random(const gf &field, uintmax_t degree) -> gfpoly {
-        std::vector<gfn> data;
+        static std::random_device rd;
+#ifdef __LP64__
+        static std::mt19937_64 gen(rd());
+#else
+        static std::mt19937 gen(rd());
+#endif
+        std::uniform_int_distribution<uint_fast64_t> dis(0, field->base() - 1);
+        std::vector<uintmax_t> data;
         data.reserve(degree + 1);
         for (uintmax_t i = 0; i < degree; ++i) {
-            data.emplace_back(gfn::random(field));
+            data.push_back(dis(gen));
         }
-        data.emplace_back(field, 1);
-        while (data[0].is_zero()) {
-            data[0] = gfn::random(field);
+        data.push_back(1);
+        while (data[0] == 0) {
+            data[0] = dis(gen);
         }
         return gfpoly(field, std::move(data));
     }
 
-    /**
-     * Returns copy of numeric representation of current polynomial.
-     */
     [[nodiscard]]
-    auto value() const -> std::vector<uintmax_t> {
-        std::vector<uintmax_t> res;
-        res.reserve(size());
-        for (const gfn &val : m_data) {
-            res.emplace_back(val.value());
-        }
-        return res;
+    auto value() const -> const std::vector<uintmax_t>& {
+        return m_data;
     }
 
 private:
@@ -85,18 +84,9 @@ private:
     auto reduce() -> gfpoly & {
         m_data.erase(std::find_if(
             m_data.rbegin(), m_data.rend(),
-            std::not_fn(std::mem_fn(&gfn::is_zero))
+            [](uintmax_t x) { return x != 0; }
         ).base(), m_data.end());
         return *this;
-    }
-
-    /**
-     * This constructor is private because it do not checks that
-     * all gfn instances have the same field.
-     */
-    gfpoly(const gf &field, std::vector<gfn> &&p) :
-        m_field(field), m_data(std::move(p)) {
-        reduce();
     }
 
 public:
@@ -107,7 +97,15 @@ public:
         m_field(field), m_data() {
         m_data.reserve(l.size());
         for (uintmax_t v : l) {
-            m_data.emplace_back(field, v);
+            m_data.push_back(v % base());
+        }
+        reduce();
+    }
+
+    gfpoly(const gf &field, std::vector<uintmax_t> &&l) :
+        m_field(field), m_data(l) {
+        for (uintmax_t &v : m_data) {
+            v %= base();
         }
         reduce();
     }
@@ -119,7 +117,7 @@ public:
     }
 
     gfpoly(const gf &field, std::initializer_list<uintmax_t> l) :
-        gfpoly(field, std::vector<uintmax_t>{l}) {}
+        gfpoly(field, std::move(std::vector<uintmax_t>{l})) {}
 
     auto operator=(std::initializer_list<uintmax_t> l) -> gfpoly & {
         gfpoly copy(m_field, l);
@@ -143,18 +141,18 @@ public:
     }
 
     explicit
-    gfpoly(gfn value) :
+    gfpoly(const gfn &value) :
         m_field(value.field()), m_data() {
         if (value) {
-            m_data.push_back(std::move(value));
+            m_data.push_back(value.value());
         }
     }
 
-    auto operator=(gfn value) -> gfpoly & {
+    auto operator=(const gfn &value) -> gfpoly & {
         // m_field == nullptr means that gfn instance is uninitialised
         // this happens during std::move, std::swap and inside some std::vector methods
         CHECK_FIELD(m_field == nullptr || m_field == value.field())
-        gfpoly copy(std::move(value));
+        gfpoly copy(value);
         std::swap(*this, copy);
         return *this;
     }
@@ -162,7 +160,7 @@ public:
     gfpoly(const gf &field, uintmax_t value) :
         m_field(field), m_data() {
         if (value % base() != 0) {
-            m_data.emplace_back(field, value);
+            m_data.push_back(value % base());
         }
     }
 
@@ -202,7 +200,7 @@ public:
      * Polynomial couldn't be mutated by index because it would be possible to
      * replace some term by gfn instance with field different to polynomial's one.
      */
-    auto operator[](uintmax_t i) const -> const gfn & {
+    auto operator[](uintmax_t i) const -> uintmax_t {
         return m_data[i];
     }
 
@@ -222,49 +220,130 @@ public:
     }
 
 private:
-    template<class U, class R>
-    auto transform(const U &value, R op) -> gfpoly & {
-        if (m_data.empty()) {
-            m_data.resize(1, gfn(m_field));
+    /**
+     * UNSAFE! Requires lb and rb to lay between 0 and base().
+     * Returned number also lays between 0 and base().
+     */
+    [[nodiscard]]
+    auto add(uintmax_t lb, uintmax_t rb) const -> uintmax_t {
+        return (lb + rb) % base();
+    }
+
+    /**
+     * UNSAFE! Requires lb and rb to lay between 0 and base().
+     * Returned number also lays between 0 and base().
+     */
+    [[nodiscard]]
+    auto sub(uintmax_t lb, uintmax_t rb) const -> uintmax_t {
+        return (base() + lb - rb) % base();
+    }
+
+    /**
+     * UNSAFE! Requires lb and rb to lay between 0 and base().
+     * Returned number also lays between 0 and base().
+     */
+    [[nodiscard]]
+    auto mul(uintmax_t lb, uintmax_t rb) const -> uintmax_t {
+        return (lb * rb) % base();
+    }
+
+    /**
+     * UNSAFE! Requires lb and rb to lay between 0 and base().
+     * Returned number also lays between 0 and base().
+     */
+    [[nodiscard]]
+    auto div(uintmax_t lb, uintmax_t rb) const -> uintmax_t {
+        switch (rb) {
+        case 0:throw std::invalid_argument("division by zero");
+        default:return (lb * field()->mul_inv(rb)) % base();
         }
-        m_data[0] = op(m_data[0], value);
+    }
+
+    /**
+     * UNSAFE! Requires rb to lay between 0 and base().
+     * Returned number also lays between 0 and base().
+     */
+    [[nodiscard]]
+    auto neg(uintmax_t rb) const -> uintmax_t {
+        return (base() - rb) % base();
+    }
+
+    using OP = uintmax_t (gfpoly::*)(uintmax_t, uintmax_t) const;
+
+    auto transform(uintmax_t value, OP op) -> gfpoly & {
+        if (m_data.empty()) {
+            m_data.resize(1, 0);
+        }
+        m_data[0] = std::invoke(op, this, m_data[0], value);
         return reduce();
     }
 
-    template<class R>
-    auto transform(const gfpoly &value, R op) -> gfpoly & {
+    auto transform(const gfn &value, OP op) -> gfpoly & {
+        CHECK_FIELD(field() == value.field())
+        if (m_data.empty()) {
+            m_data.resize(1, 0);
+        }
+        m_data[0] = std::invoke(op, this, m_data[0], value.value());
+        return reduce();
+    }
+
+    auto transform(const gfpoly &value, OP op) -> gfpoly & {
         CHECK_FIELD(field() == value.field())
         if (m_data.size() < value.size()) {
-            m_data.resize(value.size(), gfn(m_field));
+            m_data.resize(value.size(), 0);
         }
         for (uintmax_t i = 0; i < value.size(); ++i) {
-            m_data[i] = op(m_data[i], value[i]);
+            m_data[i] = std::invoke(op, this, m_data[i], value[i]);
         }
         return reduce();
     }
 
 public:
-    template<class U>
-    auto operator+=(const U &value) -> gfpoly & {
-        return transform(value, std::plus());
+    auto operator+=(uintmax_t value) -> gfpoly & {
+        return transform(value, &gfpoly::add);
     }
 
-    template<class U>
-    auto operator-=(const U &value) -> gfpoly & {
-        return transform(value, std::minus());
+    auto operator+=(const gfn &value) -> gfpoly & {
+        return transform(value.value(), &gfpoly::add);
     }
 
-    template<class U>
-    auto operator*=(const U &value) -> gfpoly & {
+    auto operator+=(const gfpoly &value) -> gfpoly & {
+        return transform(value, &gfpoly::add);
+    }
+
+    auto operator-=(uintmax_t value) -> gfpoly & {
+        return transform(value, &gfpoly::sub);
+    }
+
+    auto operator-=(const gfn &value) -> gfpoly & {
+        return transform(value.value(), &gfpoly::sub);
+    }
+
+    auto operator-=(const gfpoly &value) -> gfpoly & {
+        return transform(value, &gfpoly::sub);
+    }
+
+    auto operator*=(uintmax_t value) -> gfpoly & {
         std::transform(m_data.begin(), m_data.end(), m_data.begin(),
-                       [&](const gfn &x) -> gfn { return x * value; });
+                       [&](uintmax_t x) -> uintmax_t { return mul(x, value); });
         return reduce();
     }
 
-    template<class U>
-    auto operator/=(const U &value) -> gfpoly & {
+    auto operator*=(const gfn &value) -> gfpoly & {
         std::transform(m_data.begin(), m_data.end(), m_data.begin(),
-                       [&](const gfn &x) -> gfn { return x / value; });
+                       [&](uintmax_t x) -> uintmax_t { return mul(x, value.value()); });
+        return reduce();
+    }
+
+    auto operator/=(uintmax_t value) -> gfpoly & {
+        std::transform(m_data.begin(), m_data.end(), m_data.begin(),
+                       [&](uintmax_t x) -> uintmax_t { return div(x, value); });
+        return reduce();
+    }
+
+    auto operator/=(const gfn &value) -> gfpoly & {
+        std::transform(m_data.begin(), m_data.end(), m_data.begin(),
+                       [&](uintmax_t x) -> uintmax_t { return div(x, value.value()); });
         return reduce();
     }
 
@@ -274,24 +353,16 @@ public:
         return set_zero();
     }
 
-    auto operator+=(const gfpoly &value) -> gfpoly & {
-        return transform(value, std::plus());
-    }
-
-    auto operator-=(const gfpoly &value) -> gfpoly & {
-        return transform(value, std::minus());
-    }
-
 private:
     auto multiply(const gfpoly &a, const gfpoly &b) -> gfpoly & {
         CHECK_FIELD(a.field() == b.field())
         if (!a || !b) {
             return set_zero();
         }
-        std::vector<gfn> prod(a.size() + b.size() - 1, gfn(m_field));
+        std::vector<uintmax_t> prod(a.size() + b.size() - 1, 0);
         for (uintmax_t i = 0; i < a.size(); ++i) {
             for (uintmax_t j = 0; j < b.size(); ++j) {
-                prod[i + j] += a.m_data[i] * b.m_data[j];
+                prod[i + j] = add(prod[i + j], mul(a.m_data[i], b.m_data[j]));
             }
         }
         m_data.swap(prod);
@@ -313,21 +384,22 @@ private:
         uintmax_t const m = u.size() - 1, n = v.size() - 1;
         uintmax_t k = m - n;
         gfpoly q(u.field());
-        q.m_data.resize(m - n + 1, gfn(q.field()));
+        q.m_data.resize(m - n + 1, 0);
 
         auto division_impl = [](gfpoly *q, gfpoly *u, const gfpoly &v, auto n, auto k) {
             CHECK_FIELD(q->field() == u->field() && u->field() == v.field())
-            q->m_data[k] = u->m_data[n + k] / v.m_data[n];
+            q->m_data[k] = q->div(u->m_data[n + k], v.m_data[n]);
             for (auto j = n + k; j > k;) {
                 j--;
-                u->m_data[j] -= q->m_data[k] * v.m_data[j - k];
+                u->m_data[j] = u->sub(u->m_data[j],
+                                      q->mul(q->m_data[k], v.m_data[j - k]));
             }
         };
 
         do {
             division_impl(&q, &u, v, n, k);
         } while (k-- != 0);
-        u.m_data.resize(n, gfn(q.field())), gfn(q.field());
+        u.m_data.resize(n, 0);
         return std::make_pair(q.reduce(), u.reduce());
     }
 
@@ -360,7 +432,8 @@ public:
     template<typename U>
     auto operator>>=(U const &n) -> gfpoly & {
         if (n > degree() || !std::all_of(
-            m_data.begin(), m_data.begin() + n, std::mem_fn(&gfn::is_zero))) {
+            m_data.begin(), m_data.begin() + n,
+            [](uintmax_t x) { return x == 0; })) {
             throw std::logic_error("division is impossible");
         }
         m_data.erase(m_data.begin(), m_data.begin() + n);
@@ -373,7 +446,7 @@ public:
     template<typename U>
     auto operator<<=(U const &n) -> gfpoly & {
         reduce();
-        m_data.insert(m_data.begin(), n, gfn(m_field));
+        m_data.insert(m_data.begin(), n, 0);
         return *this;
     }
 
@@ -392,7 +465,8 @@ public:
 
 inline
 auto operator-(gfpoly a) -> gfpoly {
-    std::transform(a.m_data.begin(), a.m_data.end(), a.m_data.begin(), std::negate());
+    std::transform(a.m_data.begin(), a.m_data.end(), a.m_data.begin(),
+                   [&](uintmax_t x) { return a.neg(x); });
     return a.reduce();
 }
 

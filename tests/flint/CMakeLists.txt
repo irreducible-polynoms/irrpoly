@@ -12,8 +12,8 @@ include_directories(/usr/local/Cellar/mpfr/4.0.2/include)
 link_directories(/usr/local/Cellar/mpfr/4.0.2/lib)
 
 # FLINT
-include_directories(/usr/local/Cellar/flint/2.5.2/include)
-link_directories(/usr/local/Cellar/flint/2.5.2/lib)
+include_directories(/usr/local/Cellar/flint/2.6.0/include)
+link_directories(/usr/local/Cellar/flint/2.6.0/lib)
 
 #include(sources)
 #target_link_libraries("${PROJECT_NAME}" gmp mpfr flint)
